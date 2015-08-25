@@ -15,6 +15,7 @@ class XNovaPageCache:
         if clean:
             self._pages = {}
         cache_dir = pathlib.Path('./cache')
+        num_loaded = 0
         for subitem in cache_dir.iterdir():
             if subitem.is_file():
                 try:
@@ -23,8 +24,10 @@ class XNovaPageCache:
                         fname = subitem.name
                         contents = f.read()
                         self._pages[fname] = contents
+                        num_loaded += 1
                 except IOError as ioe:
                     pass
+        logger.info('Loaded {0} cached pages.'.format(num_loaded))
 
     def set_page(self, page_name, contents):
         self._pages[page_name] = contents

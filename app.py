@@ -7,7 +7,7 @@ from ui.main import XNova_MainWindow
 import ui.res_rc
 
 g_app = None
-logger = xn_logger.get('app.main')
+logger = xn_logger.get(__name__)
 
 
 class MyApplication(QApplication):
@@ -28,4 +28,5 @@ if __name__ == '__main__':
     except Exception as e:
         print(e)
         retcode = 1
+    logger.info('Application exiting with code {0}'.format(retcode))
     sys.exit(retcode)
