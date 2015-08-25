@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="i">
+    <file alias="favicon_16.png">i/favicon_16.png</file>
+    <file alias="favicon_32.png">i/favicon_32.png</file>
+    <file alias="loading.gif">i/loading.gif</file>
+  </qresource>
+</RCC>
