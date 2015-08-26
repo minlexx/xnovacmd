@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread, Qt
 
 # from PyQt5.QtCore import Qt
 # ^^ for Qt.QueuedConnection
@@ -6,6 +6,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread
 from .xn_data import XNCoords, XNovaAccountInfo, XNovaAccountScores
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
+from .xn_parser import OverviewParser
 
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
@@ -22,14 +23,20 @@ class XNovaWorld(QThread):
         # helpers
         self.page_cache = XNovaPageCache()
         self.page_downloader = XNovaPageDownload()
+        self.parser_overview = OverviewParser()
         # world/user info
         self.account = XNovaAccountInfo()
+        # misc
+        self.net_errors_count = 0
 
     def initialize(self, cookies_dict: dict):
         # load cached pages
         self.page_cache.load_from_disk_cache(clean=True)
         # init network session with cookies for authorization
         self.page_downloader.set_cookies_from_dict(cookies_dict)
+        # connections
+        logger.debug('XNovaWorld: initialized from tid={0}'.format(self._gettid()))
+        self.page_downloaded.connect(self.on_page_downloaded, Qt.QueuedConnection)
 
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -37,6 +44,13 @@ class XNovaWorld(QThread):
     def world_tick(self):
         # logger.debug('world_tick() called')
         pass
+
+    @pyqtSlot(str)
+    def on_page_downloaded(self, page_name: str):
+        logger.debug('on_page_downloaded({0}) tid={1}'.format(page_name, self._gettid()))
+        if page_name == 'overview':
+            page_content = self.page_cache.get_page(page_name)
+            self.parser_overview.parse_page_content(page_content)
 
     # internal, converts page identifier to url path
     @staticmethod
@@ -70,8 +84,8 @@ class XNovaWorld(QThread):
                 self.page_downloaded.emit(page_name)
             else:
                 # page download error
-                # TODO: write appropriate handler later
-                pass
+                self.net_errors_count += 1
+                logger.debug('XNovaWorld: net error happened, total count: {0}'.format(self.net_errors_count))
         return None
 
     # internal, called from thread on first load
@@ -84,7 +98,7 @@ class XNovaWorld(QThread):
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
             page_time = pages_maxtime[i]
-            self._get_page(page_name, page_time)
+            self._get_page(page_name, max_cache_lifetime=page_time, force_download=True)
             QThread.msleep(500)  # 500ms delay before requesting next page
 
     @staticmethod
@@ -96,9 +110,9 @@ class XNovaWorld(QThread):
     def run(self):
         # start new life from full downloading of current server state
         self._full_refresh()
-        logger.debug('XNovaWorld thread: entering event loop, cur thread: {0}'.format(self._gettid()))
+        logger.debug('XNovaWorld thread: entering Qt event loop, tid={0}'.format(self._gettid()))
         ret = self.exec()  # enter Qt event loop to receive events
-        logger.debug('XNovaWorld thread: event loop ended with code {0}'.format(ret))
+        logger.debug('XNovaWorld thread: Qt event loop ended with code {0}'.format(ret))
         # cannot return result
 
 
