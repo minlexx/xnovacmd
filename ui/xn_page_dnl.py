@@ -23,6 +23,7 @@ class XNovaPageDownload:
         # construct requests HTTP session
         self.sess = requests.Session()
         self.sess.headers.update({'user-agent': self.user_agent})
+        self.sess.headers.update({'referer': 'http://{0}/'.format(self.xnova_url)})
         if cookies_dict:
             self.set_cookies_from_dict(cookies_dict)
 
@@ -58,6 +59,8 @@ class XNovaPageDownload:
             if r.status_code == requests.codes.ok:
                 text = r.text
                 logger.debug('internal: download [{0}] OK'.format(url))
+                # on successful request, update referer header for the next request
+                self.sess.headers.update({'referer': url})
             else:
                 logger.debug('Unexpected response code: HTTP {0}'.format(r.status_code))
                 self._set_error('HTTP {0}'.format(r.status_code))
