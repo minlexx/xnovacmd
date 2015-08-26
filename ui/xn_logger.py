@@ -5,6 +5,7 @@ import sys
 xn_log_formatter = logging.Formatter('%(asctime)s %(levelname)s %(name)s %(message)s')
 
 
+# get "standard" logger for application
 def get(name, debug=False):
     level = logging.INFO
     if debug:

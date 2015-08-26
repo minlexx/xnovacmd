@@ -7,6 +7,5 @@ Requirements to run:
 
  * Qt 5
  * Python 3
- * python modules: [python-requests](http://docs.python-requests.org/en/latest/)
- * [SIP](https://riverbankcomputing.com/software/sip/download) required before building PyQt
- * [PyQt5](http://pyqt.sourceforge.net/Docs/PyQt5/installation.html) and all its dependencies (sip, etc)
+ * python modules: [requests](http://docs.python-requests.org/en/latest/)
+ * [PyQt5](http://pyqt.sourceforge.net/Docs/PyQt5/installation.html) and all its dependencies ([SIP](https://riverbankcomputing.com/software/sip/download), etc)

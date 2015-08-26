@@ -11,6 +11,10 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
+# This class will control:
+# 1. main application window in general, and all UI (tray icon, etc)
+#    (although each tab will have its own widget controller)
+# 2. XNova world object and background world updater thread
 class XNova_MainWindow(QWidget):
 
     STATE_NOT_AUTHED = 0
@@ -42,6 +46,8 @@ class XNova_MainWindow(QWidget):
             self.tray_icon.setToolTip('XNova Commander')
             self.tray_icon.show()
 
+    # overrides QWidget.closeEvent
+    # cleanup just before the window close
     def closeEvent(self, close_event: QCloseEvent):
         logger.debug('closing')
         if self.tray_icon:
@@ -58,11 +64,15 @@ class XNova_MainWindow(QWidget):
                 self.world.terminate()
         close_event.accept()
 
+    # convenient internal wrapper
     def add_tab(self, widget, tab_name):
         tab_index = self.ui.tabWidget.addTab(widget, tab_name)
         widget.show()
 
+    # called by main application object just after main window creation
+    # to show login widget and begin login process
     def begin_login(self):
+        # create and show login widget as first tab
         self.login_widget = LoginWidget(self.ui.tabWidget)
         self.login_widget.load_ui()
         self.login_widget.loginError.connect(self.on_login_error)
@@ -75,23 +85,24 @@ class XNova_MainWindow(QWidget):
         self.state = self.STATE_NOT_AUTHED
         QMessageBox.critical(self, 'Login error:', errstr)
 
-    @pyqtSlot(dict)
+    @pyqtSlot(str, dict)
     def on_login_ok(self, login_email, cookies_dict):
         logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
         # save login data: email, cookies
         self.state = self.STATE_AUTHED
         self.login_email = login_email
         self.cookies_dict = cookies_dict
-        # destroy login widget
+        # destroy login widget and remove its tab
         self.ui.tabWidget.removeTab(0)
         self.login_widget = None
         # create all main widgets
-        # overview widget
+        # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
         self.add_tab(self.overview_widget, 'Overview')
-        # initialize world
+        # initialize XNova world updater
         self.world.initialize(cookies_dict)
+        # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
         self.world_timer.start()
@@ -99,5 +110,6 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_world_timer(self):
+        # TODO: maybe move timer and all logic into world thread, inside?
         if self.world:
             self.world.world_tick()

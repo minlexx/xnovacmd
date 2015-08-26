@@ -4,18 +4,22 @@ from PyQt5.QtWidgets import QApplication
 
 from ui import xn_logger
 from ui.main import XNova_MainWindow
+# we need to import this file to initialize all Qt compiled resources
 import ui.res_rc
 
 g_app = None
 logger = xn_logger.get(__name__)
 
 
+# Main application class
 class MyApplication(QApplication):
     def __init__(self, argv):
         super(MyApplication, self).__init__(argv)
-        # main window
+        # create main window
         self.mainwindow = XNova_MainWindow()
         self.mainwindow.show()
+        # switch phase to login, show login widget
+        # and begin login process
         self.mainwindow.begin_login()
 
 
@@ -24,7 +28,7 @@ if __name__ == '__main__':
     g_app = MyApplication(sys.argv)
     retcode = 0
     try:
-        retcode = g_app.exec_()
+        retcode = g_app.exec_()  # Qt event loop!
     except Exception as e:
         print(e)
         retcode = 1

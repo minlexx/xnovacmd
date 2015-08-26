@@ -13,6 +13,7 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
+# background network operations for login widget
 class LoginThread(QThread):
     def __init__(self, parent=None):
         super(LoginThread, self).__init__(parent)
@@ -36,6 +37,7 @@ class LoginThread(QThread):
         self.sess.headers.update({'user-agent': self.user_agent})
         self.requests_cookiejar = None
 
+    # overrides QThread.run()
     def run(self):
         if self.step == 1:
             self.run_step1()
@@ -99,6 +101,7 @@ class LoginThread(QThread):
         self.step = 1
 
 
+# Manages all login process
 class LoginWidget(QWidget):
     # signals
     loginOk = pyqtSignal(str, dict)  # (login(email), cookies{})
@@ -173,7 +176,7 @@ class LoginWidget(QWidget):
         self.loading_gif.start()
         if self.ui.chk_remember.isChecked():
             self.save_login()
-        # create t hread object
+        # create thread object
         self.th = LoginThread(self)
         self.th.finished.connect(self.on_thread_finished)
         # get form data and start thread

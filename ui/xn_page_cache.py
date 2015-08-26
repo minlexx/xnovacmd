@@ -7,12 +7,18 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
+# Incapsulates downloaded pages storage
+# keeps all downloaded files in ./cache
+# the file first requested from this cache,
+# and only if get() returns None, it will be
+# downloaded over network
 class XNovaPageCache:
     def __init__(self):
         self._pages = {}
         self._mtimes = {}
         self.save_load_encoding = locale.getpreferredencoding()
 
+    # scan ./cache directory and load all files into memory
     def load_from_disk_cache(self, clean=True):
         if clean:
             self._pages = {}
@@ -35,6 +41,7 @@ class XNovaPageCache:
                     pass
         logger.info('Loaded {0} cached pages.'.format(num_loaded))
 
+    # save page into cache
     def set_page(self, page_name, contents):
         self._pages[page_name] = contents
         self._mtimes[page_name] = int(time.time())  # also update modified time!
@@ -47,6 +54,10 @@ class XNovaPageCache:
         except IOError as ioe:
             logger.error('set_page("{0}", ...): IOError: {1}'.format(page_name, str(ioe)))
 
+    # get page from cache
+    # the file first requested from this cache,
+    # and only if get() returns None, it will be
+    # downloaded over network
     def get_page(self, page_name, max_cache_secs=None):
         if len(page_name) < 1:
             return None

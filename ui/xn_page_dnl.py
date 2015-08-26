@@ -7,6 +7,8 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
+# Incapsulates network layer:
+# all operations for getting data from server
 class XNovaPageDownload:
     def __init__(self, cookies_dict: dict=None):
         self.xnova_url = 'uni4.xnova.su'
@@ -27,19 +29,27 @@ class XNovaPageDownload:
     def set_cookies_from_dict(self, cookies_dict: dict):
         self.sess.cookies = requests.cookies.cookiejar_from_dict(cookies_dict)
 
+    # @download@ public interface
+    # convert page "id" into url path to download
+    # and call internal function
     def download(self, page_name: str):
         page_content = None
+        # TODO: maybe this logic should be at hifger level?
         if page_name == 'overview':
             page_content = self._download_url('?set=overview')
         else:
             raise ValueError('XNovaPageDownload: unknown page type requested: {0}'.format(page_name))
         return page_content
 
+    # error handler
     def _set_error(self, errstr):
         self.error_str = errstr
 
+    # real downloader function
+    # returns None on failure
     def _download_url(self, url_append: str):
         self.error_str = None  # clear error
+        # construct url to download
         url = 'http://{0}/{1}'.format(self.xnova_url, url_append)
         logger.debug('internal: downloading [{0}]...'.format(url))
         text = None

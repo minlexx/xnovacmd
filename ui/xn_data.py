@@ -1,6 +1,12 @@
 import re
 
 
+# this module will define/keep all static Xnova data models
+# and basic classes
+
+
+# XNova universe coordinates model
+# [galaxy:solarsystem:planet]
 class XNCoords:
     def __init__(self):
         self.galaxy = 0
@@ -49,6 +55,7 @@ class XNovaAccountScores:
         self.wins = 0
         self.losses = 0
         self.fraction = ''
+        self.credits = 0
 
     def __str__(self):
         return '{0}({1}): {2}'.format(self.rank, str(self.rank_delta), self.total)

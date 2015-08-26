@@ -11,8 +11,10 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
+# created by main window to keep info about world updated
 class XNovaWorld_impl(QThread):
 
+    # signal to be emitted when page is just fetched from server and ready to process
     page_downloaded = pyqtSignal(str)  # (page_name)
 
     def __init__(self, parent=None):
@@ -29,10 +31,16 @@ class XNovaWorld_impl(QThread):
         # init network session with cookies for authorization
         self.page_downloader.set_cookies_from_dict(cookies_dict)
 
+    # this should re-calculate all user's object statuses
+    # like fleets in flight, buildings in construction,
+    # reserches in progress, etc, ...
     def world_tick(self):
         # logger.debug('world_tick() called')
         pass
 
+    # for internal needs, get page from server
+    # first try to get from cache
+    # if there is no page there, or it is expired, download from net
     def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
         page = None
         if not force_download:
@@ -45,11 +53,15 @@ class XNovaWorld_impl(QThread):
                 self.page_cache.set_page(page_name, page)
                 self.page_downloaded.emit(page_name)
             else:
+                # page download error
+                # TODO: write appropriate handler later
                 pass
 
-    def initial_download(self):
-        logger.info('XNovaWorld thread: starting initial download')
+    def _full_refresh(self):
+        logger.info('XNovaWorld thread: starting full world update')
+        # load all pages that contain useful information
         pages_list = ['overview']
+        # pages' expiration time in cache
         pages_maxtime = [60]
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
@@ -63,16 +75,20 @@ class XNovaWorld_impl(QThread):
         return int(sip_voidptr)
 
     def run(self):
-        self.initial_download()
+        # start new life from full downloading of current server state
+        self._full_refresh()
         logger.debug('XNovaWorld thread: entering event loop, cur thread: {0}'.format(self._gettid()))
-        ret = self.exec()
+        ret = self.exec()  # enter Qt event loop to receive events
         logger.debug('XNovaWorld thread: event loop ended with code {0}'.format(ret))
         # cannot return result
 
 
+# only one instance of XNovaWorld should be!
+# well, there may be others, but for coordination...
 singleton_XNovaWorld = None
 
 
+# Factory
 # Serves as singleton entry-point to get world class instance
 def XNovaWorld():
     global singleton_XNovaWorld
