@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 
-from .xn_world import XNovaWorld
+from .xn_world import XNovaWorld_instance
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
@@ -16,7 +16,7 @@ class OverviewWidget(QWidget):
         self.uifile = 'ui/overview.ui'
         # objects, sub-windows
         self.ui = None
-        self.world = XNovaWorld()
+        self.world = XNovaWorld_instance()
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)

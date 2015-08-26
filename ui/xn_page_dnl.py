@@ -30,28 +30,16 @@ class XNovaPageDownload:
     def set_cookies_from_dict(self, cookies_dict: dict):
         self.sess.cookies = requests.cookies.cookiejar_from_dict(cookies_dict)
 
-    # @download@ public interface
-    # convert page "id" into url path to download
-    # and call internal function
-    def download(self, page_name: str):
-        page_content = None
-        # TODO: maybe this logic should be at hifger level?
-        if page_name == 'overview':
-            page_content = self._download_url('?set=overview')
-        else:
-            raise ValueError('XNovaPageDownload: unknown page type requested: {0}'.format(page_name))
-        return page_content
-
     # error handler
     def _set_error(self, errstr):
         self.error_str = errstr
 
     # real downloader function
     # returns None on failure
-    def _download_url(self, url_append: str):
+    def download_url_path(self, url_path: str):
         self.error_str = None  # clear error
         # construct url to download
-        url = 'http://{0}/{1}'.format(self.xnova_url, url_append)
+        url = 'http://{0}/{1}'.format(self.xnova_url, url_path)
         logger.debug('internal: downloading [{0}]...'.format(url))
         text = None
         try:

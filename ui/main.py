@@ -6,7 +6,7 @@ from PyQt5 import uic
 from .login_widget import LoginWidget
 from .overview import OverviewWidget
 
-from .xn_world import XNovaWorld
+from .xn_world import XNovaWorld_instance
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
@@ -34,7 +34,7 @@ class XNova_MainWindow(QWidget):
         self.overview_widget = None
         # initialization
         self.load_ui()
-        self.world = XNovaWorld()
+        self.world = XNovaWorld_instance()
         self.world_timer = QTimer(self)
         self.world_timer.timeout.connect(self.on_world_timer)
 
