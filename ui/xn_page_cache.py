@@ -37,6 +37,7 @@ class XNovaPageCache:
 
     def set_page(self, page_name, contents):
         self._pages[page_name] = contents
+        self._mtimes[page_name] = int(time.time())  # also update modified time!
         try:
             fn = os.path.join('./cache', page_name)
             f = open(fn, mode='wt', encoding=self.save_load_encoding)
