@@ -58,18 +58,24 @@ class XNovaAccountScores:
         self.credits = 0
 
     def __str__(self):
-        return '{0}({1}): {2}'.format(self.rank, str(self.rank_delta), self.total)
+        delta_str = '+{0}'.format(self.rank_delta)
+        if self.rank_delta < 0:
+            delta_str = '-{0}'.format(self.rank_delta)
+        return '{0}({1}): {2}'.format(self.rank, delta_str, self.total)
 
 
 class XNovaAccountInfo:
     def __init__(self):
+        self.email = '' # set from caller ? not from site
+        # collected from overview page
         self.id = 0
+        self.ref_link = ''
         self.login = ''
-        self.email = ''
+        self.scores = XNovaAccountScores()
+        # collected from user info page
         self.main_planet_name = ''
         self.main_planet_coords = XNCoords()
         self.alliance_name = ''
-        self.scrores = XNovaAccountScores()
 
     def __str__(self):
-        return '{0} rank {1}'.format(self.login, self.scrores)
+        return '{0} rank {1}'.format(self.login, self.scores)
