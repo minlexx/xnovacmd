@@ -36,7 +36,7 @@ class XNCoords:
                 self.system = int(match.group(2))
                 self.position = int(match.group(3))
             else:
-                raise ValueError('XCoords parse error', s)
+                raise ValueError('XCoords parse error: "{0}"'.format(s))
 
 
 class XNovaAccountScores:
@@ -44,9 +44,13 @@ class XNovaAccountScores:
         self.rank = 0
         self.rank_delta = 0
         self.buildings = 0
+        self.buildings_rank = 0  # collected from user info page
         self.fleet = 0
+        self.fleet_rank = 0  # collected from user info page
         self.defense = 0
+        self.defense_rank = 0  # collected from user info page
         self.science = 0
+        self.science_rank = 0  # collected from user info page
         self.total = 0
         self.industry_level = 0
         self.industry_exp = (0, 0)
@@ -61,7 +65,7 @@ class XNovaAccountScores:
         delta_str = '+{0}'.format(self.rank_delta)
         if self.rank_delta < 0:
             delta_str = '-{0}'.format(self.rank_delta)
-        return '{0}({1}): {2}'.format(self.rank, delta_str, self.total)
+        return '{0}({1}): {2} total'.format(self.rank, delta_str, self.total)
 
 
 class XNovaAccountInfo:
