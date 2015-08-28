@@ -17,6 +17,8 @@ class XNovaWorld(QThread):
 
     # signal to be emitted when page is just fetched from server and ready to process
     page_downloaded = pyqtSignal(str)  # (page_name)
+    # signal to be emitted when initial loging is complete
+    world_load_complete = pyqtSignal()
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -48,19 +50,29 @@ class XNovaWorld(QThread):
     @pyqtSlot(str)
     def on_page_downloaded(self, page_name: str):
         logger.debug('on_page_downloaded({0}) tid={1}'.format(page_name, self._gettid()))
+        # cache has the page inside before the signal was emitted!
+        # we can get page content from cache
+        page_content = self.page_cache.get_page(page_name)
+        if not page_content:
+            raise ValueError('This should not ever happen!')
         if page_name == 'overview':
-            page_content = self.page_cache.get_page(page_name)
             self.parser_overview.parse_page_content(page_content)
 
     # internal, converts page identifier to url path
-    @staticmethod
-    def _page_name_to_url_path(page_name: str):
+    def _page_name_to_url_path(self, page_name: str):
         urls_dict = dict()
         urls_dict['overview'] = '?set=overview'
         urls_dict['imperium'] = '?set=imperium'
         sub_url = None
         if page_name in urls_dict:
             return urls_dict[page_name]
+        elif page_name == 'self_user_info':
+            # special page case, dynamic URL, depends on user id
+            #  http://uni4.xnova.su/?set=players&id=71995
+            if self.parser_overview.account.id == 0:
+                logger.warn('XNovaWorld: requested account info page, but account id is 0!')
+                return None
+            sub_url = '?set=players&id={0}'.format(self.parser_overview.account.id)
         else:
             logger.warn('XNovaWorld: unknown page name requested: {0}'.format(page_name))
         return sub_url
@@ -68,7 +80,7 @@ class XNovaWorld(QThread):
     # for internal needs, get page from server
     # first try to get from cache
     # if there is no page there, or it is expired, download from net
-    def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
+    def _get_page(self, page_name, max_cache_lifetime=None, force_download=False, do_emit=False):
         page = None
         page_path = self._page_name_to_url_path(page_name)
         if not page_path:
@@ -81,7 +93,11 @@ class XNovaWorld(QThread):
             page = self.page_downloader.download_url_path(page_path)
             if page:
                 self.page_cache.set_page(page_name, page)
-                self.page_downloaded.emit(page_name)
+                # emit signal to process aynchronously, if set to
+                if do_emit:
+                    self.page_downloaded.emit(page_name)
+                else:  # or process sync
+                    self.on_page_downloaded(page_name)
             else:
                 # page download error
                 self.net_errors_count += 1
@@ -98,8 +114,15 @@ class XNovaWorld(QThread):
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
             page_time = pages_maxtime[i]
-            self._get_page(page_name, max_cache_lifetime=page_time, force_download=True)
+            self._get_page(page_name, max_cache_lifetime=page_time, force_download=True, do_emit=False)
             QThread.msleep(500)  # 500ms delay before requesting next page
+        # additionally request user info page, constructed as:
+        #  http://uni4.xnova.su/?set=players&id=71995
+        #  This need overview parser to parse and fetch account id
+        self._get_page('self_user_info', 300, force_download=True, do_emit=False)
+        QThread.msleep(500)
+        # signal wain window that we fifnished initial loading
+        self.world_load_complete.emit()
 
     @staticmethod
     def _gettid():
