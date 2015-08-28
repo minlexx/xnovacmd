@@ -100,13 +100,23 @@ class XNova_MainWindow(QWidget):
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
         self.add_tab(self.overview_widget, 'Overview')
+        self.overview_widget.setEnabled(False)
         # initialize XNova world updater
+        self.world.parser_overview.account.email = self.login_email
         self.world.initialize(cookies_dict)
+        self.world.world_load_complete.connect(self.on_world_load_complete)
+        self.world.start()
+
+    @pyqtSlot()
+    def on_world_load_complete(self):
+        logger.debug('main: on_world_load_complete()')
+        # update account info
+        self.overview_widget.setEnabled(True)
+        self.overview_widget.set_account_info(self.world.parser_overview.account)
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
         self.world_timer.start()
-        self.world.start()
 
     @pyqtSlot()
     def on_world_timer(self):
