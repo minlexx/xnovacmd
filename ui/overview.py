@@ -29,10 +29,11 @@ class OverviewWidget(QWidget):
         self.ui.btn_stop.clicked.connect(self.on_btn_stop)
         # self.ui.btn_signal.clicked.connect(self.on_btn_signal)
 
-    def set_account_info(self, a: XNovaAccountInfo):
+    def update_account_info(self):
         def set_as_item(tw, row: int, col: int, text):
             twi = QTableWidgetItem(str(text))
             tw.setItem(row, col, twi)
+        a = self.world.get_account_info()
         self.ui.gb_account.setTitle('Player: {0} (id={1})'.format(a.login, a.id))
         set_as_item(self.ui.tw_accStats, 0, 1, a.scores.buildings)
         set_as_item(self.ui.tw_accStats, 1, 1, a.scores.fleet)

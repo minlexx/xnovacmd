@@ -141,7 +141,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="login_widget.qrc"/>
+  <include location="res.qrc"/>
  </resources>
  <connections/>
 </ui>

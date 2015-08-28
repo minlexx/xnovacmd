@@ -112,7 +112,7 @@ class XNova_MainWindow(QWidget):
         logger.debug('main: on_world_load_complete()')
         # update account info
         self.overview_widget.setEnabled(True)
-        self.overview_widget.set_account_info(self.world.parser_overview.account)
+        self.overview_widget.update_account_info()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)

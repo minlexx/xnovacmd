@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
-    <height>358</height>
+    <width>575</width>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,6 +35,9 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
      <property name="currentIndex">
       <number>-1</number>
      </property>

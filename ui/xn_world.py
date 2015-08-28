@@ -40,12 +40,17 @@ class XNovaWorld(QThread):
         logger.debug('XNovaWorld: initialized from tid={0}'.format(self._gettid()))
         self.page_downloaded.connect(self.on_page_downloaded, Qt.QueuedConnection)
 
+    def get_account_info(self) -> XNovaAccountInfo:
+        return self.parser_overview.account
+
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
     # reserches in progress, etc, ...
     def world_tick(self):
         # logger.debug('world_tick() called')
         pass
+
+    ################################################################################
 
     @pyqtSlot(str)
     def on_page_downloaded(self, page_name: str):
