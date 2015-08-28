@@ -1,12 +1,9 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread, Qt
 
-# from PyQt5.QtCore import Qt
-# ^^ for Qt.QueuedConnection
-
 from .xn_data import XNCoords, XNovaAccountInfo, XNovaAccountScores
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
-from .xn_parser import OverviewParser
+from .xn_parser import OverviewParser, UserInfoParser
 
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
@@ -25,7 +22,9 @@ class XNovaWorld(QThread):
         # helpers
         self.page_cache = XNovaPageCache()
         self.page_downloader = XNovaPageDownload()
+        # parsers
         self.parser_overview = OverviewParser()
+        self.parser_userinfo = UserInfoParser()
         # world/user info
         self.account = XNovaAccountInfo()
         # misc
@@ -41,7 +40,7 @@ class XNovaWorld(QThread):
         self.page_downloaded.connect(self.on_page_downloaded, Qt.QueuedConnection)
 
     def get_account_info(self) -> XNovaAccountInfo:
-        return self.parser_overview.account
+        return self.account
 
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -60,10 +59,27 @@ class XNovaWorld(QThread):
         page_content = self.page_cache.get_page(page_name)
         if not page_content:
             raise ValueError('This should not ever happen!')
+        # dispatch parser and merge data
         if page_name == 'overview':
             self.parser_overview.parse_page_content(page_content)
+            self.account = self.parser_overview.account
+        elif page_name == 'self_user_info':
+            self.parser_userinfo.parse_page_content(page_content)
+            self.account.scores.buildings = self.parser_userinfo.buildings
+            self.account.scores.buildings_rank = self.parser_userinfo.buildings_rank
+            self.account.scores.fleet = self.parser_userinfo.fleet
+            self.account.scores.fleet_rank = self.parser_userinfo.fleet_rank
+            self.account.scores.defense = self.parser_userinfo.defense
+            self.account.scores.defense_rank = self.parser_userinfo.defense_rank
+            self.account.scores.science = self.parser_userinfo.science
+            self.account.scores.science_rank = self.parser_userinfo.science_rank
+            self.account.scores.total = self.parser_userinfo.total
+            self.account.scores.rank = self.parser_userinfo.rank
+            self.account.main_planet_name = self.parser_userinfo.main_planet_name
+            self.account.main_planet_coords = self.parser_userinfo.main_planet_coords
+            self.account.alliance_name = self.parser_userinfo.alliance_name
 
-    # internal, converts page identifier to url path
+    # internal helper, converts page identifier to url path
     def _page_name_to_url_path(self, page_name: str):
         urls_dict = dict()
         urls_dict['overview'] = '?set=overview'
@@ -74,10 +90,10 @@ class XNovaWorld(QThread):
         elif page_name == 'self_user_info':
             # special page case, dynamic URL, depends on user id
             #  http://uni4.xnova.su/?set=players&id=71995
-            if self.parser_overview.account.id == 0:
+            if self.account.id == 0:
                 logger.warn('XNovaWorld: requested account info page, but account id is 0!')
                 return None
-            sub_url = '?set=players&id={0}'.format(self.parser_overview.account.id)
+            sub_url = '?set=players&id={0}'.format(self.account.id)
         else:
             logger.warn('XNovaWorld: unknown page name requested: {0}'.format(page_name))
         return sub_url

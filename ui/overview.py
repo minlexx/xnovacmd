@@ -35,10 +35,14 @@ class OverviewWidget(QWidget):
             tw.setItem(row, col, twi)
         a = self.world.get_account_info()
         self.ui.gb_account.setTitle('Player: {0} (id={1})'.format(a.login, a.id))
-        set_as_item(self.ui.tw_accStats, 0, 1, a.scores.buildings)
-        set_as_item(self.ui.tw_accStats, 1, 1, a.scores.fleet)
-        set_as_item(self.ui.tw_accStats, 2, 1, a.scores.defense)
-        set_as_item(self.ui.tw_accStats, 3, 1, a.scores.science)
+        set_as_item(self.ui.tw_accStats, 0, 1, '{0} rank {1}'.format(
+            a.scores.buildings, a.scores.buildings_rank))
+        set_as_item(self.ui.tw_accStats, 1, 1, '{0} rank {1}'.format(
+            a.scores.fleet, a.scores.fleet_rank))
+        set_as_item(self.ui.tw_accStats, 2, 1, '{0} rank {1}'.format(
+            a.scores.defense, a.scores.defense_rank))
+        set_as_item(self.ui.tw_accStats, 3, 1, '{0} rank {1}'.format(
+            a.scores.science, a.scores.science_rank))
         set_as_item(self.ui.tw_accStats, 4, 1, a.scores.total)
         rank_delta_str = '+' + str(a.scores.rank_delta)  # explicit "+" sign
         if a.scores.rank_delta < 0:
@@ -51,6 +55,7 @@ class OverviewWidget(QWidget):
         set_as_item(self.ui.tw_accStats, 8, 1, '{0} W / {1} L'.format(a.scores.wins, a.scores.losses))
         set_as_item(self.ui.tw_accStats, 9, 1, a.scores.credits)
         set_as_item(self.ui.tw_accStats, 10, 1, a.scores.fraction)
+        set_as_item(self.ui.tw_accStats, 11, 1, a.alliance_name)
 
     # testing only
     @pyqtSlot()

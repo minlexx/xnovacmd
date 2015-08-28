@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
-    <height>355</height>
+    <width>492</width>
+    <height>358</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
          <property name="minimumSize">
           <size>
            <width>100</width>
-           <height>225</height>
+           <height>245</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -152,6 +152,11 @@
            <string>11</string>
           </property>
          </row>
+         <row>
+          <property name="text">
+           <string>12</string>
+          </property>
+         </row>
          <column>
           <property name="text">
            <string>name</string>
@@ -215,6 +220,11 @@
          <item row="10" column="0">
           <property name="text">
            <string>Fraction:</string>
+          </property>
+         </item>
+         <item row="11" column="0">
+          <property name="text">
+           <string>Alliance:</string>
           </property>
          </item>
         </widget>

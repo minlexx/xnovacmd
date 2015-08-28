@@ -279,6 +279,7 @@ class UserInfoParser(XNParserBase):
         # internal state vars
         self.in_main_planet = False
         self.in_alliance = False
+        self.in_stats = False
         self._in = ''
         self.counter = 0
 
@@ -291,27 +292,30 @@ class UserInfoParser(XNParserBase):
             self.counter = 1
             return
         if data_s == 'Альянс:':
-            self.in_main_planet = True
+            self.in_alliance = True
             self.counter = 1
             return
-        if data_s == 'Постройки':
+        if data_s == 'Статистика игры':
+            self.in_stats = True
+            return
+        if (data_s == 'Постройки') and self.in_stats:
             self._in = 'build'
             self.counter = 1
             return
-        if data_s == 'Иследования':
-            self._in = 'build'
+        if (data_s == 'Иследования') and self.in_stats:
+            self._in = 'science'
             self.counter = 1
             return
-        if data_s == 'Флот':
-            self._in = 'build'
+        if (data_s == 'Флот') and self.in_stats:
+            self._in = 'fleet'
             self.counter = 1
             return
-        if data_s == 'Оборона':
-            self._in = 'build'
+        if (data_s == 'Оборона') and self.in_stats:
+            self._in = 'defense'
             self.counter = 1
             return
-        if data_s == 'Всего':
-            self._in = 'build'
+        if (data_s == 'Всего') and self.in_stats:
+            self._in = 'totals'
             self.counter = 1
             return
         #######################
