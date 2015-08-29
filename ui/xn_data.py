@@ -22,6 +22,9 @@ class XNCoords:
         self.system = s
         self.position = p
 
+    def is_empty(self):
+        return (self.galaxy == 0) and (self.system == 0) and (self.position == 0)
+
     def parse_str(self, s: str, raise_on_error=False):
         # '[1:23:456]'
         match = re.match('^\[(\d+):(\d+):(\d+)\]$', s)
@@ -110,6 +113,13 @@ class XNFlightShips:
         self.f_corsair = 0
         self.f_ceptor = 0
         self.f_dread = 0
+
+    def __len__(self):
+        total = self.mt + self.bt + self.li + self.ti + self.crus + self.link \
+            + self.col + self.rab + self.spy + self.bomber + self.ss + self.unik \
+            + self.zs + self.lk + self.warbase \
+            + self.f_ceptor + self.f_corsair + self.f_corvett + self.f_dread
+        return total
 
     def __str__(self):
         def sa(v, s):
