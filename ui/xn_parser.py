@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import html.parser
+import datetime
 
 from .xn_data import XNovaAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
 
@@ -175,6 +176,8 @@ class OverviewParser(XNParserBase):
         self.in_losses = False
         self.in_reflink = False
         self.in_flight = False
+        self.in_flight_time = False
+        self.in_flight_time_arrival = False
         self._data_prev = ''
         self._read_next = ''
         self._num_a_with_tooltip = 0
@@ -182,6 +185,7 @@ class OverviewParser(XNParserBase):
         self.account = XNovaAccountInfo()
         self.flights = []
         self._cur_flight = XNFlight()
+        self._cur_flight_arrive_dt = None
 
     def handle_path(self, tag: str, attrs: list, path: str):
         attrs_s = ''
@@ -268,6 +272,24 @@ class OverviewParser(XNParserBase):
             self._cur_flight.direction = flight_dir
             self._cur_flight.mission = flight_mission
             return
+        if (tag == 'tr') and (len(attrs) > 0):
+            tr_class = ''
+            for attr_tuple in attrs:
+                if attr_tuple[0] == 'class':
+                    tr_class = attr_tuple[1]
+            if (tr_class == 'flight') or (tr_class == 'return'):
+                # table row with flight info, or building (TODO)
+                self.in_flight_time = True
+        if (tag == 'font') and (len(attrs) > 0):
+            if self.in_flight_time:
+                font_color = ''
+                for attr_tuple in attrs:
+                    if attr_tuple[0] == 'color':
+                        font_color = attr_tuple[1]
+                if font_color == 'lime':
+                    self.in_flight_time_arrival = True
+                    # <font color="lime">13:59:31</font>
+                    # next data item will be arrival time
 
     def handle_endtag(self, tag: str):
         if tag == 'span':
@@ -276,9 +298,18 @@ class OverviewParser(XNParserBase):
                 self._num_a_with_tooltip = 0
                 self._num_a_with_galaxy = 0
                 # save flight
+                self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
                 self.flights.append(self._cur_flight)
                 logger.info('Flight: {0}'.format(self._cur_flight))
                 self._cur_flight = None
+                self._cur_flight_arrive_dt = None
+                return
+        if tag == 'font':
+            if self.in_flight_time:
+                if self.in_flight_time_arrival:
+                    # end processing of <font color="lime">13:59:31</font>
+                    self.in_flight_time = False
+                    self.in_flight_time_arrival = False
 
     def handle_data(self, data: str):
         data_s = data.strip()
@@ -442,6 +473,20 @@ class OverviewParser(XNParserBase):
                     self._num_a_with_galaxy = 0  # stop here
             except ValueError as ve:
                 pass
+        if self.in_flight_time and self.in_flight_time_arrival:
+            # 13:59:31  (hr:min:sec)
+            match = re.search(r'(\d+):(\d+):(\d+)', data_s)
+            if match:
+                h = safe_int(match.group(1))
+                m = safe_int(match.group(2))
+                s = safe_int(match.group(3))
+                dt_now = datetime.datetime.today()
+                dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
+                                              hour=h, minute=m, second=s)
+                self._cur_flight_arrive_dt = dt_arrive
+                # logger.debug('arrive ts: {0}'.format(dt_arrive))
+            return
+        return   # from def handle_data()
 
 
 class UserInfoParser(XNParserBase):
@@ -580,4 +625,4 @@ class UserInfoParser(XNParserBase):
                 self.counter = 0
                 self._in = ''
             return
-        return
+        return  # def handle_data()

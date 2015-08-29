@@ -1,4 +1,5 @@
 import re
+import datetime
 
 
 # this module will define/keep all static Xnova data models
@@ -132,6 +133,8 @@ class XNFlightShips:
         ret += sa(self.f_corsair, 'CORSAIR')
         ret += sa(self.f_corvett, 'CORVETT')
         ret += sa(self.f_dread, 'DREAD')
+        if ret.endswith('; '):
+            ret = ret[0:-2]
         return ret
 
 
@@ -145,7 +148,8 @@ class XNFlightResources:
         sme = 'Metal: {0}'.format(str(self.met)) if self.met > 0 else ''
         scry = 'Crystal: {0}'.format(str(self.cry)) if self.cry > 0 else ''
         sdeit = 'Deit: {0}'.format(str(self.deit)) if self.deit > 0 else ''
-        return sme + ' ' + scry + ' ' + sdeit
+        ret = sme + ' ' + scry + ' ' + sdeit
+        return ret.strip()
 
 
 class XNFlight:
@@ -156,10 +160,12 @@ class XNFlight:
         self.dst = XNCoords()
         self.mission = None
         self.direction = ''
+        self.arrive_datetime = 0
 
     def __str__(self):
         s = '{0} {1}->{2} ({3}) {4}'.format(
             self.mission, str(self.src), str(self.dst), str(self.ships), str(self.res))
         if self.direction == 'return':
-            s += ' (return)'
+            s += ' return'
+        s += (' ' + str(self.arrive_datetime))
         return s
