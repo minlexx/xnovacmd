@@ -24,6 +24,12 @@ class XNovaPageCache:
             self._pages = {}
             self._mtimes = {}
         cache_dir = pathlib.Path('./cache')
+        if not cache_dir.exists():
+            try:
+                cache_dir.mkdir()
+            except OSError as ose:
+                pass
+            return
         num_loaded = 0
         for subitem in cache_dir.iterdir():
             if subitem.is_file():
