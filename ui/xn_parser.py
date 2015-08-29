@@ -253,7 +253,9 @@ class OverviewParser(XNParserBase):
             flight_dirs = ['flight', 'return']
             flight_missions = ['owndeploy', 'owntransport', 'ownattack', 'ownespionage',
                                'ownharvest', 'owncolony', 'ownfederation', 'ownmissile',
-                               'owndestroy', 'ownhold']
+                               'owndestroy', 'ownhold',
+                               # enemy/hostile missions
+                               'attack', 'espionage', 'missile', 'destroy', 'federation']
             flight_dir = ''
             flight_mission = ''
             for a_sclass in classes:
@@ -294,13 +296,18 @@ class OverviewParser(XNParserBase):
     def handle_endtag(self, tag: str):
         if tag == 'span':
             if self.in_flight:
+                # save flight arrive time
+                self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
+                # validate this is flight
+                if (not self._cur_flight.src.is_empty()) and (not self._cur_flight.dst.is_empty()):
+                    # only having source/destination set
+                    if len(self._cur_flight.ships) > 0:
+                        # only actually having ships in it
+                        self.flights.append(self._cur_flight)
+                        logger.info('Flight: {0}'.format(self._cur_flight))
                 self.in_flight = False
                 self._num_a_with_tooltip = 0
                 self._num_a_with_galaxy = 0
-                # save flight
-                self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
-                self.flights.append(self._cur_flight)
-                logger.info('Flight: {0}'.format(self._cur_flight))
                 self._cur_flight = None
                 self._cur_flight_arrive_dt = None
                 return
