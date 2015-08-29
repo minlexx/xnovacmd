@@ -21,7 +21,7 @@ class XNCoords:
         self.system = s
         self.position = p
 
-    def parse_str(self, s: str):
+    def parse_str(self, s: str, raise_on_error=False):
         # '[1:23:456]'
         match = re.match('^\[(\d+):(\d+):(\d+)\]$', s)
         if match:
@@ -36,7 +36,9 @@ class XNCoords:
                 self.system = int(match.group(2))
                 self.position = int(match.group(3))
             else:
-                raise ValueError('XCoords parse error: "{0}"'.format(s))
+                if raise_on_error:
+                    raise ValueError('XCoords parse error: "{0}"'.format(s))
+        return
 
 
 class XNovaAccountScores:
@@ -83,3 +85,81 @@ class XNovaAccountInfo:
 
     def __str__(self):
         return '{0} rank {1}'.format(self.login, self.scores)
+
+
+class XNFlightShips:
+    def __init__(self):
+        self.mt = 0  # small transport
+        self.bt = 0  # big transport
+        self.li = 0  # light interceptor
+        self.ti = 0  # heavy ceptor
+        self.crus = 0  # cruiser
+        self.link = 0  # linkor
+        self.col = 0   # colonizator
+        self.rab = 0   # refiner
+        self.spy = 0   # spy
+        self.bomber = 0  # bomber
+        self.ss = 0     # solar satellite
+        self.unik = 0   # destroyer
+        self.zs = 0    # death star
+        self.lk = 0    # linear cruiser
+        self.warbase = 0  # warbase
+        # fraction specific ships
+        self.f_corvett = 0
+        self.f_corsair = 0
+        self.f_ceptor = 0
+        self.f_dread = 0
+
+    def __str__(self):
+        def sa(v, s):
+            return '{0}: {1}; '.format(s, v) if v > 0 else ''
+        ret = sa(self.mt, 'MT')
+        ret += sa(self.bt, 'BT')
+        ret += sa(self.li, 'LI')
+        ret += sa(self.ti, 'TI')
+        ret += sa(self.crus, 'CR')
+        ret += sa(self.link, 'LINK')
+        ret += sa(self.col, 'COL')
+        ret += sa(self.rab, 'RAB')
+        ret += sa(self.spy, 'SPY')
+        ret += sa(self.bomber, 'BOMB')
+        ret += sa(self.ss, 'ss')
+        ret += sa(self.unik, 'UNIK')
+        ret += sa(self.zs, 'DEATH STAR')
+        ret += sa(self.lk, 'LK')
+        ret += sa(self.warbase, 'BASE')
+        ret += sa(self.f_ceptor, 'CEPTOR')
+        ret += sa(self.f_corsair, 'CORSAIR')
+        ret += sa(self.f_corvett, 'CORVETT')
+        ret += sa(self.f_dread, 'DREAD')
+        return ret
+
+
+class XNFlightResources:
+    def __init__(self):
+        self.met = 0
+        self.cry = 0
+        self.deit = 0
+
+    def __str__(self):
+        sme = 'Metal: {0}'.format(str(self.met)) if self.met > 0 else ''
+        scry = 'Crystal: {0}'.format(str(self.cry)) if self.cry > 0 else ''
+        sdeit = 'Deit: {0}'.format(str(self.deit)) if self.deit > 0 else ''
+        return sme + ' ' + scry + ' ' + sdeit
+
+
+class XNFlight:
+    def __init__(self):
+        self.ships = XNFlightShips()
+        self.res = XNFlightResources()
+        self.src = XNCoords()
+        self.dst = XNCoords()
+        self.mission = None
+        self.direction = ''
+
+    def __str__(self):
+        s = '{0} {1}->{2} ({3}) {4}'.format(
+            self.mission, str(self.src), str(self.dst), str(self.ships), str(self.res))
+        if self.direction == 'return':
+            s += ' (return)'
+        return s

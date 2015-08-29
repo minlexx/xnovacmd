@@ -2,7 +2,7 @@
 import re
 import html.parser
 
-from .xn_data import XNovaAccountInfo, XNCoords
+from .xn_data import XNovaAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
 
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
@@ -73,6 +73,94 @@ class XNParserBase(html.parser.HTMLParser):
             self.feed(page)
 
 
+def _parse_flight_ships(s) -> XNFlightShips:
+    class _FSParser(XNParserBase):
+        def __init__(self):
+            super(_FSParser, self).__init__()
+            self.ships = XNFlightShips()
+            self._p = ''
+
+        def handle_data(self, data: str):
+            data_s = data.strip()
+            if len(data_s) < 1:
+                return
+            # logger.debug('FSParser: data: [{0}], prev=[{1}]'.format(data_s, self._p))
+            value = safe_int(data_s)
+            if value > 0:
+                if self._p == 'Малый транспорт:':
+                    self.ships.mt = value
+                elif self._p == 'Большой транспорт:':
+                    self.ships.bt = value
+                elif self._p == 'Лёгкий истребитель:':
+                    self.ships.li = value
+                elif self._p == 'Тяжёлый истребитель:':
+                    self.ships.ti = value
+                elif self._p == 'Крейсер:':
+                    self.ships.crus = value
+                elif self._p == 'Линкор:':
+                    self.ships.link = value
+                elif self._p == 'Колонизатор:':
+                    self.ships.col = value
+                elif self._p == 'Переработчик:':
+                    self.ships.rab = value
+                elif self._p == 'Шпионский зонд:':
+                    self.ships.spy = value
+                elif self._p == 'Бомбардировщик:':
+                    self.ships.bomber = value
+                elif self._p == 'Солнечный спутник:':
+                    self.ships.ss = value
+                elif self._p == 'Уничтожитель:':
+                    self.ships.unik = value
+                elif self._p == 'Звезда смерти:':
+                    self.ships.zs = value
+                elif self._p == 'Линейный крейсер:':
+                    self.ships.lk = value
+                elif self._p == 'Передвижная база:':
+                    self.ships.warbase = value
+                elif self._p == 'Корсар:':
+                    self.ships.f_corsair = value
+                elif self._p == 'Корвет:':
+                    self.ships.f_corvett = value
+                elif self._p == 'Перехватчик:':
+                    self.ships.f_ceptor = value
+                elif self._p == 'Дредноут:':
+                    self.ships.f_dread = value
+                else:
+                    raise ValueError('Unknown ship type: "{0}"'.format(self._p))
+            else:
+                self._p = data_s
+
+    parser = _FSParser()
+    parser.parse_page_content(s)
+    return parser.ships
+
+
+def _parse_flight_resources(s) -> XNFlightResources:
+    class _FRParser(XNParserBase):
+        def __init__(self):
+            super(_FRParser, self).__init__()
+            self.res = XNFlightResources()
+            self._c = 0
+
+        def handle_data(self, data: str):
+            data_s = data.strip()
+            if len(data_s) < 1:
+                return
+            self._c += 1
+            # logger.debug('FRParser data [{0}] c={1}'.format(data_s, self._c))
+            if self._c == 2:
+                self.res.met = safe_int(data_s)
+            elif self._c == 4:
+                self.res.cry = safe_int(data_s)
+            elif self._c == 6:
+                self.res.deit = safe_int(data_s)
+
+    parser = _FRParser()
+    parser.parse_page_content(s)
+    fr = parser.res
+    return fr
+
+
 # parses overview page
 # gets account info
 class OverviewParser(XNParserBase):
@@ -86,9 +174,14 @@ class OverviewParser(XNParserBase):
         self.in_wins = False
         self.in_losses = False
         self.in_reflink = False
+        self.in_flight = False
         self._data_prev = ''
         self._read_next = ''
+        self._num_a_with_tooltip = 0
+        self._num_a_with_galaxy = 0
         self.account = XNovaAccountInfo()
+        self.flights = []
+        self._cur_flight = XNFlight()
 
     def handle_path(self, tag: str, attrs: list, path: str):
         attrs_s = ''
@@ -102,10 +195,90 @@ class OverviewParser(XNParserBase):
             if ('src', '/images/losses.gif') in attrs:
                 self.in_losses = True
                 # logger.debug('in_losses')
+            return
         if (tag == 'a') and (len(attrs) > 0):
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
             if ('href', '?set=refers') in attrs:
                 self.in_reflink = True
+                return
+            if self.in_flight:
+                data_tooltip_content = ''
+                href = ''
+                for attr_tuple in attrs:
+                    if attr_tuple[0] == 'data-tooltip-content':
+                        data_tooltip_content = attr_tuple[1]
+                    if attr_tuple[0] == 'href':
+                        href = attr_tuple[1]
+                # this may be flee compisition reference or resources jar
+                if data_tooltip_content != '':
+                    # <table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font>
+                    # </td><td width=25% align=right><font color=white>2<font>
+                    # or ... <font color=white>Металл<font></td> ... <font color=white>18.000<font> ...
+                    # logger.debug('tt: [{0}]'.format(data_tooltip_content))
+                    self._num_a_with_tooltip += 1
+                    if self._num_a_with_tooltip == 1:
+                        fs = _parse_flight_ships(data_tooltip_content)
+                        # logger.debug('  ships: {0}'.format(fs))
+                        self._cur_flight.ships = fs
+                    elif self._num_a_with_tooltip == 2:
+                        fr = _parse_flight_resources(data_tooltip_content)
+                        # logger.debug('  resources: {0}'.format(fr))
+                        self._cur_flight.res = fr
+                # or it may be a planet reference
+                if href != '':
+                    # logger.debug('<a href=[{0}]'.format(href))
+                    # <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=129"
+                    if href.startswith('?set=galaxy&r=3&galaxy='):
+                        # logger.debug('    galaxy reference? [{0}]'.format(href))
+                        self._num_a_with_galaxy += 1
+            return
+        # handle flying fleets
+        if (tag == 'span') and (len(attrs) > 0):
+            span_class = ''
+            for attr_tuple in attrs:
+                if attr_tuple[0] == 'class':
+                    span_class = attr_tuple[1]
+            if span_class == '':
+                # skip all <span> without class
+                return
+            # check that span class is flight:
+            #  class="return ownattack"
+            #  class="flight ownattack"
+            #  class="return owndeploy"
+            classes = span_class.split(' ')
+            flight_dirs = ['flight', 'return']
+            flight_missions = ['owndeploy', 'owntransport', 'ownattack', 'ownespionage',
+                               'ownharvest', 'owncolony', 'ownfederation', 'ownmissile',
+                               'owndestroy', 'ownhold']
+            flight_dir = ''
+            flight_mission = ''
+            for a_sclass in classes:
+                if a_sclass in flight_dirs:
+                    flight_dir = a_sclass
+                if a_sclass in flight_missions:
+                    flight_mission = a_sclass
+            if (flight_dir == '') or (flight_mission == ''):
+                # this not span about flying fleet
+                return
+            # logger.debug('--> In flight: {0}'.format(str(classes)))  # ['return', 'owntransport']
+            self.in_flight = True
+            self._num_a_with_tooltip = 0
+            self._num_a_with_galaxy = 0
+            self._cur_flight = XNFlight()
+            self._cur_flight.direction = flight_dir
+            self._cur_flight.mission = flight_mission
+            return
+
+    def handle_endtag(self, tag: str):
+        if tag == 'span':
+            if self.in_flight:
+                self.in_flight = False
+                self._num_a_with_tooltip = 0
+                self._num_a_with_galaxy = 0
+                # save flight
+                self.flights.append(self._cur_flight)
+                logger.info('Flight: {0}'.format(self._cur_flight))
+                self._cur_flight = None
 
     def handle_data(self, data: str):
         data_s = data.strip()
@@ -257,6 +430,18 @@ class OverviewParser(XNParserBase):
             if match:
                 self.account.id = safe_int(match.group(1))
             self.in_reflink = False
+        if self._num_a_with_galaxy > 0:
+            # logger.debug('{0}: galaxy ref [{1}]'.format(self._num_a_with_galaxy, data_s))
+            xc = XNCoords()
+            try:
+                xc.parse_str(data_s, raise_on_error=True)
+                if self._num_a_with_galaxy == 1:
+                    self._cur_flight.src = xc
+                elif self._num_a_with_galaxy == 2:
+                    self._cur_flight.dst = xc
+                    self._num_a_with_galaxy = 0  # stop here
+            except ValueError as ve:
+                pass
 
 
 class UserInfoParser(XNParserBase):
