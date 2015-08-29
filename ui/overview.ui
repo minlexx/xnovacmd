@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>358</height>
+    <width>602</width>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,7 @@
          <property name="minimumSize">
           <size>
            <width>100</width>
-           <height>245</height>
+           <height>225</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -152,11 +152,6 @@
            <string>11</string>
           </property>
          </row>
-         <row>
-          <property name="text">
-           <string>12</string>
-          </property>
-         </row>
          <column>
           <property name="text">
            <string>name</string>
@@ -194,35 +189,30 @@
          </item>
          <item row="5" column="0">
           <property name="text">
-           <string>Rank:</string>
+           <string>Industry:</string>
           </property>
          </item>
          <item row="6" column="0">
           <property name="text">
-           <string>Industry:</string>
+           <string>Military:</string>
           </property>
          </item>
          <item row="7" column="0">
           <property name="text">
-           <string>Military:</string>
+           <string>Wins/Losses:</string>
           </property>
          </item>
          <item row="8" column="0">
           <property name="text">
-           <string>Wins/Losses:</string>
+           <string>Credits:</string>
           </property>
          </item>
          <item row="9" column="0">
           <property name="text">
-           <string>Credits:</string>
-          </property>
-         </item>
-         <item row="10" column="0">
-          <property name="text">
            <string>Fraction:</string>
           </property>
          </item>
-         <item row="11" column="0">
+         <item row="10" column="0">
           <property name="text">
            <string>Alliance:</string>
           </property>

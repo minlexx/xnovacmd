@@ -22,7 +22,7 @@ class OverviewWidget(QWidget):
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
         self.ui.splitter.setSizes([250, 150])
-        self.ui.tw_accStats.setColumnWidth(0, 90)
+        self.ui.tw_accStats.setColumnWidth(0, 80)
         self.ui.tw_accStats.setColumnWidth(1, 300)
         # testing only
         self.ui.btn_start.clicked.connect(self.on_btn_start)
@@ -43,19 +43,20 @@ class OverviewWidget(QWidget):
             a.scores.defense, a.scores.defense_rank))
         set_as_item(self.ui.tw_accStats, 3, 1, '{0} rank {1}'.format(
             a.scores.science, a.scores.science_rank))
-        set_as_item(self.ui.tw_accStats, 4, 1, a.scores.total)
+        # total: 15156 rank 195 (+2)
         rank_delta_str = '+' + str(a.scores.rank_delta)  # explicit "+" sign
         if a.scores.rank_delta < 0:
             rank_delta_str = str(a.scores.rank_delta)
-        set_as_item(self.ui.tw_accStats, 5, 1, '{0} ({1})'.format(a.scores.rank, rank_delta_str))
-        set_as_item(self.ui.tw_accStats, 6, 1, '{0} lv ({1}/{2} exp)'.format(
+        set_as_item(self.ui.tw_accStats, 4, 1, '{0} rank {1} ({2})'.format(
+            a.scores.total, a.scores.rank, rank_delta_str))
+        set_as_item(self.ui.tw_accStats, 5, 1, '{0} lv ({1}/{2} exp)'.format(
             a.scores.industry_level, a.scores.industry_exp[0], a.scores.industry_exp[1]))
-        set_as_item(self.ui.tw_accStats, 7, 1, '{0} lv ({1}/{2} exp)'.format(
+        set_as_item(self.ui.tw_accStats, 6, 1, '{0} lv ({1}/{2} exp)'.format(
             a.scores.military_level, a.scores.military_exp[0], a.scores.military_exp[1]))
-        set_as_item(self.ui.tw_accStats, 8, 1, '{0} W / {1} L'.format(a.scores.wins, a.scores.losses))
-        set_as_item(self.ui.tw_accStats, 9, 1, a.scores.credits)
-        set_as_item(self.ui.tw_accStats, 10, 1, a.scores.fraction)
-        set_as_item(self.ui.tw_accStats, 11, 1, a.alliance_name)
+        set_as_item(self.ui.tw_accStats, 7, 1, '{0} W / {1} L'.format(a.scores.wins, a.scores.losses))
+        set_as_item(self.ui.tw_accStats, 8, 1, a.scores.credits)
+        set_as_item(self.ui.tw_accStats, 9, 1, a.scores.fraction)
+        set_as_item(self.ui.tw_accStats, 10, 1, a.alliance_name)
 
     # testing only
     @pyqtSlot()
