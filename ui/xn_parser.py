@@ -527,22 +527,35 @@ class OverviewParser(XNParserBase):
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
+            hour = 0
+            minute = 0
+            second = 0
             # 13:59:31  (hr:min:sec)
             match = re.search(r'(\d+):(\d+):(\d+)', data_s)
             if match:
-                h = safe_int(match.group(1))
-                m = safe_int(match.group(2))
-                s = safe_int(match.group(3))
+                hour = safe_int(match.group(1))
+                minute = safe_int(match.group(2))
+                second = safe_int(match.group(3))
+            else:
+                # 8:31  (min:sec)
+                match = re.search(r'(\d+):(\d+)', data_s)
+                if match:
+                    minute = safe_int(match.group(1))
+                    second = safe_int(match.group(2))
+                else:
+                    # just a number (seconds)
+                    second = safe_int(data_s)
+            if hour + minute + second > 0:
                 # dt_now = datetime.datetime.today()
                 # dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
                 #                              hour=h, minute=m, second=s)
                 # this method is more reliable:
-                time_left = datetime.timedelta(seconds=s, minutes=m, hours=h)
+                time_left = datetime.timedelta(seconds=second, minutes=minute, hours=hour)
                 dt_arrive = self.server_time + time_left
                 self._cur_flight_arrive_dt = dt_arrive
                 logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
                     time_left, dt_arrive))
-            return
+                return
         if self.in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data_s)
