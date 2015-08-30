@@ -9,18 +9,41 @@ import datetime
 # XNova universe coordinates model
 # [galaxy:solarsystem:planet]
 class XNCoords:
+    TYPE_PLANET = 1
+    TYPE_DEBRIS_FIELD = 2
+    TYPE_MOON = 3
+    TYPE_WARBASE = 5
+
     def __init__(self):
         self.galaxy = 0
         self.system = 0
         self.position = 0
+        self.target_type = self.TYPE_PLANET
 
     def __str__(self):
-        return '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
+        coords_str = '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
+        type_str = ''  # default for planet coordinates
+        if self.target_type == self.TYPE_DEBRIS_FIELD:
+            type_str = ' field'
+        elif self.target_type == self.TYPE_MOON:
+            type_str = ' moon'
+        elif self.target_type == self.TYPE_WARBASE:
+            type_str = ' base'
+        return '{0}{1}'.format(coords_str, type_str)
 
     def set_gsp(self, g: int, s: int, p: int):
         self.galaxy = g
         self.system = s
         self.position = p
+
+    def set_target_field(self):
+        self.target_type = self.TYPE_DEBRIS_FIELD
+
+    def set_target_moon(self):
+        self.target_type = self.TYPE_MOON
+
+    def set_target_base(self):
+        self.target_type = self.TYPE_WARBASE
 
     def is_empty(self):
         return (self.galaxy == 0) and (self.system == 0) and (self.position == 0)
