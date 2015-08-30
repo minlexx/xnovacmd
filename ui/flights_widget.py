@@ -6,6 +6,7 @@ from PyQt5 import uic
 
 import datetime
 
+from .xn_data import XNFlight
 from .xn_world import XNovaWorld_instance
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
@@ -19,6 +20,9 @@ class FlightsWidget(QWidget):
         # objects, sub-windows
         self.ui = None
         self.world = XNovaWorld_instance()
+        self.flights = []
+        # our_time - server_time:
+        self.diff_with_server_time_secs = 0
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
@@ -53,33 +57,43 @@ class FlightsWidget(QWidget):
         twi = QTableWidgetItem(str(text))
         self.ui.tw_flights.setItem(row, col, twi)
 
+    def _fl_timer_str(self, fl: XNFlight) -> str:
+        our_time = datetime.datetime.today()
+        time_arr_s = str(fl.arrive_datetime)
+        td = fl.arrive_datetime - our_time
+        seconds_left = int(td.total_seconds())
+        seconds_left += self.diff_with_server_time_secs
+        if seconds_left < 0:
+            seconds_left = 0
+        hours_left = seconds_left // 3600
+        seconds_left -= (hours_left * 3600)
+        minutes_left = seconds_left // 60
+        seconds_left -= (minutes_left * 60)
+        hours_str = '{0:02}:'.format(hours_left) if hours_left > 0 else ''
+        minutes_str = '{0:02}:'.format(minutes_left) if minutes_left > 0 else ''
+        seconds_str = '{0:02}'.format(seconds_left)
+        timer_str = '{0}{1}{2}\n{3}'.format(hours_str, minutes_str, seconds_str, time_arr_s)
+        return timer_str
+
     def update_flights(self):
         # clear widget
         self.ui.tw_flights.clearContents()
         self.ui.tw_flights.setRowCount(0)
         # get data
-        flights = self.world.get_flights()
-        # dt_now = datetime.datetime.today()
-        # use server time instead, FIXED
+        self.flights = self.world.get_flights()
+        our_time = datetime.datetime.today()
+        # use server time to get time difference between ours and theirs
         assert isinstance(self.world.server_time, datetime.datetime)
-        dt_now = self.world.server_time
+        server_time = self.world.server_time
+        dt_diff = our_time - server_time
+        # logger.debug(dt_diff.total_seconds())  # 0:00:16.390197
+        self.diff_with_server_time_secs = int(dt_diff.total_seconds())
+        # iterate
         irow = 0
-        for fl in flights:
+        for fl in self.flights:
             # format data
             # fleet timer
-            time_arr_s = str(fl.arrive_datetime)
-            td = fl.arrive_datetime - dt_now
-            seconds_left = int(td.total_seconds())
-            if seconds_left < 0:
-                seconds_left = 0
-            hours_left = seconds_left // 3600
-            seconds_left -= (hours_left * 3600)
-            minutes_left = seconds_left // 60
-            seconds_left -= (minutes_left * 60)
-            hours_str = '{0:02}:'.format(hours_left) if hours_left > 0 else ''
-            minutes_str = '{0:02}:'.format(minutes_left) if minutes_left > 0 else ''
-            seconds_str = '{0:02}'.format(seconds_left)
-            timer_str = '{0}{1}{2}\n{3}'.format(hours_str, minutes_str, seconds_str, time_arr_s)
+            timer_str = self._fl_timer_str(fl)
             # fleet mission
             fldir_str = '\n{0}'.format(fl.direction) if fl.direction == 'return' else ''
             mis_str = '{0}{1}'.format(fl.mission, fldir_str)
@@ -99,3 +113,14 @@ class FlightsWidget(QWidget):
             irow += 1
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         self.ui.btn_show.setText('Fleets in space: {0}'.format(irow))
+
+    def flights_tick(self):
+        """Updates flights remaining times to display
+        """
+        our_time = datetime.datetime.today()
+        # iterate
+        irow = 0
+        for fl in self.flights:
+            timer_str = self._fl_timer_str(fl)
+            self._set_twi(irow, 0, timer_str)
+            irow += 1

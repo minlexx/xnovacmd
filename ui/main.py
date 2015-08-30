@@ -145,6 +145,7 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_world_timer(self):
-        # TODO: maybe move timer and all logic into world thread, inside?
         if self.world:
             self.world.world_tick()
+        if self.flights_widget:
+            self.flights_widget.flights_tick()
