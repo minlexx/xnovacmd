@@ -51,9 +51,26 @@ class FlightsWidget(QWidget):
             self.setMinimumHeight(22+22+2)
             self.parent().setMinimumHeight(22+22+3)
             self.btn_show.setArrowType(Qt.DownArrow)
+        self.update_button_fleet_count()
 
     def update_button_fleet_count(self):
-        self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
+        if self.ui.tw_flights.isVisible():
+            self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
+        else:
+            closest_fleet_str = ''
+            if len(self.flights) > 0:
+                fl = self.flights[0]
+                secs = self._fl_remaining_time_secs(fl)
+                hours = secs // 3600
+                secs -= (hours * 3600)
+                minutes = secs // 60
+                secs -= (minutes * 60)
+                return_str = ' ({0})'.format(fl.direction) if fl.direction == 'return' else ''
+                closest_fleet_str = '{0:02}:{1:02}:{2:02} {3}{4} {5} => {6} ({7} ships)'.format(
+                    hours, minutes, secs, fl.mission, return_str,
+                    fl.src, fl.dst, len(fl.ships))
+            self.ui.btn_show.setText('Fleets in space: {0};  {1}'.format(
+                len(self.flights), closest_fleet_str))
 
     def _set_twi(self, row, col, text):
         twi = QTableWidgetItem(str(text))
@@ -144,6 +161,5 @@ class FlightsWidget(QWidget):
         for irow in finished_fleets:
             self.ui.tw_flights.removeRow(irow)
             del self.flights[irow]
-        # also update button text if needed
-        if len(finished_fleets) > 0:
-            self.update_button_fleet_count()
+        # also update button text
+        self.update_button_fleet_count()
