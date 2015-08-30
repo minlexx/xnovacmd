@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QSplitter, QTableWidget, QTabl
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 
-from .xn_data import XNovaAccountInfo
 from .xn_world import XNovaWorld_instance
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)

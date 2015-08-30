@@ -136,6 +136,8 @@ class XNova_MainWindow(QWidget):
         # update account info
         self.overview_widget.setEnabled(True)
         self.overview_widget.update_account_info()
+        # update flying fleets
+        self.flights_widget.update_flights()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
