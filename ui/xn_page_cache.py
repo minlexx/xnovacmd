@@ -37,12 +37,14 @@ class XNovaPageCache:
                     # get file last modification time
                     stt = subitem.stat()
                     mtime = int(stt.st_mtime)
-                    with subitem.open(mode='rt', encoding=self.save_load_encoding) as f:
-                        fname = subitem.name
-                        contents = f.read()
-                        self._pages[fname] = contents  # save file contents
-                        self._mtimes[fname] = mtime  # save also modification time
-                        num_loaded += 1
+                    if subitem.name != 'login.dat':
+                        # skip login.dat
+                        with subitem.open(mode='rt', encoding=self.save_load_encoding) as f:
+                            fname = subitem.name
+                            contents = f.read()
+                            self._pages[fname] = contents  # save file contents
+                            self._mtimes[fname] = mtime  # save also modification time
+                            num_loaded += 1
                 except IOError as ioe:
                     pass
                 except UnicodeDecodeError as ude:
