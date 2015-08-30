@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 from PyQt5.QtCore import PYQT_VERSION_STR
 from PyQt5.QtWidgets import QApplication

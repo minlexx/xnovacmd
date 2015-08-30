@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from ui.xn_page_cache import XNovaPageCache
 from ui.xn_parser import OverviewParser, UserInfoParser
 
