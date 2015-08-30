@@ -19,17 +19,19 @@ class XNCoords:
         self.system = 0
         self.position = 0
         self.target_type = self.TYPE_PLANET
+        self.target_name = ''  # optional
 
     def __str__(self):
+        name_str = '{0} '.format(self.target_name) if self.target_name != '' else ''
         coords_str = '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
         type_str = ''  # default for planet coordinates
         if self.target_type == self.TYPE_DEBRIS_FIELD:
-            type_str = ' field'
+            type_str = ' field '
         elif self.target_type == self.TYPE_MOON:
-            type_str = ' moon'
+            type_str = ' moon '
         elif self.target_type == self.TYPE_WARBASE:
-            type_str = ' base'
-        return '{0}{1}'.format(coords_str, type_str)
+            type_str = ' base '
+        return '{0}{1}{2}'.format(name_str, type_str, coords_str)
 
     def set_gsp(self, g: int, s: int, p: int):
         self.galaxy = g
@@ -210,5 +212,5 @@ class XNFlight:
             self.mission, str(self.src), str(self.dst), str(self.ships), str(self.res))
         if self.direction == 'return':
             s += ' return'
-        s += (' ' + str(self.arrive_datetime))
+        s += (' @' + str(self.arrive_datetime))
         return s

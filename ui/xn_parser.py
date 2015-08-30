@@ -14,7 +14,7 @@ def safe_int(data: str):
     ret = 0
     try:
         ret = int(data.replace('.', ''))
-    except ValueError as ve:
+    except ValueError:
         ret = 0
     return ret
 
@@ -186,13 +186,15 @@ class OverviewParser(XNParserBase):
         self.flights = []
         self._cur_flight = XNFlight()
         self._cur_flight_arrive_dt = None
+        self._cur_flight_src_nametype = ('', '')
+        self._cur_flight_dst_nametype = ('', '')
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
 
     def handle_path(self, tag: str, attrs: list, path: str):
-        attrs_s = ''
-        if len(attrs) > 0:
-            attrs_s = ';  attrs: {0}'.format(str(attrs))
+        # attrs_s = ''
+        # if len(attrs) > 0:
+        #    attrs_s = ';  attrs: {0}'.format(str(attrs))
         if (tag == 'img') and (len(attrs) > 0):
             # logger.debug('path [{0}]: {1}{2}'.format(tag, path, attrs_s))
             if ('src', '/images/wins.gif') in attrs:
@@ -276,21 +278,26 @@ class OverviewParser(XNParserBase):
                 if attr_tuple[0] == 'class':
                     tr_class = attr_tuple[1]
             if (tr_class == 'flight') or (tr_class == 'return'):
-                # table row with flight info, or building (TODO)
+                # table row with flight info, or building
                 self.in_flight_time = True
-        if (tag == 'font') and (len(attrs) > 0):
-            if self.in_flight_time:
-                font_color = ''
-                for attr_tuple in attrs:
-                    if attr_tuple[0] == 'color':
-                        font_color = attr_tuple[1]
-                if font_color == 'lime':
-                    self.in_flight_time_arrival = True
-                    # <font color="lime">13:59:31</font>
-                    # next data item will be arrival time
+        # change flight time detection from "arrival time" in font tag
+        # to "time left" in <div id="bxxfs2" class="z">8:59:9</div>
+        # which comes just before the font tag
+        # if (tag == 'font') and (len(attrs) > 0):
+        #    if self.in_flight_time:
+        #        font_color = ''
+        #        for attr_tuple in attrs:
+        #            if attr_tuple[0] == 'color':
+        #                font_color = attr_tuple[1]
+        #        if font_color == 'lime':
+        #            self.in_flight_time_arrival = True
+        #            # <font color="lime">13:59:31</font>
+        #            # next data item will be arrival time
         if (tag == 'div') and (len(attrs) > 0):
             # try to find a server time, expressed in tag:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
+            # or try to find fleet arrival time, expressed in tag:
+            # <div id="bxxfs2" class="z">8:59:9</div>
             div_id = ''
             div_class = ''
             for attr_tuple in attrs:
@@ -298,8 +305,12 @@ class OverviewParser(XNParserBase):
                     div_class = attr_tuple[1]
                 if attr_tuple[0] == 'id':
                     div_id = attr_tuple[1]
+            # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             if (div_class == 'pull-right') and (div_id == 'clock'):
                 self.in_server_time = True
+            # <div id="bxxfs2" class="z">8:59:9</div>
+            if (div_class == 'z') and self.in_flight_time:
+                self.in_flight_time_arrival = True
 
     def handle_endtag(self, tag: str):
         if tag == 'span':
@@ -319,13 +330,18 @@ class OverviewParser(XNParserBase):
                 self._cur_flight = None
                 self._cur_flight_arrive_dt = None
             return
-        if tag == 'font':
-            if self.in_flight_time:
-                if self.in_flight_time_arrival:
-                    # end processing of <font color="lime">13:59:31</font>
-                    self.in_flight_time = False
-                    self.in_flight_time_arrival = False
-            return
+        # if tag == 'font':
+        #    if self.in_flight_time:
+        #        if self.in_flight_time_arrival:
+        #            # end processing of <font color="lime">13:59:31</font>
+        #            self.in_flight_time = False
+        #            self.in_flight_time_arrival = False
+        #    return
+        # ^^ channged light ttime detection from font tag to div
+        if (tag == 'div') and self.in_flight_time_arrival and self.in_flight_time:
+            # end processing of <div id="bxxfs2" class="z">8:59:9</div>
+            self.in_flight_time = False
+            self.in_flight_time_arrival = False
         if (tag == 'div') and self.in_server_time:
             self.in_server_time = False
             return
@@ -487,23 +503,45 @@ class OverviewParser(XNParserBase):
                 xc.parse_str(data_s, raise_on_error=True)
                 if self._num_a_with_galaxy == 1:
                     self._cur_flight.src = xc
+                    self._cur_flight.src.target_name = self._cur_flight_src_nametype[0]
+                    self._cur_flight.src.target_type = self._cur_flight_src_nametype[1]
                 elif self._num_a_with_galaxy == 2:
                     self._cur_flight.dst = xc
+                    self._cur_flight.dst.target_name = self._cur_flight_dst_nametype[0]
+                    self._cur_flight.dst.target_type = self._cur_flight_dst_nametype[1]
                     self._num_a_with_galaxy = 0  # stop here
-            except ValueError as ve:
+            except ValueError:
                 pass
+        if self.in_flight:
+            logger.debug('in_flight data: [{0}]'.format(data_s))
+            m = re.match(r'^отправленный с планеты (.+)$', data_s)
+            if m:
+                src_name = m.group(1)
+                # logger.info('Fleet source: PLANET: {0}'.format(src_name))
+                self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_PLANET)
+            m = re.match(r'^направляется к планете (.+)$', data_s)
+            if m:
+                dst_name = m.group(1)
+                # logger.info('Fleet dest: PLANET: {0}'.format(dst_name))
+                self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
         if self.in_flight_time and self.in_flight_time_arrival:
+            # first in was arrival time: <font color="lime">13:59:31</font>
+            # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
             # 13:59:31  (hr:min:sec)
             match = re.search(r'(\d+):(\d+):(\d+)', data_s)
             if match:
                 h = safe_int(match.group(1))
                 m = safe_int(match.group(2))
                 s = safe_int(match.group(3))
-                dt_now = datetime.datetime.today()
-                dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
-                                              hour=h, minute=m, second=s)
+                # dt_now = datetime.datetime.today()
+                # dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
+                #                              hour=h, minute=m, second=s)
+                # this method is more reliable:
+                time_left = datetime.timedelta(seconds=s, minutes=m, hours=h)
+                dt_arrive = self.server_time + time_left
                 self._cur_flight_arrive_dt = dt_arrive
-                # logger.debug('arrive ts: {0}'.format(dt_arrive))
+                logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
+                    time_left, dt_arrive))
             return
         if self.in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
