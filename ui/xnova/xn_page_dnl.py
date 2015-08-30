@@ -1,9 +1,11 @@
 import configparser
+
 import requests
 import requests.exceptions
 import requests.cookies
 
-from . import xn_logger
+from xnova import xn_logger
+
 logger = xn_logger.get(__name__, debug=True)
 
 

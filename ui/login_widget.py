@@ -1,15 +1,17 @@
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl, QThread
-from PyQt5.QtGui import QDesktopServices, QMovie
-from PyQt5 import uic
-
 import re
 import pickle
 import configparser
+
 import requests
 import requests.exceptions
 
-from . import xn_logger
+from PyQt5 import uic
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QUrl, QThread
+from PyQt5.QtGui import QDesktopServices, QMovie
+
+from xnova import xn_logger
+
 logger = xn_logger.get(__name__, debug=False)
 
 

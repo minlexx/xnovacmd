@@ -4,8 +4,8 @@ import html.parser
 import datetime
 
 from .xn_data import XNovaAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
+from xnova import xn_logger
 
-from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 

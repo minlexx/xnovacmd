@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QMessageBox
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 
-from . import xn_logger
+from xnova import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
@@ -11,7 +11,7 @@ class XNWidget(QWidget):
     def __init__(self, parent=None):
         super(XNWidget, self).__init__(parent)
         # state vars
-        self.uifile = 'ui/main.ui'
+        self.uifile = 'ui/<YOUR_WIDGET_UI_FILE_HERE>.ui'
         # objects, sub-windows
         self.ui = None
         # initialization

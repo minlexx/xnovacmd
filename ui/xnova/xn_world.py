@@ -1,13 +1,12 @@
 import datetime
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread, Qt
-
-from .xn_data import XNCoords, XNovaAccountInfo, XNFlight
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
+from .xn_data import XNovaAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
 from .xn_parser import OverviewParser, UserInfoParser
+from xnova import xn_logger
 
-from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 

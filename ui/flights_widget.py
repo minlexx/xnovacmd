@@ -1,14 +1,13 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
-from PyQt5.QtWidgets import QWidget, QMessageBox, QToolButton, \
-    QTableWidget, QTableWidgetItem, QHeaderView
-from PyQt5.QtGui import QIcon
-from PyQt5 import uic
-
 import datetime
 
-from .xn_data import XNFlight
-from .xn_world import XNovaWorld_instance
-from . import xn_logger
+from PyQt5 import uic
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
+
+from xnova.xn_data import XNFlight
+from xnova.xn_world import XNovaWorld_instance
+from xnova import xn_logger
+
 logger = xn_logger.get(__name__, debug=True)
 
 

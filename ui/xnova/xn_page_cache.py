@@ -3,7 +3,8 @@ import pathlib
 import locale
 import time
 
-from . import xn_logger
+from xnova import xn_logger
+
 logger = xn_logger.get(__name__, debug=True)
 
 
