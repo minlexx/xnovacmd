@@ -43,6 +43,7 @@ class XNova_MainWindow(QWidget):
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
+        self.setWindowIcon(QIcon(':/i/favicon_32.png'))
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
             self.tray_icon = QSystemTrayIcon(QIcon(':/i/favicon_16.png'), self)
