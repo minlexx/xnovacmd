@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="i">
+    <file alias="race1.gif">i/race1.gif</file>
+    <file alias="race2.gif">i/race2.gif</file>
+    <file alias="race3.gif">i/race3.gif</file>
+    <file alias="race4.gif">i/race4.gif</file>
     <file alias="favicon_16.png">i/favicon_16.png</file>
     <file alias="favicon_32.png">i/favicon_32.png</file>
     <file alias="loading.gif">i/loading.gif</file>
