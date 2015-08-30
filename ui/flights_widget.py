@@ -55,7 +55,7 @@ class FlightsWidget(QWidget):
 
     def update_button_fleet_count(self):
         if self.ui.tw_flights.isVisible():
-            self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
+            self.ui.btn_show.setText('Fleets: {0}'.format(len(self.flights)))
         else:
             closest_fleet_str = ''
             if len(self.flights) > 0:
@@ -66,10 +66,10 @@ class FlightsWidget(QWidget):
                 minutes = secs // 60
                 secs -= (minutes * 60)
                 return_str = ' ({0})'.format(fl.direction) if fl.direction == 'return' else ''
-                closest_fleet_str = '{0:02}:{1:02}:{2:02} {3}{4} {5} => {6} ({7} ships)'.format(
+                closest_fleet_str = '{0:02}:{1:02}:{2:02} {3}{4} {5} => {6}, {7} ship(s)'.format(
                     hours, minutes, secs, fl.mission, return_str,
                     fl.src, fl.dst, len(fl.ships))
-            self.ui.btn_show.setText('Fleets in space: {0};  {1}'.format(
+            self.ui.btn_show.setText('Fleets: {0}  |||   {1}'.format(
                 len(self.flights), closest_fleet_str))
 
     def _set_twi(self, row, col, text):
