@@ -27,7 +27,7 @@ class OverviewWidget(QWidget):
         # testing only
         self.ui.btn_start.clicked.connect(self.on_btn_start)
         self.ui.btn_stop.clicked.connect(self.on_btn_stop)
-        # self.ui.btn_signal.clicked.connect(self.on_btn_signal)
+        self.ui.btn_signal.clicked.connect(self.on_btn_signal)
 
     def update_account_info(self):
         def set_as_item(tw, row: int, col: int, text):
@@ -76,3 +76,8 @@ class OverviewWidget(QWidget):
         if self.world.isRunning():
             logger.debug('stopping')
             self.world.quit()
+
+    @pyqtSlot()
+    def on_btn_signal(self):
+        # test exceptions in pyQt slots
+        raise Exception("wow")
