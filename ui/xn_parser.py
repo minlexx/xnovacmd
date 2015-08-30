@@ -186,6 +186,8 @@ class OverviewParser(XNParserBase):
         self.flights = []
         self._cur_flight = XNFlight()
         self._cur_flight_arrive_dt = None
+        self.server_time = datetime.datetime.today()
+        self.in_server_time = False
 
     def handle_path(self, tag: str, attrs: list, path: str):
         attrs_s = ''
@@ -286,6 +288,18 @@ class OverviewParser(XNParserBase):
                     self.in_flight_time_arrival = True
                     # <font color="lime">13:59:31</font>
                     # next data item will be arrival time
+        if (tag == 'div') and (len(attrs) > 0):
+            # try to find a server time, expressed in tag:
+            # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
+            div_id = ''
+            div_class = ''
+            for attr_tuple in attrs:
+                if attr_tuple[0] == 'class':
+                    div_class = attr_tuple[1]
+                if attr_tuple[0] == 'id':
+                    div_id = attr_tuple[1]
+            if (div_class == 'pull-right') and (div_id == 'clock'):
+                self.in_server_time = True
 
     def handle_endtag(self, tag: str):
         if tag == 'span':
@@ -304,13 +318,17 @@ class OverviewParser(XNParserBase):
                 self._num_a_with_galaxy = 0
                 self._cur_flight = None
                 self._cur_flight_arrive_dt = None
-                return
+            return
         if tag == 'font':
             if self.in_flight_time:
                 if self.in_flight_time_arrival:
                     # end processing of <font color="lime">13:59:31</font>
                     self.in_flight_time = False
                     self.in_flight_time_arrival = False
+            return
+        if (tag == 'div') and self.in_server_time:
+            self.in_server_time = False
+            return
 
     def handle_data(self, data: str):
         data_s = data.strip()
@@ -487,6 +505,18 @@ class OverviewParser(XNParserBase):
                 self._cur_flight_arrive_dt = dt_arrive
                 # logger.debug('arrive ts: {0}'.format(dt_arrive))
             return
+        if self.in_server_time:
+            # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
+            match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data_s)
+            if match:
+                day = safe_int(match.group(1))
+                month = safe_int(match.group(2))
+                year = safe_int(match.group(3))
+                hour = safe_int(match.group(4))
+                minute = safe_int(match.group(5))
+                second = safe_int(match.group(6))
+                self.server_time = datetime.datetime(year, month, day, hour, minute, second)
+                logger.info('Got server time: {0}'.format(self.server_time))
         return   # from def handle_data()
 
 
