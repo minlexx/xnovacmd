@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
-import datetime
 
-
-# this module will define/keep all static Xnova data models
-# and basic classes
+"""This module will define/keep all static Xnova data models
+and basic classes
+"""
 
 
 # XNova universe coordinates model
