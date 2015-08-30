@@ -154,6 +154,9 @@ class XNFlightResources:
         self.cry = 0
         self.deit = 0
 
+    def __len__(self):
+        return self.met + self.cry + self.deit
+
     def __str__(self):
         sme = 'Metal: {0}'.format(str(self.met)) if self.met > 0 else ''
         scry = 'Crystal: {0}'.format(str(self.cry)) if self.cry > 0 else ''
@@ -163,6 +166,13 @@ class XNFlightResources:
 
 
 class XNFlight:
+    FLIGHT_DIRS = ['flight', 'return']
+    FLIGHT_MISSIONS = ['owndeploy', 'owntransport', 'ownattack', 'ownespionage',
+                       'ownharvest', 'owncolony', 'ownfederation', 'ownmissile',
+                       'owndestroy', 'ownhold',
+                       # enemy/hostile missions
+                       'attack', 'espionage', 'missile', 'destroy', 'federation']
+
     def __init__(self):
         self.ships = XNFlightShips()
         self.res = XNFlightResources()

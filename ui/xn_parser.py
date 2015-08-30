@@ -250,18 +250,12 @@ class OverviewParser(XNParserBase):
             #  class="flight ownattack"
             #  class="return owndeploy"
             classes = span_class.split(' ')
-            flight_dirs = ['flight', 'return']
-            flight_missions = ['owndeploy', 'owntransport', 'ownattack', 'ownespionage',
-                               'ownharvest', 'owncolony', 'ownfederation', 'ownmissile',
-                               'owndestroy', 'ownhold',
-                               # enemy/hostile missions
-                               'attack', 'espionage', 'missile', 'destroy', 'federation']
             flight_dir = ''
             flight_mission = ''
             for a_sclass in classes:
-                if a_sclass in flight_dirs:
+                if a_sclass in XNFlight.FLIGHT_DIRS:
                     flight_dir = a_sclass
-                if a_sclass in flight_missions:
+                if a_sclass in XNFlight.FLIGHT_MISSIONS:
                     flight_mission = a_sclass
             if (flight_dir == '') or (flight_mission == ''):
                 # this not span about flying fleet
