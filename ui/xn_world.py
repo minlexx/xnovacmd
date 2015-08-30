@@ -1,6 +1,6 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread, Qt
 
-from .xn_data import XNCoords, XNovaAccountInfo, XNovaAccountScores
+from .xn_data import XNCoords, XNovaAccountInfo, XNFlight
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
 from .xn_parser import OverviewParser, UserInfoParser
@@ -27,6 +27,7 @@ class XNovaWorld(QThread):
         self.parser_userinfo = UserInfoParser()
         # world/user info
         self.account = XNovaAccountInfo()
+        self.flights = []
         # misc
         self.net_errors_count = 0
 
@@ -41,6 +42,9 @@ class XNovaWorld(QThread):
 
     def get_account_info(self) -> XNovaAccountInfo:
         return self.account
+
+    def get_flights(self) -> list:
+        return self.flights
 
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -63,6 +67,7 @@ class XNovaWorld(QThread):
         if page_name == 'overview':
             self.parser_overview.parse_page_content(page_content)
             self.account = self.parser_overview.account
+            self.flights = self.parser_overview.flights
         elif page_name == 'self_user_info':
             self.parser_userinfo.parse_page_content(page_content)
             self.account.scores.buildings = self.parser_userinfo.buildings
