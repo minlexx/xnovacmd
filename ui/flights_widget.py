@@ -67,6 +67,8 @@ class FlightsWidget(QWidget):
             time_arr_s = str(fl.arrive_datetime)
             td = fl.arrive_datetime - dt_now
             seconds_left = int(td.total_seconds())
+            if seconds_left < 0:
+                seconds_left = 0
             hours_left = seconds_left // 3600
             seconds_left -= (hours_left * 3600)
             minutes_left = seconds_left // 60
