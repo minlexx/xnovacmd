@@ -45,6 +45,8 @@ class XNovaPageCache:
                         num_loaded += 1
                 except IOError as ioe:
                     pass
+                except UnicodeDecodeError as ude:
+                    logger.error('Encoding error in [{0}], skipped: {1}'.format(subitem.name, str(ude)))
         logger.info('Loaded {0} cached pages.'.format(num_loaded))
 
     # save page into cache
