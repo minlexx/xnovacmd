@@ -93,3 +93,4 @@ class FlightsWidget(QWidget):
             #
             irow += 1
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
+        self.ui.btn_show.setText('Fleets in space: {0}'.format(irow))

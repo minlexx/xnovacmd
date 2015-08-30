@@ -158,8 +158,8 @@ class XNFlightResources:
         return self.met + self.cry + self.deit
 
     def __str__(self):
-        sme = 'Metal: {0}'.format(str(self.met)) if self.met > 0 else ''
-        scry = 'Crystal: {0}'.format(str(self.cry)) if self.cry > 0 else ''
+        sme = 'Met: {0}'.format(str(self.met)) if self.met > 0 else ''
+        scry = 'Cry: {0}'.format(str(self.cry)) if self.cry > 0 else ''
         sdeit = 'Deit: {0}'.format(str(self.deit)) if self.deit > 0 else ''
         ret = sme + ' ' + scry + ' ' + sdeit
         return ret.strip()
