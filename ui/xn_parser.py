@@ -186,8 +186,8 @@ class OverviewParser(XNParserBase):
         self.flights = []
         self._cur_flight = XNFlight()
         self._cur_flight_arrive_dt = None
-        self._cur_flight_src_nametype = ('', '')
-        self._cur_flight_dst_nametype = ('', '')
+        self._cur_flight_src_nametype = ('', 0)
+        self._cur_flight_dst_nametype = ('', 0)
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
 
@@ -329,6 +329,8 @@ class OverviewParser(XNParserBase):
                 self._num_a_with_galaxy = 0
                 self._cur_flight = None
                 self._cur_flight_arrive_dt = None
+                self._cur_flight_src_nametype = ('', 0)
+                self._cur_flight_dst_nametype = ('', 0)
             return
         # if tag == 'font':
         #    if self.in_flight_time:
