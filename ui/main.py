@@ -1,9 +1,10 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QTimer
+from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QBoxLayout
 from PyQt5.QtGui import QIcon, QCloseEvent
 from PyQt5 import uic
 
 from .login_widget import LoginWidget
+from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 
 from .xn_world import XNovaWorld_instance
@@ -32,6 +33,7 @@ class XNova_MainWindow(QWidget):
         self.tray_icon = None
         self.login_widget = None
         self.overview_widget = None
+        self.flights_widget = None
         # initialization
         self.load_ui()
         self.world = XNovaWorld_instance()
@@ -69,6 +71,22 @@ class XNova_MainWindow(QWidget):
         tab_index = self.ui.tabWidget.addTab(widget, tab_name)
         widget.show()
 
+    # defaults:
+    # orientation = Qt.Vertical
+    # margins = (11, 11, 11, 11)  # from Qt docs, style dependent
+    def install_layout_for_widget(self, widget, orientation=None, margins=None, spacing=None):
+        if widget.layout():
+            return  # already has a layout
+        direction = QBoxLayout.TopToBottom
+        if orientation == Qt.Horizontal:
+            direction = QBoxLayout.LeftToRight
+        l = QBoxLayout(direction)
+        if margins:
+            l.setContentsMargins(margins[0], margins[1], margins[2], margins[3])
+        if spacing:
+            l.setSpacing(spacing)
+        widget.setLayout(l)
+
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
@@ -96,6 +114,11 @@ class XNova_MainWindow(QWidget):
         self.ui.tabWidget.removeTab(0)
         self.login_widget = None
         # create all main widgets
+        # create flights widget
+        self.flights_widget = FlightsWidget(self)
+        self.flights_widget.load_ui()
+        self.install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1,1,1,1), spacing=1)
+        self.ui.fr_flights.layout().addWidget(self.flights_widget)
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
