@@ -79,10 +79,12 @@ class FlightsWidget(QWidget):
         # clear widget
         self.ui.tw_flights.clearContents()
         self.ui.tw_flights.setRowCount(0)
-        # get data
-        self.flights = self.world.get_flights()
+        # get data, making a copy of world flights for self
+        # because we will modify those (del items when fleet arrives)
+        world_flights = self.world.get_flights()
+        self.flights = world_flights.copy()
+        # calc diff of our time with server time
         our_time = datetime.datetime.today()
-        # use server time to get time difference between ours and theirs
         assert isinstance(self.world.server_time, datetime.datetime)
         server_time = self.world.server_time
         dt_diff = our_time - server_time
@@ -120,7 +122,15 @@ class FlightsWidget(QWidget):
         our_time = datetime.datetime.today()
         # iterate
         irow = 0
+        finished_fleets = []
         for fl in self.flights:
             timer_str = self._fl_timer_str(fl)
             self._set_twi(irow, 0, timer_str)
+            # maybe delete fleet that has completed?
+            if timer_str == '00':
+                finished_fleets.append(irow)
             irow += 1
+        # delete completed fleets
+        for irow in finished_fleets:
+            self.ui.tw_flights.removeRow(irow)
+            del self.flights[irow]
