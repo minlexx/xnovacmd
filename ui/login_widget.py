@@ -10,7 +10,7 @@ import requests
 import requests.exceptions
 
 from . import xn_logger
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 # background network operations for login widget
@@ -81,8 +81,8 @@ class LoginThread(QThread):
                 logger.debug('Loaded auth response page OK')
                 logger.debug(r.text)
                 # success: '<script>top.location.href="?set=overview";</script>'
-                # errors: 'Игрока с таким E-mail адресом не найдено',
-                #        'Неверный E-mail и/или пароль'
+                # errors: 'пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ E-mail пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ',
+                #        'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ E-mail пїЅ/пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ'
                 self.step += 1
                 match = re.search('^<script', r.text)
                 if match:
