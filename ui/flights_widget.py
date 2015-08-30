@@ -53,18 +53,24 @@ class FlightsWidget(QWidget):
             self.parent().setMinimumHeight(22+22+3)
             self.btn_show.setArrowType(Qt.DownArrow)
 
+    def update_button_fleet_count(self):
+        self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
+
     def _set_twi(self, row, col, text):
         twi = QTableWidgetItem(str(text))
         self.ui.tw_flights.setItem(row, col, twi)
 
-    def _fl_timer_str(self, fl: XNFlight) -> str:
+    def _fl_remaining_time_secs(self, fl: XNFlight) -> int:
         our_time = datetime.datetime.today()
-        time_arr_s = str(fl.arrive_datetime)
         td = fl.arrive_datetime - our_time
         seconds_left = int(td.total_seconds())
         seconds_left += self.diff_with_server_time_secs
         if seconds_left < 0:
             seconds_left = 0
+        return seconds_left
+
+    def _fl_timer_str(self, fl: XNFlight) -> str:
+        seconds_left = self._fl_remaining_time_secs(fl)
         hours_left = seconds_left // 3600
         seconds_left -= (hours_left * 3600)
         minutes_left = seconds_left // 60
@@ -72,6 +78,7 @@ class FlightsWidget(QWidget):
         hours_str = '{0:02}:'.format(hours_left) if hours_left > 0 else ''
         minutes_str = '{0:02}:'.format(minutes_left) if minutes_left > 0 else ''
         seconds_str = '{0:02}'.format(seconds_left)
+        time_arr_s = str(fl.arrive_datetime)
         timer_str = '{0}{1}{2}\n{3}'.format(hours_str, minutes_str, seconds_str, time_arr_s)
         return timer_str
 
@@ -115,26 +122,29 @@ class FlightsWidget(QWidget):
             irow += 1
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         # upadte button text
-        self.ui.btn_show.setText('Fleets in space: {0}'.format(irow))
+        self.update_button_fleet_count()
 
     def flights_tick(self):
         """Updates flights remaining times to display
         """
         our_time = datetime.datetime.today()
-        # iterate
+        # iterate, updating first column only
         irow = 0
-        finished_fleets = []
         for fl in self.flights:
             timer_str = self._fl_timer_str(fl)
             self._set_twi(irow, 0, timer_str)
-            # maybe delete fleet that has completed?
-            if timer_str == '00':
-                finished_fleets.append(irow)
             irow += 1
         # delete completed fleets
+        irow = 0
+        finished_fleets = []
+        for fl in self.flights:
+            secs_left = self._fl_remaining_time_secs(fl)
+            if secs_left <= 0:
+                finished_fleets.append(irow)
+            irow += 1
         for irow in finished_fleets:
             self.ui.tw_flights.removeRow(irow)
             del self.flights[irow]
         # also update button text if needed
         if len(finished_fleets) > 0:
-            self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
+            self.update_button_fleet_count()
