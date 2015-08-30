@@ -81,8 +81,6 @@ class LoginThread(QThread):
                 logger.debug('Loaded auth response page OK')
                 logger.debug(r.text)
                 # success: '<script>top.location.href="?set=overview";</script>'
-                # errors: '������ � ����� E-mail ������� �� �������',
-                #        '�������� E-mail �/��� ������'
                 self.step += 1
                 match = re.search('^<script', r.text)
                 if match:
