@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import uic
 
 from .xn_world import XNovaWorld_instance
+from .xn_data import fraction_from_name
 from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
@@ -54,8 +55,13 @@ class OverviewWidget(QWidget):
             a.scores.military_level, a.scores.military_exp[0], a.scores.military_exp[1]))
         set_as_item(self.ui.tw_accStats, 7, 1, '{0} W / {1} L'.format(a.scores.wins, a.scores.losses))
         set_as_item(self.ui.tw_accStats, 8, 1, a.scores.credits)
-        set_as_item(self.ui.tw_accStats, 9, 1, a.scores.fraction)
         set_as_item(self.ui.tw_accStats, 10, 1, a.alliance_name)
+        # fraction
+        fr = fraction_from_name(a.scores.fraction)
+        if fr:
+            icon = QIcon(':/i/{0}'.format(fr.ico_name))
+            twi = QTableWidgetItem(icon, str(a.scores.fraction))
+            self.ui.tw_accStats.setItem(9, 1, twi)
 
     # testing only
     @pyqtSlot()

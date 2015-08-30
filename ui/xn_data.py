@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import datetime
 
@@ -214,3 +215,33 @@ class XNFlight:
             s += ' return'
         s += (' @' + str(self.arrive_datetime))
         return s
+
+
+class XNovaFraction:
+    def __init__(self, name=None, race_id=None, ico=None):
+        self.name = ''
+        if name is not None:
+            self.name = name
+        self.race_id = 0
+        if race_id > 0:
+            self.race_id = race_id
+        self.ico_name = ''
+        if ico is not None:
+            self.ico_name = ico
+
+
+def fraction_from_name(name: str) -> XNovaFraction:
+    if name == 'Конфедерация':
+        ret = XNovaFraction('Конфедерация', 1, 'race1.gif')
+        return ret
+    elif name == 'Бионики':
+        ret = XNovaFraction('Бионики', 2, 'race2.gif')
+        return ret
+    elif name == 'Сайлоны':
+        ret = XNovaFraction('Сайлоны', 3, 'race3.gif')
+        return ret
+    elif name == 'Древние':
+        ret = XNovaFraction('Древние', 4, 'race4.gif')
+        return ret
+    else:
+        return None
