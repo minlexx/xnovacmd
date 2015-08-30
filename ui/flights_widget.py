@@ -59,7 +59,10 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.setRowCount(0)
         # get data
         flights = self.world.get_flights()
-        dt_now = datetime.datetime.today()
+        # dt_now = datetime.datetime.today()
+        # use server time instead, FIXED
+        assert isinstance(self.world.server_time, datetime.datetime)
+        dt_now = self.world.server_time
         irow = 0
         for fl in flights:
             # format data

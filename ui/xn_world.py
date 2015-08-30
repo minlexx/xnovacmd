@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QThread, Qt
 
 from .xn_data import XNCoords, XNovaAccountInfo, XNFlight
@@ -26,6 +28,7 @@ class XNovaWorld(QThread):
         self.parser_overview = OverviewParser()
         self.parser_userinfo = UserInfoParser()
         # world/user info
+        self.server_time = datetime.datetime.today()
         self.account = XNovaAccountInfo()
         self.flights = []
         # misc
@@ -45,6 +48,9 @@ class XNovaWorld(QThread):
 
     def get_flights(self) -> list:
         return self.flights
+
+    def get_server_time(self) -> datetime.datetime:
+        return self.server_time
 
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -68,6 +74,7 @@ class XNovaWorld(QThread):
             self.parser_overview.parse_page_content(page_content)
             self.account = self.parser_overview.account
             self.flights = self.parser_overview.flights
+            self.server_time = self.parser_overview.server_time
         elif page_name == 'self_user_info':
             self.parser_userinfo.parse_page_content(page_content)
             self.account.scores.buildings = self.parser_userinfo.buildings
