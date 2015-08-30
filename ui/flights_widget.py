@@ -114,6 +114,7 @@ class FlightsWidget(QWidget):
             #
             irow += 1
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
+        # upadte button text
         self.ui.btn_show.setText('Fleets in space: {0}'.format(irow))
 
     def flights_tick(self):
@@ -134,3 +135,6 @@ class FlightsWidget(QWidget):
         for irow in finished_fleets:
             self.ui.tw_flights.removeRow(irow)
             del self.flights[irow]
+        # also update button text if needed
+        if len(finished_fleets) > 0:
+            self.ui.btn_show.setText('Fleets in space: {0}'.format(len(self.flights)))
