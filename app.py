@@ -33,12 +33,9 @@ if __name__ == '__main__':
     # create global application object
     g_app = MyApplication(sys.argv)
     # keep reference to it to prevent garbage collection
-    retcode = 0
-    try:
-        retcode = g_app.exec_()  # Qt event loop!
-    except Exception as e:
-        print(e)
-        retcode = 1
+    xn_logger.handle_unhandled(True)
+    retcode = g_app.exec_()  # Qt event loop!
+    xn_logger.handle_unhandled(False)
     logger.info('Application exiting with code {0}'.format(retcode))
     del g_app  # free reference - now can be garbage collected
     sys.exit(retcode)
