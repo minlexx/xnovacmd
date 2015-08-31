@@ -132,7 +132,7 @@ class FlightsWidget(QWidget):
             fldir_str = '\n{0}'.format(fl.direction) if fl.direction == 'return' else ''
             mis_str = '{0}{1}'.format(fl.mission, fldir_str)
             # resources
-            res_str = '\n{0}'.format(str(fl.res)) if len(fl.res) > 0 else ''
+            res_str = '\nRes: {0}'.format(format(fl.res, '{m}m / {c}c / {d}d')) if len(fl.res) > 0 else ''
             # insert row
             # timer | mission | src | dst | ships (res)
             self.ui.tw_flights.insertRow(irow)

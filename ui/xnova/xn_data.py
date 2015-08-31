@@ -173,14 +173,38 @@ class XNFlightShips:
         return ret
 
 
-class XNFlightResources:
-    def __init__(self):
-        self.met = 0
-        self.cry = 0
-        self.deit = 0
+class XNResourceBundle:
+    def __init__(self, m=0, c=0, d=0):
+        self.met = m
+        self.cry = c
+        self.deit = d
 
     def __len__(self):
+        """
+        :return: Total resource count, sum of met+cry+deit
+        """
         return self.met + self.cry + self.deit
+
+    def __format__(self, format_spec):
+        """ Format_spec accepts:
+         {m} metal count
+         {c} crystal count
+         {d} deit count
+         {M} metal count, or empty string if 0
+         {C} crystal count, or empty string if 0
+         {D} deit count, or empty string if 0
+         """
+        met_e = '' if self.met == 0 else str(self.met)
+        cry_e = '' if self.cry == 0 else str(self.cry)
+        deit_e = '' if self.deit == 0 else str(self.deit)
+        ret = format_spec
+        ret = ret.replace('{m}', str(self.met))
+        ret = ret.replace('{c}', str(self.cry))
+        ret = ret.replace('{d}', str(self.deit))
+        ret = ret.replace('{M}', met_e)
+        ret = ret.replace('{C}', cry_e)
+        ret = ret.replace('{D}', deit_e)
+        return ret
 
     def __str__(self):
         sme = 'Met: {0}'.format(str(self.met)) if self.met > 0 else ''
@@ -200,7 +224,7 @@ class XNFlight:
 
     def __init__(self):
         self.ships = XNFlightShips()
-        self.res = XNFlightResources()
+        self.res = XNResourceBundle()
         self.src = XNCoords()
         self.dst = XNCoords()
         self.mission = None

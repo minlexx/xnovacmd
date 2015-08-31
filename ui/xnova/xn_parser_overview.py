@@ -2,7 +2,7 @@
 import re
 import datetime
 
-from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
+from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNFlightShips
 from .xn_parser import XNParserBase, safe_int
 from . import xn_logger
 
@@ -67,11 +67,11 @@ def _parse_flight_ships(s) -> XNFlightShips:
     return parser.ships
 
 
-def _parse_flight_resources(s) -> XNFlightResources:
+def _parse_flight_resources(s) -> XNResourceBundle:
     class _FRParser(XNParserBase):
         def __init__(self):
             super(_FRParser, self).__init__()
-            self.res = XNFlightResources()
+            self.res = XNResourceBundle()
             self._c = 0
 
         def handle_data2(self, data: str, tag: str, attrs: list):
