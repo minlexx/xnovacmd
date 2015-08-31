@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-from xnova.xn_page_cache import XNovaPageCache
-from xnova.xn_parser import OverviewParser, UserInfoParser
+from ui.xnova.xn_page_cache import XNovaPageCache
+from ui.xnova.xn_parser_overview import OverviewParser
+from ui.xnova.xn_parser_userinfo import UserInfoParser
 
 
 def main():
