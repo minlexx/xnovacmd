@@ -77,6 +77,10 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.setItem(row, col, twi)
 
     def _fl_remaining_time_secs(self, fl: XNFlight) -> int:
+        if fl.arrive_datetime is None:
+            logger.error('Fleet has no arrive time: {0}'.format(str(fl)))
+            # FIXME: this should not happen!
+            return 0
         our_time = datetime.datetime.today()
         td = fl.arrive_datetime - our_time
         seconds_left = int(td.total_seconds())
@@ -143,7 +147,6 @@ class FlightsWidget(QWidget):
     def flights_tick(self):
         """Updates flights remaining times to display
         """
-        our_time = datetime.datetime.today()
         # iterate, updating first column only
         irow = 0
         for fl in self.flights:
