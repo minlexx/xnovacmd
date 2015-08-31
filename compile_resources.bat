@@ -5,6 +5,5 @@ rem python3 interpreter should already be in PATH
 set QTDIR=V:\dev\Qt\5.5\msvc2010
 set PATH=%QTDIR%\bin;%PATH%
 
-cd ui
-pyrcc5 res.qrc -o res_rc.py
+pyrcc5 ui\res.qrc -o ui\res_rc.py
 pause
