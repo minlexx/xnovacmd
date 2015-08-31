@@ -4,7 +4,7 @@ import datetime
 
 from .xn_data import XNovaAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
 from .xn_parser import XNParserBase, safe_int
-from xnova import xn_logger
+from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 

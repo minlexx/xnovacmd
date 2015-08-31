@@ -3,9 +3,9 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 
-from xnova.xn_world import XNovaWorld_instance
-from xnova.xn_data import fraction_from_name
-from xnova import xn_logger
+from .xnova.xn_world import XNovaWorld_instance
+from .xnova.xn_data import fraction_from_name
+from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 

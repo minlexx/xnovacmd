@@ -7,8 +7,8 @@ from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 
-from xnova.xn_world import XNovaWorld_instance
-from xnova import xn_logger
+from .xnova.xn_world import XNovaWorld_instance
+from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 

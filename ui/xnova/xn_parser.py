@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import html.parser
 
-from xnova import xn_logger
+from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 

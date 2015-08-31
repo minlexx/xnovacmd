@@ -4,9 +4,9 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
 
-from xnova.xn_data import XNFlight
-from xnova.xn_world import XNovaWorld_instance
-from xnova import xn_logger
+from .xnova.xn_data import XNFlight
+from .xnova.xn_world import XNovaWorld_instance
+from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 
