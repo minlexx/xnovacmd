@@ -2,7 +2,7 @@
 import re
 import datetime
 
-from .xn_data import XNovaAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
+from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNFlightResources, XNFlightShips
 from .xn_parser import XNParserBase, safe_int
 from . import xn_logger
 
@@ -117,7 +117,7 @@ class OverviewParser(XNParserBase):
         self._read_next = ''
         self._num_a_with_tooltip = 0
         self._num_a_with_galaxy = 0
-        self.account = XNovaAccountInfo()
+        self.account = XNAccountInfo()
         self.flights = []
         self._cur_flight = XNFlight()
         self._cur_flight_arrive_dt = None
@@ -449,19 +449,20 @@ class OverviewParser(XNParserBase):
                     self._num_a_with_galaxy = 0  # stop here
             except ValueError:
                 pass
+            return
         if self.in_flight:
-            logger.debug('in_flight data: [{0}]'.format(data_s))
             m = re.match(r'^отправленный с планеты (.+)$', data_s)
             if m:
                 src_name = m.group(1)
-                # logger.info('Fleet source: PLANET: {0}'.format(src_name))
                 self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_PLANET)
+                return
             m = re.match(r'^направляется к планете (.+)$', data_s)
             if m:
                 dst_name = m.group(1)
-                # logger.info('Fleet dest: PLANET: {0}'.format(dst_name))
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
+                return
             # if = [направляется к  координаты] =  colonize, can safely skip
+            logger.debug('in_flight data: [{0}]'.format(data_s))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
@@ -481,8 +482,14 @@ class OverviewParser(XNParserBase):
                     minute = safe_int(match.group(1))
                     second = safe_int(match.group(2))
                 else:
-                    # just a number (seconds)
-                    second = safe_int(data_s)
+                    # server sometimes sends remaining fleet time
+                    # without seconds part: <div id="bxxfs4" class="z">38:</div>
+                    match = re.search(r'(\d+):', data_s)
+                    if match:
+                        minute = safe_int(match.group(1))
+                    else:
+                        # just a number (seconds)
+                        second = safe_int(data_s)
             if hour + minute + second > 0:
                 # dt_now = datetime.datetime.today()
                 # dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,

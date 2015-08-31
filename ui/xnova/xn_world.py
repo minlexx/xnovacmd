@@ -2,7 +2,7 @@ import datetime
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
 
-from .xn_data import XNovaAccountInfo
+from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
 from .xn_parser_overview import OverviewParser
@@ -30,7 +30,7 @@ class XNovaWorld(QThread):
         self.parser_userinfo = UserInfoParser()
         # world/user info
         self.server_time = datetime.datetime.today()
-        self.account = XNovaAccountInfo()
+        self.account = XNAccountInfo()
         self.flights = []
         # misc
         self.net_errors_count = 0
@@ -44,7 +44,7 @@ class XNovaWorld(QThread):
         logger.debug('XNovaWorld: initialized from tid={0}'.format(self._gettid()))
         self.page_downloaded.connect(self.on_page_downloaded, Qt.QueuedConnection)
 
-    def get_account_info(self) -> XNovaAccountInfo:
+    def get_account_info(self) -> XNAccountInfo:
         return self.account
 
     def get_flights(self) -> list:

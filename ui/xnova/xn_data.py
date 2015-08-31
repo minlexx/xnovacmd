@@ -70,7 +70,7 @@ class XNCoords:
         return
 
 
-class XNovaAccountScores:
+class XNAccountScores:
     def __init__(self):
         self.rank = 0
         self.rank_delta = 0
@@ -99,14 +99,14 @@ class XNovaAccountScores:
         return '{0}({1}): {2} total'.format(self.rank, delta_str, self.total)
 
 
-class XNovaAccountInfo:
+class XNAccountInfo:
     def __init__(self):
         self.email = '' # set from caller ? not from site
         # collected from overview page
         self.id = 0
         self.ref_link = ''
         self.login = ''
-        self.scores = XNovaAccountScores()
+        self.scores = XNAccountScores()
         # collected from user info page
         self.main_planet_name = ''
         self.main_planet_coords = XNCoords()

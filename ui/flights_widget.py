@@ -79,7 +79,12 @@ class FlightsWidget(QWidget):
     def _fl_remaining_time_secs(self, fl: XNFlight) -> int:
         if fl.arrive_datetime is None:
             logger.error('Fleet has no arrive time: {0}'.format(str(fl)))
-            # FIXME: this should not happen!
+            # this is ridiculous, you will laugh
+            # this happened because server sometimes sent remaining fleet
+            # time without seconds part:
+            # <div id="bxxfs4" class="z">38:</div>
+            # it shoud be 38:0, 38 minutes 0 seconds. it's because
+            # 2280 seconds / 60 is exactly 38 with no remainder. Uhhh....
             return 0
         our_time = datetime.datetime.today()
         td = fl.arrive_datetime - our_time
