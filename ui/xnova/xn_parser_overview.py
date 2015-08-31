@@ -16,12 +16,8 @@ def _parse_flight_ships(s) -> XNFlightShips:
             self.ships = XNFlightShips()
             self._p = ''
 
-        def handle_data(self, data: str):
-            data_s = data.strip()
-            if len(data_s) < 1:
-                return
-            # logger.debug('FSParser: data: [{0}], prev=[{1}]'.format(data_s, self._p))
-            value = safe_int(data_s)
+        def handle_data2(self, data: str, tag: str, attrs: list):
+            value = safe_int(data)
             if value > 0:
                 if self._p == 'Малый транспорт:':
                     self.ships.mt = value
@@ -64,7 +60,7 @@ def _parse_flight_ships(s) -> XNFlightShips:
                 else:
                     raise ValueError('Unknown ship type: "{0}"'.format(self._p))
             else:
-                self._p = data_s
+                self._p = data
 
     parser = _FSParser()
     parser.parse_page_content(s)
@@ -78,18 +74,14 @@ def _parse_flight_resources(s) -> XNFlightResources:
             self.res = XNFlightResources()
             self._c = 0
 
-        def handle_data(self, data: str):
-            data_s = data.strip()
-            if len(data_s) < 1:
-                return
+        def handle_data2(self, data: str, tag: str, attrs: list):
             self._c += 1
-            # logger.debug('FRParser data [{0}] c={1}'.format(data_s, self._c))
             if self._c == 2:
-                self.res.met = safe_int(data_s)
+                self.res.met = safe_int(data)
             elif self._c == 4:
-                self.res.cry = safe_int(data_s)
+                self.res.cry = safe_int(data)
             elif self._c == 6:
-                self.res.deit = safe_int(data_s)
+                self.res.deit = safe_int(data)
 
     parser = _FRParser()
     parser.parse_page_content(s)
@@ -126,18 +118,13 @@ class OverviewParser(XNParserBase):
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
 
-    def handle_path(self, tag: str, attrs: list, path: str):
-        # attrs_s = ''
-        # if len(attrs) > 0:
-        #    attrs_s = ';  attrs: {0}'.format(str(attrs))
+    def handle_starttag(self, tag: str, attrs: list):
+        super(OverviewParser, self).handle_starttag(tag, attrs)
         if (tag == 'img') and (len(attrs) > 0):
-            # logger.debug('path [{0}]: {1}{2}'.format(tag, path, attrs_s))
             if ('src', '/images/wins.gif') in attrs:
                 self.in_wins = True
-                # logger.debug('in_wins')
             if ('src', '/images/losses.gif') in attrs:
                 self.in_losses = True
-                # logger.debug('in_losses')
             return
         if (tag == 'a') and (len(attrs) > 0):
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
@@ -218,16 +205,6 @@ class OverviewParser(XNParserBase):
         # change flight time detection from "arrival time" in font tag
         # to "time left" in <div id="bxxfs2" class="z">8:59:9</div>
         # which comes just before the font tag
-        # if (tag == 'font') and (len(attrs) > 0):
-        #    if self.in_flight_time:
-        #        font_color = ''
-        #        for attr_tuple in attrs:
-        #            if attr_tuple[0] == 'color':
-        #                font_color = attr_tuple[1]
-        #        if font_color == 'lime':
-        #            self.in_flight_time_arrival = True
-        #            # <font color="lime">13:59:31</font>
-        #            # next data item will be arrival time
         if (tag == 'div') and (len(attrs) > 0):
             # try to find a server time, expressed in tag:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
@@ -248,6 +225,7 @@ class OverviewParser(XNParserBase):
                 self.in_flight_time_arrival = True
 
     def handle_endtag(self, tag: str):
+        super(OverviewParser, self).handle_endtag(tag)
         if tag == 'span':
             if self.in_flight:
                 # save flight arrive time
@@ -267,14 +245,7 @@ class OverviewParser(XNParserBase):
                 self._cur_flight_src_nametype = ('', 0)
                 self._cur_flight_dst_nametype = ('', 0)
             return
-        # if tag == 'font':
-        #    if self.in_flight_time:
-        #        if self.in_flight_time_arrival:
-        #            # end processing of <font color="lime">13:59:31</font>
-        #            self.in_flight_time = False
-        #            self.in_flight_time_arrival = False
-        #    return
-        # ^^ channged light ttime detection from font tag to div
+        # ^^ channged flight time detection from font tag to div
         if (tag == 'div') and self.in_flight_time_arrival and self.in_flight_time:
             # end processing of <div id="bxxfs2" class="z">8:59:9</div>
             self.in_flight_time = False
@@ -283,77 +254,74 @@ class OverviewParser(XNParserBase):
             self.in_server_time = False
             return
 
-    def handle_data(self, data: str):
-        data_s = data.strip()
-        if len(data_s) < 1:
-            return
-        # logger.debug('data [{0}]:    path: [{1}]'.format(data_s, self.get_path()))
-        if data_s == 'Игрок:':
+    def handle_data2(self, data: str, tag: str, attrs: list):
+        # logger.debug('data [{0}]:    path: [{1}]'.format(data, self.get_path()))
+        if data == 'Игрок:':
             self.in_player_data = True
-            self._data_prev = data_s
+            self._data_prev = data
             return
-        if data_s == 'Промышленный уровень':
+        if data == 'Промышленный уровень':
             self.in_prom_level = True
             self._read_next = 'prom_level'
             return
-        if data_s == 'Военный уровень':
+        if data == 'Военный уровень':
             self.in_military_level = True
             self._read_next = 'mil_level'
             return
-        if data_s == 'Кредиты':
+        if data == 'Кредиты':
             self.in_credits = True
             self._read_next = 'credits'
             return
-        if data_s == 'Фракция:':
+        if data == 'Фракция:':
             self.in_fraction = True
             self._read_next = 'fr'
             return
         ###########################
         if self.in_player_data:
             if self._data_prev == 'Игрок:':
-                self.account.login = data_s
+                self.account.login = data
                 self._data_prev = ''
-                logger.info('Player login: {0}'.format(data_s))
+                logger.info('Player login: {0}'.format(data))
                 return
             if self._data_prev == 'Постройки:':
-                self.account.scores.buildings = safe_int(data_s)
+                self.account.scores.buildings = safe_int(data)
                 self._data_prev = ''
                 logger.info('Buildings: {0}'.format(self.account.scores.buildings))
                 return
             if self._data_prev == 'Флот:':
-                self.account.scores.fleet = safe_int(data_s)
+                self.account.scores.fleet = safe_int(data)
                 self._data_prev = ''
                 logger.info('Fleet: {0}'.format(self.account.scores.fleet))
                 return
             if self._data_prev == 'Оборона:':
-                self.account.scores.defense = safe_int(data_s)
+                self.account.scores.defense = safe_int(data)
                 self._data_prev = ''
                 logger.info('Defense: {0}'.format(self.account.scores.defense))
                 return
             if self._data_prev == 'Наука:':
-                self.account.scores.science = safe_int(data_s)
+                self.account.scores.science = safe_int(data)
                 self._data_prev = ''
                 logger.info('Science: {0}'.format(self.account.scores.science))
                 return
             if self._data_prev == 'Всего:':
-                self.account.scores.total = safe_int(data_s)
+                self.account.scores.total = safe_int(data)
                 self._data_prev = ''
                 logger.info('Total: {0}'.format(self.account.scores.total))
                 return
             if self._data_prev == 'Место:':
-                # logger.debug('Prev.was place: {0}'.format(data_s))
-                self.account.scores.rank = safe_int(data_s)
+                # logger.debug('Prev.was place: {0}'.format(data))
+                self.account.scores.rank = safe_int(data)
                 self._data_prev = 'Место_delta:'
                 return
             if self._data_prev == 'Место_delta:':
-                # logger.debug('Prev.was place_delta: {0}'.format(data_s))
-                if data_s == '(':
+                # logger.debug('Prev.was place_delta: {0}'.format(data))
+                if data == '(':
                     self._data_prev = 'Место_delta(:'
                 return
             if self._data_prev == 'Место_delta(:':
-                # logger.debug('Prev.was Место_delta(: {0}'.format(data_s))
+                # logger.debug('Prev.was Место_delta(: {0}'.format(data))
                 try:
-                    self.account.scores.rank_delta = int(data_s.replace('.', ''))
+                    self.account.scores.rank_delta = int(data.replace('.', ''))
                 except ValueError as ve:
                     logger.warn('OverviewParser failed to parse player rank delta: {0}'.format(str(ve)))
                 self._data_prev = ''
@@ -364,20 +332,20 @@ class OverviewParser(XNParserBase):
                 # logger.info(str(self.account))
                 return
             # none of above matches
-            self._data_prev = data_s
+            self._data_prev = data
             return
         # end in_player_data
         if self.in_prom_level:
             if self._read_next == 'prom_level':
                 # [7 из 100]
-                match = re.match(r'(\d+)\sиз\s(\d+)', data_s)
+                match = re.match(r'(\d+)\sиз\s(\d+)', data)
                 if match:  # ('7', '100')
                     self.account.scores.industry_level = int(match.group(1))
                 self._read_next = 'prom_exp'
                 return
             if self._read_next == 'prom_exp':
                 # [342 / 343 exp]
-                match = re.match(r'(\d+)\s/\s(\d+)', data_s)
+                match = re.match(r'(\d+)\s/\s(\d+)', data)
                 if match:  # ('342', '343')
                     exp = int(match.group(1))
                     exp_m = int(match.group(2))
@@ -390,14 +358,14 @@ class OverviewParser(XNParserBase):
         if self.in_military_level:
             if self._read_next == 'mil_level':
                 # [7 из 100]
-                match = re.match(r'(\d+)\sиз\s(\d+)', data_s)
+                match = re.match(r'(\d+)\sиз\s(\d+)', data)
                 if match:  # ('7', '100')
                     self.account.scores.military_level = int(match.group(1))
                 self._read_next = 'mil_exp'
                 return
             if self._read_next == 'mil_exp':
                 # [342 / 343 exp]
-                match = re.match(r'(\d+)\s/\s(\d+)', data_s)
+                match = re.match(r'(\d+)\s/\s(\d+)', data)
                 if match:  # ('342', '343')
                     exp = int(match.group(1))
                     exp_m = int(match.group(2))
@@ -408,36 +376,36 @@ class OverviewParser(XNParserBase):
             return
         if self.in_credits:
             if self._read_next == 'credits':
-                self.account.scores.credits = safe_int(data_s)
+                self.account.scores.credits = safe_int(data)
                 self.in_credits = False
                 self._read_next = ''
             return
         if self.in_fraction:
             if self._read_next == 'fr':
-                self.account.scores.fraction = data_s
+                self.account.scores.fraction = data
                 self._read_next = ''
                 self.in_fraction = False
         if self.in_wins:
-            logger.info('wins: %s' % data_s)
-            self.account.scores.wins = safe_int(data_s)
+            logger.info('wins: %s' % data)
+            self.account.scores.wins = safe_int(data)
             self.in_wins = False
         if self.in_losses:
-            logger.info('losses: %s' % data_s)
-            self.account.scores.losses = safe_int(data_s)
+            logger.info('losses: %s' % data)
+            self.account.scores.losses = safe_int(data)
             self.in_losses = False
         if self.in_reflink:
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
-            logger.info('Account referral link: [{0}]'.format(data_s))
-            self.account.ref_link = data_s
-            match = re.search(r'/\?(\d+)$', data_s)
+            logger.info('Account referral link: [{0}]'.format(data))
+            self.account.ref_link = data
+            match = re.search(r'/\?(\d+)$', data)
             if match:
                 self.account.id = safe_int(match.group(1))
             self.in_reflink = False
         if self._num_a_with_galaxy > 0:
-            # logger.debug('{0}: galaxy ref [{1}]'.format(self._num_a_with_galaxy, data_s))
+            # logger.debug('{0}: galaxy ref [{1}]'.format(self._num_a_with_galaxy, data))
             xc = XNCoords()
             try:
-                xc.parse_str(data_s, raise_on_error=True)
+                xc.parse_str(data, raise_on_error=True)
                 if self._num_a_with_galaxy == 1:
                     self._cur_flight.src = xc
                     self._cur_flight.src.target_name = self._cur_flight_src_nametype[0]
@@ -451,18 +419,18 @@ class OverviewParser(XNParserBase):
                 pass
             return
         if self.in_flight:
-            m = re.match(r'^отправленный с планеты (.+)$', data_s)
+            m = re.match(r'^отправленный с планеты (.+)$', data)
             if m:
                 src_name = m.group(1)
                 self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_PLANET)
                 return
-            m = re.match(r'^направляется к планете (.+)$', data_s)
+            m = re.match(r'^направляется к планете (.+)$', data)
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
                 return
             # if = [направляется к  координаты] =  colonize, can safely skip
-            logger.debug('in_flight data: [{0}]'.format(data_s))
+            logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
@@ -470,26 +438,26 @@ class OverviewParser(XNParserBase):
             minute = 0
             second = 0
             # 13:59:31  (hr:min:sec)
-            match = re.search(r'(\d+):(\d+):(\d+)', data_s)
+            match = re.search(r'(\d+):(\d+):(\d+)', data)
             if match:
                 hour = safe_int(match.group(1))
                 minute = safe_int(match.group(2))
                 second = safe_int(match.group(3))
             else:
                 # 8:31  (min:sec)
-                match = re.search(r'(\d+):(\d+)', data_s)
+                match = re.search(r'(\d+):(\d+)', data)
                 if match:
                     minute = safe_int(match.group(1))
                     second = safe_int(match.group(2))
                 else:
                     # server sometimes sends remaining fleet time
                     # without seconds part: <div id="bxxfs4" class="z">38:</div>
-                    match = re.search(r'(\d+):', data_s)
+                    match = re.search(r'(\d+):', data)
                     if match:
                         minute = safe_int(match.group(1))
                     else:
                         # just a number (seconds)
-                        second = safe_int(data_s)
+                        second = safe_int(data)
             if hour + minute + second > 0:
                 # dt_now = datetime.datetime.today()
                 # dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
@@ -503,7 +471,7 @@ class OverviewParser(XNParserBase):
                 return
         if self.in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
-            match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data_s)
+            match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data)
             if match:
                 day = safe_int(match.group(1))
                 month = safe_int(match.group(2))

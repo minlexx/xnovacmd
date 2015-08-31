@@ -21,49 +21,27 @@ def safe_int(data: str):
 class XNParserBase(html.parser.HTMLParser):
     def __init__(self):
         super(XNParserBase, self).__init__(strict=False, convert_charrefs=True)
-        self._path = []
-
-    def get_path(self):
-        path = ''
-        for tag in self._path:
-            if path != '':
-                path += '|'
-            path += tag
-        return path
-
-    def _path_append(self, tag: str, attrs: list):
-        # skip "meta" tags, xnova has unclosed meta tags!
-        # also as <br> <input> instead of <br />, <input />
-        skip_path_tags = ['meta', 'br', 'input']
-        tag_classid = ''
-        if len(attrs) > 0:
-            # [('class', 'col-xs-4 text-center')] ...
-            tag_class = ''
-            tag_id = ''
-            for attr in attrs:
-                if attr[0] == 'id':
-                    tag_id = '#' + attr[1]
-                if attr[0] == 'class':
-                    tag_class = '.' + attr[1]
-            tag_classid = '{0}{1}'.format(tag_class, tag_id)
-            tag_classid = tag_classid.strip()
-        if tag not in skip_path_tags:
-            self._path.append(tag + tag_classid)
+        self._last_tag = ''
+        self._last_attrs = list()
 
     def handle_starttag(self, tag: str, attrs: list):
         super(XNParserBase, self).handle_starttag(tag, attrs)
-        self._path_append(tag, attrs)
-        self.handle_path(tag, attrs, self.get_path())
+        self._last_tag = tag
+        self._last_attrs = attrs
 
     def handle_endtag(self, tag: str):
         super(XNParserBase, self).handle_endtag(tag)
-        if len(self._path) > 0:
-            self._path.pop()
+        self._last_tag = ''
+        self._last_attrs = list()
 
     def handle_data(self, data: str):
         super(XNParserBase, self).handle_data(data)
+        data_s = data.strip()
+        if len(data_s) < 1:
+            return
+        self.handle_data2(data_s, self._last_tag, self._last_attrs)
 
-    def handle_path(self, tag: str, attrs: list, path: str):
+    def handle_data2(self, data: str, tag: str, attrs: list):
         pass
 
     def parse_page_content(self, page: str):
