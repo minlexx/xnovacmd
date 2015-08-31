@@ -40,6 +40,12 @@ uhe_logger.addHandler(uhe_stderr)
 
 
 def unhandled_exception_filter(exc_type, exc_value, exc_traceback):
+    # skip ctrl+c, do we really need it in GUI app?
+    if issubclass(exc_type, KeyboardInterrupt):
+        # sys.exit(1)  # or, maybe ...
+        # call original function
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
     # get exception info as strings
     etb_s = traceback.format_exception(exc_type, exc_value, exc_traceback)
     # log
@@ -50,8 +56,6 @@ def unhandled_exception_filter(exc_type, exc_value, exc_traceback):
         if line.endswith('\n'):
             line = line[:-1]
         uhe_logger.critical('  {0}'.format(line))
-    # call original function
-    # sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
 
 def handle_unhandled(do_handle: bool):
