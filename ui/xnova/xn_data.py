@@ -17,10 +17,10 @@ class XNCoords:
     TYPE_MOON = 3
     TYPE_WARBASE = 5
 
-    def __init__(self):
-        self.galaxy = 0
-        self.system = 0
-        self.position = 0
+    def __init__(self, g=0, s=0, p=0):
+        self.galaxy = g
+        self.system = s
+        self.position = p
         self.target_type = self.TYPE_PLANET
         self.target_name = ''  # optional
 

@@ -16,6 +16,36 @@ def safe_int(data: str):
     return ret
 
 
+# get attribute value from tag attributes
+def get_attribute(attrs: list, attr_name: str) -> str:
+    """
+    Gets attribute value from tag attributes, or None if not found
+    :param attrs: attributes list as get from http_parser.handle_starttag()
+    :param attr_name: attribute to search for
+    :return: given attribute value (str), or None if not found
+    """
+    if attrs is None:
+        return None
+    # attrs: list of tuples: [(attr_name1, attr_value2), (), ... ]
+    for attr_tuple in attrs:
+        if attr_tuple[0] == attr_name:
+            return attr_tuple[1]
+    return None
+
+
+def get_tag_classes(attrs: list) -> list:
+    """
+    Get tag class as list of strings, or None if not set
+    :param attrs: attrs list, from handle_starttag()
+    :return: strings list, classes if found or None
+    """
+    a_class = get_attribute(attrs, 'class')
+    if a_class is None:
+        return None
+    cls_list = a_class.split(' ')
+    return cls_list
+
+
 # extends html.parser.HTMLParser class
 # by remembering tags path
 class XNParserBase(html.parser.HTMLParser):
