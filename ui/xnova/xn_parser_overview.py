@@ -2,18 +2,18 @@
 import re
 import datetime
 
-from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNFlightShips
+from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNShipsBundle
 from .xn_parser import XNParserBase, safe_int
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 
 
-def _parse_flight_ships(s) -> XNFlightShips:
+def _parse_flight_ships(s) -> XNShipsBundle:
     class _FSParser(XNParserBase):
         def __init__(self):
             super(_FSParser, self).__init__()
-            self.ships = XNFlightShips()
+            self.ships = XNShipsBundle()
             self._p = ''
 
         def handle_data2(self, data: str, tag: str, attrs: list):
@@ -417,19 +417,20 @@ class OverviewParser(XNParserBase):
                     self._num_a_with_galaxy = 0  # stop here
             except ValueError:
                 pass
-            return
         if self.in_flight:
             m = re.match(r'^отправленный с планеты (.+)$', data)
             if m:
                 src_name = m.group(1)
                 self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_PLANET)
-                return
             m = re.match(r'^направляется к планете (.+)$', data)
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
-                return
             # if = [направляется к  координаты] =  colonize, can safely skip
+            m = re.match(r'^возвращается на планету (.+)$', data)
+            if m:
+                dst_name = m.group(1)
+                self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
             logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>

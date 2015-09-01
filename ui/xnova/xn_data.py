@@ -6,9 +6,12 @@ and basic classes
 """
 
 
-# XNova universe coordinates model
-# [galaxy:solarsystem:planet]
 class XNCoords:
+    """
+    XNova universe coordinates data model
+    can parse strings like "[galaxy:solarsystem:planet]"
+    also holds exact target object type - planet, moon, or debris field
+    """
     TYPE_PLANET = 1
     TYPE_DEBRIS_FIELD = 2
     TYPE_MOON = 3
@@ -71,6 +74,9 @@ class XNCoords:
 
 
 class XNAccountScores:
+    """
+    All user account statistics
+    """
     def __init__(self):
         self.rank = 0
         self.rank_delta = 0
@@ -100,6 +106,9 @@ class XNAccountScores:
 
 
 class XNAccountInfo:
+    """
+    Holds information about user profile (name, main planet) and statistics
+    """
     def __init__(self):
         self.email = '' # set from caller ? not from site
         # collected from overview page
@@ -116,7 +125,11 @@ class XNAccountInfo:
         return '{0} rank {1}'.format(self.login, self.scores)
 
 
-class XNFlightShips:
+class XNShipsBundle:
+    """
+    Holds information about ships bundle
+    for example, in flight, on planet's orbit, etc
+    """
     def __init__(self):
         self.mt = 0  # small transport
         self.bt = 0  # big transport
@@ -124,7 +137,7 @@ class XNFlightShips:
         self.ti = 0  # heavy ceptor
         self.crus = 0  # cruiser
         self.link = 0  # linkor
-        self.col = 0   # colonizator
+        self.col = 0   # colonizer
         self.rab = 0   # refiner
         self.spy = 0   # spy
         self.bomber = 0  # bomber
@@ -140,6 +153,9 @@ class XNFlightShips:
         self.f_dread = 0
 
     def __len__(self):
+        """
+        :return total ships count in bundle
+        """
         total = self.mt + self.bt + self.li + self.ti + self.crus + self.link \
             + self.col + self.rab + self.spy + self.bomber + self.ss + self.unik \
             + self.zs + self.lk + self.warbase \
@@ -174,6 +190,11 @@ class XNFlightShips:
 
 
 class XNResourceBundle:
+    """
+    Hold information about resources bundle, used in many situations:
+    - resources on planet
+    - resources in flight inside ships
+    """
     def __init__(self, m=0, c=0, d=0):
         self.met = m
         self.cry = c
@@ -181,7 +202,7 @@ class XNResourceBundle:
 
     def __len__(self):
         """
-        :return: Total resource count, sum of met+cry+deit
+        :return Total resource count, sum of met+cry+deit
         """
         return self.met + self.cry + self.deit
 
@@ -223,13 +244,19 @@ class XNFlight:
                        'attack', 'espionage', 'missile', 'destroy', 'federation']
 
     def __init__(self):
-        self.ships = XNFlightShips()
+        self.ships = XNShipsBundle()
         self.res = XNResourceBundle()
         self.src = XNCoords()
         self.dst = XNCoords()
         self.mission = None
         self.direction = ''
         self.arrive_datetime = 0
+
+    @staticmethod
+    def is_hostile_mission(mission_str):
+        if mission_str in ['attack', 'espionage', 'missile', 'destroy', 'federation']:
+            return True
+        return False
 
     def __str__(self):
         s = '{0} {1}->{2} ({3}) {4}'.format(
@@ -240,7 +267,7 @@ class XNFlight:
         return s
 
 
-class XNovaFraction:
+class XNFraction:
     def __init__(self, name=None, race_id=None, ico=None):
         self.name = ''
         if name is not None:
@@ -253,18 +280,121 @@ class XNovaFraction:
             self.ico_name = ico
 
 
-def fraction_from_name(name: str) -> XNovaFraction:
+def fraction_from_name(name: str) -> XNFraction:
     if name == 'Конфедерация':
-        ret = XNovaFraction('Конфедерация', 1, 'race1.gif')
+        ret = XNFraction('Конфедерация', 1, 'race1.gif')
         return ret
     elif name == 'Бионики':
-        ret = XNovaFraction('Бионики', 2, 'race2.gif')
+        ret = XNFraction('Бионики', 2, 'race2.gif')
         return ret
     elif name == 'Сайлоны':
-        ret = XNovaFraction('Сайлоны', 3, 'race3.gif')
+        ret = XNFraction('Сайлоны', 3, 'race3.gif')
         return ret
     elif name == 'Древние':
-        ret = XNovaFraction('Древние', 4, 'race4.gif')
+        ret = XNFraction('Древние', 4, 'race4.gif')
         return ret
     else:
         return None
+
+
+class XNBuildingsBundle:
+    """
+    holds info about planet's buildings levels
+    """
+    def __init__(self):
+        self.met_factory = 0
+        self.cry_factory = 0
+        self.deit_factory = 0
+        self.solar_station = 0
+        self.nuclear_station = 0
+        self.robotics_factory = 0
+        self.nanites_factory = 0
+        self.shipyard = 0
+        self.met_silo = 0
+        self.cry_silo = 0
+        self.deit_silo = 0
+        self.lab = 0
+        self.terraformer = 0
+        self.alliance_silo = 0
+        self.rocket_silo = 0
+        self.lunar_base = 0
+        self.lunar_phalanx = 0
+        self.gates = 0
+
+
+class XNDefenseBundle:
+    """
+    holds all info about planet's defenses count
+    """
+    def __init__(self):
+        self.rocket = 0
+        self.light_laser = 0
+        self.heavy_laser = 0
+        self.gauss = 0
+        self.ion = 0
+        self.plasma = 0
+        self.small_dome = 0
+        self.big_dome = 0
+        self.defender_rocket = 0
+        self.attack_rocket = 0
+
+
+class XNPlanetProductionPowers:
+    """
+    Acts like a sctructure to hold values for individual
+    production power settings (levels)
+    """
+    def __init__(self):
+        self.met = 0
+        self.cry = 0
+        self.deit = 0
+        self.solar_station = 0
+        self.nuclear_station = 0
+        self.satellites = 0
+
+
+class XNPlanetEnergyInfo:
+    """
+    Acts like a structure to hold information
+    about planet's energy situation
+    """
+    def __init__(self):
+        self.energy_left = 0
+        self.energy_total = 0
+        self.charge_percent = 0
+
+
+class XNDebrisField:
+    """ planet debris field, contains only metal and crystal """
+    def __init__(self, m=0, c=0):
+        self.met = m
+        self.cry = c
+
+    def __len__(self):
+        return self.met + self.cry
+
+    def __str__(self):
+        return 'Debris field (Metal: {0}, Crystal: {1})'.format(self.met, self.cry)
+
+
+class XNPlanet:
+    """
+    Main planet model, holding all information
+    """
+    def __init__(self, name=None, coords=None, planet_id=0):
+        self.planet_id = planet_id
+        self.name = name if name is not None else ''
+        self.coords = coords if isinstance(coords, XNCoords) else XNCoords()
+        self.fields_busy = 0
+        self.fields_total = 0
+        self.res_current = XNResourceBundle(0, 0, 0)
+        self.res_prod_per_hour = XNResourceBundle(0, 0, 0)
+        self.energy = XNPlanetEnergyInfo()
+        self.prod_powers = XNPlanetProductionPowers()
+        self.ships = XNShipsBundle()
+        self.buildings = XNBuildingsBundle()
+        self.defense = XNDefenseBundle()
+        # planet may have moon
+        self.moon = 0
+        # planet may have debris_field
+        self.field = XNDebrisField(0, 0)
