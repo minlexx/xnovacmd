@@ -5,8 +5,11 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
 from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
+from .xn_data import XNCoords, XNPlanet
 from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
+from .xn_parser_curplanet import CurPlanetParser
+from .xn_parser_imperium import ImperiumParser
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -28,10 +31,16 @@ class XNovaWorld(QThread):
         # parsers
         self.parser_overview = OverviewParser()
         self.parser_userinfo = UserInfoParser()
+        self.parser_curplanet = CurPlanetParser()
+        self.parser_imperium = ImperiumParser()
         # world/user info
         self.server_time = datetime.datetime.today()
         self.account = XNAccountInfo()
         self.flights = []
+        self.cur_planet_id = 0
+        self.cur_planet_name = ''
+        self.cur_planet_coords = XNCoords(0, 0, 0)
+        self.planets = []
         # misc
         self.net_errors_count = 0
 
@@ -76,6 +85,11 @@ class XNovaWorld(QThread):
             self.account = self.parser_overview.account
             self.flights = self.parser_overview.flights
             self.server_time = self.parser_overview.server_time
+            # run also cur planet parser on the same content
+            self.parser_curplanet.parse_page_content(page_content)
+            self.cur_planet_id = self.parser_curplanet.cur_planet_id
+            self.cur_planet_name = self.parser_curplanet.cur_planet_name
+            self.cur_planet_coords = self.parser_curplanet.cur_planet_coords
         elif page_name == 'self_user_info':
             self.parser_userinfo.parse_page_content(page_content)
             self.account.scores.buildings = self.parser_userinfo.buildings
@@ -91,6 +105,8 @@ class XNovaWorld(QThread):
             self.account.main_planet_name = self.parser_userinfo.main_planet_name
             self.account.main_planet_coords = self.parser_userinfo.main_planet_coords
             self.account.alliance_name = self.parser_userinfo.alliance_name
+        elif page_name == 'imperium':
+            self.parser_imperium.parse_page_content(page_content)
 
     # internal helper, converts page identifier to url path
     def _page_name_to_url_path(self, page_name: str):
@@ -136,6 +152,8 @@ class XNovaWorld(QThread):
                 # page download error
                 self.net_errors_count += 1
                 logger.debug('XNovaWorld: net error happened, total count: {0}'.format(self.net_errors_count))
+                if self.net_errors_count > 10:
+                    raise RuntimeError('Too many network errors: {0}!'.format(self.net_errors_count))
         return None
 
     # internal, called from thread on first load
