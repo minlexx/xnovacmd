@@ -50,6 +50,7 @@ class XNova_MainWindow(QWidget):
             logger.debug('System tray icon is available, showing')
             self.tray_icon = QSystemTrayIcon(QIcon(':/i/favicon_16.png'), self)
             self.tray_icon.setToolTip('XNova Commander')
+            self.tray_icon.activated.connect(self.on_tray_icon_activated)
             self.tray_icon.show()
         # create status bar
         self.statusbar = XNCStatusBar(self)
@@ -164,3 +165,25 @@ class XNova_MainWindow(QWidget):
             self.world.world_tick()
         if self.flights_widget:
             self.flights_widget.flights_tick()
+
+    @pyqtSlot(int)
+    def on_tray_icon_activated(self, reason):
+        # QSystemTrayIcon::Unknown	0	Unknown reason
+        # QSystemTrayIcon::Context	1	The context menu for the system tray entry was requested
+        # QSystemTrayIcon::DoubleClick	2	The system tray entry was double clicked
+        # QSystemTrayIcon::Trigger	3	The system tray entry was clicked
+        # QSystemTrayIcon::MiddleClick	4	The system tray entry was clicked with the middle mouse button
+        if reason == QSystemTrayIcon.Trigger:
+            # left-click
+            self.setWindowState( (self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
+            self.show()
+            return
+        # other useful help about tray icon:
+        # bool QSystemTrayIcon::supportsMessages()
+        # void QSystemTrayIcon::showMessage(const QString & title, const QString & message,
+        #     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information,
+        #     int millisecondsTimeoutHint = 10000)
+        # QSystemTrayIcon::NoIcon	0	No icon is shown.
+        # QSystemTrayIcon::Information	1	An information icon is shown.
+        # QSystemTrayIcon::Warning	2	A standard warning icon is shown.
+        # QSystemTrayIcon::Critical	3	A critical warning icon is shown
