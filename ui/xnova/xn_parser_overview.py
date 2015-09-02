@@ -344,8 +344,11 @@ class OverviewParser(XNParserBase):
                 self._read_next = 'prom_exp'
                 return
             if self._read_next == 'prom_exp':
-                # [342 / 343 exp]
-                match = re.match(r'(\d+)\s/\s(\d+)', data)
+                # [342 / 343 exp] OR
+                # [714 / 1.728 exp]
+                # just remove all '.' chars
+                data_r = data.replace('.', '')
+                match = re.match(r'(\d+)\s/\s(\d+)', data_r)
                 if match:  # ('342', '343')
                     exp = int(match.group(1))
                     exp_m = int(match.group(2))
@@ -365,7 +368,8 @@ class OverviewParser(XNParserBase):
                 return
             if self._read_next == 'mil_exp':
                 # [342 / 343 exp]
-                match = re.match(r'(\d+)\s/\s(\d+)', data)
+                data_r = data.replace('.', '')
+                match = re.match(r'(\d+)\s/\s(\d+)', data_r)
                 if match:  # ('342', '343')
                     exp = int(match.group(1))
                     exp_m = int(match.group(2))
