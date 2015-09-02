@@ -171,10 +171,24 @@ class FlightsWidget(QWidget):
                 finished_fleets.append(irow)
             irow += 1
         for irow in finished_fleets:
-            self.ui.tw_flights.removeRow(irow)
-            finished_flight = self.flights[irow]
-            del self.flights[irow]
-            # emit signal
-            self.flightArrived.emit(finished_flight)
+            # remove row from table widget
+            # self.ui.tw_flights.removeRow(irow)
+            self.ui.tw_flights.removeRow(0)
+            # item-to-delete from python list will always have index 0?
+            # because we need to delete the first item every time
+            # finished_flight = self.flights[irow]
+            try:
+                finished_flight = self.flights[0]
+                del self.flights[0]
+                # emit signal
+                self.flightArrived.emit(finished_flight)
+            except IndexError as ie:
+                logger.error('IndexError while clearing finished flights: ')
+                logger.error(' deleting index {0}, while total list len: {1}'.format(
+                    0, len(self.flights)))
         # also update button text
         self.update_button_fleet_count()
+
+# CRITICAL ui.xnova.xn_logger File "ui\flights_widget.py", line 175, in flights_tick
+#    finished_flight = self.flights[irow]
+# CRITICAL ui.xnova.xn_logger IndexError: list index out of range
