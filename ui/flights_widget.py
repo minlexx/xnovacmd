@@ -1,7 +1,7 @@
 import datetime
 
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
 
 from .xnova.xn_data import XNFlight
@@ -12,6 +12,10 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class FlightsWidget(QWidget):
+    # Qt signals
+    # emitted when fleet has arrived at its destination
+    flightArrived = pyqtSignal(XNFlight)
+
     def __init__(self, parent=None):
         super(FlightsWidget, self).__init__(parent)
         # state vars
@@ -168,6 +172,9 @@ class FlightsWidget(QWidget):
             irow += 1
         for irow in finished_fleets:
             self.ui.tw_flights.removeRow(irow)
+            finished_flight = self.flights[irow]
             del self.flights[irow]
+            # emit signal
+            self.flightArrived.emit(finished_flight)
         # also update button text
         self.update_button_fleet_count()

@@ -8,6 +8,7 @@ from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 
+from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
@@ -132,6 +133,7 @@ class XNova_MainWindow(QWidget):
         # create flights widget
         self.flights_widget = FlightsWidget(self)
         self.flights_widget.load_ui()
+        self.flights_widget.flightArrived.connect(self.on_flight_arrived)
         self.install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1,1,1,1), spacing=1)
         self.ui.fr_flights.layout().addWidget(self.flights_widget)
         # create overview widget and add it as first tab
@@ -181,7 +183,8 @@ class XNova_MainWindow(QWidget):
 
     def show_tray_message(self, title, message, icon_type=None, timeout_ms=None):
         """
-        Shows message from system tray icon
+        Shows message from system tray icon, if system supports it.
+        If no support, this is just a no-op
         :param title: message title
         :param message: message text
         :param icon_type: one of:
@@ -199,4 +202,11 @@ class XNova_MainWindow(QWidget):
                 timeout_ms = 10000
             self.tray_icon.showMessage(title, message, icon_type, timeout_ms)
         else:
-            logger.debug('This system does not support tray icon messages.')
+            logger.info('This system does not support tray icon messages.')
+
+    @pyqtSlot(XNFlight)
+    def on_flight_arrived(self, fl: XNFlight):
+        logger.debug('main window got flight arrival: {0}'.format(fl))
+        short_fleet_info = '{0} {1} => {2}, {3} ship(s)'.format(
+            fl.mission, fl.src, fl.dst, len(fl.ships))
+        self.show_tray_message('XNova: Fleet arrived', short_fleet_info)
