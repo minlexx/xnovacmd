@@ -178,12 +178,25 @@ class XNova_MainWindow(QWidget):
             self.setWindowState( (self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
             self.show()
             return
-        # other useful help about tray icon:
-        # bool QSystemTrayIcon::supportsMessages()
-        # void QSystemTrayIcon::showMessage(const QString & title, const QString & message,
-        #     QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information,
-        #     int millisecondsTimeoutHint = 10000)
-        # QSystemTrayIcon::NoIcon	0	No icon is shown.
-        # QSystemTrayIcon::Information	1	An information icon is shown.
-        # QSystemTrayIcon::Warning	2	A standard warning icon is shown.
-        # QSystemTrayIcon::Critical	3	A critical warning icon is shown
+
+    def show_tray_message(self, title, message, icon_type=None, timeout_ms=None):
+        """
+        Shows message from system tray icon
+        :param title: message title
+        :param message: message text
+        :param icon_type: one of:
+        QSystemTrayIcon.NoIcon      0   No icon is shown.
+        QSystemTrayIcon.Information 1   An information icon is shown.
+        QSystemTrayIcon.Warning     2   A standard warning icon is shown.
+        QSystemTrayIcon.Critical    3   A critical warning icon is shown
+        """
+        if self.tray_icon is None:
+            return
+        if self.tray_icon.supportsMessages():
+            if icon_type is None:
+                icon_type = QSystemTrayIcon.Information
+            if timeout_ms is None:
+                timeout_ms = 10000
+            self.tray_icon.showMessage(title, message, icon_type, timeout_ms)
+        else:
+            logger.debug('This system does not support tray icon messages.')
