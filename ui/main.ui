@@ -17,21 +17,21 @@
    <iconset resource="res.qrc">
     <normaloff>:/i/favicon_16.png</normaloff>:/i/favicon_16.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="main_vl">
    <property name="spacing">
     <number>3</number>
    </property>
    <property name="leftMargin">
-    <number>5</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
     <number>2</number>
    </property>
    <property name="rightMargin">
-    <number>5</number>
+    <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>2</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QFrame" name="fr_flights">
@@ -80,7 +80,7 @@
           <x>0</x>
           <y>0</y>
           <width>110</width>
-          <height>414</height>
+          <height>449</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -119,22 +119,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QFrame" name="fr_status">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

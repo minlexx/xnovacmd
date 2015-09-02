@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSlot, Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QBoxLayout
 from PyQt5.QtGui import QIcon, QCloseEvent
 
+from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
@@ -32,6 +33,7 @@ class XNova_MainWindow(QWidget):
         # objects, sub-windows
         self.ui = None
         self.tray_icon = None
+        self.statusbar = None
         self.login_widget = None
         self.overview_widget = None
         self.flights_widget = None
@@ -49,6 +51,11 @@ class XNova_MainWindow(QWidget):
             self.tray_icon = QSystemTrayIcon(QIcon(':/i/favicon_16.png'), self)
             self.tray_icon.setToolTip('XNova Commander')
             self.tray_icon.show()
+        # create status bar
+        self.statusbar = XNCStatusBar(self)
+        self.layout().addWidget(self.statusbar)
+        self.statusbar.setupUi()
+        self.setStatusMessage('Not authorized, not connected: Log in!')
 
     # overrides QWidget.closeEvent
     # cleanup just before the window close
@@ -67,6 +74,9 @@ class XNova_MainWindow(QWidget):
                 logger.warn('wait failed, last chance, terminating!')
                 self.world.terminate()
         close_event.accept()
+
+    def setStatusMessage(self, msg: str):
+        self.statusbar.setStatus(msg)
 
     # convenient internal wrapper
     def add_tab(self, widget, tab_name):
@@ -103,6 +113,7 @@ class XNova_MainWindow(QWidget):
     def on_login_error(self, errstr):
         logger.error('Login error: {0}'.format(errstr))
         self.state = self.STATE_NOT_AUTHED
+        self.setStatusMessage('Login error: {0}'.format(errstr))
         QMessageBox.critical(self, 'Login error:', errstr)
 
     @pyqtSlot(str, dict)
@@ -110,6 +121,7 @@ class XNova_MainWindow(QWidget):
         logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
         # save login data: email, cookies
         self.state = self.STATE_AUTHED
+        self.setStatusMessage('Login OK, loading world')
         self.login_email = login_email
         self.cookies_dict = cookies_dict
         # destroy login widget and remove its tab
@@ -135,6 +147,7 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
+        self.setStatusMessage('World loaded.')
         # update account info
         self.overview_widget.setEnabled(True)
         self.overview_widget.update_account_info()
