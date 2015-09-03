@@ -395,7 +395,13 @@ class XNPlanet:
         self.ships = XNShipsBundle()
         self.buildings = XNBuildingsBundle()
         self.defense = XNDefenseBundle()
-        # planet may have moon
-        self.moon = 0
+        self.moon = None  # planet may have moon
+        self.is_moon = False  # or may be a moon itself
         # planet may have debris_field
-        self.field = XNDebrisField(0, 0)
+        self.debris_field = XNDebrisField(0, 0)
+
+    def __str__(self):
+        if self.coords.target_name == '':
+            self.coords.target_name = self.name
+        return str(self.coords)
+
