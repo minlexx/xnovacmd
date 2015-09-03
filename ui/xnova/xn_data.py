@@ -348,9 +348,9 @@ class XNPlanetProductionPowers:
         self.met = 0
         self.cry = 0
         self.deit = 0
-        self.solar_station = 0
-        self.nuclear_station = 0
-        self.satellites = 0
+        self.solar = 0
+        self.nuclear = 0
+        self.ss = 0
 
 
 class XNPlanetEnergyInfo:
@@ -389,7 +389,7 @@ class XNPlanet:
         self.fields_busy = 0
         self.fields_total = 0
         self.res_current = XNResourceBundle(0, 0, 0)
-        self.res_prod_per_hour = XNResourceBundle(0, 0, 0)
+        self.res_per_hour = XNResourceBundle(0, 0, 0)
         self.energy = XNPlanetEnergyInfo()
         self.prod_powers = XNPlanetProductionPowers()
         self.ships = XNShipsBundle()
