@@ -59,7 +59,7 @@ class CurPlanetParser(XNParserBase):
                             logger.info('Found cur planet id: {0}'.format(self.cur_planet_id))
             return
 
-    def handle_data2(self, data: str, tag: str, attrs: tuple):
+    def handle_data2(self, data: str, tag: str, attrs: list):
         if self.in_planet_list:
             if self.in_planet_block:
                 if self.in_hidden_sm:
