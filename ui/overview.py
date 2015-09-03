@@ -22,7 +22,6 @@ class OverviewWidget(QWidget):
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
-        self.ui.splitter.setSizes([250, 150])
         self.ui.tw_accStats.setColumnWidth(0, 80)
         self.ui.tw_accStats.setColumnWidth(1, 300)
         # testing only

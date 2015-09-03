@@ -58,7 +58,7 @@
       <widget class="QScrollArea" name="sa_planets">
        <property name="minimumSize">
         <size>
-         <width>112</width>
+         <width>120</width>
          <height>0</height>
         </size>
        </property>
@@ -79,7 +79,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>110</width>
+          <width>118</width>
           <height>449</height>
          </rect>
         </property>
