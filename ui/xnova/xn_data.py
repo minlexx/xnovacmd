@@ -384,6 +384,7 @@ class XNPlanet:
     def __init__(self, name=None, coords=None, planet_id=0):
         self.planet_id = planet_id
         self.name = name if name is not None else ''
+        self.pic_url = ''
         self.coords = coords if isinstance(coords, XNCoords) else XNCoords()
         self.fields_busy = 0
         self.fields_total = 0
