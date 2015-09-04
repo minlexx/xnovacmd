@@ -45,13 +45,13 @@ class ImperiumParser(XNParserBase):
             if m:
                 planet_id = safe_int(m.group(1))
                 self.planet_ids.append(planet_id)
-                logger.debug('Found planet id: {0}'.format(planet_id))
+                # logger.debug('Found planet id: {0}'.format(planet_id))
         if self.in_picdef and (tag == 'img'):
             img_src = get_attribute(attrs, 'src')
             if img_src is None:
                 return
             self.planet_pics.append(img_src)
-            logger.debug('Found planet img: {0}'.format(img_src))
+            # logger.debug('Found planet img: {0}'.format(img_src))
         return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
@@ -105,7 +105,7 @@ class ImperiumParser(XNParserBase):
                     self.planets[self._counter].name = data
                     self.planets[self._counter].coords = XNCoords(0, 0, 0)
                     self.planets[self._counter].coords.target_name = data  # optional, but...
-                    logger.info('planet[{0}].name = {1}'.format(self._counter, data))
+                    # logger.debug('planet[{0}].name = {1}'.format(self._counter, data))
                     # move to next planet
                     self._counter += 1
                 elif self._phase == 'fields':
@@ -115,8 +115,8 @@ class ImperiumParser(XNParserBase):
                         fields_total = safe_int(m.group(2))
                         self.planets[self._counter].fields_busy = fields_busy
                         self.planets[self._counter].fields_total = fields_total
-                        logger.info('planet[{0}].fields = {1}/{2}'.format(
-                            self._counter, fields_busy, fields_total))
+                        # logger.debug('planet[{0}].fields = {1}/{2}'.format(
+                        #    self._counter, fields_busy, fields_total))
                     self._counter += 1
                     if self._counter >= len(self.planets):
                         self._counter = 0
@@ -147,8 +147,8 @@ class ImperiumParser(XNParserBase):
                             self.planets[self._counter].energy.energy_left = value
                         # log only if there was assignment
                         if self._phase_res != '':
-                            logger.info('planet[{0}].{1}.{2} = {3}'.format(
-                                self._counter, self._phase, self._phase_res, value))
+                            # logger.debug('planet[{0}].{1}.{2} = {3}'.format(
+                            #    self._counter, self._phase, self._phase_res, value))
                             self._counter += 1
                         if self._counter >= len(self.planets):
                             self._counter = 0
@@ -169,13 +169,13 @@ class ImperiumParser(XNParserBase):
                         elif self._phase_res == 'deit':
                             self.planets[self._counter].res_per_hour.deit = value
                         if self._phase_res != '':
-                            logger.info('planet[{0}].{1}.{2} = {3}'.format(
-                                self._counter, self._phase, self._phase_res, value))
+                            # logger.debug('planet[{0}].{1}.{2} = {3}'.format(
+                            #    self._counter, self._phase, self._phase_res, value))
                             self._counter += 1
                         if self._counter >= len(self.planets):
                             self._counter = 0
                             if self._phase_res == 'deit':
-                                logger.debug('STOP res_per_hour')
+                                # logger.debug('STOP res_per_hour')
                                 self._phase = ''
                             self._phase_res = ''
                 elif self._phase == 'prod_powers':
@@ -205,7 +205,7 @@ class ImperiumParser(XNParserBase):
                             self._counter, self.planets[self._counter].coords))
                         self._counter += 1
         if (tag == 'font') and (self._phase == 'res_current') and (self._phase_res == 'charge'):
-            logger.info('planet[{0}].energy.charge_percent = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].energy.charge_percent = {1}'.format(self._counter, data))
             self.planets[self._counter].energy.charge_percent = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
@@ -214,53 +214,56 @@ class ImperiumParser(XNParserBase):
                 self._phase_res = ''
                 # logger.debug('END charge')
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'met'):
-            logger.info('planet[{0}].prod_powers.met = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.met = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.met = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'cry'):
-            logger.info('planet[{0}].prod_powers.cry = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.cry = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.cry = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'deit'):
-            logger.info('planet[{0}].prod_powers.deit = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.deit = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.deit = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'solar'):
-            logger.info('planet[{0}].prod_powers.solar = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.solar = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.solar = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'nuclear'):
-            logger.info('planet[{0}].prod_powers.nuclear = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.nuclear = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.nuclear = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
         if (tag == 'font') and (self._phase == 'prod_powers') and (self._phase_res == 'ss'):
-            logger.info('planet[{0}].prod_powers.ss = {1}'.format(self._counter, data))
+            # logger.debug('planet[{0}].prod_powers.ss = {1}'.format(self._counter, data))
             self.planets[self._counter].prod_powers.ss = safe_int(data)
             self._counter += 1
             if self._counter >= len(self.planets):
                 self._counter = 0
                 self._phase_res = ''
                 self._phase = ''
-                logger.debug('END prod_powers')
+                # logger.debug('END prod_powers')
         return  # def handle_data()
 
     def handle_endtag(self, tag: str):
         super(ImperiumParser, self).handle_endtag(tag)
         if self.in_picdef and (tag == 'th'):
             self.in_picdef = False
+            return
+        if tag == 'html':
+            logger.info('Loaded info about {0} planet(s)'.format(len(self.planets)))
             return
