@@ -145,8 +145,12 @@ class XNova_MainWindow(QWidget):
         # testing only
         pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
         pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
-        pl2 = XNPlanet('Amarr', XNCoords(1, 232, 7))
+        pl1.fields_busy = 90
+        pl1.fields_total = 167
+        pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
         pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
+        pl2.fields_busy = 84
+        pl2.fields_total = 207
         pls = [pl1, pl2]
         self.setup_planets(pls)
 
@@ -158,6 +162,7 @@ class XNova_MainWindow(QWidget):
 
     def setup_planets(self, planets: list):
         layout = self.ui.panel_planets.layout()
+        layout.setSpacing(0)
         remove_trailing_spacer_from_layout(layout)
         # remove all previous planet widgets from planets panel
         if layout.count() > 0:
