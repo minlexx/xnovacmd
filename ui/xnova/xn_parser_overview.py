@@ -105,6 +105,7 @@ class OverviewParser(XNParserBase):
         self.in_flight = False
         self.in_flight_time = False
         self.in_flight_time_arrival = False
+        self.in_enemy_message_span = False
         self._data_prev = ''
         self._read_next = ''
         self._num_a_with_tooltip = 0
@@ -144,7 +145,7 @@ class OverviewParser(XNParserBase):
                     # <table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font>
                     # </td><td width=25% align=right><font color=white>2<font>
                     # or ... <font color=white>Металл<font></td> ... <font color=white>18.000<font> ...
-                    # logger.debug('tt: [{0}]'.format(data_tooltip_content))
+                    # logger.debug('<a with tooltip:: [{0}]'.format(data_tooltip_content))
                     self._num_a_with_tooltip += 1
                     if self._num_a_with_tooltip == 1:
                         fs = _parse_flight_ships(data_tooltip_content)
@@ -158,7 +159,7 @@ class OverviewParser(XNParserBase):
                 if href != '':
                     # logger.debug('<a href=[{0}]'.format(href))
                     # <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=129"
-                    if href.startswith('?set=galaxy&r=3&galaxy='):
+                    if href.startswith('?set=galaxy'):
                         # logger.debug('    galaxy reference? [{0}]'.format(href))
                         self._num_a_with_galaxy += 1
             return
@@ -170,6 +171,11 @@ class OverviewParser(XNParserBase):
                     span_class = attr_tuple[1]
             if span_class == '':
                 # skip all <span> without class
+                return
+            # check special span case that is send message to enemy attacker:
+            # <span class='sprite skin_m'></span>
+            if span_class == 'sprite skin_m':
+                self.in_enemy_message_span = True
                 return
             # check that span class is flight:
             #  class="return ownattack"
@@ -227,6 +233,10 @@ class OverviewParser(XNParserBase):
     def handle_endtag(self, tag: str):
         super(OverviewParser, self).handle_endtag(tag)
         if tag == 'span':
+            # special case when enemy attack fleet, contains inner span tag
+            if self.in_enemy_message_span:
+                self.in_enemy_message_span = False
+                return
             if self.in_flight:
                 # save flight arrive time
                 self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
@@ -237,6 +247,7 @@ class OverviewParser(XNParserBase):
                         # only actually having ships in it
                         self.flights.append(self._cur_flight)
                         logger.info('Flight: {0}'.format(self._cur_flight))
+                # logger.debug('handle_endtag(span): ending flight')
                 self.in_flight = False
                 self._num_a_with_tooltip = 0
                 self._num_a_with_galaxy = 0
@@ -435,7 +446,7 @@ class OverviewParser(XNParserBase):
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
-            logger.debug('in_flight data: [{0}]'.format(data))
+            # logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
@@ -471,8 +482,8 @@ class OverviewParser(XNParserBase):
                 time_left = datetime.timedelta(seconds=second, minutes=minute, hours=hour)
                 dt_arrive = self.server_time + time_left
                 self._cur_flight_arrive_dt = dt_arrive
-                logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
-                    time_left, dt_arrive))
+                # logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
+                #    time_left, dt_arrive))
                 return
         if self.in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
