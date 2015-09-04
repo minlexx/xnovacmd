@@ -1,4 +1,3 @@
-import os.path
 import datetime
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
@@ -168,13 +167,7 @@ class XNovaWorld(QThread):
         if img_bytes is None:
             logger.error('World: image dnl failed: [{0}]'.format(img_path))
             return
-        img_path_plain = img_path.replace('/', '_')
-        filename = os.path.join(self.page_cache._img_cache_dir, img_path_plain)
-        try:
-            with open(filename, mode='wb') as f:
-                f.write(img_bytes)
-        except IOError as ioe:
-            logger.error('World: image [{0}] save failed: [{1}]'.format(filename, str(ioe)))
+        self.page_cache.save_image(img_path, img_bytes)
 
     # internal, called from thread on first load
     def _full_refresh(self):

@@ -53,6 +53,14 @@ class XNovaPageCache:
                 except UnicodeDecodeError as ude:
                     logger.error('Encoding error in [{0}], skipped: {1}'.format(subitem.name, str(ude)))
         logger.info('Loaded {0} cached pages.'.format(num_loaded))
+        # ensure that image cache dir also exists
+        cache_dir = pathlib.Path(self._img_cache_dir)
+        if not cache_dir.exists():
+            try:
+                cache_dir.mkdir(parents=True)
+            except OSError as ose:
+                pass
+            return
 
     # save page into cache
     def set_page(self, page_name, contents):
@@ -66,6 +74,15 @@ class XNovaPageCache:
             f.close()
         except IOError as ioe:
             logger.error('set_page("{0}", ...): IOError: {1}'.format(page_name, str(ioe)))
+
+    def save_image(self, img_path: str, img_bytes: bytes):
+        img_path_plain = img_path.replace('/', '_')
+        filename = os.path.join(self._img_cache_dir, img_path_plain)
+        try:
+            with open(filename, mode='wb') as f:
+                f.write(img_bytes)
+        except IOError as ioe:
+            logger.error('image [{0}] save failed: [{1}]'.format(filename, str(ioe)))
 
     # get page from cache
     # the file first requested from this cache,
