@@ -144,7 +144,9 @@ class XNova_MainWindow(QWidget):
         self.add_tab(self.login_widget, 'Login')
         # testing only
         pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
+        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
         pl2 = XNPlanet('Amarr', XNCoords(1, 232, 7))
+        pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
         pls = [pl1, pl2]
         self.setup_planets(pls)
 
@@ -164,7 +166,6 @@ class XNova_MainWindow(QWidget):
                 if li is not None:
                     wi = li.widget()
                     if wi is not None:
-                        #if type(wi) == PlanetWidget:
                         if isinstance(wi, PlanetWidget):
                             layout.removeWidget(wi)
                             wi.close()
