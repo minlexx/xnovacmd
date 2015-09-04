@@ -17,6 +17,8 @@ class XNovaPageCache:
     def __init__(self):
         self._pages = {}
         self._mtimes = {}
+        self._page_cache_dir = './cache/page'
+        self._img_cache_dir = './cache/img'
         self.save_load_encoding = locale.getpreferredencoding()
 
     # scan ./cache directory and load all files into memory
@@ -24,10 +26,10 @@ class XNovaPageCache:
         if clean:
             self._pages = {}
             self._mtimes = {}
-        cache_dir = pathlib.Path('./cache')
+        cache_dir = pathlib.Path(self._page_cache_dir)
         if not cache_dir.exists():
             try:
-                cache_dir.mkdir()
+                cache_dir.mkdir(parents=True)
             except OSError as ose:
                 pass
             return
@@ -57,7 +59,7 @@ class XNovaPageCache:
         self._pages[page_name] = contents
         self._mtimes[page_name] = int(time.time())  # also update modified time!
         try:
-            fn = os.path.join('./cache', page_name)
+            fn = os.path.join(self._page_cache_dir, page_name)
             f = open(fn, mode='wt', encoding=self.save_load_encoding)
             # f = open(fn, mode='wt')
             f.write(contents)
