@@ -1,3 +1,4 @@
+import os.path
 import datetime
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
@@ -162,6 +163,19 @@ class XNovaWorld(QThread):
                     raise RuntimeError('Too many network errors: {0}!'.format(self.net_errors_count))
         return None
 
+    def _download_image(self, img_path: str):
+        img_bytes = self.page_downloader.download_url_path(img_path, return_binary=True)
+        if img_bytes is None:
+            logger.error('World: image dnl failed: [{0}]'.format(img_path))
+            return
+        img_path_plain = img_path.replace('/', '_')
+        filename = os.path.join(self.page_cache._img_cache_dir, img_path_plain)
+        try:
+            with open(filename, mode='wb') as f:
+                f.write(img_bytes)
+        except IOError as ioe:
+            logger.error('World: image [{0}] save failed: [{1}]'.format(filename, str(ioe)))
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('XNovaWorld thread: starting full world update')
@@ -178,6 +192,9 @@ class XNovaWorld(QThread):
         #  http://uni4.xnova.su/?set=players&id=71995
         #  This need overview parser to parse and fetch account id
         self._get_page('self_user_info', 300, force_download=True, do_emit=False)
+        # also download all planets pics
+        for pl in self.planets:
+            self._download_image(pl.pic_url)
         QThread.msleep(500)
         # signal wain window that we fifnished initial loading
         self.world_load_complete.emit()

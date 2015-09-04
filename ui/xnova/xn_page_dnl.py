@@ -38,16 +38,19 @@ class XNovaPageDownload:
 
     # real downloader function
     # returns None on failure
-    def download_url_path(self, url_path: str):
+    def download_url_path(self, url_path: str, return_binary=False):
         self.error_str = None  # clear error
         # construct url to download
         url = 'http://{0}/{1}'.format(self.xnova_url, url_path)
         logger.debug('internal: downloading [{0}]...'.format(url))
-        text = None
+        ret = None
         try:
             r = self.sess.get(url)
             if r.status_code == requests.codes.ok:
-                text = r.text
+                if not return_binary:
+                    ret = r.text
+                else:
+                    ret = r.content
                 logger.debug('internal: download [{0}] OK'.format(url))
                 # on successful request, update referer header for the next request
                 self.sess.headers.update({'referer': url})
@@ -57,4 +60,4 @@ class XNovaPageDownload:
         except requests.exceptions.RequestException as e:
             logger.debug('Exception {0}'.format(type(e)))
             self._set_error(str(e))
-        return text
+        return ret
