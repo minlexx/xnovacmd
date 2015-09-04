@@ -56,7 +56,7 @@ class CurPlanetParser(XNParserBase):
                         match = re.search(r'changePlanet\((\d+)\)', a_onclick)
                         if match:
                             self.cur_planet_id = safe_int(match.group(1))
-                            logger.info('Found cur planet id: {0}'.format(self.cur_planet_id))
+                            # logger.debug('Found cur planet id: {0}'.format(self.cur_planet_id))
             return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
@@ -67,11 +67,11 @@ class CurPlanetParser(XNParserBase):
                     if self.data_count == 0:
                         # this is planet name
                         self.cur_planet_name = data
-                        logger.info('Found cur planet name: {0}'.format(self.cur_planet_name))
+                        # logger.debug('Found cur planet name: {0}'.format(self.cur_planet_name))
                     elif self.data_count == 1:
                         # this is planet coords
                         self.cur_planet_coords.parse_str(data)
-                        logger.info('Found cur planet coords: {0}'.format(self.cur_planet_coords))
+                        # logger.debug('Found cur planet coords: {0}'.format(self.cur_planet_coords))
                     self.data_count += 1
                     if self.data_count >= 2:
                         # exit processing, we found all we need
@@ -82,3 +82,6 @@ class CurPlanetParser(XNParserBase):
 
     def handle_endtag(self, tag: str):
         super(CurPlanetParser, self).handle_endtag(tag)
+        if tag == 'html':
+            logger.info('Found cur planet: #{0} {1} {2}'.format(
+                self.cur_planet_id, self.cur_planet_name, str(self.cur_planet_coords)))
