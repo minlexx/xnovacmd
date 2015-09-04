@@ -57,10 +57,15 @@ class XNovaWorld(QThread):
         return self.account
 
     def get_flights(self) -> list:
-        return self.flights
+        # return data, making a copy of world flights for self
+        # because caller may modify those (del items when fleet arrives)
+        return self.flights.copy()
 
     def get_server_time(self) -> datetime.datetime:
         return self.server_time
+
+    def get_planets(self) -> list:
+        return self.planets.copy()
 
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -107,6 +112,7 @@ class XNovaWorld(QThread):
             self.account.alliance_name = self.parser_userinfo.alliance_name
         elif page_name == 'imperium':
             self.parser_imperium.parse_page_content(page_content)
+            self.planets = self.parser_imperium.planets
 
     # internal helper, converts page identifier to url path
     def _page_name_to_url_path(self, page_name: str):

@@ -115,10 +115,8 @@ class FlightsWidget(QWidget):
         # clear widget
         self.ui.tw_flights.clearContents()
         self.ui.tw_flights.setRowCount(0)
-        # get data, making a copy of world flights for self
-        # because we will modify those (del items when fleet arrives)
-        world_flights = self.world.get_flights()
-        self.flights = world_flights.copy()
+        # get data
+        self.flights = self.world.get_flights()
         # calc diff of our time with server time
         our_time = datetime.datetime.today()
         assert isinstance(self.world.server_time, datetime.datetime)

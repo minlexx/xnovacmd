@@ -1,18 +1,66 @@
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QBoxLayout
+from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, \
+    QLayout, QBoxLayout, QLayoutItem
 from PyQt5.QtGui import QIcon, QCloseEvent
 
 from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
+from .planets_panel import PlanetWidget
 from .overview import OverviewWidget
 
-from .xnova.xn_data import XNFlight
+from .xnova.xn_data import XNCoords, XNFlight, XNPlanet
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
+
+
+def install_layout_for_widget(widget, orientation=None, margins=None, spacing=None):
+    """
+    Installs a layout to widget, if it does not have it already.
+    :param widget: target widget
+    :param orientation: Qt.Vertical (default) / Qt.Horizontal
+    :param margins: layou margins = (11, 11, 11, 11) from Qt docs, style dependent
+    :param spacing: spacing between items in layout
+    :return: None
+    """
+    if widget.layout():
+        return  # already has a layout
+    direction = QBoxLayout.TopToBottom
+    if orientation == Qt.Horizontal:
+        direction = QBoxLayout.LeftToRight
+    l = QBoxLayout(direction)
+    if margins:
+        l.setContentsMargins(margins[0], margins[1], margins[2], margins[3])
+    if spacing:
+        l.setSpacing(spacing)
+    widget.setLayout(l)
+
+
+def remove_trailing_spacer_from_layout(layout: QLayout):
+    """
+    If the last item in the layout is spacer, removes it.
+    :param layout: target layout
+    :return: bool success indicator
+    """
+    ni = layout.count()
+    if ni < 1:
+        return False
+    ni -= 1
+    layoutItem = layout.itemAt(ni)
+    if layoutItem is None:
+        return False
+    spacerItem = layoutItem.spacerItem()
+    if spacerItem is not None:
+        layout.removeItem(spacerItem)
+        return True
+    return False
+
+
+def append_trailing_spacer_to_layout(layout: QBoxLayout):
+    layout.addStretch()
 
 
 # This class will control:
@@ -85,22 +133,6 @@ class XNova_MainWindow(QWidget):
         tab_index = self.ui.tabWidget.addTab(widget, tab_name)
         widget.show()
 
-    # defaults:
-    # orientation = Qt.Vertical
-    # margins = (11, 11, 11, 11)  # from Qt docs, style dependent
-    def install_layout_for_widget(self, widget, orientation=None, margins=None, spacing=None):
-        if widget.layout():
-            return  # already has a layout
-        direction = QBoxLayout.TopToBottom
-        if orientation == Qt.Horizontal:
-            direction = QBoxLayout.LeftToRight
-        l = QBoxLayout(direction)
-        if margins:
-            l.setContentsMargins(margins[0], margins[1], margins[2], margins[3])
-        if spacing:
-            l.setSpacing(spacing)
-        widget.setLayout(l)
-
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
@@ -110,6 +142,36 @@ class XNova_MainWindow(QWidget):
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
         self.add_tab(self.login_widget, 'Login')
+        # testing only
+        pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
+        pl2 = XNPlanet('Amarr', XNCoords(1, 232, 7))
+        pls = [pl1, pl2]
+        self.setup_planets(pls)
+
+    def setup_one_planet(self, pl: XNPlanet):
+        pw = PlanetWidget(self.ui.panel_planets)
+        pw.setPlanet(pl)
+        self.ui.panel_planets.layout().addWidget(pw)
+        pw.show()
+
+    def setup_planets(self, planets: list):
+        layout = self.ui.panel_planets.layout()
+        remove_trailing_spacer_from_layout(layout)
+        # remove all previous planet widgets from planets panel
+        if layout.count() > 0:
+            for i in range(layout.count()-1, -1, -1):
+                li = layout.itemAt(i)
+                if li is not None:
+                    wi = li.widget()
+                    if wi is not None:
+                        #if type(wi) == PlanetWidget:
+                        if isinstance(wi, PlanetWidget):
+                            layout.removeWidget(wi)
+                            wi.close()
+                            del wi
+        for pl in planets:
+            self.setup_one_planet(pl)
+        append_trailing_spacer_to_layout(layout)
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
@@ -134,7 +196,7 @@ class XNova_MainWindow(QWidget):
         self.flights_widget = FlightsWidget(self)
         self.flights_widget.load_ui()
         self.flights_widget.flightArrived.connect(self.on_flight_arrived)
-        self.install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1,1,1,1), spacing=1)
+        install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
         self.ui.fr_flights.layout().addWidget(self.flights_widget)
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
@@ -156,6 +218,9 @@ class XNova_MainWindow(QWidget):
         self.overview_widget.update_account_info()
         # update flying fleets
         self.flights_widget.update_flights()
+        # well... planets?
+        planets = self.world.get_planets()
+        self.setup_planets(planets)
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
