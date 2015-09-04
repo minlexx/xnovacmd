@@ -6,7 +6,7 @@ import requests.cookies
 
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 # Incapsulates network layer:
@@ -55,9 +55,9 @@ class XNovaPageDownload:
                 # on successful request, update referer header for the next request
                 self.sess.headers.update({'referer': url})
             else:
-                logger.debug('Unexpected response code: HTTP {0}'.format(r.status_code))
+                logger.error('Unexpected response code: HTTP {0}'.format(r.status_code))
                 self._set_error('HTTP {0}'.format(r.status_code))
         except requests.exceptions.RequestException as e:
-            logger.debug('Exception {0}'.format(type(e)))
+            logger.error('Exception {0}'.format(type(e)))
             self._set_error(str(e))
         return ret
