@@ -64,7 +64,9 @@ class PlanetWidget(QFrame):
         self._img_loaded = False
         self._mouse_over_planet_name = False
         self._mouse_over_planet_coords = False
+        self._mouse_over_planet_fields = False
         self._tt = PWToolTipInfo()
+        self._pb_texture = QImage()
         self.init_ui()
 
     def init_ui(self):
@@ -74,6 +76,8 @@ class PlanetWidget(QFrame):
         self.setFrameShadow(QFrame.Plain)
         self.setFrameShape(QFrame.StyledPanel)
         self.setMouseTracking(True)
+        if not self._pb_texture.load(':/i/pb01_tex.png'):
+            logger.warn('Failed to load progress bar texture!')
 
     def _load_img(self):
         if self._planet.pic_url != '':
@@ -131,12 +135,12 @@ class PlanetWidget(QFrame):
         painter.setFont(font)
         painter.drawText(x, y, text)
 
-    def _drawPlanetPic(self, painter):
+    def _drawPlanetPic(self, painter: QPainter):
         if self._img_loaded:
             #painter.drawImage(self.rect(), self._img, self._img.rect(), Qt.AutoColor)
             painter.drawImage(self._img.rect(), self._img, self._img.rect(), Qt.AutoColor)
 
-    def _drawPlanetTitle(self, painter):
+    def _drawPlanetTitle(self, painter: QPainter):
         font = QFont('Tahoma', 10, QFont.Bold)
         font_coords = QFont('Tahoma', 8)
         font_metrics = QFontMetrics(font)
@@ -151,6 +155,16 @@ class PlanetWidget(QFrame):
                             self._planet.coords.position)
         self._drawTextShadow(painter, 5, 1+font_h+2+font_h, scoords, font_coords, text_color)
 
+    def _drawFields(self, painter: QPainter):
+        ratio = self._planet.fields_busy / self._planet.fields_total
+        pb_width = int(self.width() * ratio)
+        w = self._pb_texture.height()
+        fb = QBrush(self._pb_texture)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(fb)
+        r = QRect(0, self.height()-w, pb_width, w)
+        painter.drawRect(r)
+
     def _drawToolTip(self, painter: QPainter):
         self._tt.draw(painter)
 
@@ -159,6 +173,7 @@ class PlanetWidget(QFrame):
         painter = QPainter(self)
         self._drawPlanetPic(painter)
         self._drawPlanetTitle(painter)
+        self._drawFields(painter)
         self._drawToolTip(painter)
 
     def mouseMoveEvent(self, event: QMouseEvent):
@@ -166,18 +181,21 @@ class PlanetWidget(QFrame):
         # QMouseEvent::pos() reports the position of the mouse cursor, relative to this widget.
         mx = event.x()
         my = event.y()
-        global_mouse_pos = event.globalPos()
-        # logger.info('mouse {0}, {1}'.format(mx, my))
+        # global_mouse_pos = event.globalPos()
+        fields_pb_h = self._pb_texture.height()
         # remember prev
         prev_mouse_over_planet_name = self._mouse_over_planet_name
         prev_mouse_over_planet_coords = self._mouse_over_planet_coords
         self._mouse_over_planet_name = False
         self._mouse_over_planet_coords = False
+        self._mouse_over_planet_fields = False
         # calculate
         if (my >= 3) and (my <= 23):
             self._mouse_over_planet_name = True
         if (my >= 24) and (my <= 35):
             self._mouse_over_planet_coords = True
+        if (my >= self.height()-fields_pb_h) and (my <= self.height()):
+            self._mouse_over_planet_fields = True
         # detect change
         change = False
         tt_text = ''
@@ -199,6 +217,9 @@ class PlanetWidget(QFrame):
             self._tt.show_tt(0, 40, 'Go to planet')
         if self._mouse_over_planet_coords:
             self._tt.show_tt(0, 40, 'Go to galaxy')
+        if self._mouse_over_planet_fields:
+            self._tt.show_tt(0, 40, 'Fields: {0} / {1}'.format(
+                self._planet.fields_busy, self._planet.fields_total))
         self.update()
 
     # def enterEvent(self, event):

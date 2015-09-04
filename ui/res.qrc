@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="i">
+    <file alias="pb01_tex.png">i/pb01_tex.png</file>
     <file alias="race1.gif">i/race1.gif</file>
     <file alias="race2.gif">i/race2.gif</file>
     <file alias="race3.gif">i/race3.gif</file>
