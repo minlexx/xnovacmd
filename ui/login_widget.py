@@ -1,6 +1,7 @@
 import re
 import pickle
 import configparser
+import pathlib
 
 import requests
 import requests.exceptions
@@ -136,11 +137,16 @@ class LoginWidget(QWidget):
         remember = self.ui.chk_remember.isChecked()
         auth_data = (email, password, remember)
         try:
+            cache_dir = pathlib.Path('./cache')
+            if not cache_dir.exists():
+                cache_dir.mkdir()
             with open(self.pickle_filename, 'wb') as f:
                 pickle.dump(auth_data, f)
         except pickle.PickleError as pe:
             pass
         except IOError as ioe:
+            pass
+        except OSError as ose:
             pass
 
     def restore_login(self):

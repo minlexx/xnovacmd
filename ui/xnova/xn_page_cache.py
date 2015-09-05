@@ -20,6 +20,7 @@ class XNovaPageCache:
         self._page_cache_dir = './cache/page'
         self._img_cache_dir = './cache/img'
         self.save_load_encoding = locale.getpreferredencoding()
+        logger.info('Locale preferred encoding: {0}'.format(self.save_load_encoding))
 
     # scan ./cache directory and load all files into memory
     def load_from_disk_cache(self, clean=True):
@@ -30,9 +31,9 @@ class XNovaPageCache:
         if not cache_dir.exists():
             try:
                 cache_dir.mkdir(parents=True)
+                logger.info('Created pages cache dir')
             except OSError as ose:
-                pass
-            return
+                logger.error('Cannot create page cache dir: {0}'.format(str(ose)))
         num_loaded = 0
         for subitem in cache_dir.iterdir():
             if subitem.is_file():
@@ -58,9 +59,9 @@ class XNovaPageCache:
         if not cache_dir.exists():
             try:
                 cache_dir.mkdir(parents=True)
+                logger.info('Created images cache dir')
             except OSError as ose:
-                pass
-            return
+                logger.error('Cannot create img cahe dir: {0}'.format(str(ose)))
 
     # save page into cache
     def set_page(self, page_name, contents):
