@@ -104,7 +104,6 @@ class XNova_MainWindow(QWidget):
         # create status bar
         self.statusbar = XNCStatusBar(self)
         self.layout().addWidget(self.statusbar)
-        self.statusbar.setupUi()
         self.setStatusMessage('Not authorized, not connected: Log in!')
 
     # overrides QWidget.closeEvent

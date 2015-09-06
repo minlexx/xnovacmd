@@ -3,8 +3,8 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem
 from PyQt5.QtGui import QIcon
 
-from .xnova.xn_world import XNovaWorld_instance
 from .xnova.xn_data import fraction_from_name
+from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -24,10 +24,6 @@ class OverviewWidget(QWidget):
         self.ui = uic.loadUi(self.uifile, self)
         self.ui.tw_accStats.setColumnWidth(0, 80)
         self.ui.tw_accStats.setColumnWidth(1, 300)
-        # testing only
-        self.ui.btn_start.clicked.connect(self.on_btn_start)
-        self.ui.btn_stop.clicked.connect(self.on_btn_stop)
-        self.ui.btn_signal.clicked.connect(self.on_btn_signal)
 
     def update_account_info(self):
         def set_as_item(tw, row: int, col: int, text):
@@ -62,22 +58,3 @@ class OverviewWidget(QWidget):
             icon = QIcon(':/i/{0}'.format(fr.ico_name))
             twi = QTableWidgetItem(icon, str(a.scores.fraction))
             self.ui.tw_accStats.setItem(9, 1, twi)
-
-    # testing only
-    @pyqtSlot()
-    def on_btn_start(self):
-        if not self.world.isRunning():
-            logger.debug('starting')
-            self.world.start()
-
-    # testing only
-    @pyqtSlot()
-    def on_btn_stop(self):
-        if self.world.isRunning():
-            logger.debug('stopping')
-            self.world.quit()
-
-    @pyqtSlot()
-    def on_btn_signal(self):
-        # test exceptions in pyQt slots
-        raise Exception("wow")
