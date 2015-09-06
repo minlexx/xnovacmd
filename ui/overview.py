@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QToolBox
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QToolBox, QBoxLayout
 from PyQt5.QtGui import QIcon
 
 from .xnova.xn_data import fraction_from_name
@@ -18,9 +18,14 @@ class OverviewWidget(QWidget):
         self.uifile = 'ui/overview.ui'
         # objects, sub-windows
         self.ui = None
+        self.icon_open = None
+        self.icon_closed = None
+        self.prev_index = -1
         self.world = XNovaWorld_instance()
 
     def load_ui(self):
+        self.icon_open = QIcon(':/i/tb_open.png')
+        self.icon_closed = QIcon(':/i/tb_closed.png')
         self.ui = uic.loadUi(self.uifile, self)
         self.ui.gb_account.setTitle(self.tr('Player:'))
         self.ui.tw_accStats.setColumnWidth(0, 120)
@@ -39,9 +44,17 @@ class OverviewWidget(QWidget):
         self.set_as_item(10, 0, self.tr('Alliance:'))
         # tool box items
         self.ui.toolBox.setItemText(0, self.tr('Overview'))
+        self.ui.toolBox.setItemIcon(0, self.icon_closed)
         self.ui.toolBox.setItemText(1, self.tr('Stats'))
+        self.ui.toolBox.setItemIcon(1, self.icon_open)
         self.ui.toolBox.setCurrentIndex(1)
+        self.prev_index = 1
         self.ui.toolBox.currentChanged.connect(self.on_tb_currentChanged)
+        layout = self.ui.toolBox.layout()
+        if layout is not None:
+            if isinstance(layout, QBoxLayout):
+                layout.setContentsMargins(1, 1, 1, 1)
+                layout.setSpacing(0)
 
     def set_as_item(self, row: int, col: int, text):
         twi = QTableWidgetItem(str(text))
@@ -81,3 +94,6 @@ class OverviewWidget(QWidget):
     @pyqtSlot(int)
     def on_tb_currentChanged(self, index):
         logger.debug('current changed: {0}'.format(index))
+        self.ui.toolBox.setItemIcon(self.prev_index, self.icon_closed)
+        self.ui.toolBox.setItemIcon(index, self.icon_open)
+        self.prev_index = index

@@ -8,5 +8,7 @@
     <file alias="favicon_16.png">i/favicon_16.png</file>
     <file alias="favicon_32.png">i/favicon_32.png</file>
     <file alias="loading.gif">i/loading.gif</file>
+    <file alias="tb_closed.png">i/tb_closed.png</file>
+    <file alias="tb_open.png">i/tb_open.png</file>
   </qresource>
 </RCC>
