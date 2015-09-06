@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
 from PyQt5.QtGui import QColor, QBrush
 
+from .widget_utils import flight_mission_for_humans
 from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -139,7 +140,8 @@ class FlightsWidget(QWidget):
             timer_str = self._fl_timer_str(fl)
             # fleet mission
             fldir_str = self.tr('\nreturn') if fl.direction == 'return' else ''
-            mis_str = '{0}{1}'.format(fl.mission, fldir_str)
+            mis_str_h = flight_mission_for_humans(fl.mission)
+            mis_str = '{0}{1}'.format(mis_str_h, fldir_str)
             # resources
             res_str = ''
             if len(fl.res) > 0:

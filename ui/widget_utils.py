@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QWidget, QLayout, QBoxLayout, QLayoutItem
 
 
@@ -47,3 +47,28 @@ def remove_trailing_spacer_from_layout(layout: QLayout):
 def append_trailing_spacer_to_layout(layout: QBoxLayout):
     layout.addStretch()
 
+
+def flight_mission_for_humans(mis: str):
+    if mis is None:
+        return None
+    if mis == 'owndeploy':
+        return QCoreApplication.translate('FlightMission', 'Deploy')
+    if mis == 'owntransport':
+        return QCoreApplication.translate('FlightMission', 'Transport')
+    if (mis == 'ownattack') or (mis == 'attack'):
+        return QCoreApplication.translate('FlightMission', 'Attack')
+    if (mis == 'ownespionage') or (mis == 'espionage'):
+        return QCoreApplication.translate('FlightMission', 'Espionage')
+    if mis == 'ownharvest':
+        return QCoreApplication.translate('FlightMission', 'Harvest')
+    if mis == 'owncolony':
+        return QCoreApplication.translate('FlightMission', 'Colonize')
+    if (mis == 'ownfederation') or (mis == 'federation'):
+        return QCoreApplication.translate('FlightMission', 'Federation')
+    if (mis == 'ownmissile') or (mis == 'missile'):
+        return QCoreApplication.translate('FlightMission', 'I-P Missile')
+    if (mis == 'owndestroy') or (mis == 'destroy'):
+        return QCoreApplication.translate('FlightMission', 'Destroy')
+    if mis == 'ownhold':
+        return QCoreApplication.translate('FlightMission', 'Hold')
+    return QCoreApplication.translate('FlightMission', 'Mission unknown')

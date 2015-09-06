@@ -1,6 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0" language="ru" sourcelanguage="en">
 <context>
+    <name>FlightMission</name>
+    <message>
+        <location filename="widget_utils.py" line="55"/>
+        <source>Deploy</source>
+        <translation>Оставить</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="57"/>
+        <source>Transport</source>
+        <translation>Транспорт</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="59"/>
+        <source>Attack</source>
+        <translation>Атака</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="61"/>
+        <source>Espionage</source>
+        <translation>Шпионаж</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="63"/>
+        <source>Harvest</source>
+        <translation>Переработать</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="65"/>
+        <source>Colonize</source>
+        <translation>Колонизировать</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="67"/>
+        <source>Federation</source>
+        <translation>Объединить</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="69"/>
+        <source>I-P Missile</source>
+        <translation>Межпланетная атака</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="71"/>
+        <source>Destroy</source>
+        <translation>Уничтожить</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="73"/>
+        <source>Hold</source>
+        <translation>Удерживать</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="74"/>
+        <source>Mission unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+</context>
+<context>
     <name>FlightsWidget</name>
     <message>
         <location filename="flights_widget.ui" line="20"/>
@@ -161,97 +219,97 @@ Res: {0}</source>
 <context>
     <name>OverviewWidget</name>
     <message>
-        <location filename="overview.py" line="52"/>
+        <location filename="overview.py" line="65"/>
         <source>Player: {0} (id={1})</source>
         <translation>Игрок: {0} (id={1})</translation>
     </message>
     <message>
-        <location filename="overview.py" line="59"/>
+        <location filename="overview.py" line="72"/>
         <source>{0} rank {1}</source>
         <translation>{0} место {1}</translation>
     </message>
     <message>
-        <location filename="overview.py" line="65"/>
+        <location filename="overview.py" line="78"/>
         <source>{0} rank {1} ({2})</source>
         <translation>{0} место {1} ({2})</translation>
     </message>
     <message>
-        <location filename="overview.py" line="69"/>
+        <location filename="overview.py" line="82"/>
         <source>{0} lv ({1}/{2} exp)</source>
         <translation>{0} ур ({1}/{2}) exp</translation>
     </message>
     <message>
-        <location filename="overview.py" line="71"/>
+        <location filename="overview.py" line="84"/>
         <source>{0} W / {1} L</source>
         <translation>{0} W / {1} L</translation>
     </message>
     <message>
-        <location filename="overview.py" line="25"/>
+        <location filename="overview.py" line="30"/>
         <source>Player:</source>
         <translation>Игрок:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="29"/>
+        <location filename="overview.py" line="34"/>
         <source>Buildings:</source>
         <translation>Постройки:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="30"/>
+        <location filename="overview.py" line="35"/>
         <source>Fleet:</source>
         <translation>Флот:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="31"/>
+        <location filename="overview.py" line="36"/>
         <source>Defense:</source>
         <translation>Оборона:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="32"/>
+        <location filename="overview.py" line="37"/>
         <source>Science:</source>
         <translation>Наука:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="33"/>
+        <location filename="overview.py" line="38"/>
         <source>Total:</source>
         <translation>Всего:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="34"/>
+        <location filename="overview.py" line="39"/>
         <source>Industry:</source>
         <translation>Промышленность:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="35"/>
+        <location filename="overview.py" line="40"/>
         <source>Military:</source>
         <translation>Военный опыт:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="36"/>
+        <location filename="overview.py" line="41"/>
         <source>Wins/Losses:</source>
         <translation>Побед/Поражений:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="37"/>
+        <location filename="overview.py" line="42"/>
         <source>Credits:</source>
         <translation>Кредиты:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="38"/>
+        <location filename="overview.py" line="43"/>
         <source>Fraction:</source>
         <translation>Фракция:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="39"/>
+        <location filename="overview.py" line="44"/>
         <source>Alliance:</source>
         <translation>Альянс:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="41"/>
+        <location filename="overview.py" line="46"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="overview.py" line="42"/>
+        <location filename="overview.py" line="48"/>
         <source>Stats</source>
         <translation>Статистика</translation>
     </message>

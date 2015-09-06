@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, \
 from PyQt5.QtGui import QIcon, QCloseEvent
 
 from .widget_utils import install_layout_for_widget, append_trailing_spacer_to_layout, \
-    remove_trailing_spacer_from_layout
+    remove_trailing_spacer_from_layout, flight_mission_for_humans
 from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
@@ -233,6 +233,7 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot(XNFlight)
     def on_flight_arrived(self, fl: XNFlight):
         logger.debug('main window got flight arrival: {0}'.format(fl))
+        mis_str = flight_mission_for_humans(fl.mission)
         short_fleet_info = '{0} {1} => {2}, {3} ship(s)'.format(
-            fl.mission, fl.src, fl.dst, len(fl.ships))
+            mis_str, fl.src, fl.dst, len(fl.ships))
         self.show_tray_message(self.tr('XNova: Fleet arrived'), short_fleet_info)
