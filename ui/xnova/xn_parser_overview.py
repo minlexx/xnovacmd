@@ -437,16 +437,43 @@ class OverviewParser(XNParserBase):
             if m:
                 src_name = m.group(1)
                 self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_PLANET)
+            m = re.match(r'^отправленный с луны (.+)$', data)
+            if m:
+                src_name = m.group(1)
+                self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_MOON)
+            m = re.match(r'^отправленный с поля обломков (.+)$', data)
+            if m:
+                src_name = m.group(1)
+                self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_DEBRIS_FIELD)
+            #  [отправленный  с координат]
+            m = re.match(r'^отправленный  с координат$', data)
+            if m:
+                if self._cur_flight.mission == 'ownharvest':
+                    self._cur_flight_src_nametype = ('', XNCoords.TYPE_DEBRIS_FIELD)
             m = re.match(r'^направляется к планете (.+)$', data)
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
-            # if = [направляется к  координаты] =  colonize, can safely skip
+            m = re.match(r'^направляется к луне (.+)$', data)
+            if m:
+                dst_name = m.group(1)
+                self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_MOON)
+            # if = [направляется к  координаты] = if colonize, can safely skip
+            # also may be harvest? can determine by mission type detected before
+            m = re.match(r'^направляется к  координаты$', data)
+            if m:
+                if self._cur_flight.mission == 'ownharvest':
+                    self._cur_flight_dst_nametype = ('', XNCoords.TYPE_DEBRIS_FIELD)
+            #  направляется к полю обломков Колония
+            m = re.match(r'^направляется к полю обломков (.+)$', data)
+            if m:
+                dst_name = m.group(1)
+                self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_DEBRIS_FIELD)
             m = re.match(r'^возвращается на планету (.+)$', data)
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
-            # logger.debug('in_flight data: [{0}]'.format(data))
+            logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
