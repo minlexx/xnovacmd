@@ -9,6 +9,8 @@ logger = xn_logger.get(__name__, debug=True)
 # converts string to int, silently ignoring errors
 def safe_int(data: str):
     ret = 0
+    if data == '-':  # indicates as "None", return 0
+        return ret
     try:
         ret = int(data.replace('.', ''))
     except ValueError:
