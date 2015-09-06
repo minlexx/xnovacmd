@@ -1,6 +1,6 @@
 import datetime
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QThread, Qt
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QThread
 
 from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
@@ -45,12 +45,17 @@ class XNovaWorld(QThread):
         self.net_errors_count = 0
 
     def initialize(self, cookies_dict: dict):
+        """
+        Called just before thread starts
+        :param cookies_dict: dictionary with cookies for networking
+        :return: None
+        """
         # load cached pages
         self.page_cache.load_from_disk_cache(clean=True)
         # init network session with cookies for authorization
         self.page_downloader.set_cookies_from_dict(cookies_dict)
         # connections
-        logger.debug('XNovaWorld: initialized from tid={0}'.format(self._gettid()))
+        logger.debug('initialized from tid={0}'.format(self._gettid()))
         self.page_downloaded.connect(self.on_page_downloaded, Qt.QueuedConnection)
 
     def get_account_info(self) -> XNAccountInfo:
@@ -126,11 +131,11 @@ class XNovaWorld(QThread):
             # special page case, dynamic URL, depends on user id
             #  http://uni4.xnova.su/?set=players&id=71995
             if self.account.id == 0:
-                logger.warn('XNovaWorld: requested account info page, but account id is 0!')
+                logger.warn('requested account info page, but account id is 0!')
                 return None
             sub_url = '?set=players&id={0}'.format(self.account.id)
         else:
-            logger.warn('XNovaWorld: unknown page name requested: {0}'.format(page_name))
+            logger.warn('unknown page name requested: {0}'.format(page_name))
         return sub_url
 
     # for internal needs, get page from server
@@ -157,7 +162,7 @@ class XNovaWorld(QThread):
             else:
                 # page download error
                 self.net_errors_count += 1
-                logger.debug('XNovaWorld: net error happened, total count: {0}'.format(self.net_errors_count))
+                logger.debug('net error happened, total count: {0}'.format(self.net_errors_count))
                 if self.net_errors_count > 10:
                     raise RuntimeError('Too many network errors: {0}!'.format(self.net_errors_count))
         return None
@@ -165,13 +170,13 @@ class XNovaWorld(QThread):
     def _download_image(self, img_path: str):
         img_bytes = self.page_downloader.download_url_path(img_path, return_binary=True)
         if img_bytes is None:
-            logger.error('World: image dnl failed: [{0}]'.format(img_path))
+            logger.error('image dnl failed: [{0}]'.format(img_path))
             return
         self.page_cache.save_image(img_path, img_bytes)
 
     # internal, called from thread on first load
     def _full_refresh(self):
-        logger.info('XNovaWorld thread: starting full world update')
+        logger.info('thread: starting full world update')
         # load all pages that contain useful information
         pages_list = ['overview', 'imperium']
         # pages' expiration time in cache
@@ -201,9 +206,9 @@ class XNovaWorld(QThread):
     def run(self):
         # start new life from full downloading of current server state
         self._full_refresh()
-        logger.debug('XNovaWorld thread: entering Qt event loop, tid={0}'.format(self._gettid()))
+        logger.debug('thread: entering Qt event loop, tid={0}'.format(self._gettid()))
         ret = self.exec()  # enter Qt event loop to receive events
-        logger.debug('XNovaWorld thread: Qt event loop ended with code {0}'.format(ret))
+        logger.debug('thread: Qt event loop ended with code {0}'.format(ret))
         # cannot return result
 
 

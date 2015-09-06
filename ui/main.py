@@ -187,7 +187,7 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(str, dict)
     def on_login_ok(self, login_email, cookies_dict):
-        logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
+        # logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
         # save login data: email, cookies
         self.state = self.STATE_AUTHED
         self.setStatusMessage('Login OK, loading world')
