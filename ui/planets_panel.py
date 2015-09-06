@@ -138,6 +138,13 @@ class PlanetWidget(QFrame):
     def _drawPlanetPic(self, painter: QPainter):
         if self._img_loaded:
             painter.drawImage(self._img.rect(), self._img, self._img.rect(), Qt.AutoColor)
+        if self._planet.is_current:
+            pen = QPen(QColor(0, 200, 0))
+            pen.setWidth(4)
+            painter.setPen(pen)
+            rc = self.rect()
+            rc.adjust(0, 0, -1, -1)
+            painter.drawRect(rc)
 
     def _drawPlanetTitle(self, painter: QPainter):
         font = QFont('Tahoma', 10, QFont.Bold)

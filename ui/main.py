@@ -102,10 +102,12 @@ class XNova_MainWindow(QWidget):
         pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
         pl1.fields_busy = 90
         pl1.fields_total = 167
+        pl1.is_current = True
         pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
         pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
         pl2.fields_busy = 84
         pl2.fields_total = 207
+        pl2.is_current = False
         pls = [pl1, pl2]
         self.setup_planets(pls)
 

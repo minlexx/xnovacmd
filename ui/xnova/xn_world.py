@@ -170,6 +170,19 @@ class XNovaWorld(QThread):
         elif page_name == 'imperium':
             self.parser_imperium.parse_page_content(page_content)
             self.planets = self.parser_imperium.planets
+            self._update_current_planet()
+
+    def _update_current_planet(self):
+        """
+        Just updates internal planets array with information
+        about which of them is current one
+        :return: None
+        """
+        for pl in self.planets:
+            if pl.planet_id == self.cur_planet_id:
+                pl.is_current = True
+            else:
+                pl.is_current = False
 
     # internal helper, converts page identifier to url path
     def _page_name_to_url_path(self, page_name: str):

@@ -416,6 +416,7 @@ class XNPlanet:
         self.is_moon = False  # or may be a moon itself
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
+        self.is_current = False  # used by UI to highlight current planet, that's all
 
     def __str__(self):
         if self.coords.target_name == '':
