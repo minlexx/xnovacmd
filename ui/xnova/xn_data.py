@@ -30,11 +30,11 @@ class XNCoords:
         coords_str = '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
         type_str = ''  # default for planet coordinates
         if self.target_type == self.TYPE_DEBRIS_FIELD:
-            type_str = ' field '
+            type_str = ' (field) '
         elif self.target_type == self.TYPE_MOON:
-            type_str = ' moon '
+            type_str = ' (moon) '
         elif self.target_type == self.TYPE_WARBASE:
-            type_str = ' base '
+            type_str = ' (base) '
         return '{0}{1}{2}'.format(name_str, type_str, coords_str)
 
     def set_gsp(self, g: int, s: int, p: int):
