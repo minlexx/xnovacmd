@@ -63,7 +63,7 @@ class LoginThread(QThread):
                 self.step += 1
             else:
                 logger.debug('Unexpected response code: HTTP {0}'.format(r.status_code))
-                self.set_error('HTTP {0}'.format(r.status_code))
+                self.set_error(self.tr('HTTP error {0}').format(r.status_code))
         except requests.exceptions.RequestException as e:
             logger.debug('Exception {0}'.format(type(e)))
             self.set_error(str(e))
@@ -93,7 +93,7 @@ class LoginThread(QThread):
                     self.set_error(r.text)
             else:
                 logger.debug('Unexpected response code: HTTP {0}'.format(r.status_code))
-                self.set_error('HTTP {0}'.format(r.status_code))
+                self.set_error(self.tr('HTTP error {0}').format(r.status_code))
         except requests.exceptions.RequestException as e:
             logger.debug('Exception {0}'.format(type(e)))
             self.set_error(str(e))
@@ -146,8 +146,8 @@ class LoginWidget(QWidget):
             pass
         except IOError as ioe:
             pass
-        except OSError as ose:
-            pass
+        # except OSError as ose:  # same as IOError in python3 ?
+        #    pass
 
     def restore_login(self):
         try:
@@ -171,7 +171,7 @@ class LoginWidget(QWidget):
 
     @pyqtSlot()
     def on_btn_login(self):
-        logger.debug('login clicked')
+        # logger.debug('login clicked')
         self.ui.btn_login.hide()
         self.ui.btn_register.hide()
         self.ui.le_email.setEnabled(False)
@@ -193,7 +193,7 @@ class LoginWidget(QWidget):
 
     @pyqtSlot()
     def on_thread_finished(self):
-        logger.debug('thread finished')
+        # logger.debug('thread finished')
         self.loading_gif.stop()
         self.ui.le_email.setEnabled(True)
         self.ui.le_pass.setEnabled(True)

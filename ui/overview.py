@@ -30,26 +30,26 @@ class OverviewWidget(QWidget):
             twi = QTableWidgetItem(str(text))
             tw.setItem(row, col, twi)
         a = self.world.get_account_info()
-        self.ui.gb_account.setTitle('Player: {0} (id={1})'.format(a.login, a.id))
-        set_as_item(self.ui.tw_accStats, 0, 1, '{0} rank {1}'.format(
+        self.ui.gb_account.setTitle(self.tr('Player: {0} (id={1})').format(a.login, a.id))
+        set_as_item(self.ui.tw_accStats, 0, 1, self.tr('{0} rank {1}').format(
             a.scores.buildings, a.scores.buildings_rank))
-        set_as_item(self.ui.tw_accStats, 1, 1, '{0} rank {1}'.format(
+        set_as_item(self.ui.tw_accStats, 1, 1, self.tr('{0} rank {1}').format(
             a.scores.fleet, a.scores.fleet_rank))
-        set_as_item(self.ui.tw_accStats, 2, 1, '{0} rank {1}'.format(
+        set_as_item(self.ui.tw_accStats, 2, 1, self.tr('{0} rank {1}').format(
             a.scores.defense, a.scores.defense_rank))
-        set_as_item(self.ui.tw_accStats, 3, 1, '{0} rank {1}'.format(
+        set_as_item(self.ui.tw_accStats, 3, 1, self.tr('{0} rank {1}').format(
             a.scores.science, a.scores.science_rank))
         # total: 15156 rank 195 (+2)
         rank_delta_str = '+' + str(a.scores.rank_delta)  # explicit "+" sign
         if a.scores.rank_delta < 0:
             rank_delta_str = str(a.scores.rank_delta)
-        set_as_item(self.ui.tw_accStats, 4, 1, '{0} rank {1} ({2})'.format(
+        set_as_item(self.ui.tw_accStats, 4, 1, self.tr('{0} rank {1} ({2})').format(
             a.scores.total, a.scores.rank, rank_delta_str))
-        set_as_item(self.ui.tw_accStats, 5, 1, '{0} lv ({1}/{2} exp)'.format(
+        set_as_item(self.ui.tw_accStats, 5, 1, self.tr('{0} lv ({1}/{2} exp)').format(
             a.scores.industry_level, a.scores.industry_exp[0], a.scores.industry_exp[1]))
-        set_as_item(self.ui.tw_accStats, 6, 1, '{0} lv ({1}/{2} exp)'.format(
+        set_as_item(self.ui.tw_accStats, 6, 1, self.tr('{0} lv ({1}/{2} exp)').format(
             a.scores.military_level, a.scores.military_exp[0], a.scores.military_exp[1]))
-        set_as_item(self.ui.tw_accStats, 7, 1, '{0} W / {1} L'.format(a.scores.wins, a.scores.losses))
+        set_as_item(self.ui.tw_accStats, 7, 1, self.tr('{0} W / {1} L').format(a.scores.wins, a.scores.losses))
         set_as_item(self.ui.tw_accStats, 8, 1, a.scores.credits)
         set_as_item(self.ui.tw_accStats, 10, 1, a.alliance_name)
         # fraction

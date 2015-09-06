@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QPoint, QRect
-from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QToolTip
+from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox
 from PyQt5.QtGui import QPaintEvent, QPainter, QPainterPath, QFont, QFontMetrics, \
     QImage, QColor, QPen, QBrush, QMouseEvent
 
@@ -137,7 +137,6 @@ class PlanetWidget(QFrame):
 
     def _drawPlanetPic(self, painter: QPainter):
         if self._img_loaded:
-            #painter.drawImage(self.rect(), self._img, self._img.rect(), Qt.AutoColor)
             painter.drawImage(self._img.rect(), self._img, self._img.rect(), Qt.AutoColor)
 
     def _drawPlanetTitle(self, painter: QPainter):
@@ -198,27 +197,22 @@ class PlanetWidget(QFrame):
             self._mouse_over_planet_fields = True
         # detect change
         change = False
-        tt_text = ''
         if prev_mouse_over_planet_name != self._mouse_over_planet_name:
             change = True
-            tt_text = 'name'
         if prev_mouse_over_planet_coords != self._mouse_over_planet_coords:
             change = True
-            tt_text = 'coords'
         self._tt.hide()
         if change:
             if self._mouse_over_planet_name or self._mouse_over_planet_coords:
                 self.setCursor(Qt.PointingHandCursor)
-                # QToolTip.showText(global_mouse_pos, tt_text, self)
             else:
                 self.setCursor(Qt.ArrowCursor)
-                # QToolTip.hideText()
         if self._mouse_over_planet_name:
-            self._tt.show_tt(0, 40, 'Go to planet')
+            self._tt.show_tt(0, 40, self.tr('Go to planet'))
         if self._mouse_over_planet_coords:
-            self._tt.show_tt(0, 40, 'Go to galaxy')
+            self._tt.show_tt(0, 40, self.tr('Go to galaxy'))
         if self._mouse_over_planet_fields:
-            self._tt.show_tt(0, 40, 'Fields: {0} / {1}'.format(
+            self._tt.show_tt(0, 40, self.tr('Field: {0}/{1}').format(
                 self._planet.fields_busy, self._planet.fields_total))
         self.update()
 

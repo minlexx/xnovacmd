@@ -27,7 +27,9 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.setColumnCount(5)
         self.ui.tw_flights.setRowCount(0)
         # timer | mission | src | dst | ships (res)
-        self.ui.tw_flights.setHorizontalHeaderLabels(['Timer', 'Mission', 'From', 'To', 'Ships/Res'])
+        self.ui.tw_flights.setHorizontalHeaderLabels([
+            self.tr('Timer'), self.tr('Mission'), self.tr('From'),
+            self.tr('To'), self.tr('Ships/Res')])
         self.ui.tw_flights.setColumnWidth(0, 120)
         self.ui.tw_flights.setColumnWidth(1, 90)
         self.ui.tw_flights.setColumnWidth(2, 120)
@@ -54,7 +56,7 @@ class FlightsWidget(QWidget):
     def update_button_fleet_count(self):
         flights = self.world.get_flights()
         if self.ui.tw_flights.isVisible():
-            self.ui.btn_show.setText('Fleets: {0}'.format(len(flights)))
+            self.ui.btn_show.setText(self.tr('Fleets: {0}').format(len(flights)))
         else:
             closest_fleet_str = ''
             if len(flights) > 0:
@@ -66,11 +68,11 @@ class FlightsWidget(QWidget):
                 secs -= (hours * 3600)
                 minutes = secs // 60
                 secs -= (minutes * 60)
-                return_str = ' ({0})'.format(fl.direction) if fl.direction == 'return' else ''
-                closest_fleet_str = '{0:02}:{1:02}:{2:02} {3}{4} {5} => {6}, {7} ship(s)'.format(
+                return_str = self.tr(' (return)') if fl.direction == 'return' else ''
+                closest_fleet_str = self.tr('{0:02}:{1:02}:{2:02} {3}{4} {5} => {6}, {7} ship(s)').format(
                     hours, minutes, secs, fl.mission, return_str,
                     fl.src, fl.dst, len(fl.ships))
-            self.ui.btn_show.setText('Fleets: {0}  |||   {1}'.format(
+            self.ui.btn_show.setText(self.tr('Fleets: {0}  |||   {1}').format(
                 len(flights), closest_fleet_str))
 
     @staticmethod
@@ -136,10 +138,13 @@ class FlightsWidget(QWidget):
             # fleet timer
             timer_str = self._fl_timer_str(fl)
             # fleet mission
-            fldir_str = '\n{0}'.format(fl.direction) if fl.direction == 'return' else ''
+            fldir_str = self.tr('\nreturn') if fl.direction == 'return' else ''
             mis_str = '{0}{1}'.format(fl.mission, fldir_str)
             # resources
-            res_str = '\nRes: {0}'.format(format(fl.res, '{m}m / {c}c / {d}d')) if len(fl.res) > 0 else ''
+            res_str = ''
+            if len(fl.res) > 0:
+                res_str = '\n' + self.tr('Res: {0}').format(
+                    format(fl.res, self.tr('{m}m / {c}c / {d}d')))
             # insert row
             # timer | mission | src | dst | ships (res)
             # self.ui.tw_flights.insertRow(irow)

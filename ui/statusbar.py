@@ -16,9 +16,9 @@ class XNCStatusBar(QStatusBar):
         # initialization
         self.setSizeGripEnabled(True)
         # testing only
-        self.btn_start = QPushButton('start', self)
-        self.btn_stop = QPushButton('stop', self)
-        self.btn_signal = QPushButton('signal', self)
+        self.btn_start = QPushButton(self.tr('start'), self)
+        self.btn_stop = QPushButton(self.tr('stop'), self)
+        self.btn_signal = QPushButton(self.tr('signal'), self)
         # void	addPermanentWidget(QWidget * widget, int stretch = 0)
         self.addPermanentWidget(self.btn_start, 0)
         self.addPermanentWidget(self.btn_stop, 0)

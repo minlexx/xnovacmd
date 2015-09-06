@@ -54,13 +54,13 @@ class XNova_MainWindow(QWidget):
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
             self.tray_icon = QSystemTrayIcon(QIcon(':/i/favicon_16.png'), self)
-            self.tray_icon.setToolTip('XNova Commander')
+            self.tray_icon.setToolTip(self.tr('XNova Commander'))
             self.tray_icon.activated.connect(self.on_tray_icon_activated)
             self.tray_icon.show()
         # create status bar
         self.statusbar = XNCStatusBar(self)
         self.layout().addWidget(self.statusbar)
-        self.setStatusMessage('Not authorized, not connected: Log in!')
+        self.setStatusMessage(self.tr('Not connected: Log in!'))
 
     # overrides QWidget.closeEvent
     # cleanup just before the window close
@@ -96,7 +96,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget.load_ui()
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
-        self.add_tab(self.login_widget, 'Login')
+        self.add_tab(self.login_widget, self.tr('Login'))
         # testing only
         pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
         pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
@@ -138,15 +138,15 @@ class XNova_MainWindow(QWidget):
     def on_login_error(self, errstr):
         logger.error('Login error: {0}'.format(errstr))
         self.state = self.STATE_NOT_AUTHED
-        self.setStatusMessage('Login error: {0}'.format(errstr))
-        QMessageBox.critical(self, 'Login error:', errstr)
+        self.setStatusMessage(self.tr('Login error: {0}').format(errstr))
+        QMessageBox.critical(self, self.tr('Login error:'), errstr)
 
     @pyqtSlot(str, dict)
     def on_login_ok(self, login_email, cookies_dict):
         # logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
         # save login data: email, cookies
         self.state = self.STATE_AUTHED
-        self.setStatusMessage('Login OK, loading world')
+        self.setStatusMessage(self.tr('Login OK, loading world'))
         self.login_email = login_email
         self.cookies_dict = cookies_dict
         # destroy login widget and remove its tab
@@ -161,7 +161,7 @@ class XNova_MainWindow(QWidget):
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
-        self.add_tab(self.overview_widget, 'Overview')
+        self.add_tab(self.overview_widget, self.tr('Overview'))
         self.overview_widget.setEnabled(False)
         # initialize XNova world updater
         self.world.parser_overview.account.email = self.login_email
@@ -173,7 +173,7 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
-        self.setStatusMessage('World loaded.')
+        self.setStatusMessage(self.tr('World loaded.'))
         # update account info
         self.overview_widget.setEnabled(True)
         self.overview_widget.update_account_info()
@@ -235,4 +235,4 @@ class XNova_MainWindow(QWidget):
         logger.debug('main window got flight arrival: {0}'.format(fl))
         short_fleet_info = '{0} {1} => {2}, {3} ship(s)'.format(
             fl.mission, fl.src, fl.dst, len(fl.ships))
-        self.show_tray_message('XNova: Fleet arrived', short_fleet_info)
+        self.show_tray_message(self.tr('XNova: Fleet arrived'), short_fleet_info)
