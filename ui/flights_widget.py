@@ -3,6 +3,7 @@ import datetime
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtGui import QColor, QBrush
 
 from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
@@ -72,8 +73,35 @@ class FlightsWidget(QWidget):
             self.ui.btn_show.setText('Fleets: {0}  |||   {1}'.format(
                 len(flights), closest_fleet_str))
 
-    def _set_twi(self, row, col, text):
+    @staticmethod
+    def _get_mis_color(mis: str, dir_: str) -> QColor:
+        ret = QColor(255, 255, 255)
+        if mis == 'ownharvest':
+            ret = QColor(255, 255, 200)
+        elif mis == 'owndeploy':
+            ret = QColor(200, 200, 255)
+        elif mis == 'ownattack':
+            ret = QColor(255, 200, 230)
+        elif mis == 'owntransport':
+            ret = QColor(200, 255, 200)
+        elif mis == 'ownespionage':
+            ret = QColor(255, 220, 150)
+        elif mis == 'owncolony':
+            ret = QColor(190, 210, 255)
+        elif mis == 'ownmissile':
+            ret = QColor(165, 255, 255)
+        if dir_ == 'return':
+            # darken
+            ret.setRed(ret.red() * 0.8)
+            ret.setGreen(ret.green() * 0.8)
+            ret.setBlue(ret.blue() * 0.8)
+        return ret
+
+    def _set_twi(self, row, col, text, bg_color=None):
         twi = QTableWidgetItem(str(text))
+        if bg_color is not None:
+            bgb = QBrush(QColor(bg_color), Qt.SolidPattern)
+            twi.setBackground(bgb)
         self.ui.tw_flights.setItem(row, col, twi)
 
     def _fl_timer_str(self, fl: XNFlight) -> str:
@@ -93,8 +121,8 @@ class FlightsWidget(QWidget):
 
     def update_flights(self):
         # clear widget
-        prev_row = self.ui.tw_flights.currentRow()
-        prev_col = self.ui.tw_flights.currentColumn()
+        # prev_row = self.ui.tw_flights.currentRow()
+        # prev_col = self.ui.tw_flights.currentColumn()
         self.ui.tw_flights.setUpdatesEnabled(False)
         self.ui.tw_flights.clearContents()
         # self.ui.tw_flights.setRowCount(0)  # nope, resets current scroll position
@@ -116,14 +144,14 @@ class FlightsWidget(QWidget):
             # timer | mission | src | dst | ships (res)
             # self.ui.tw_flights.insertRow(irow)
             self._set_twi(irow, 0, timer_str)
-            self._set_twi(irow, 1, mis_str)
+            self._set_twi(irow, 1, mis_str, self._get_mis_color(fl.mission, fl.direction))
             self._set_twi(irow, 2, str(fl.src))
             self._set_twi(irow, 3, str(fl.dst))
             self._set_twi(irow, 4, str(fl.ships) + res_str)
             # self.ui.tw_flights.setRowHeight(irow, 40)
             irow += 1
         self.ui.tw_flights.setUpdatesEnabled(True)
-        self.ui.tw_flights.setCurrentCell(prev_row, prev_col)
+        # self.ui.tw_flights.setCurrentCell(prev_row, prev_col)
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         # upadte button text
         self.update_button_fleet_count()
