@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru" sourcelanguage="en">
+<!DOCTYPE TS><TS version="2.0" language="ru" sourcelanguage="en">
 <context>
     <name>FlightsWidget</name>
     <message>
@@ -12,6 +11,82 @@
         <location filename="flights_widget.ui" line="59"/>
         <source>Fleets in space: 0</source>
         <translation>Флоты в полете: 0</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="30"/>
+        <source>Timer</source>
+        <translation>Таймер</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="30"/>
+        <source>Mission</source>
+        <translation>Задание</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="30"/>
+        <source>From</source>
+        <translation>Откуда</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="30"/>
+        <source>To</source>
+        <translation>Куда</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="30"/>
+        <source>Ships/Res</source>
+        <translation>Корабли/Ресурсы</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="59"/>
+        <source>Fleets: {0}</source>
+        <translation>Флоты: {0}</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="72"/>
+        <source> (return)</source>
+        <translation> (возврат)</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="74"/>
+        <source>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} ship(s)</source>
+        <translation>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} корабл(ей)</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="77"/>
+        <source>Fleets: {0}  |||   {1}</source>
+        <translation>Флоты: {0}  |||   {1}</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="145"/>
+        <source>
+return</source>
+        <translation>
+возврат</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="149"/>
+        <source>
+Res: {0}</source>
+        <translation type="obsolete">Ресы: {0}</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="152"/>
+        <source>{m}m / {c}c / {d}d</source>
+        <translation>{m}м / {c}к / {d}д</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="152"/>
+        <source>Res: {0}</source>
+        <translation>Ресы: {0}</translation>
+    </message>
+</context>
+<context>
+    <name>LoginThread</name>
+    <message>
+        <location filename="login_widget.py" line="100"/>
+        <source>HTTP error {0}</source>
+        <translation>Ошибка HTTP {0}</translation>
     </message>
 </context>
 <context>
@@ -78,9 +153,191 @@
 <context>
     <name>MyApplication</name>
     <message>
-        <location filename="app.py" line="21"/>
+        <location filename="app.py" line="24"/>
         <source>Test translator</source>
         <translation>Проверка переводчика</translation>
+    </message>
+</context>
+<context>
+    <name>OverviewWidget</name>
+    <message>
+        <location filename="overview.py" line="52"/>
+        <source>Player: {0} (id={1})</source>
+        <translation>Игрок: {0} (id={1})</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="59"/>
+        <source>{0} rank {1}</source>
+        <translation>{0} место {1}</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="65"/>
+        <source>{0} rank {1} ({2})</source>
+        <translation>{0} место {1} ({2})</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="69"/>
+        <source>{0} lv ({1}/{2} exp)</source>
+        <translation>{0} ур ({1}/{2}) exp</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="71"/>
+        <source>{0} W / {1} L</source>
+        <translation>{0} W / {1} L</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="25"/>
+        <source>Player:</source>
+        <translation>Игрок:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="29"/>
+        <source>Buildings:</source>
+        <translation>Постройки:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="30"/>
+        <source>Fleet:</source>
+        <translation>Флот:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="31"/>
+        <source>Defense:</source>
+        <translation>Оборона:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="32"/>
+        <source>Science:</source>
+        <translation>Наука:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="33"/>
+        <source>Total:</source>
+        <translation>Всего:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="34"/>
+        <source>Industry:</source>
+        <translation>Промышленность:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="35"/>
+        <source>Military:</source>
+        <translation>Военный опыт:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="36"/>
+        <source>Wins/Losses:</source>
+        <translation>Побед/Поражений:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="37"/>
+        <source>Credits:</source>
+        <translation>Кредиты:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="38"/>
+        <source>Fraction:</source>
+        <translation>Фракция:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="39"/>
+        <source>Alliance:</source>
+        <translation>Альянс:</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="41"/>
+        <source>Overview</source>
+        <translation>Обзор</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="42"/>
+        <source>Stats</source>
+        <translation>Статистика</translation>
+    </message>
+</context>
+<context>
+    <name>PlanetWidget</name>
+    <message>
+        <location filename="planets_panel.py" line="212"/>
+        <source>Go to planet</source>
+        <translation>К планете</translation>
+    </message>
+    <message>
+        <location filename="planets_panel.py" line="214"/>
+        <source>Go to galaxy</source>
+        <translation>К галактике</translation>
+    </message>
+    <message>
+        <location filename="planets_panel.py" line="216"/>
+        <source>Field: {0}/{1}</source>
+        <translation>Поля: {0}/{1}</translation>
+    </message>
+</context>
+<context>
+    <name>XNCStatusBar</name>
+    <message>
+        <location filename="statusbar.py" line="19"/>
+        <source>start</source>
+        <translation>старт</translation>
+    </message>
+    <message>
+        <location filename="statusbar.py" line="20"/>
+        <source>stop</source>
+        <translation>стоп</translation>
+    </message>
+    <message>
+        <location filename="statusbar.py" line="21"/>
+        <source>signal</source>
+        <translation>сигнал</translation>
+    </message>
+</context>
+<context>
+    <name>XNova_MainWindow</name>
+    <message>
+        <location filename="main.py" line="58"/>
+        <source>XNova Commander</source>
+        <translation>XNova Commander</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="64"/>
+        <source>Not connected: Log in!</source>
+        <translation>Не подключено: залогинься!</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="100"/>
+        <source>Login</source>
+        <translation>Авторизация</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="142"/>
+        <source>Login error: {0}</source>
+        <translation>Ошибка входа: {0}</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="143"/>
+        <source>Login error:</source>
+        <translation>Ошибка авторизации:</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="150"/>
+        <source>Login OK, loading world</source>
+        <translation>Вход ОК, загружаю мир</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="165"/>
+        <source>Overview</source>
+        <translation>Обзор</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="177"/>
+        <source>World loaded.</source>
+        <translation>Мир загружен.</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="239"/>
+        <source>XNova: Fleet arrived</source>
+        <translation>XNova: приезд флота</translation>
     </message>
 </context>
 </TS>
