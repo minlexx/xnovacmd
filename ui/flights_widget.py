@@ -12,10 +12,6 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class FlightsWidget(QWidget):
-    # Qt signals
-    # emitted when fleet has arrived at its destination
-    flightArrived = pyqtSignal(XNFlight)
-
     def __init__(self, parent=None):
         super(FlightsWidget, self).__init__(parent)
         # state vars
@@ -23,9 +19,6 @@ class FlightsWidget(QWidget):
         # objects, sub-windows
         self.ui = None
         self.world = XNovaWorld_instance()
-        self.flights = []
-        # our_time - server_time:
-        self.diff_with_server_time_secs = 0
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
@@ -58,13 +51,16 @@ class FlightsWidget(QWidget):
         self.update_button_fleet_count()
 
     def update_button_fleet_count(self):
+        flights = self.world.get_flights()
         if self.ui.tw_flights.isVisible():
-            self.ui.btn_show.setText('Fleets: {0}'.format(len(self.flights)))
+            self.ui.btn_show.setText('Fleets: {0}'.format(len(flights)))
         else:
             closest_fleet_str = ''
-            if len(self.flights) > 0:
-                fl = self.flights[0]
-                secs = self._fl_remaining_time_secs(fl)
+            if len(flights) > 0:
+                fl = flights[0]
+                secs = self.world.get_flight_remaining_time_secs(fl)
+                if secs is None:  # ignore, this should not happen but possible
+                    secs = 0
                 hours = secs // 3600
                 secs -= (hours * 3600)
                 minutes = secs // 60
@@ -74,32 +70,16 @@ class FlightsWidget(QWidget):
                     hours, minutes, secs, fl.mission, return_str,
                     fl.src, fl.dst, len(fl.ships))
             self.ui.btn_show.setText('Fleets: {0}  |||   {1}'.format(
-                len(self.flights), closest_fleet_str))
+                len(flights), closest_fleet_str))
 
     def _set_twi(self, row, col, text):
         twi = QTableWidgetItem(str(text))
         self.ui.tw_flights.setItem(row, col, twi)
 
-    def _fl_remaining_time_secs(self, fl: XNFlight) -> int:
-        if fl.arrive_datetime is None:
-            logger.error('Fleet has no arrive time: {0}'.format(str(fl)))
-            # this is ridiculous, you will laugh
-            # this happened because server sometimes sent remaining fleet
-            # time without seconds part:
-            # <div id="bxxfs4" class="z">38:</div>
-            # it shoud be 38:0, 38 minutes 0 seconds. it's because
-            # 2280 seconds / 60 is exactly 38 with no remainder. Uhhh....
-            return 0
-        our_time = datetime.datetime.today()
-        td = fl.arrive_datetime - our_time
-        seconds_left = int(td.total_seconds())
-        seconds_left += self.diff_with_server_time_secs
-        if seconds_left < 0:
-            seconds_left = 0
-        return seconds_left
-
     def _fl_timer_str(self, fl: XNFlight) -> str:
-        seconds_left = self._fl_remaining_time_secs(fl)
+        seconds_left = self.world.get_flight_remaining_time_secs(fl)
+        if seconds_left is None:
+            raise ValueError('Flight seconds left is None: {0}'.format(str(fl)))
         hours_left = seconds_left // 3600
         seconds_left -= (hours_left * 3600)
         minutes_left = seconds_left // 60
@@ -113,20 +93,17 @@ class FlightsWidget(QWidget):
 
     def update_flights(self):
         # clear widget
+        prev_row = self.ui.tw_flights.currentRow()
+        prev_col = self.ui.tw_flights.currentColumn()
+        self.ui.tw_flights.setUpdatesEnabled(False)
         self.ui.tw_flights.clearContents()
-        self.ui.tw_flights.setRowCount(0)
+        # self.ui.tw_flights.setRowCount(0)  # nope, resets current scroll position
         # get data
-        self.flights = self.world.get_flights()
-        # calc diff of our time with server time
-        our_time = datetime.datetime.today()
-        assert isinstance(self.world.server_time, datetime.datetime)
-        server_time = self.world.server_time
-        dt_diff = our_time - server_time
-        # logger.debug(dt_diff.total_seconds())  # 0:00:16.390197
-        self.diff_with_server_time_secs = int(dt_diff.total_seconds())
+        flights = self.world.get_flights()
+        self.ui.tw_flights.setRowCount(len(flights))
         # iterate
         irow = 0
-        for fl in self.flights:
+        for fl in flights:
             # format data
             # fleet timer
             timer_str = self._fl_timer_str(fl)
@@ -137,56 +114,16 @@ class FlightsWidget(QWidget):
             res_str = '\nRes: {0}'.format(format(fl.res, '{m}m / {c}c / {d}d')) if len(fl.res) > 0 else ''
             # insert row
             # timer | mission | src | dst | ships (res)
-            self.ui.tw_flights.insertRow(irow)
+            # self.ui.tw_flights.insertRow(irow)
             self._set_twi(irow, 0, timer_str)
             self._set_twi(irow, 1, mis_str)
             self._set_twi(irow, 2, str(fl.src))
             self._set_twi(irow, 3, str(fl.dst))
             self._set_twi(irow, 4, str(fl.ships) + res_str)
-            #
             # self.ui.tw_flights.setRowHeight(irow, 40)
-            #
             irow += 1
+        self.ui.tw_flights.setUpdatesEnabled(True)
+        self.ui.tw_flights.setCurrentCell(prev_row, prev_col)
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         # upadte button text
         self.update_button_fleet_count()
-
-    def flights_tick(self):
-        """Updates flights remaining times to display
-        """
-        # iterate, updating first column only
-        irow = 0
-        for fl in self.flights:
-            timer_str = self._fl_timer_str(fl)
-            self._set_twi(irow, 0, timer_str)
-            irow += 1
-        # delete completed fleets
-        irow = 0
-        finished_fleets = []
-        for fl in self.flights:
-            secs_left = self._fl_remaining_time_secs(fl)
-            if secs_left <= 0:
-                finished_fleets.append(irow)
-            irow += 1
-        for irow in finished_fleets:
-            # remove row from table widget
-            # self.ui.tw_flights.removeRow(irow)
-            self.ui.tw_flights.removeRow(0)
-            # item-to-delete from python list will always have index 0?
-            # because we need to delete the first item every time
-            # finished_flight = self.flights[irow]
-            try:
-                finished_flight = self.flights[0]
-                del self.flights[0]
-                # emit signal
-                self.flightArrived.emit(finished_flight)
-            except IndexError as ie:
-                logger.error('IndexError while clearing finished flights: ')
-                logger.error(' deleting index {0}, while total list len: {1}'.format(
-                    0, len(self.flights)))
-        # also update button text
-        self.update_button_fleet_count()
-
-# CRITICAL ui.xnova.xn_logger File "ui\flights_widget.py", line 175, in flights_tick
-#    finished_flight = self.flights[irow]
-# CRITICAL ui.xnova.xn_logger IndexError: list index out of range

@@ -5,7 +5,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QThread
 from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
-from .xn_data import XNCoords, XNPlanet
+from .xn_data import XNCoords, XNFlight, XNPlanet
 from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
 from .xn_parser_curplanet import CurPlanetParser
@@ -22,6 +22,8 @@ class XNovaWorld(QThread):
     page_downloaded = pyqtSignal(str)  # (page_name)
     # signal to be emitted when initial loging is complete
     world_load_complete = pyqtSignal()
+    # emitted when fleet has arrived at its destination
+    flight_arrived = pyqtSignal(XNFlight)
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -34,7 +36,9 @@ class XNovaWorld(QThread):
         self.parser_curplanet = CurPlanetParser()
         self.parser_imperium = ImperiumParser()
         # world/user info
-        self.server_time = datetime.datetime.today()
+        self._server_time = datetime.datetime.today()  # server time at last overview update
+        # all we need to calc server time is actually time diff with our time:
+        self.diff_with_server_time_secs = 0  # calculated as: our_time - server_time
         self.account = XNAccountInfo()
         self.flights = []
         self.cur_planet_id = 0
@@ -62,22 +66,66 @@ class XNovaWorld(QThread):
         return self.account
 
     def get_flights(self) -> list:
-        # return data, making a copy of world flights for self
-        # because caller may modify those (del items when fleet arrives)
-        return self.flights.copy()
+        return self.flights
 
-    def get_server_time(self) -> datetime.datetime:
-        return self.server_time
+    def get_flight_remaining_time_secs(self, fl: XNFlight) -> int:
+        """
+        Calculates flight remaining time, adjusting time by difference
+        between our time and server
+        :param fl: flight
+        :return: remaining time in seconds, or None on error
+        """
+        secs_left = fl.remaining_time_secs(self.diff_with_server_time_secs)
+        if secs_left is None:
+            return None
+        return secs_left
+
+    def get_current_server_time(self) -> datetime.datetime:
+        """
+        Calculates current server time (at this moment), using
+        previously calculated time diff (checked at last update)
+        :return:
+        """
+        dt_now = datetime.datetime.today()
+        dt_delta = datetime.timedelta(seconds=self.diff_with_server_time_secs)
+        dt_server = dt_now - dt_delta
+        return dt_server
 
     def get_planets(self) -> list:
-        return self.planets.copy()
+        return self.planets
 
+    ################################################################################
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
     # reserches in progress, etc, ...
     def world_tick(self):
         # logger.debug('world_tick() called')
-        pass
+        self.world_tick_flights()
+
+    def world_tick_flights(self):
+        # logger.debug('tick: server time diff: {0}'.format(self.diff_with_server_time_secs))  # 0:00:16.390197
+        # iterate
+        finished_flights_count = 0
+        for fl in self.flights:
+            secs_left = self.get_flight_remaining_time_secs(fl)
+            if secs_left is None:
+                raise ValueError('Flight seconds left is None: {0}'.format(str(fl)))
+            if secs_left <= 0:
+                finished_flights_count += 1
+        for irow in range(finished_flights_count):
+            try:
+                # finished_flight = self.flights[irow]
+                # item-to-delete from python list will always have index 0?
+                # because we need to delete the first item every time
+                finished_flight = self.flights[0]
+                del self.flights[0]
+                # emit signal
+                self.flight_arrived.emit(finished_flight)
+            except IndexError:
+                # should never happen
+                logger.error('IndexError while clearing finished flights: ')
+                logger.error(' deleting index {0}, while total list len: {1}'.format(
+                    0, len(self.flights)))
 
     ################################################################################
 
@@ -94,7 +142,11 @@ class XNovaWorld(QThread):
             self.parser_overview.parse_page_content(page_content)
             self.account = self.parser_overview.account
             self.flights = self.parser_overview.flights
-            self.server_time = self.parser_overview.server_time
+            # get server time also calculate time diff
+            self._server_time = self.parser_overview.server_time
+            dt_our_time = datetime.datetime.today()
+            dt_diff = dt_our_time - self._server_time
+            self.diff_with_server_time_secs = int(dt_diff.total_seconds())
             # run also cur planet parser on the same content
             self.parser_curplanet.parse_page_content(page_content)
             self.cur_planet_id = self.parser_curplanet.cur_planet_id

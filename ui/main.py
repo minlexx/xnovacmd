@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, \
     QLayout, QBoxLayout, QLayoutItem
 from PyQt5.QtGui import QIcon, QCloseEvent
 
+from .widget_utils import install_layout_for_widget, append_trailing_spacer_to_layout, \
+    remove_trailing_spacer_from_layout
 from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
@@ -15,52 +17,6 @@ from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
-
-
-def install_layout_for_widget(widget, orientation=None, margins=None, spacing=None):
-    """
-    Installs a layout to widget, if it does not have it already.
-    :param widget: target widget
-    :param orientation: Qt.Vertical (default) / Qt.Horizontal
-    :param margins: layou margins = (11, 11, 11, 11) from Qt docs, style dependent
-    :param spacing: spacing between items in layout
-    :return: None
-    """
-    if widget.layout():
-        return  # already has a layout
-    direction = QBoxLayout.TopToBottom
-    if orientation == Qt.Horizontal:
-        direction = QBoxLayout.LeftToRight
-    l = QBoxLayout(direction)
-    if margins:
-        l.setContentsMargins(margins[0], margins[1], margins[2], margins[3])
-    if spacing:
-        l.setSpacing(spacing)
-    widget.setLayout(l)
-
-
-def remove_trailing_spacer_from_layout(layout: QLayout):
-    """
-    If the last item in the layout is spacer, removes it.
-    :param layout: target layout
-    :return: bool success indicator
-    """
-    ni = layout.count()
-    if ni < 1:
-        return False
-    ni -= 1
-    layoutItem = layout.itemAt(ni)
-    if layoutItem is None:
-        return False
-    spacerItem = layoutItem.spacerItem()
-    if spacerItem is not None:
-        layout.removeItem(spacerItem)
-        return True
-    return False
-
-
-def append_trailing_spacer_to_layout(layout: QBoxLayout):
-    layout.addStretch()
 
 
 # This class will control:
@@ -200,7 +156,6 @@ class XNova_MainWindow(QWidget):
         # create flights widget
         self.flights_widget = FlightsWidget(self)
         self.flights_widget.load_ui()
-        self.flights_widget.flightArrived.connect(self.on_flight_arrived)
         install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
         self.ui.fr_flights.layout().addWidget(self.flights_widget)
         # create overview widget and add it as first tab
@@ -212,6 +167,7 @@ class XNova_MainWindow(QWidget):
         self.world.parser_overview.account.email = self.login_email
         self.world.initialize(cookies_dict)
         self.world.world_load_complete.connect(self.on_world_load_complete)
+        self.world.flight_arrived.connect(self.on_flight_arrived)
         self.world.start()
 
     @pyqtSlot()
@@ -236,7 +192,7 @@ class XNova_MainWindow(QWidget):
         if self.world:
             self.world.world_tick()
         if self.flights_widget:
-            self.flights_widget.flights_tick()
+            self.flights_widget.update_flights()
 
     @pyqtSlot(int)
     def on_tray_icon_activated(self, reason):

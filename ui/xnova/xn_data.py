@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import re
 
 """This module will define/keep all static Xnova data models
@@ -250,7 +251,8 @@ class XNFlight:
         self.dst = XNCoords()
         self.mission = None
         self.direction = ''
-        self.arrive_datetime = 0
+        self.arrive_datetime = datetime.datetime(datetime.MINYEAR, month=1, day=1, hour=0,
+                                                 minute=0, second=0, microsecond=0, tzinfo=None)
 
     @staticmethod
     def is_hostile_mission(mission_str):
@@ -259,12 +261,27 @@ class XNFlight:
         return False
 
     def __str__(self):
-        s = '{0} {1}->{2} ({3}) {4}'.format(
+        s = '{0} {1} -> {2} ({3}) {4}'.format(
             self.mission, str(self.src), str(self.dst), str(self.ships), str(self.res))
         if self.direction == 'return':
             s += ' return'
         s += (' @' + str(self.arrive_datetime))
         return s
+
+    def remaining_time_secs(self, diff_with_server_time_secs=0) -> int:
+        """
+        Calculates the time flight has until arrival, in seconds
+        :param diff_with_server_time_secs difference between local time and server time,
+               in seconds, added to resulting return value
+        :return None on error (self.arrive_datetime is None), or remaining time in seconds
+        """
+        if self.arrive_datetime is None:
+            return None
+        our_time = datetime.datetime.today()
+        td = self.arrive_datetime - our_time
+        seconds_left = int(td.total_seconds())
+        seconds_left += diff_with_server_time_secs
+        return seconds_left
 
 
 class XNFraction:
