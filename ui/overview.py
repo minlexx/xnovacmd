@@ -93,7 +93,7 @@ class OverviewWidget(QWidget):
 
     @pyqtSlot(int)
     def on_tb_currentChanged(self, index):
-        logger.debug('current changed: {0}'.format(index))
+        # logger.debug('current changed: {0}'.format(index))
         self.ui.toolBox.setItemIcon(self.prev_index, self.icon_closed)
         self.ui.toolBox.setItemIcon(index, self.icon_open)
         self.prev_index = index
