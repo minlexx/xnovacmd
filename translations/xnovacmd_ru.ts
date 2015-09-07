@@ -71,52 +71,52 @@
         <translation>Флоты в полете: 0</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="30"/>
+        <location filename="flights_widget.py" line="31"/>
         <source>Timer</source>
         <translation>Таймер</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="30"/>
+        <location filename="flights_widget.py" line="31"/>
         <source>Mission</source>
         <translation>Задание</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="30"/>
+        <location filename="flights_widget.py" line="31"/>
         <source>From</source>
         <translation>Откуда</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="30"/>
+        <location filename="flights_widget.py" line="31"/>
         <source>To</source>
         <translation>Куда</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="30"/>
+        <location filename="flights_widget.py" line="31"/>
         <source>Ships/Res</source>
         <translation>Корабли/Ресурсы</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="59"/>
+        <location filename="flights_widget.py" line="60"/>
         <source>Fleets: {0}</source>
         <translation>Флоты: {0}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="72"/>
+        <location filename="flights_widget.py" line="73"/>
         <source> (return)</source>
         <translation> (возврат)</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="74"/>
+        <location filename="flights_widget.py" line="75"/>
         <source>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} ship(s)</source>
         <translation>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} корабл(ей)</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="77"/>
+        <location filename="flights_widget.py" line="78"/>
         <source>Fleets: {0}  |||   {1}</source>
         <translation>Флоты: {0}  |||   {1}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="145"/>
+        <location filename="flights_widget.py" line="146"/>
         <source>
 return</source>
         <translation>
@@ -129,12 +129,12 @@ Res: {0}</source>
         <translation type="obsolete">Ресы: {0}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="152"/>
+        <location filename="flights_widget.py" line="154"/>
         <source>{m}m / {c}c / {d}d</source>
         <translation>{m}м / {c}к / {d}д</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="152"/>
+        <location filename="flights_widget.py" line="154"/>
         <source>Res: {0}</source>
         <translation>Ресы: {0}</translation>
     </message>
@@ -317,17 +317,17 @@ Res: {0}</source>
 <context>
     <name>PlanetWidget</name>
     <message>
-        <location filename="planets_panel.py" line="212"/>
+        <location filename="planets_panel.py" line="219"/>
         <source>Go to planet</source>
         <translation>К планете</translation>
     </message>
     <message>
-        <location filename="planets_panel.py" line="214"/>
+        <location filename="planets_panel.py" line="221"/>
         <source>Go to galaxy</source>
         <translation>К галактике</translation>
     </message>
     <message>
-        <location filename="planets_panel.py" line="216"/>
+        <location filename="planets_panel.py" line="223"/>
         <source>Field: {0}/{1}</source>
         <translation>Поля: {0}/{1}</translation>
     </message>
@@ -368,34 +368,39 @@ Res: {0}</source>
         <translation>Авторизация</translation>
     </message>
     <message>
-        <location filename="main.py" line="142"/>
+        <location filename="main.py" line="144"/>
         <source>Login error: {0}</source>
         <translation>Ошибка входа: {0}</translation>
     </message>
     <message>
-        <location filename="main.py" line="143"/>
+        <location filename="main.py" line="145"/>
         <source>Login error:</source>
         <translation>Ошибка авторизации:</translation>
     </message>
     <message>
-        <location filename="main.py" line="150"/>
+        <location filename="main.py" line="152"/>
         <source>Login OK, loading world</source>
-        <translation>Вход ОК, загружаю мир</translation>
+        <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="165"/>
+        <location filename="main.py" line="167"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="177"/>
+        <location filename="main.py" line="179"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="239"/>
+        <location filename="main.py" line="242"/>
         <source>XNova: Fleet arrived</source>
-        <translation>XNova: приезд флота</translation>
+        <translation>XNova: флот долетел</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="240"/>
+        <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
+        <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
 </context>
 </TS>
