@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QCoreApplication
 from PyQt5.QtWidgets import QWidget, QStatusBar, QPushButton
 from PyQt5.QtGui import QIcon
 
@@ -54,10 +54,20 @@ class XNCStatusBar(QStatusBar):
     def on_btn_stop(self):
         if self.world.isRunning():
             logger.debug('stopping')
-            self.world.quit()
+            # same as self.world.quit()
+            self.world.signal_quit()
 
     @pyqtSlot()
     def on_btn_signal(self):
         # test exceptions in pyQt slots
-        raise Exception("wow")
-
+        # raise Exception("wow")
+        #
+        # e = MyThreadEvent('Signal!')  # QEvent descendant
+        # This will enqueue the event in the event loop of the thread the object is living in;
+        # therefore, the event will not be dispatched unless that thread has a running event loop.
+        # QCoreApplication.postEvent(self.world, e)
+        # it will not work, handler will be called from main (GUI) thread anyway
+        # because XNovaWorld instance object (QThread object) was created itself in main thread
+        #
+        # test signal to thread
+        self.world.signal(self.world.SIGNAL_RELOAD_PAGE)

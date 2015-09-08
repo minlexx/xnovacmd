@@ -166,8 +166,8 @@ class XNova_MainWindow(QWidget):
         self.add_tab(self.overview_widget, self.tr('Overview'))
         self.overview_widget.setEnabled(False)
         # initialize XNova world updater
-        self.world.parser_overview.account.email = self.login_email
         self.world.initialize(cookies_dict)
+        self.world.set_login_email(self.login_email)
         self.world.world_load_complete.connect(self.on_world_load_complete)
         self.world.flight_arrived.connect(self.on_flight_arrived)
         self.world.start()
