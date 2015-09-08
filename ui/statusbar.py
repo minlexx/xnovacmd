@@ -70,4 +70,4 @@ class XNCStatusBar(QStatusBar):
         # because XNovaWorld instance object (QThread object) was created itself in main thread
         #
         # test signal to thread
-        self.world.signal(self.world.SIGNAL_RELOAD_PAGE)
+        self.world.signal(self.world.SIGNAL_RELOAD_PAGE, page_name='overview')

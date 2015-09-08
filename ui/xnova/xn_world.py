@@ -28,7 +28,7 @@ class XNovaWorld(QThread):
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
         # helpers
-        self._page_times = dict()
+        self._page_dnl_times = dict()
         self._page_cache = XNovaPageCache()
         self._page_downloader = XNovaPageDownload()
         # parsers
@@ -49,7 +49,15 @@ class XNovaWorld(QThread):
         # internal need
         self._net_errors_count = 0
         self._mutex = QMutex(QMutex.Recursive)
+        self._signal_kwargs = dict()
+        # thread identifiers, collected here mainly for debugging purposes
+        # those are actually:
+        # - DWORD GetCurrentThreadId() in Windows
+        # - pthread_t pthread_current() in Linux
         self._maintid = 0
+        self._worldtid = 0
+        # settings
+        self._overview_update_interval = 60  # seconds
 
     def initialize(self, cookies_dict: dict):
         """
@@ -93,10 +101,13 @@ class XNovaWorld(QThread):
         self.quit()
         self.unlock()
 
-    def signal(self, signal_code=0, *args, **kwargs):
-        # TODO: varargs parsing
+    def signal(self, signal_code=0, **kwargs):
+        # logger.debug('signal: kwargs = {0}'.format(str(kwargs)))
+        # ^^: args = (), kwargs = {'page': 'overview'}
         self.lock()
-        self.exit(signal_code)
+        if kwargs is not None:
+            self._signal_kwargs = kwargs
+        self.exit(signal_code)  # QEventLoop.exit(code) makes thread's event loop to exit with code
         self.unlock()
 
     def get_account_info(self) -> XNAccountInfo:
@@ -156,10 +167,11 @@ class XNovaWorld(QThread):
     def world_tick(self):
         # This is called from GUI thread =(
         self.lock()
-        self.world_tick_flights()
+        self._world_tick_flights()
+        self._maybe_refresh_overview()
         self.unlock()
 
-    def world_tick_flights(self):
+    def _world_tick_flights(self):
         # logger.debug('tick: server time diff: {0}'.format(self._diff_with_server_time_secs))  # 0:00:16.390197
         # iterate
         finished_flights_count = 0
@@ -193,6 +205,16 @@ class XNovaWorld(QThread):
                         0, len(self._flights)))
         # end world_tick_flights()
 
+    def _maybe_refresh_overview(self):
+        if 'overview' in self._page_dnl_times:
+            dt_last = self._page_dnl_times['overview']
+            dt_now = datetime.datetime.today()
+            dt_diff = dt_now - dt_last
+            secs_ago = int(dt_diff.total_seconds())
+            if secs_ago >= self._overview_update_interval:
+                logger.debug('_maybe_refresh_overview() trigger update: {0} secs ago.'.format(secs_ago))
+                self.signal(self.SIGNAL_RELOAD_PAGE, page_name='overview')
+
     ################################################################################
 
     def on_page_downloaded(self, page_name: str):
@@ -204,7 +226,7 @@ class XNovaWorld(QThread):
             raise ValueError('This should not ever happen!')
         # get current date/time
         dt_now = datetime.datetime.today()
-        self._page_times[page_name] = dt_now  # save last download time for page
+        self._page_dnl_times[page_name] = dt_now  # save last download time for page
         # dispatch parser and merge data
         if page_name == 'overview':
             self._parser_overview.parse_page_content(page_content)
@@ -219,6 +241,7 @@ class XNovaWorld(QThread):
             self._cur_planet_id = self._parser_curplanet.cur_planet_id
             self._cur_planet_name = self._parser_curplanet.cur_planet_name
             self._cur_planet_coords = self._parser_curplanet.cur_planet_coords
+            self._update_current_planet()  # it may have changed
         elif page_name == 'self_user_info':
             self._parser_userinfo.parse_page_content(page_content)
             self._account.scores.buildings = self._parser_userinfo.buildings
@@ -237,7 +260,16 @@ class XNovaWorld(QThread):
         elif page_name == 'imperium':
             self._parser_imperium.parse_page_content(page_content)
             self._planets = self._parser_imperium.planets
+            # since we've overwritten the whole planets array, we need to
+            # write current planet into it again
             self._update_current_planet()
+
+    def on_reload_page(self):
+        # logger.debug('on_reload_page(), signal args = {0}'.format(str(self._signal_kwargs)))
+        if 'page_name' in self._signal_kwargs:
+            page_name = self._signal_kwargs['page_name']
+            logger.debug('on_reload_page(): reloading {0}'.format(page_name))
+            self._get_page(page_name, max_cache_lifetime=1, force_download=True)
 
     def _update_current_planet(self):
         """
@@ -332,26 +364,29 @@ class XNovaWorld(QThread):
         sip_voidptr = QThread.currentThreadId()
         return int(sip_voidptr)
 
-    # main thread function, lives in Qt event loop to receive/send Qt events
     def run(self):
+        """
+        Main thread function, lives in Qt event loop to receive/send Qt events
+        :return: cannot return any value, including None
+        """
+        self._worldtid = self._gettid()
         # start new life from full downloading of current server state
         self._full_refresh()
         ret = -1
         while ret != self.SIGNAL_QUIT:
-            logger.debug('thread: entering Qt event loop, tid={0}'.format(self._gettid()))
+            # logger.debug('thread: entering Qt event loop, tid={0}'.format(self._worldtid))
             ret = self.exec()  # enter Qt event loop to receive events
-            logger.debug('thread: Qt event loop ended with code {0}'.format(ret))
+            # logger.debug('thread: Qt event loop ended with code {0}'.format(ret))
             # parse event loop's return value
             if ret == self.SIGNAL_QUIT:
                 break
             if ret == self.SIGNAL_RELOAD_PAGE:
-                logger.debug('thread: run(): got SIGNAL_RELOAD_PAGE')
+                self.on_reload_page()
         logger.debug('thread: exiting.')
-        # cannot return result
 
 
 # only one instance of XNovaWorld should be!
-# well, there may be others, but for coordination...
+# well, there may be others, but for coordination it should be one
 singleton_XNovaWorld = None
 
 
