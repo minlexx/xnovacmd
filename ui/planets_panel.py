@@ -162,7 +162,9 @@ class PlanetWidget(QFrame):
         self._drawTextShadow(painter, 5, 1+font_h+2+font_h, scoords, font_coords, text_color)
 
     def _drawFields(self, painter: QPainter):
-        ratio = self._planet.fields_busy / self._planet.fields_total
+        ratio = 0
+        if self._planet.fields_total > 0:
+            ratio = self._planet.fields_busy / self._planet.fields_total
         pb_width = int(self.width() * ratio)
         w = self._pb_texture.height()
         fb = QBrush(self._pb_texture)
