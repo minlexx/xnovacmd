@@ -3,7 +3,7 @@ import re
 import datetime
 
 from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNShipsBundle
-from .xn_parser import XNParserBase, safe_int
+from .xn_parser import XNParserBase, safe_int, get_attribute
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -524,4 +524,11 @@ class OverviewParser(XNParserBase):
                 second = safe_int(match.group(6))
                 self.server_time = datetime.datetime(year, month, day, hour, minute, second)
                 logger.info('Got server time: {0}'.format(self.server_time))
+        if tag == 'b':
+            # <b id="new_messages">0</b>
+            b_id = get_attribute(attrs, 'id')
+            if b_id is not None:
+                if b_id == 'new_messages':
+                    new_messages = safe_int(data)
+                    logger.info('new messages: {0}'.format(new_messages))
         return   # from def handle_data()
