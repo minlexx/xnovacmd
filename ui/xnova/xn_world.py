@@ -283,6 +283,18 @@ class XNovaWorld(QThread):
             else:
                 pl.is_current = False
 
+    def _inc_network_errors(self):
+        """
+        Error handler, called when network error has occured,
+        when page could not be downloaded. Raises RuntimeError when
+        too many errors happened.
+        :return:
+        """
+        self._net_errors_count += 1
+        logger.error('net error happened, total count: {0}'.format(self._net_errors_count))
+        if self._net_errors_count > 10:
+            raise RuntimeError('Too many network errors: {0}!'.format(self._net_errors_count))
+
     # internal helper, converts page identifier to url path
     def _page_name_to_url_path(self, page_name: str):
         urls_dict = dict()
@@ -321,16 +333,24 @@ class XNovaWorld(QThread):
                 self.on_page_downloaded(page_name)  # process downloaded page
             else:
                 # page download error
-                self._net_errors_count += 1
-                logger.debug('net error happened, total count: {0}'.format(self._net_errors_count))
-                if self._net_errors_count > 10:
-                    raise RuntimeError('Too many network errors: {0}!'.format(self._net_errors_count))
+                self._inc_network_errors()
         return None
+
+    def _download_galaxy_page(self, galaxy_no, sys_no):
+        # 'http://uni4.xnova.su/?set=galaxy&r=3&galaxy=3&system=130'
+        url_path = '?set=galaxy&r=3&galaxy={0}&system={1}'.format(galaxy_no, sys_no)
+        # do not ask cache, just donwload directly and always
+        page = self._page_downloader.download_url_path(url_path)
+        if page is None:
+            self._inc_network_errors()
+            return None
+        return page
 
     def _download_image(self, img_path: str):
         img_bytes = self._page_downloader.download_url_path(img_path, return_binary=True)
         if img_bytes is None:
             logger.error('image dnl failed: [{0}]'.format(img_path))
+            self._inc_network_errors()
             return
         self._page_cache.save_image(img_path, img_bytes)
 
