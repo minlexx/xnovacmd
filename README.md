@@ -9,3 +9,7 @@ Requirements to run:
  * Python 3
  * python modules: [requests](http://docs.python-requests.org/en/latest/), [PyExecJS](https://pypi.python.org/pypi/PyExecJS)
  * [PyQt5](http://pyqt.sourceforge.net/Docs/PyQt5/installation.html) and all its dependencies ([SIP](https://riverbankcomputing.com/software/sip/download), etc)
+
+PyExecJS also requires a JS runtime be available in your system at runtime:
+In Windows, built-in Microsoft Windows Script Host (JScript) is fine,
+on Linux you'll probably need something like [Node.js](http://nodejs.org)
