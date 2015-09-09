@@ -1,7 +1,7 @@
 # xnovacmd
 Desktop client for [XNova](http://xnova.su/) browser game, written using Python 3 + Qt 5 (PyQt5)
 
-Still a lot of work in progress, but I can a light at the end.
+Still a lot of work in progress, but I can see a light at the end.
 
 Requirements to run:
 
