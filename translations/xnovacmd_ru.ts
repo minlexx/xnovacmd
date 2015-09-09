@@ -353,54 +353,59 @@ Res: {0}</source>
 <context>
     <name>XNova_MainWindow</name>
     <message>
-        <location filename="main.py" line="58"/>
+        <location filename="main.py" line="60"/>
         <source>XNova Commander</source>
         <translation>XNova Commander</translation>
     </message>
     <message>
-        <location filename="main.py" line="64"/>
+        <location filename="main.py" line="66"/>
         <source>Not connected: Log in!</source>
         <translation>Не подключено: залогинься!</translation>
     </message>
     <message>
-        <location filename="main.py" line="100"/>
+        <location filename="main.py" line="102"/>
         <source>Login</source>
         <translation>Авторизация</translation>
     </message>
     <message>
-        <location filename="main.py" line="141"/>
+        <location filename="main.py" line="143"/>
         <source>Login error: {0}</source>
         <translation>Ошибка входа: {0}</translation>
     </message>
     <message>
-        <location filename="main.py" line="142"/>
+        <location filename="main.py" line="144"/>
         <source>Login error:</source>
         <translation>Ошибка авторизации:</translation>
     </message>
     <message>
-        <location filename="main.py" line="149"/>
+        <location filename="main.py" line="151"/>
         <source>Login OK, loading world</source>
         <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="164"/>
+        <location filename="main.py" line="166"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="176"/>
+        <location filename="main.py" line="182"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="239"/>
+        <location filename="main.py" line="247"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="237"/>
+        <location filename="main.py" line="245"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="170"/>
+        <source>Imperium</source>
+        <translation>Империя</translation>
     </message>
 </context>
 </TS>

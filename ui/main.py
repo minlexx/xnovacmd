@@ -11,6 +11,7 @@ from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .planets_panel import PlanetsBarWidget
 from .overview import OverviewWidget
+from .imperium import ImperiumWidget
 
 from .xnova.xn_data import XNCoords, XNFlight, XNPlanet
 from .xnova.xn_world import XNovaWorld_instance
@@ -40,8 +41,9 @@ class XNova_MainWindow(QWidget):
         self.tray_icon = None
         self.statusbar = None
         self.login_widget = None
-        self.overview_widget = None
         self.flights_widget = None
+        self.overview_widget = None
+        self.imperium_widget = None
         # initialization
         self.load_ui()
         self.world = XNovaWorld_instance()
@@ -109,9 +111,9 @@ class XNova_MainWindow(QWidget):
         pl2.fields_total = 207
         pl2.is_current = False
         test_planets = [pl1, pl2]
-        self.setup_planets(test_planets)
+        self.setup_planets_panel(test_planets)
 
-    def setup_planets(self, planets: list):
+    def setup_planets_panel(self, planets: list):
         layout = self.ui.panel_planets.layout()
         layout.setSpacing(0)
         remove_trailing_spacer_from_layout(layout)
@@ -162,6 +164,10 @@ class XNova_MainWindow(QWidget):
         self.overview_widget.load_ui()
         self.add_tab(self.overview_widget, self.tr('Overview'))
         self.overview_widget.setEnabled(False)
+        # create 2nd tab - Imperium
+        self.imperium_widget = ImperiumWidget(self)
+        self.add_tab(self.imperium_widget, self.tr('Imperium'))
+        self.imperium_widget.setEnabled(False)
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
         self.world.set_login_email(self.login_email)
@@ -180,7 +186,9 @@ class XNova_MainWindow(QWidget):
         self.flights_widget.update_flights()
         # update planets
         planets = self.world.get_planets()
-        self.setup_planets(planets)
+        self.setup_planets_panel(planets)
+        self.imperium_widget.setEnabled(True)
+        self.imperium_widget.update_planets()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
