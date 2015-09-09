@@ -9,7 +9,7 @@ from .xnova import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
-class PWToolTipInfo:
+class PBWToolTipInfo:
     def __init__(self, parent=None):
         self._visible = False
         self._x = 0
@@ -53,24 +53,24 @@ class PWToolTipInfo:
         painter.drawText(b_rect, Qt.AlignCenter, self._text)
 
 
-class PlanetWidget(QFrame):
+class PlanetsBarWidget(QFrame):
     requestOpenPlanet = pyqtSignal(int)
     requestOpenGalaxy = pyqtSignal(XNCoords)
 
     def __init__(self, parent=None):
-        super(PlanetWidget, self).__init__(parent)
+        super(PlanetsBarWidget, self).__init__(parent)
         self._planet = XNPlanet()
         self._img = QImage()
         self._img_loaded = False
         self._mouse_over_planet_name = False
         self._mouse_over_planet_coords = False
         self._mouse_over_planet_fields = False
-        self._tt = PWToolTipInfo()
+        self._tt = PBWToolTipInfo()
         self._pb_texture = QImage()
         self.init_ui()
 
     def init_ui(self):
-        # logger.debug('PlanetWidget init UI')
+        # logger.debug('PlanetsBarWidget init UI')
         self.setMinimumSize(88, 88)
         self.setMaximumSize(88, 88)
         self.setFrameShadow(QFrame.Plain)
@@ -177,7 +177,7 @@ class PlanetWidget(QFrame):
         self._tt.draw(painter)
 
     def paintEvent(self, e: QPaintEvent):
-        super(PlanetWidget, self).paintEvent(e)
+        super(PlanetsBarWidget, self).paintEvent(e)
         painter = QPainter(self)
         self._drawPlanetPic(painter)
         self._drawPlanetTitle(painter)
@@ -185,7 +185,7 @@ class PlanetWidget(QFrame):
         self._drawToolTip(painter)
 
     def mouseMoveEvent(self, event: QMouseEvent):
-        super(PlanetWidget, self).mouseMoveEvent(event)
+        super(PlanetsBarWidget, self).mouseMoveEvent(event)
         # QMouseEvent::pos() reports the position of the mouse cursor, relative to this widget.
         mx = event.x()
         my = event.y()
@@ -226,10 +226,10 @@ class PlanetWidget(QFrame):
         self.update()
 
     # def enterEvent(self, event):
-    #    super(PlanetWidget, self).enterEvent(event)
+    #    super(PlanetsBarWidget, self).enterEvent(event)
 
     def leaveEvent(self, event):
-        super(PlanetWidget, self).leaveEvent(event)
+        super(PlanetsBarWidget, self).leaveEvent(event)
         self._tt.hide()
         self.update()
 

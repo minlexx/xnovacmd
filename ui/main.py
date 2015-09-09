@@ -9,7 +9,7 @@ from .widget_utils import install_layout_for_widget, append_trailing_spacer_to_l
 from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
-from .planets_panel import PlanetWidget
+from .planets_panel import PlanetsBarWidget
 from .overview import OverviewWidget
 
 from .xnova.xn_data import XNCoords, XNFlight, XNPlanet
@@ -108,14 +108,8 @@ class XNova_MainWindow(QWidget):
         pl2.fields_busy = 84
         pl2.fields_total = 207
         pl2.is_current = False
-        pls = [pl1, pl2]
-        self.setup_planets(pls)
-
-    def setup_one_planet(self, pl: XNPlanet):
-        pw = PlanetWidget(self.ui.panel_planets)
-        pw.setPlanet(pl)
-        self.ui.panel_planets.layout().addWidget(pw)
-        pw.show()
+        test_planets = [pl1, pl2]
+        self.setup_planets(test_planets)
 
     def setup_planets(self, planets: list):
         layout = self.ui.panel_planets.layout()
@@ -128,12 +122,15 @@ class XNova_MainWindow(QWidget):
                 if li is not None:
                     wi = li.widget()
                     if wi is not None:
-                        if isinstance(wi, PlanetWidget):
+                        if isinstance(wi, PlanetsBarWidget):
                             layout.removeWidget(wi)
                             wi.close()
                             del wi
         for pl in planets:
-            self.setup_one_planet(pl)
+            pw = PlanetsBarWidget(self.ui.panel_planets)
+            pw.setPlanet(pl)
+            layout.addWidget(pw)
+            pw.show()
         append_trailing_spacer_to_layout(layout)
 
     @pyqtSlot(str)
@@ -181,7 +178,7 @@ class XNova_MainWindow(QWidget):
         self.overview_widget.update_account_info()
         # update flying fleets
         self.flights_widget.update_flights()
-        # well... planets?
+        # update planets
         planets = self.world.get_planets()
         self.setup_planets(planets)
         # set timer to do every-second world recalculation
