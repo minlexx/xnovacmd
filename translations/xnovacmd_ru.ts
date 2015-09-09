@@ -315,19 +315,19 @@ Res: {0}</source>
     </message>
 </context>
 <context>
-    <name>PlanetWidget</name>
+    <name>PlanetsBarWidget</name>
     <message>
-        <location filename="planets_panel.py" line="219"/>
+        <location filename="planets_panel.py" line="221"/>
         <source>Go to planet</source>
         <translation>К планете</translation>
     </message>
     <message>
-        <location filename="planets_panel.py" line="221"/>
+        <location filename="planets_panel.py" line="223"/>
         <source>Go to galaxy</source>
         <translation>К галактике</translation>
     </message>
     <message>
-        <location filename="planets_panel.py" line="223"/>
+        <location filename="planets_panel.py" line="225"/>
         <source>Field: {0}/{1}</source>
         <translation>Поля: {0}/{1}</translation>
     </message>
@@ -368,37 +368,37 @@ Res: {0}</source>
         <translation>Авторизация</translation>
     </message>
     <message>
-        <location filename="main.py" line="144"/>
+        <location filename="main.py" line="141"/>
         <source>Login error: {0}</source>
         <translation>Ошибка входа: {0}</translation>
     </message>
     <message>
-        <location filename="main.py" line="145"/>
+        <location filename="main.py" line="142"/>
         <source>Login error:</source>
         <translation>Ошибка авторизации:</translation>
     </message>
     <message>
-        <location filename="main.py" line="152"/>
+        <location filename="main.py" line="149"/>
         <source>Login OK, loading world</source>
         <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="167"/>
+        <location filename="main.py" line="164"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="179"/>
+        <location filename="main.py" line="176"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="242"/>
+        <location filename="main.py" line="239"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="240"/>
+        <location filename="main.py" line="237"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
