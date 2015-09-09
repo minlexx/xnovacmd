@@ -16,16 +16,19 @@ class XNCStatusBar(QStatusBar):
         # initialization
         self.setSizeGripEnabled(True)
         # testing only
-        self.btn_start = QPushButton(self.tr('start'), self)
-        self.btn_stop = QPushButton(self.tr('stop'), self)
+        # self.btn_start = QPushButton(self.tr('start'), self)
+        # self.btn_stop = QPushButton(self.tr('stop'), self)
         self.btn_signal = QPushButton(self.tr('signal'), self)
+        self.btn_test1 = QPushButton(self.tr('test 1'), self)
         # void	addPermanentWidget(QWidget * widget, int stretch = 0)
-        self.addPermanentWidget(self.btn_start, 0)
-        self.addPermanentWidget(self.btn_stop, 0)
-        self.addPermanentWidget(self.btn_signal, 0)
-        self.btn_start.clicked.connect(self.on_btn_start)
-        self.btn_stop.clicked.connect(self.on_btn_stop)
+        # self.addPermanentWidget(self.btn_start)
+        # self.addPermanentWidget(self.btn_stop)
+        self.addPermanentWidget(self.btn_signal)
+        self.addPermanentWidget(self.btn_test1)
+        # self.btn_start.clicked.connect(self.on_btn_start)
+        # self.btn_stop.clicked.connect(self.on_btn_stop)
         self.btn_signal.clicked.connect(self.on_btn_signal)
+        self.btn_test1.clicked.connect(self.on_btn_test1)
         #
         self.show()
         # self.showMessage('wow')
@@ -71,3 +74,8 @@ class XNCStatusBar(QStatusBar):
         #
         # test signal to thread
         self.world.signal(self.world.SIGNAL_RELOAD_PAGE, page_name='overview')
+
+    @pyqtSlot()
+    def on_btn_test1(self):
+        # test galaxy parser
+        self.world.signal(self.world.SIGNAL_PARSE_GALAXY, galaxy=1, system=7)

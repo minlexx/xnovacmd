@@ -4,6 +4,7 @@ from ui.xnova.xn_parser_overview import OverviewParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
+from ui.xnova.xn_parser_galaxy import GalaxyParser
 
 
 def main():
@@ -26,6 +27,11 @@ def main():
     p4 = CurPlanetParser()
     content = cacher.get_page('overview')  # can be almost any page, overview or imperium is fine
     p4.parse_page_content(content)
+    # galaxy
+    gp = GalaxyParser()
+    content = cacher.get_page('galaxy_1_7')
+    gp.parse_page_content(content)
+    gp.unscramble_galaxy_script()
 
 if __name__ == "__main__":
     main()

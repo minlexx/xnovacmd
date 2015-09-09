@@ -1,4 +1,14 @@
 #!/usr/bin/python3
+
+"""
+Entry point to application.
+
+Python modules used by application in whole:
+- PyQt5
+- requests
+- PyExecJS
+"""
+
 import sys
 
 from PyQt5.QtCore import PYQT_VERSION_STR, QTranslator, QLocale

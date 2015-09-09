@@ -10,6 +10,7 @@ from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
 from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
+from .xn_parser_galaxy import GalaxyParser
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -19,6 +20,7 @@ logger = xn_logger.get(__name__, debug=True)
 class XNovaWorld(QThread):
     SIGNAL_QUIT = 0
     SIGNAL_RELOAD_PAGE = 1
+    SIGNAL_PARSE_GALAXY = 99
 
     # signal to be emitted when initial world loading is complete
     world_load_complete = pyqtSignal()
@@ -271,6 +273,18 @@ class XNovaWorld(QThread):
             logger.debug('on_reload_page(): reloading {0}'.format(page_name))
             self._get_page(page_name, max_cache_lifetime=1, force_download=True)
 
+    def on_parse_galaxy(self):
+        if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
+            gal_no = self._signal_kwargs['galaxy']
+            sys_no = self._signal_kwargs['system']
+            logger.debug('downloading galaxy page {0},{1}'.format(gal_no, sys_no))
+            page = self._download_galaxy_page(gal_no, sys_no)
+            if page is not None:
+                self._page_cache.set_page('galaxy_{0}_{1}'.format(gal_no, sys_no), page)
+                gp = GalaxyParser()
+                gp.parse_page_content(page)
+                gp.unscramble_galaxy_script()
+
     def _update_current_planet(self):
         """
         Just updates internal planets array with information
@@ -402,6 +416,8 @@ class XNovaWorld(QThread):
                 break
             if ret == self.SIGNAL_RELOAD_PAGE:
                 self.on_reload_page()
+            elif ret == self.SIGNAL_PARSE_GALAXY:
+                self.on_parse_galaxy()
         logger.debug('thread: exiting.')
 
 
