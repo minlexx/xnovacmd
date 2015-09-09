@@ -265,7 +265,7 @@ class XNFlight:
             self.mission, str(self.src), str(self.dst), str(self.ships), str(self.res))
         if self.direction == 'return':
             s += ' return'
-        s += (' @' + str(self.arrive_datetime))
+        s += (' @ ' + str(self.arrive_datetime))
         return s
 
     def remaining_time_secs(self, diff_with_server_time_secs=0) -> int:
@@ -338,15 +338,55 @@ class XNBuildingsBundle:
         self.lunar_phalanx = 0
         self.gates = 0
 
+    def __str__(self):
+        ret = ''
+        if self.met_factory > 0:
+            ret += 'MetF: {0} '.format(self.met_factory)
+        if self.cry_factory > 0:
+            ret += 'CryF: {0} '.format(self.cry_factory)
+        if self.deit_factory > 0:
+            ret += 'DeitF: {0} '.format(self.deit_factory)
+        if self.solar_station > 0:
+            ret += 'Solar: {0} '.format(self.solar_station)
+        if self.nuclear_station > 0:
+            ret += 'Nuclear: {0} '.format(self.nuclear_station)
+        if self.robotics_factory > 0:
+            ret += 'RF: {0} '.format(self.robotics_factory)
+        if self.nanites_factory > 0:
+            ret += 'Nanites: {0} '.format(self.nanites_factory)
+        if self.shipyard > 0:
+            ret += 'ShipY: {0} '.format(self.shipyard)
+        if self.met_silo > 0:
+            ret += 'MetS: {0} '.format(self.met_silo)
+        if self.cry_silo > 0:
+            ret += 'CryS: {0} '.format(self.cry_silo)
+        if self.deit_silo > 0:
+            ret += 'DeitS: {0} '.format(self.deit_silo)
+        if self.lab > 0:
+            ret += 'Lab: {0} '.format(self.lab)
+        if self.terraformer > 0:
+            ret += 'TerraF: {0} '.format(self.terraformer)
+        if self.alliance_silo > 0:
+            ret += 'AllianceS: {0} '.format(self.alliance_silo)
+        if self.rocket_silo > 0:
+            ret += 'RocketS: {0} '.format(self.rocket_silo)
+        if self.lunar_base > 0:
+            ret += 'Lunar Base: {0} '.format(self.lunar_base)
+        if self.lunar_phalanx > 0:
+            ret += 'Phalanx: {0} '.format(self.lunar_phalanx)
+        if self.gates > 0:
+            ret += 'Gates: {0} '.format(self.gates)
+        return ret.strip()
+
 
 class XNDefenseBundle:
     """
     holds all info about planet's defenses count
     """
     def __init__(self):
-        self.rocket = 0
-        self.light_laser = 0
-        self.heavy_laser = 0
+        self.ru = 0
+        self.ll = 0
+        self.tl = 0
         self.gauss = 0
         self.ion = 0
         self.plasma = 0
@@ -354,6 +394,30 @@ class XNDefenseBundle:
         self.big_dome = 0
         self.defender_rocket = 0
         self.attack_rocket = 0
+
+    def __str__(self):
+        ret = ''
+        if self.ru > 0:
+            ret += 'RU: {0} '.format(self.ru)
+        if self.ll > 0:
+            ret += 'LL: {0} '.format(self.ll)
+        if self.tl > 0:
+            ret += 'TL: {0} '.format(self.tl)
+        if self.gauss > 0:
+            ret += 'GAUSS: {0} '.format(self.gauss)
+        if self.ion > 0:
+            ret += 'ION: {0} '.format(self.ion)
+        if self.plasma > 0:
+            ret += 'PLASMA: {0} '.format(self.plasma)
+        if self.small_dome > 0:
+            ret += 'MSK: {0} '.format(self.small_dome)
+        if self.big_dome > 0:
+            ret += 'BSK: {0} '.format(self.big_dome)
+        if self.defender_rocket > 0:
+            ret += 'Defender Rocket: {0} '.format(self.defender_rocket)
+        if self.attack_rocket > 0:
+            ret += 'MPR: {0} '.format(self.attack_rocket)
+        return ret.strip()
 
 
 class XNPlanetProductionPowers:
@@ -400,9 +464,13 @@ class XNPlanet:
     """
     def __init__(self, name=None, coords=None, planet_id=0):
         self.planet_id = planet_id
-        self.name = name if name is not None else ''
+        self.name = ''
+        if name is not None:
+            self.name = name
         self.pic_url = ''
-        self.coords = coords if isinstance(coords, XNCoords) else XNCoords()
+        self.coords = XNCoords()
+        if isinstance(coords, XNCoords):
+            self.coords = coords
         self.fields_busy = 0
         self.fields_total = 0
         self.res_current = XNResourceBundle(0, 0, 0)

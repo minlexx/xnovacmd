@@ -54,6 +54,16 @@ class ImperiumParser(XNParserBase):
             # logger.debug('Found planet img: {0}'.format(img_src))
         return
 
+    def set_phase(self, ph):
+        self._phase = ph
+        self._counter = 0
+
+    def inc_counter_and_check_reset_phase(self):
+        self._counter += 1
+        if self._counter >= len(self.planets):
+            self._counter = 0
+            self._phase = ''
+
     def handle_data2(self, data: str, tag: str, attrs: list):
         # logger.debug('data in tag [{0}]: [{1}]'.format(tag, data))
         if not self.in_imp_1:
@@ -77,65 +87,103 @@ class ImperiumParser(XNParserBase):
                         # reset counter, it will count current planet to store info to
                         self._counter = 0
                     elif data == 'Координаты':
-                        self._phase = 'coords'
-                        self._counter = 0
+                        self.set_phase('coords')
                     elif data == 'Поля':
-                        self._phase = 'fields'
-                        self._counter = 0
+                        self.set_phase('fields')
                     elif data == 'Рудник металла':
-                        self._phase = 'met_factory'
-                        self._counter = 0
+                        self.set_phase('met_factory')
                     elif data == 'Рудник кристалла':
-                        self._phase = 'cry_factory'
-                        self._counter = 0
+                        self.set_phase('cry_factory')
                     elif data == 'Синтезатор дейтерия':
-                        self._phase = 'deit_factory'
-                        self._counter = 0
+                        self.set_phase('deit_factory')
                     elif data == 'Солнечная батарея':
-                        self._phase = 'solar_station'
-                        self._counter = 0
+                        self.set_phase('solar_station')
                     elif data == 'Термоядерный реактор':
-                        self._phase = 'nuclear_station'
-                        self._counter = 0
+                        self.set_phase('nuclear_station')
                     elif data == 'Фабрика роботов':
-                        self._phase = 'robotics_factory'
-                        self._counter = 0
+                        self.set_phase('robotics_factory')
                     elif data == 'Фабрика нанитов':
-                        self._phase = 'nanites_factory'
-                        self._counter = 0
+                        self.set_phase('nanites_factory')
                     elif data == 'Верфь':
-                        self._phase = 'shipyard'
-                        self._counter = 0
+                        self.set_phase('shipyard')
                     elif data == 'Склад металла':
-                        self._phase = 'met_silo'
-                        self._counter = 0
+                        self.set_phase('met_silo')
                     elif data == 'Склад кристалла':
-                        self._phase = 'cry_silo'
-                        self._counter = 0
+                        self.set_phase('cry_silo')
                     elif data == 'Емкость дейтерия':
-                        self._phase = 'deit_silo'
-                        self._counter = 0
+                        self.set_phase('deit_silo')
                     elif data == 'Лаборатория':
-                        self._phase = 'lab'
-                        self._counter = 0
+                        self.set_phase('lab')
                     elif data == 'Терраформер':
-                        self._phase = 'terraformer'
-                        self._counter = 0
+                        self.set_phase('terraformer')
                     elif data == 'Склад альянса':
-                        self._phase = 'alliance_silo'
-                        self._counter = 0
+                        self.set_phase('alliance_silo')
                     elif data == 'Ракетная шахта':
-                        self._phase = 'rocket_silo'
-                        self._counter = 0
+                        self.set_phase('rocket_silo')
                     elif data == 'Лунная база':
-                        self._phase = 'lunar_base'
-                        self._counter = 0
+                        self.set_phase('lunar_base')
                     elif data == 'Сенсорная фаланга':
-                        self._phase = 'lunar_phalanx'
-                        self._counter = 0
+                        self.set_phase('lunar_phalanx')
                     elif data == 'Межгалактические врата':
-                        self._phase = 'gates'
-                        self._counter = 0
+                        self.set_phase('gates')
+                    elif data == 'Малый транспорт':
+                        self.set_phase('ship_mt')
+                    elif data == 'Большой транспорт':
+                        self.set_phase('ship_bt')
+                    elif data == 'Лёгкий истребитель':
+                        self.set_phase('ship_li')
+                    elif data == 'Тяжёлый истребитель':
+                        self.set_phase('ship_ti')
+                    elif data == 'Крейсер':
+                        self.set_phase('ship_crus')
+                    elif data == 'Линкор':
+                        self.set_phase('ship_link')
+                    elif data == 'Колонизатор':
+                        self.set_phase('ship_col')
+                    elif data == 'Переработчик':
+                        self.set_phase('ship_rab')
+                    elif data == 'Шпионский зонд':
+                        self.set_phase('ship_spy')
+                    elif data == 'Бомбардировщик':
+                        self.set_phase('ship_bomber')
+                    elif data == 'Солнечный спутник':
+                        self.set_phase('ship_ss')
+                    elif data == 'Уничтожитель':
+                        self.set_phase('ship_unik')
+                    elif data == 'Звезда смерти':
+                        self.set_phase('ship_zs')
+                    elif data == 'Линейный крейсер':
+                        self.set_phase('ship_lk')
+                    elif data == 'Передвижная база':
+                        self.set_phase('ship_warbase')
+                    elif data == 'Корвет':
+                        self.set_phase('ship_f_corvett')
+                    elif data == 'Перехватчик':
+                        self.set_phase('ship_f_ceptor')
+                    elif data == 'Дредноут':
+                        self.set_phase('ship_f_dread')
+                    elif data == 'Корсар':
+                        self.set_phase('ship_f_corsair')
+                    elif data == 'Ракетная установка':
+                        self.set_phase('def_ru')
+                    elif data == 'Легкий лазер':
+                        self.set_phase('def_ll')
+                    elif data == 'Тяжёлый лазер':
+                        self.set_phase('def_tl')
+                    elif data == 'Пушка Гаусса':
+                        self.set_phase('def_gauss')
+                    elif data == 'Ионное орудие':
+                        self.set_phase('def_ion')
+                    elif data == 'Плазменное орудие':
+                        self.set_phase('def_plasma')
+                    elif data == 'Малый щитовой купол':
+                        self.set_phase('def_small_dome')
+                    elif data == 'Большой щитовой купол':
+                        self.set_phase('def_big_dome')
+                    elif data == 'Ракета-перехватчик':
+                        self.set_phase('def_defender_rocket')
+                    elif data == 'Межпланетная ракета':
+                        self.set_phase('def_attack_rocket')
                     return  # <th colspan="2"> ... </th>
             if th_rowspan is not None:
                 if th_rowspan == '5':
@@ -176,6 +224,8 @@ class ImperiumParser(XNParserBase):
                         self._counter = 0
                         self._phase = 'res_current'
                         self._phase_res = ''
+                elif self._phase == 'coords':
+                    pass  # this case is handled, but no work is needed here
                 elif self._phase == 'res_current':
                     if data == 'Металл':
                         self._phase_res = 'met'
@@ -249,120 +299,153 @@ class ImperiumParser(XNParserBase):
                     # logger.debug('prod_powers data [{0}] phase_res: {1}'.format(data, self._phase_res))
                 elif self._phase == 'met_factory':
                     self.planets[self._counter].buildings.met_factory = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'cry_factory':
                     self.planets[self._counter].buildings.cry_factory = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'deit_factory':
                     self.planets[self._counter].buildings.deit_factory = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'solar_station':
                     self.planets[self._counter].buildings.solar_station = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'nuclear_station':
                     self.planets[self._counter].buildings.nuclear_station = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'robotics_factory':
                     self.planets[self._counter].buildings.robotics_factory = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'nanites_factory':
                     self.planets[self._counter].buildings.nanites_factory = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'shipyard':
                     self.planets[self._counter].buildings.shipyard = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'met_silo':
                     self.planets[self._counter].buildings.met_silo = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'cry_silo':
                     self.planets[self._counter].buildings.cry_silo = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'deit_silo':
                     self.planets[self._counter].buildings.deit_silo = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'lab':
                     self.planets[self._counter].buildings.lab = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'terraformer':
                     self.planets[self._counter].buildings.terraformer = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'alliance_silo':
                     self.planets[self._counter].buildings.alliance_silo = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'rocket_silo':
                     self.planets[self._counter].buildings.rocket_silo = safe_int(data)
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'lunar_base':
                     self.planets[self._counter].buildings.lunar_base = safe_int(data)
                     if self.planets[self._counter].buildings.lunar_base > 0:
                         self.planets[self._counter].is_moon = True  # omg
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'lunar_phalanx':
                     self.planets[self._counter].buildings.lunar_phalanx = safe_int(data)
                     if self.planets[self._counter].buildings.lunar_phalanx > 0:
                         self.planets[self._counter].is_moon = True  # omg
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
+                    self.inc_counter_and_check_reset_phase()
                 elif self._phase == 'gates':
                     self.planets[self._counter].buildings.gates = safe_int(data)
                     # dunno, may be moon, may be warbase :/
-                    self._counter += 1
-                    if self._counter >= len(self.planets):
-                        self._counter = 0
-                        self._phase = ''
-                #else:
-                #    if self._phase != '':
-                #        logger.debug('data in phase [{0}]: [{1}]'.format(self._phase, data))
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_mt':
+                    self.planets[self._counter].ships.mt = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_bt':
+                    self.planets[self._counter].ships.bt = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_li':
+                    self.planets[self._counter].ships.li = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_ti':
+                    self.planets[self._counter].ships.ti = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_crus':
+                    self.planets[self._counter].ships.crus = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_link':
+                    self.planets[self._counter].ships.link = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_col':
+                    self.planets[self._counter].ships.col = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_rab':
+                    self.planets[self._counter].ships.rab = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_spy':
+                    self.planets[self._counter].ships.spy = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_bomber':
+                    self.planets[self._counter].ships.bomber = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_ss':
+                    self.planets[self._counter].ships.ss = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_unik':
+                    self.planets[self._counter].ships.unik = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_zs':
+                    self.planets[self._counter].ships.zs = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_lk':
+                    self.planets[self._counter].ships.lk = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_warbase':
+                    self.planets[self._counter].ships.warbase = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_f_corvett':
+                    self.planets[self._counter].ships.f_corvett = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_f_corsair':
+                    self.planets[self._counter].ships.f_corsair = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_f_ceptor':
+                    self.planets[self._counter].ships.f_ceptor = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'ship_f_dread':
+                    self.planets[self._counter].ships.f_dread = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_ru':
+                    self.planets[self._counter].defense.ru = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_ll':
+                    self.planets[self._counter].defense.ll = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_tl':
+                    self.planets[self._counter].defense.tl = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_gauss':
+                    self.planets[self._counter].defense.gauss = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_ion':
+                    self.planets[self._counter].defense.ion = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_plasma':
+                    self.planets[self._counter].defense.plasma = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_small_dome':
+                    self.planets[self._counter].defense.small_dome = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_big_dome':
+                    self.planets[self._counter].defense.big_dome = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_defender_rocket':
+                    self.planets[self._counter].defense.defender_rocket = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                elif self._phase == 'def_attack_rocket':
+                    self.planets[self._counter].defense.attack_rocket = safe_int(data)
+                    self.inc_counter_and_check_reset_phase()
+                else:
+                    if self._phase != '':
+                        logger.debug('Unhandled data in phase [{0}]: [{1}]'.format(self._phase, data))
             return  # tag th
         if tag == 'a':
             href = get_attribute(attrs, 'href')
@@ -436,4 +519,8 @@ class ImperiumParser(XNParserBase):
             return
         if tag == 'html':
             logger.info('Loaded info about {0} planet(s)'.format(len(self.planets)))
+            # for pl in self.planets:
+            #    logger.debug('Planet {0} buildings: {1}'.format(str(pl), str(pl.buildings)))
+            #    logger.debug('Planet {0} ships:     {1}'.format(str(pl), str(pl.ships)))
+            #    logger.debug('Planet {0} defense:   {1}'.format(str(pl), str(pl.defense)))
             return
