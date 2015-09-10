@@ -1,4 +1,5 @@
 import configparser
+import json
 
 import requests
 import requests.exceptions
@@ -29,8 +30,35 @@ class XNovaPageDownload:
         if cookies_dict:
             self.set_cookies_from_dict(cookies_dict)
 
-    def set_cookies_from_dict(self, cookies_dict: dict):
+    def set_cookies_from_dict(self, cookies_dict: dict, do_save=False, json_filename=None):
         self.sess.cookies = requests.cookies.cookiejar_from_dict(cookies_dict)
+        if do_save:
+            # Save cookies to file
+            # Note: cache dir should exist at this point, because
+            #   XNovaPageCache.load_from_disk_cache() is called right before
+            #   this function from XNovaWorld.initialize(), which creates cache dirs
+            #   if they do not exist.
+            try:
+                filename = './cache/cookies.json'
+                if json_filename is not None:
+                    filename = json_filename
+                with open(filename, mode='wt', encoding='UTF-8') as f:
+                    f.write(json.dumps(cookies_dict, sort_keys=True, indent=4))
+            except IOError:
+                pass
+
+    def load_cookies_from_file(self, filename: str):
+        result = True
+        try:
+            s = ''
+            with open(filename, mode='rt', encoding='UTF-8') as f:
+                s = f.read()
+            cookies_dict = json.loads(s)
+            if type(cookies_dict) == dict:
+                self.set_cookies_from_dict(cookies_dict, do_save=False)
+        except IOError:
+            result = False
+        return result
 
     # error handler
     def _set_error(self, errstr):

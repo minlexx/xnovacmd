@@ -70,7 +70,7 @@ class XNovaWorld(QThread):
         # load cached pages
         self._page_cache.load_from_disk_cache(clean=True)
         # init network session with cookies for authorization
-        self._page_downloader.set_cookies_from_dict(cookies_dict)
+        self._page_downloader.set_cookies_from_dict(cookies_dict, do_save=True)
         # misc
         self._maintid = self._gettid()
         logger.debug('initialized from tid={0}'.format(self._maintid))
