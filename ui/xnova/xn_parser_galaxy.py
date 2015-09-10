@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import re
 import execjs
 
 from .xn_data import XNCoords
@@ -14,6 +13,7 @@ class GalaxyParser(XNParserBase):
         super(GalaxyParser, self).__init__()
         self._in_galaxy = False
         self.script_body = ''
+        self.galaxy_rows = []
 
     def handle_starttag(self, tag: str, attrs: list):
         super(GalaxyParser, self).handle_starttag(tag, attrs)
@@ -56,8 +56,14 @@ class GalaxyParser(XNParserBase):
         # ^^ [function(p,a,c,k,e,d){e=functi... ...0426'.split('|'))]
         #
         # create JS interptreter and eval that
-        js = execjs.get()
-        print(js.eval(inner_eval))
+        js_runtimes = execjs.available_runtimes()
+        if 'Node' in js_runtimes:
+            js = execjs.get('Node')
+        else:
+            js = execjs.get()  # default
+        logger.info('Using [{0}] as JS runtime.'.format(js.name))
+        eval_res = js.eval(inner_eval)
+        # Now, eval_res is a string:
         # row[12]={"planet":12,"id_planet":54448,"ally_planet":0,"metal":0,"crystal":0,
         # "name":"\u0413\u043b\u0430\u0432\u043d\u0430\u044f \u043f\u043b\u0430\u043d\u0435\u0442\u0430",
         # "planet_type":1,"destruyed":0,"image":"normaltempplanet02","last_active":60,"parent_planet":0,
@@ -73,3 +79,48 @@ class GalaxyParser(XNParserBase):
         # "user_image":"71995_1440872455.jpg","ally_name":"Fury","ally_members":8,"ally_web":"",
         # "ally_tag":"Fury","type":null,"total_rank":141,"total_points":115582};
         # ...
+        # we ned to eval() this string again, slightly modified, to get resulting row:
+        eval_res = 'var row = []; ' + eval_res + "\nreturn row;"
+        ctx = js.compile(eval_res)
+        self.galaxy_rows = ctx.exec_(eval_res)
+        print(type(self.galaxy_rows))
+        print(self.galaxy_rows)
+        # <class 'list'>
+        # [None, None, None, None, None, None, None,
+        # {
+        #   'type': None,
+        #   'planet_type': 1,
+        #   'total_points': 0,
+        #   'ally_planet': 0,
+        #   'ally_web': None,
+        #   'urlaubs_modus_time': 0,
+        #   'crystal': 0,
+        #   'user_id': 71993,
+        #   'name': 'Главная планета',
+        #   'ally_tag': None,
+        #   'last_active': 60,
+        #   'luna_name': None,
+        #   'planet': 7,
+        #   'luna_diameter': None,
+        #   'ally_id': 0,
+        #   'onlinetime': 1,
+        #   'luna_id': None,
+        #   'parent_planet': 0,
+        #   'sex': 1,
+        #   'ally_name': None,
+        #   'avatar': 8,
+        #   'user_image': '',
+        #   'destruyed': 0,
+        #   'banaday': 0,
+        #   'luna_temp': None,
+        #   'race': 4,
+        #   'image': 'normaltempplanet09',
+        #   'username': 'Дмитрий и Марина Цыкуновы',
+        #   'luna_destruyed': None,
+        #   'metal': 0,
+        #   'id_planet': 54449,
+        #   'authlevel': 0,
+        #   'ally_members': None,
+        #   'total_rank': 7866
+        # },
+        # None, ... ]
