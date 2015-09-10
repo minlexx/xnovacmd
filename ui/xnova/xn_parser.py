@@ -77,5 +77,5 @@ class XNParserBase(html.parser.HTMLParser):
         pass
 
     def parse_page_content(self, page: str):
-        if page:
+        if page is not None:
             self.feed(page)

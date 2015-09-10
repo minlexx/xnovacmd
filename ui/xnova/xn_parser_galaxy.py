@@ -15,6 +15,10 @@ class GalaxyParser(XNParserBase):
         self.script_body = ''
         self.galaxy_rows = []
 
+    def clear(self):
+        self.script_body = ''
+        self.galaxy_rows = []
+
     def handle_starttag(self, tag: str, attrs: list):
         super(GalaxyParser, self).handle_starttag(tag, attrs)
         if tag == 'div':
@@ -83,8 +87,8 @@ class GalaxyParser(XNParserBase):
         eval_res = 'var row = []; ' + eval_res + "\nreturn row;"
         ctx = js.compile(eval_res)
         self.galaxy_rows = ctx.exec_(eval_res)
-        print(type(self.galaxy_rows))
-        print(self.galaxy_rows)
+        # print(type(self.galaxy_rows))
+        # print(self.galaxy_rows)
         # <class 'list'>
         # [None, None, None, None, None, None, None,
         # {
