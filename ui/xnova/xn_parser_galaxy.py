@@ -5,7 +5,7 @@ from .xn_data import XNCoords
 from .xn_parser import XNParserBase, safe_int, get_attribute
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class GalaxyParser(XNParserBase):
@@ -65,7 +65,7 @@ class GalaxyParser(XNParserBase):
             js = execjs.get('Node')
         else:
             js = execjs.get()  # default
-        logger.info('Using [{0}] as JS runtime.'.format(js.name))
+        logger.debug('Using [{0}] as JS runtime.'.format(js.name))
         eval_res = js.eval(inner_eval)
         # Now, eval_res is a string:
         # row[12]={"planet":12,"id_planet":54448,"ally_planet":0,"metal":0,"crystal":0,

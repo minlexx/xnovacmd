@@ -5,7 +5,7 @@ import time
 
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 # Incapsulates downloaded pages storage
@@ -20,7 +20,7 @@ class XNovaPageCache:
         self._page_cache_dir = './cache/page'
         self._img_cache_dir = './cache/img'
         self.save_load_encoding = locale.getpreferredencoding()
-        logger.info('Locale preferred encoding: {0}'.format(self.save_load_encoding))
+        logger.debug('Locale preferred encoding: {0}'.format(self.save_load_encoding))
 
     # scan ./cache directory and load all files into memory
     def load_from_disk_cache(self, clean=True):
