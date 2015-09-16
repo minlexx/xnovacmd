@@ -11,7 +11,7 @@ Requirements to run:
 Required python modules:
  * [requests](http://docs.python-requests.org/en/latest/)
  * [PyExecJS](https://pypi.python.org/pypi/PyExecJS)
- * [PySocks](https://pypi.python.org/pypi/PySocks) for **SOCKS55** proxy socket, required by **requesocks**
+ * [PySocks](https://pypi.python.org/pypi/PySocks) for **SOCKS5** proxy socket, required by **requesocks**
  * [requesocks](https://pypi.python.org/pypi/requesocks), slightly fixed (uses external pysocks package), is included in source tree. No need to install.
  * [certifi](https://pypi.python.org/pypi/certifi) for HTTPS certificate validation, used somewhere in depths of **requesocks**, if get url contains *https://*
  * [PyQt5](http://pyqt.sourceforge.net/Docs/PyQt5/installation.html) and all its dependencies ([SIP](https://riverbankcomputing.com/software/sip/download), etc)
