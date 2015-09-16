@@ -7,6 +7,9 @@ Python modules used by application in whole:
 - PyQt5
 - requests
 - PyExecJS
+- PySocks for SOCKS5 proxy socket, required by requesocks
+- certifi for HTTPS certificate validation, also used in depths of requesocks
+- requesocks is included in source tree
 """
 
 import sys
