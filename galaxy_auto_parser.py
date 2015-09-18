@@ -50,7 +50,11 @@ g_got_from_cache = False
 def int_(val):
     if val is None:
         return None
-    return int(val)
+    try:
+        r = int(val)
+    except ValueError:
+        r = 0
+    return r
 
 
 def str_(val):
@@ -65,8 +69,8 @@ def parse_range(val: str) -> tuple:
         return ret
     m = re.match(r'(\d+),(\d+)', val)
     if m:
-        start = int(m.group(1))
-        end = int(m.group(2))
+        start = int_(m.group(1))
+        end = int_(m.group(2))
         ret = (start, end)
     return ret
 
