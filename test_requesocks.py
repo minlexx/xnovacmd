@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # requires:
 #  - pysocks for socks5 proxy socket, required by requesocks
 #  - certifi for HTTPS certificate validation, also used in depths of requesocks
@@ -6,7 +7,7 @@ import requesocks
 import certifi
 
 
-SOCKS5_PROXY = '192.168.20.1:9050'
+SOCKS5_PROXY = '127.0.0.1:9050'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
              'Chrome/45.0.2454.85 Safari/537.36'
 
@@ -21,6 +22,7 @@ def main():
     # url = 'http://yandex.ru/internet'
     # url = 'https://www.whatismyip.com/my-ip-information/'
     url = 'http://httpbin.org/ip'
+    print('Using proxy: {0}'.format(SOCKS5_PROXY))
     print('Requesting URL: {0}'.format(url))
     r = session.get(url)
     if r.status_code == 200:
