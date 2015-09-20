@@ -21,6 +21,17 @@ class ImperiumParser(XNParserBase):
         self.planet_pics = []
         self.planets = []
 
+    def clear(self):
+        self.in_imp_1 = False
+        self.in_picdef = False
+        self._phase = 'pics'
+        self._phase_res = ''
+        self._counter = 0
+        # somewhat output data
+        self.planet_ids = []
+        self.planet_pics = []
+        self.planets = []
+
     def handle_starttag(self, tag: str, attrs: list):
         super(ImperiumParser, self).handle_starttag(tag, attrs)
         if not self.in_imp_1 and (tag == 'div'):

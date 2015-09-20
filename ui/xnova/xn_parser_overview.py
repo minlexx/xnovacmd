@@ -94,6 +94,9 @@ def _parse_flight_resources(s) -> XNResourceBundle:
 class OverviewParser(XNParserBase):
     def __init__(self):
         super(OverviewParser, self).__init__()
+        self.clear()
+
+    def clear(self):
         self.in_player_data = False
         self.in_prom_level = False
         self.in_military_level = False

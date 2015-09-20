@@ -40,6 +40,9 @@ class CurPlanetParser(XNParserBase):
                     return
                 if ('planet' in div_classes) and ('type_1' in div_classes) and ('current' in div_classes):
                     self.in_planet_block = True
+                # type_5 is starbase
+                if ('planet' in div_classes) and ('type_5' in div_classes) and ('current' in div_classes):
+                    self.in_planet_block = True
             if self.in_planet_block:
                 if tag == 'div':
                     div_classes = get_tag_classes(attrs)
