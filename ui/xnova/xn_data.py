@@ -240,7 +240,7 @@ class XNFlight:
     FLIGHT_DIRS = ['flight', 'return']
     FLIGHT_MISSIONS = ['owndeploy', 'owntransport', 'ownattack', 'ownespionage',
                        'ownharvest', 'owncolony', 'ownfederation', 'ownmissile',
-                       'owndestroy', 'ownhold',
+                       'owndestroy', 'ownhold', 'ownbase',
                        # enemy/hostile missions
                        'attack', 'espionage', 'missile', 'destroy', 'federation']
 

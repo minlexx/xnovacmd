@@ -43,19 +43,24 @@
         <translation>Межпланетная атака</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="71"/>
+        <location filename="widget_utils.py" line="73"/>
         <source>Destroy</source>
         <translation>Уничтожить</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="73"/>
+        <location filename="widget_utils.py" line="75"/>
         <source>Hold</source>
         <translation>Удерживать</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="74"/>
+        <location filename="widget_utils.py" line="76"/>
         <source>Mission unknown</source>
         <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="71"/>
+        <source>Create base</source>
+        <translation>Создать базу</translation>
     </message>
 </context>
 <context>
@@ -116,7 +121,7 @@
         <translation>Флоты: {0}  |||   {1}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="146"/>
+        <location filename="flights_widget.py" line="148"/>
         <source>
 return</source>
         <translation>
@@ -129,12 +134,12 @@ Res: {0}</source>
         <translation type="obsolete">Ресы: {0}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="154"/>
+        <location filename="flights_widget.py" line="156"/>
         <source>{m}m / {c}c / {d}d</source>
         <translation>{m}м / {c}к / {d}д</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="154"/>
+        <location filename="flights_widget.py" line="156"/>
         <source>Res: {0}</source>
         <translation>Ресы: {0}</translation>
     </message>
@@ -211,7 +216,7 @@ Res: {0}</source>
 <context>
     <name>MyApplication</name>
     <message>
-        <location filename="app.py" line="24"/>
+        <location filename="app.py" line="37"/>
         <source>Test translator</source>
         <translation>Проверка переводчика</translation>
     </message>
@@ -337,17 +342,22 @@ Res: {0}</source>
     <message>
         <location filename="statusbar.py" line="19"/>
         <source>start</source>
-        <translation>старт</translation>
+        <translation type="obsolete">старт</translation>
     </message>
     <message>
         <location filename="statusbar.py" line="20"/>
         <source>stop</source>
-        <translation>стоп</translation>
+        <translation type="obsolete">стоп</translation>
     </message>
     <message>
         <location filename="statusbar.py" line="21"/>
         <source>signal</source>
         <translation>сигнал</translation>
+    </message>
+    <message>
+        <location filename="statusbar.py" line="22"/>
+        <source>test 1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

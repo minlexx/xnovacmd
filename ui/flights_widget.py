@@ -93,6 +93,8 @@ class FlightsWidget(QWidget):
             ret = QColor(190, 210, 255)
         elif mis == 'ownmissile':
             ret = QColor(165, 255, 255)
+        elif mis == 'ownbase':
+            ret = QColor(153, 200, 255)
         if dir_ == 'return':
             # darken
             ret.setRed(ret.red() * 0.8)
