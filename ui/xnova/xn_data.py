@@ -482,6 +482,7 @@ class XNPlanet:
         self.defense = XNDefenseBundle()
         self.moon = None  # planet may have moon
         self.is_moon = False  # or may be a moon itself
+        self.is_base = False
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
         self.is_current = False  # used by UI to highlight current planet, that's all
@@ -489,5 +490,17 @@ class XNPlanet:
     def __str__(self):
         if self.coords.target_name == '':
             self.coords.target_name = self.name
-        return str(self.coords)
+        add_type = ''
+        if self.is_moon:
+            add_type = ' (moon)'
+        if self.is_base:
+            add_type = ' (base)'
+        return str(self.coords) + add_type
+
+    def detect_base_by_pic_url(self):
+        self.is_base = False
+        if self.pic_url is not None:
+            m = re.search(r's_baseplanet01.jpg$', self.pic_url)
+            if m is not None:
+                self.is_base = True
 
