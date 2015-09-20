@@ -152,6 +152,7 @@ class XNova_MainWindow(QWidget):
         self.cookies_dict = cookies_dict
         # destroy login widget and remove its tab
         self.ui.tabWidget.removeTab(0)
+        self.login_widget.close()
         self.login_widget = None
         # create all main widgets
         # create flights widget

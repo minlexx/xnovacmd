@@ -145,6 +145,59 @@ Res: {0}</source>
     </message>
 </context>
 <context>
+    <name>ImperiumWidget</name>
+    <message>
+        <location filename="imperium.py" line="48"/>
+        <source>Name</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="53"/>
+        <source>Coords</source>
+        <translation>Координаты</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="58"/>
+        <source>Fields</source>
+        <translation>Поля</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="64"/>
+        <source>Resources</source>
+        <translation>Ресурсы</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="65"/>
+        <source>Metal</source>
+        <translation>Металл</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="69"/>
+        <source>Crystal</source>
+        <translation>Кристалл</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="73"/>
+        <source>Deit</source>
+        <translation>Дейт</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="79"/>
+        <source>Buildings</source>
+        <translation>Постройки</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="80"/>
+        <source>Defense</source>
+        <translation>Оборона</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="81"/>
+        <source>Fleet</source>
+        <translation>Флот</translation>
+    </message>
+</context>
+<context>
     <name>LoginThread</name>
     <message>
         <location filename="login_widget.py" line="100"/>
@@ -357,7 +410,7 @@ Res: {0}</source>
     <message>
         <location filename="statusbar.py" line="22"/>
         <source>test 1</source>
-        <translation type="unfinished"></translation>
+        <translation>тест 1</translation>
     </message>
 </context>
 <context>
@@ -393,27 +446,27 @@ Res: {0}</source>
         <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="166"/>
+        <location filename="main.py" line="167"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="182"/>
+        <location filename="main.py" line="183"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="247"/>
+        <location filename="main.py" line="248"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="245"/>
+        <location filename="main.py" line="246"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
     <message>
-        <location filename="main.py" line="170"/>
+        <location filename="main.py" line="171"/>
         <source>Imperium</source>
         <translation>Империя</translation>
     </message>
