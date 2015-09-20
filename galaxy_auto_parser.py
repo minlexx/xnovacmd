@@ -371,9 +371,16 @@ def main():
                     help='Name of sqlite3 db file to store galaxy data. Default is "galaxy.db"')
     ap.add_argument('--status-filename', nargs='?', default='galaxy_auto_parser.json',
                     help='File name where scan progress will be written in JSON format. Default \
-is "galaxy_auto_parser.json". JSON output example is: {"done": 1, "total": 10}.')
+is "galaxy_auto_parser.json". JSON output format example is: {"done": 1, "total": 10}.')
     ap.add_argument('--cookies-filename', nargs='?', default='./cache/cookies.json',
-                    help='Name of JSON file with cookies used to access site. Default is "./cache/cookies.json"')
+                    help='Name of JSON file with cookies used to access site. Default is "./cache/cookies.json"'
+                    'JSON file format:'
+                    '{ '
+                    '    "PHPSESSID": "o1c4iuctlt2s7721cuohuhkla7", '
+                    '    "x_id": "1", '
+                    '    "x_secret": "553a5b8f1f30a1c3708711ba57cab68a", '
+                    '    "x_uni": "uni4"'
+                    '}')
     ap.add_argument('--list-js-runtimes', action='store_true',
                     help='List available detected JavaScript runtimes and exit.')
     ns = ap.parse_args()
