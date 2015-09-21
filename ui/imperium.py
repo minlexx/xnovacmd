@@ -74,9 +74,88 @@ class ImperiumWidget(QWidget):
         for pl in planets:
             item_strings.append('{0}'.format(pl.res_current.deit))
         res_root.addChild(QTreeWidgetItem(item_strings))
-        res_root.setExpanded(True)
         self._tree.addTopLevelItem(res_root)
+        res_root.setExpanded(True)
         #
+        # buildings
         buildings_root = QTreeWidgetItem([self.tr('Buildings')])
+        item_strings = [self.tr('Metal factory')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.met_factory))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Crystal factory')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.cry_factory))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Deit factory')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.deit_factory))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Solar station')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.solar_station))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Nuclear station')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.nuclear_station))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Robotics factory')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.robotics_factory))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Nanites factory')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.nanites_factory))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Shipyard')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.shipyard))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Metal silo')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.met_silo))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Crystal silo')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.cry_silo))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Deit silo')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.deit_silo))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Lab')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.lab))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('TerraFormer')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.terraformer))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Alliance silo')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.alliance_silo))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Rocket silo')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.rocket_silo))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Lunar Base')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.lunar_base))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Lunar Phalanx')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.lunar_phalanx))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Gates')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.buildings.gates))
+        buildings_root.addChild(QTreeWidgetItem(item_strings))
+        self._tree.addTopLevelItem(buildings_root)
+        buildings_root.setExpanded(True)
+        #
+        # defense
         defense_root = QTreeWidgetItem([self.tr('Defense')])
+        #
+        # fleet
         fleet_root = QTreeWidgetItem([self.tr('Fleet')])
