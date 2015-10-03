@@ -480,6 +480,10 @@ class OverviewParser(XNParserBase):
             m = re.search(r'Задание: Создать базу$', data)
             if m:
                 self._cur_flight.mission = 'ownbase'
+            # in_flight data: [. Задание: Межпланетная атака]
+            m = re.search(r'Задание: Межпланетная атака$', data)
+            if m:
+                self._cur_flight.mission = 'ownmissile'
             # logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
@@ -539,3 +543,13 @@ class OverviewParser(XNParserBase):
                     new_messages = safe_int(data)
                     logger.info('new messages: {0}'.format(new_messages))
         return   # from def handle_data()
+
+# own missile parser
+# <span class="flight ownattack">Ваш <a href='javascript:;' class="tooltip"
+#   data-tooltip-content='<table width=200><tr><td width=75% align=left>
+#   <font color=white>Межпланетная ракета:<font></td><td width=25% align=right>
+#   <font color=white>2<font></td></tr></table>'
+# class="ownattack">флот</a> отправленный с планеты Tama
+# <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" ownattack >[1:34:11]</a>
+# направляется к планете порта <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=19"
+# ownattack >[1:19:3]</a>. Задание: Межпланетная атака</span>
