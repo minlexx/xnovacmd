@@ -43,19 +43,24 @@
         <translation>Межпланетная атака</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="71"/>
+        <location filename="widget_utils.py" line="73"/>
         <source>Destroy</source>
         <translation>Уничтожить</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="73"/>
+        <location filename="widget_utils.py" line="75"/>
         <source>Hold</source>
         <translation>Удерживать</translation>
     </message>
     <message>
-        <location filename="widget_utils.py" line="74"/>
+        <location filename="widget_utils.py" line="76"/>
         <source>Mission unknown</source>
         <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <location filename="widget_utils.py" line="71"/>
+        <source>Create base</source>
+        <translation>Создать базу</translation>
     </message>
 </context>
 <context>
@@ -116,7 +121,7 @@
         <translation>Флоты: {0}  |||   {1}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="146"/>
+        <location filename="flights_widget.py" line="148"/>
         <source>
 return</source>
         <translation>
@@ -129,14 +134,67 @@ Res: {0}</source>
         <translation type="obsolete">Ресы: {0}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="154"/>
+        <location filename="flights_widget.py" line="156"/>
         <source>{m}m / {c}c / {d}d</source>
         <translation>{m}м / {c}к / {d}д</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="154"/>
+        <location filename="flights_widget.py" line="156"/>
         <source>Res: {0}</source>
         <translation>Ресы: {0}</translation>
+    </message>
+</context>
+<context>
+    <name>ImperiumWidget</name>
+    <message>
+        <location filename="imperium.py" line="48"/>
+        <source>Name</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="53"/>
+        <source>Coords</source>
+        <translation>Координаты</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="58"/>
+        <source>Fields</source>
+        <translation>Поля</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="64"/>
+        <source>Resources</source>
+        <translation>Ресурсы</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="65"/>
+        <source>Metal</source>
+        <translation>Металл</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="69"/>
+        <source>Crystal</source>
+        <translation>Кристалл</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="73"/>
+        <source>Deit</source>
+        <translation>Дейт</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="79"/>
+        <source>Buildings</source>
+        <translation>Постройки</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="80"/>
+        <source>Defense</source>
+        <translation>Оборона</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="81"/>
+        <source>Fleet</source>
+        <translation>Флот</translation>
     </message>
 </context>
 <context>
@@ -211,7 +269,7 @@ Res: {0}</source>
 <context>
     <name>MyApplication</name>
     <message>
-        <location filename="app.py" line="24"/>
+        <location filename="app.py" line="37"/>
         <source>Test translator</source>
         <translation>Проверка переводчика</translation>
     </message>
@@ -337,17 +395,22 @@ Res: {0}</source>
     <message>
         <location filename="statusbar.py" line="19"/>
         <source>start</source>
-        <translation>старт</translation>
+        <translation type="obsolete">старт</translation>
     </message>
     <message>
         <location filename="statusbar.py" line="20"/>
         <source>stop</source>
-        <translation>стоп</translation>
+        <translation type="obsolete">стоп</translation>
     </message>
     <message>
         <location filename="statusbar.py" line="21"/>
         <source>signal</source>
         <translation>сигнал</translation>
+    </message>
+    <message>
+        <location filename="statusbar.py" line="22"/>
+        <source>test 1</source>
+        <translation>тест 1</translation>
     </message>
 </context>
 <context>
@@ -383,27 +446,27 @@ Res: {0}</source>
         <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="166"/>
+        <location filename="main.py" line="167"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="182"/>
+        <location filename="main.py" line="183"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="247"/>
+        <location filename="main.py" line="248"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="245"/>
+        <location filename="main.py" line="246"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
     <message>
-        <location filename="main.py" line="170"/>
+        <location filename="main.py" line="171"/>
         <source>Imperium</source>
         <translation>Империя</translation>
     </message>

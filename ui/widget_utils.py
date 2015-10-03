@@ -67,6 +67,8 @@ def flight_mission_for_humans(mis: str):
         return QCoreApplication.translate('FlightMission', 'Federation')
     if (mis == 'ownmissile') or (mis == 'missile'):
         return QCoreApplication.translate('FlightMission', 'I-P Missile')
+    if mis == 'ownbase':
+        return QCoreApplication.translate('FlightMission', 'Create base')
     if (mis == 'owndestroy') or (mis == 'destroy'):
         return QCoreApplication.translate('FlightMission', 'Destroy')
     if mis == 'ownhold':

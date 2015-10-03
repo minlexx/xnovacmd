@@ -5,6 +5,9 @@ import requests
 import requests.exceptions
 import requests.cookies
 
+import requesocks
+import requesocks.exceptions
+
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=False)
@@ -17,14 +20,27 @@ class XNovaPageDownload:
         self.xnova_url = 'uni4.xnova.su'
         self.user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
         self.error_str = None
+        self.proxy = None
         # load user-agent from config/net.ini
         cfg = configparser.ConfigParser()
         cfg.read('config/net.ini', encoding='utf-8')
         if 'net' in cfg:
             self.user_agent = cfg['net']['user_agent']
             self.xnova_url = cfg['net']['xnova_url']
+            self.proxy = cfg['net']['proxy']
+            if self.proxy == '':
+                self.proxy = None
         # construct requests HTTP session
-        self.sess = requests.Session()
+        if self.proxy is not None:
+            if self.proxy.startswith('socks5://'):
+                # for SOCKS5 proxy create requesocks session
+                self.sess = requesocks.session()
+                logger.info('Using SOCKS5 proxy session (requesocks)')
+        else:
+            self.sess = requests.Session()  # else normal session
+        if self.proxy is not None:
+            self.sess.proxies = {'http': self.proxy, 'https': self.proxy}
+            logger.info('Set HTTP/HTTPS proxy to: {0}'.format(self.proxy))
         self.sess.headers.update({'user-agent': self.user_agent})
         self.sess.headers.update({'referer': 'http://{0}/'.format(self.xnova_url)})
         if cookies_dict:
@@ -91,5 +107,8 @@ class XNovaPageDownload:
                 self._set_error('HTTP {0}'.format(r.status_code))
         except requests.exceptions.RequestException as e:
             logger.error('Exception {0}'.format(type(e)))
+            self._set_error(str(e))
+        except requesocks.exceptions.RequestException as e:
+            logger.error('Requesocks exception {0}'.format(type(e)))
             self._set_error(str(e))
         return ret

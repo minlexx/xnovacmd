@@ -7,10 +7,14 @@ Python modules used by application in whole:
 - PyQt5
 - requests
 - PyExecJS
+- PySocks for SOCKS5 proxy socket, required by requesocks
+- certifi for HTTPS certificate validation, also used in depths of requesocks
+- requesocks is included in source tree
 """
 
 import sys
 
+import sip
 from PyQt5.QtCore import PYQT_VERSION_STR, QTranslator, QLocale
 from PyQt5.QtWidgets import QApplication
 
@@ -20,7 +24,6 @@ from ui.main import XNova_MainWindow
 # we need to import this file to initialize all Qt compiled resources
 import ui.res_rc
 
-g_app = None
 logger = xn_logger.get(__name__)
 
 
@@ -60,15 +63,17 @@ if __name__ == '__main__':
     # next is not really needed, because it is called at import time
     # bui I need to silence PyCharm about unused import!!!
     ui.res_rc.qInitResources()
+    # fix PyQt crashes during program exit?
+    sip.setdestroyonexit(False)
     # create global application object
     # and keep reference to it to prevent garbage collection
-    g_app = MyApplication(sys.argv)
-    g_app.setup_translation()
-    g_app.create_window()
+    app = MyApplication(sys.argv)
+    app.setup_translation()
+    app.create_window()
     xn_logger.handle_unhandled(True)
-    retcode = g_app.exec_()  # Qt event loop!
+    retcode = app.exec_()  # Qt event loop!
+    app.mainwindow.close()
+    app.mainwindow = None
     xn_logger.handle_unhandled(False)
     logger.info('Application exiting with code {0}'.format(retcode))
-    # free reference - now can be garbage collected
-    del g_app
     sys.exit(retcode)

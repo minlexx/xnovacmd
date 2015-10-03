@@ -12,7 +12,8 @@ SOURCES="app.py \
     ui/flights_widget.py \
     ui/planets_panel.py \
     ui/statusbar.py \
-    ui/widget_utils.py"
+    ui/widget_utils.py \
+    ui/imperium.py"
 
 echo "TS files: $TS_FILES"
 echo "Sources: $SOURCES"

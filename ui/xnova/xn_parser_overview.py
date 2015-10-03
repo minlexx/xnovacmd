@@ -94,6 +94,9 @@ def _parse_flight_resources(s) -> XNResourceBundle:
 class OverviewParser(XNParserBase):
     def __init__(self):
         super(OverviewParser, self).__init__()
+        self.clear()
+
+    def clear(self):
         self.in_player_data = False
         self.in_prom_level = False
         self.in_military_level = False
@@ -473,6 +476,10 @@ class OverviewParser(XNParserBase):
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
+            # in_flight data: [. Задание: Создать базу]
+            m = re.search(r'Задание: Создать базу$', data)
+            if m:
+                self._cur_flight.mission = 'ownbase'
             # logger.debug('in_flight data: [{0}]'.format(data))
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>

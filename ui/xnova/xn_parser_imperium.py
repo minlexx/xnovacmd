@@ -21,6 +21,17 @@ class ImperiumParser(XNParserBase):
         self.planet_pics = []
         self.planets = []
 
+    def clear(self):
+        self.in_imp_1 = False
+        self.in_picdef = False
+        self._phase = 'pics'
+        self._phase_res = ''
+        self._counter = 0
+        # somewhat output data
+        self.planet_ids = []
+        self.planet_pics = []
+        self.planets = []
+
     def handle_starttag(self, tag: str, attrs: list):
         super(ImperiumParser, self).handle_starttag(tag, attrs)
         if not self.in_imp_1 and (tag == 'div'):
@@ -82,6 +93,7 @@ class ImperiumParser(XNParserBase):
                             planet = XNPlanet()
                             planet.planet_id = pid
                             planet.pic_url = self.planet_pics[self._counter]
+                            planet.detect_base_by_pic_url()
                             self.planets.append(planet)
                             self._counter += 1
                         # reset counter, it will count current planet to store info to

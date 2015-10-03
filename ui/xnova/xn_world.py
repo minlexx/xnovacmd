@@ -184,10 +184,10 @@ class XNovaWorld(QThread):
             if secs_left <= 0:
                 logger.debug('==== Flight considered complete, seconds left: {0}'.format(secs_left))
                 logger.debug('==== Flight: {0}'.format(str(fl)))
-                logger.debug('==== additional debug info:')
-                logger.debug('====  - diff with server time: {0}'.format(self._diff_with_server_time_secs))
-                logger.debug('====  - current time: {0}'.format(datetime.datetime.today()))
-                logger.debug('====  - current server time: {0}'.format(self.get_current_server_time()))
+                # logger.debug('==== additional debug info:')
+                # logger.debug('====  - diff with server time: {0}'.format(self._diff_with_server_time_secs))
+                # logger.debug('====  - current time: {0}'.format(datetime.datetime.today()))
+                # logger.debug('====  - current server time: {0}'.format(self.get_current_server_time()))
                 finished_flights_count += 1
         if finished_flights_count > 0:
             logger.debug('==== Removing total {0} arrived flights'.format(finished_flights_count))
@@ -231,6 +231,7 @@ class XNovaWorld(QThread):
         self._page_dnl_times[page_name] = dt_now  # save last download time for page
         # dispatch parser and merge data
         if page_name == 'overview':
+            self._parser_overview.clear()
             self._parser_overview.parse_page_content(page_content)
             self._account = self._parser_overview.account
             self._flights = self._parser_overview.flights
@@ -260,6 +261,7 @@ class XNovaWorld(QThread):
             self._account.main_planet_coords = self._parser_userinfo.main_planet_coords
             self._account.alliance_name = self._parser_userinfo.alliance_name
         elif page_name == 'imperium':
+            self._parser_imperium.clear()
             self._parser_imperium.parse_page_content(page_content)
             self._planets = self._parser_imperium.planets
             # since we've overwritten the whole planets array, we need to
