@@ -156,6 +156,49 @@ class ImperiumWidget(QWidget):
         #
         # defense
         defense_root = QTreeWidgetItem([self.tr('Defense')])
+        item_strings = [self.tr('Rocket Launcher')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.ru))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Light Laser')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.ll))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Heavy Laser')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.tl))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Gauss')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.gauss))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Ion')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.ion))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Plasma')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.plasma))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Small Dome')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.small_dome))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Big Dome')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.big_dome))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Defender Missile')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.defender_rocket))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Attack Missile')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.defense.attack_rocket))
+        defense_root.addChild(QTreeWidgetItem(item_strings))
+        # add/expand
+        self._tree.addTopLevelItem(defense_root)
+        defense_root.setExpanded(True)
         #
         # fleet
         fleet_root = QTreeWidgetItem([self.tr('Fleet')])
