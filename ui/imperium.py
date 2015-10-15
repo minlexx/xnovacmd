@@ -151,6 +151,7 @@ class ImperiumWidget(QWidget):
         for pl in planets:
             item_strings.append('{0}'.format(pl.buildings.gates))
         buildings_root.addChild(QTreeWidgetItem(item_strings))
+        # add/expand
         self._tree.addTopLevelItem(buildings_root)
         buildings_root.setExpanded(True)
         #
@@ -202,3 +203,82 @@ class ImperiumWidget(QWidget):
         #
         # fleet
         fleet_root = QTreeWidgetItem([self.tr('Fleet')])
+        item_strings = [self.tr('Small Transport')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.mt))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Big Transport')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.bt))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Light Fighter')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.li))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Heavy Fighter')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.ti))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Cruiser')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.crus))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Battleship')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.link))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Colonizer')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.col))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Refiner')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.rab))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Spy')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.spy))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Bomber')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.bomber))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Solar Satellite')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.ss))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Destroyer')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.unik))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Death Star')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.zs))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('BattleCruiser')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.lk))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('War Base')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.warbase))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Corvett')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.f_corvett))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Interceptor')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.f_ceptor))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Dreadnought')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.f_dread))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Corsair')]
+        for pl in planets:
+            item_strings.append('{0}'.format(pl.ships.f_corsair))
+        fleet_root.addChild(QTreeWidgetItem(item_strings))
+        # add/expand
+        self._tree.addTopLevelItem(fleet_root)
+        fleet_root.setExpanded(True)
