@@ -74,3 +74,15 @@ def flight_mission_for_humans(mis: str):
     if mis == 'ownhold':
         return QCoreApplication.translate('FlightMission', 'Hold')
     return QCoreApplication.translate('FlightMission', 'Mission unknown')
+
+
+def number_format(num: int) -> str:
+    s = '0'
+    r = num
+    while r > 0:
+        ost = r % 1000
+        r = (r // 1000)
+        s = str(ost) + s
+        if r > 0:
+            s = '.' + s
+    return s

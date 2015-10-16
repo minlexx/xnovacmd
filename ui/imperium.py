@@ -4,6 +4,8 @@ from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
+from .widget_utils import number_format
+
 logger = xn_logger.get(__name__, debug=True)
 
 
@@ -81,19 +83,21 @@ class ImperiumWidget(QWidget):
         res_root = QTreeWidgetItem([self.tr('Resources')])
         item_strings = [self.tr('Metal')]
         for pl in planets:
-            item_strings.append('{0}'.format(pl.res_current.met))
+            item_strings.append('{0}'.format(number_format(pl.res_current.met)))
         additem_helper(item_strings, Qt.AlignHCenter, res_root)
         item_strings = [self.tr('Crystal')]
         for pl in planets:
-            item_strings.append('{0}'.format(pl.res_current.cry))
+            item_strings.append('{0}'.format(number_format(pl.res_current.cry)))
         additem_helper(item_strings, Qt.AlignHCenter, res_root)
         item_strings = [self.tr('Deit')]
         for pl in planets:
-            item_strings.append('{0}'.format(pl.res_current.deit))
+            item_strings.append('{0}'.format(number_format(pl.res_current.deit)))
         additem_helper(item_strings, Qt.AlignHCenter, res_root)
         item_strings = [self.tr('Energy')]
         for pl in planets:
-            item_strings.append('{0} / {1}'.format(pl.energy.energy_left, pl.energy.energy_total))
+            item_strings.append('{0} / {1}'.format(
+                number_format(pl.energy.energy_left),
+                number_format(pl.energy.energy_total)))
         additem_helper(item_strings, Qt.AlignHCenter, res_root)
         item_strings = [self.tr('Charge')]
         for pl in planets:
