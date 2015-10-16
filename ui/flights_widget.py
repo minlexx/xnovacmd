@@ -78,6 +78,10 @@ class FlightsWidget(QWidget):
             self.ui.btn_show.setText(self.tr('Fleets: {0}  |||  {1}').format(
                 len(flights), closest_fleet_str))
 
+    def update_new_messages_count(self):
+        nmc = self.world.get_new_messages_count()
+        self.ui.lbl_msgCount.setText(str(nmc))
+
     @staticmethod
     def _get_mis_color(mis: str, dir_: str) -> QColor:
         ret = QColor(255, 255, 255)
@@ -166,3 +170,4 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         # upadte button text
         self.update_button_fleet_count()
+        self.update_new_messages_count()
