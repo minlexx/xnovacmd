@@ -5,7 +5,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
 from PyQt5.QtGui import QColor, QBrush
 
-from .widget_utils import flight_mission_for_humans
+from .widget_utils import flight_mission_for_humans, number_format
 from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -153,8 +153,10 @@ class FlightsWidget(QWidget):
             # resources
             res_str = ''
             if len(fl.res) > 0:
-                res_str = '\n' + self.tr('Res: {0}').format(
-                    format(fl.res, self.tr('{m}m / {c}c / {d}d')))
+                res_str = '\n' + self.tr('Res: {0} m / {1} c {2} d').format(
+                    number_format(fl.res.met),
+                    number_format(fl.res.cry),
+                    number_format(fl.res.deit))
             # insert row
             # timer | mission | src | dst | ships (res)
             # self.ui.tw_flights.insertRow(irow)
