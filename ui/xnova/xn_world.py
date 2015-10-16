@@ -59,7 +59,7 @@ class XNovaWorld(QThread):
         self._maintid = 0
         self._worldtid = 0
         # settings
-        self._overview_update_interval = 60  # seconds
+        self._overview_update_interval = 120  # seconds
 
     def initialize(self, cookies_dict: dict):
         """
