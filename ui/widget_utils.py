@@ -77,12 +77,16 @@ def flight_mission_for_humans(mis: str):
 
 
 def number_format(num: int) -> str:
-    s = '0'
-    r = num
+    if num == 0:
+        return '0'
+    s = ''
+    r = abs(num)
     while r > 0:
         ost = r % 1000
         r = (r // 1000)
         s = str(ost) + s
         if r > 0:
             s = '.' + s
+    if num < 0:
+        s = '-' + s
     return s
