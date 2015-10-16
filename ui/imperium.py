@@ -75,6 +75,14 @@ class ImperiumWidget(QWidget):
         for pl in planets:
             item_strings.append('{0}'.format(pl.res_current.deit))
         res_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Energy')]
+        for pl in planets:
+            item_strings.append('{0} / {1}'.format(pl.energy.energy_left, pl.energy.energy_total))
+        res_root.addChild(QTreeWidgetItem(item_strings))
+        item_strings = [self.tr('Charge')]
+        for pl in planets:
+            item_strings.append('{0}%'.format(pl.energy.charge_percent))
+        res_root.addChild(QTreeWidgetItem(item_strings))
         self._tree.addTopLevelItem(res_root)
         res_root.setExpanded(True)
         #
