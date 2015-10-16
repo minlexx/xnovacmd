@@ -113,15 +113,15 @@
     <message>
         <location filename="flights_widget.py" line="75"/>
         <source>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} ship(s)</source>
-        <translation>{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} корабл(ей)</translation>
+        <translation type="obsolete">{0:02}:{1:02}:{2:02} {3}{4} {5} =&gt; {6}, {7} корабл(ей)</translation>
     </message>
     <message>
         <location filename="flights_widget.py" line="78"/>
         <source>Fleets: {0}  |||   {1}</source>
-        <translation>Флоты: {0}  |||   {1}</translation>
+        <translation type="obsolete">Флоты: {0}  |||   {1}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="148"/>
+        <location filename="flights_widget.py" line="150"/>
         <source>
 return</source>
         <translation>
@@ -134,14 +134,24 @@ Res: {0}</source>
         <translation type="obsolete">Ресы: {0}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="156"/>
+        <location filename="flights_widget.py" line="158"/>
         <source>{m}m / {c}c / {d}d</source>
         <translation>{m}м / {c}к / {d}д</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="156"/>
+        <location filename="flights_widget.py" line="158"/>
         <source>Res: {0}</source>
         <translation>Ресы: {0}</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="75"/>
+        <source>{0:02}:{1:02}:{2:02} ||| {3}{4}: {5} =&gt; {6}, {7} ship(s)</source>
+        <translation>{0:02}:{1:02}:{2:02} ||| {3}{4}: {5} =&gt; {6}, {7} корабль(ей)</translation>
+    </message>
+    <message>
+        <location filename="flights_widget.py" line="80"/>
+        <source>Fleets: {0}  |||  {1}</source>
+        <translation>Флоты: {0}  |||  {1}</translation>
     </message>
 </context>
 <context>
@@ -179,22 +189,257 @@ Res: {0}</source>
     <message>
         <location filename="imperium.py" line="73"/>
         <source>Deit</source>
-        <translation>Дейт</translation>
+        <translation>Дейтерий</translation>
     </message>
     <message>
-        <location filename="imperium.py" line="79"/>
+        <location filename="imperium.py" line="81"/>
         <source>Buildings</source>
         <translation>Постройки</translation>
     </message>
     <message>
-        <location filename="imperium.py" line="80"/>
+        <location filename="imperium.py" line="159"/>
         <source>Defense</source>
         <translation>Оборона</translation>
     </message>
     <message>
-        <location filename="imperium.py" line="81"/>
+        <location filename="imperium.py" line="205"/>
         <source>Fleet</source>
         <translation>Флот</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="82"/>
+        <source>Metal factory</source>
+        <translation>Рудник металла</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="86"/>
+        <source>Crystal factory</source>
+        <translation>Рудник кристалла</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="90"/>
+        <source>Deit factory</source>
+        <translation>Синтезатор дейтерия</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="94"/>
+        <source>Solar station</source>
+        <translation>Солнечная электростанция</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="98"/>
+        <source>Nuclear station</source>
+        <translation>Термоядерная электростанция</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="102"/>
+        <source>Robotics factory</source>
+        <translation>Фабрика роботов</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="106"/>
+        <source>Nanites factory</source>
+        <translation>Фабрика нанитов</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="110"/>
+        <source>Shipyard</source>
+        <translation>Верфь</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="114"/>
+        <source>Metal silo</source>
+        <translation>Склад металла</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="118"/>
+        <source>Crystal silo</source>
+        <translation>Склад кристалла</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="122"/>
+        <source>Deit silo</source>
+        <translation>Склад дейтерия</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="126"/>
+        <source>Lab</source>
+        <translation>Лаборатория</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="130"/>
+        <source>TerraFormer</source>
+        <translation>Терраформер</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="134"/>
+        <source>Alliance silo</source>
+        <translation>Склад альянса</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="138"/>
+        <source>Rocket silo</source>
+        <translation>Ракетная шахта</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="142"/>
+        <source>Lunar Base</source>
+        <translation>Лунная база</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="146"/>
+        <source>Lunar Phalanx</source>
+        <translation>Лунная фаланга</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="150"/>
+        <source>Gates</source>
+        <translation>Межгалактические Врата</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="160"/>
+        <source>Rocket Launcher</source>
+        <translation>Ракетная установка</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="164"/>
+        <source>Light Laser</source>
+        <translation>Лёгкий лазер</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="168"/>
+        <source>Heavy Laser</source>
+        <translation>Тяжёлый лазер</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="172"/>
+        <source>Gauss</source>
+        <translation>Пушка Гаусса</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="176"/>
+        <source>Ion</source>
+        <translation>Ионное орудие</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="180"/>
+        <source>Plasma</source>
+        <translation>Плазменное орудие</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="184"/>
+        <source>Small Dome</source>
+        <translation>Малый купол</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="188"/>
+        <source>Big Dome</source>
+        <translation>Большой купол</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="192"/>
+        <source>Defender Missile</source>
+        <translation>Ракета-перехватчик</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="196"/>
+        <source>Attack Missile</source>
+        <translation>Межпланетная ракета</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="206"/>
+        <source>Small Transport</source>
+        <translation>Малый транспорт</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="210"/>
+        <source>Big Transport</source>
+        <translation>Большой транспорт</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="214"/>
+        <source>Light Fighter</source>
+        <translation>Легкий истребитель</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="218"/>
+        <source>Heavy Fighter</source>
+        <translation>Тяжелый истребитель</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="222"/>
+        <source>Cruiser</source>
+        <translation>Крейсер</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="226"/>
+        <source>Battleship</source>
+        <translation>Линкор</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="230"/>
+        <source>Colonizer</source>
+        <translation>Колонизатор</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="234"/>
+        <source>Refiner</source>
+        <translation>Переработчик</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="238"/>
+        <source>Spy</source>
+        <translation>Шпионский зонд</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="242"/>
+        <source>Bomber</source>
+        <translation>Бомбардировщик</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="246"/>
+        <source>Solar Satellite</source>
+        <translation>Солнечный спутник</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="250"/>
+        <source>Destroyer</source>
+        <translation>Уничтожитель</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="254"/>
+        <source>Death Star</source>
+        <translation>Звезда Смерти</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="258"/>
+        <source>BattleCruiser</source>
+        <translation>Линейный Крейсер</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="262"/>
+        <source>War Base</source>
+        <translation>Передвижная база</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="266"/>
+        <source>Corvett</source>
+        <translation>Корвет</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="270"/>
+        <source>Interceptor</source>
+        <translation>Перехватчик</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="274"/>
+        <source>Dreadnought</source>
+        <translation>Дредноут</translation>
+    </message>
+    <message>
+        <location filename="imperium.py" line="278"/>
+        <source>Corsair</source>
+        <translation>Корсар</translation>
     </message>
 </context>
 <context>
