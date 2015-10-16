@@ -7,7 +7,8 @@ import requesocks
 import certifi
 
 
-SOCKS5_PROXY = '127.0.0.1:9050'
+#SOCKS5_PROXY = '127.0.0.1:9050'
+SOCKS5_PROXY = '192.168.20.1:9050'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
              'Chrome/45.0.2454.85 Safari/537.36'
 

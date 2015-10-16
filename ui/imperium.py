@@ -36,12 +36,13 @@ class ImperiumWidget(QWidget):
         planets = self._world.get_planets()
         header_labels = ['-']
         for i in range(len(planets)):
-            header_labels.append(str(i))
+            # header_labels.append(str(i))
+            header_labels.append(planets[i].name)
         self._tree.setHeaderLabels(header_labels)
         # default column widths
         for i in range(len(planets)):
             if i < 1:
-                self._tree.setColumnWidth(i, 100)
+                self._tree.setColumnWidth(i, 150)
             else:
                 self._tree.setColumnWidth(i, 75)
         # names
