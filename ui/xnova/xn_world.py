@@ -184,6 +184,9 @@ class XNovaWorld(QThread):
         self._maybe_refresh_overview()
         self.unlock()
 
+    # just counts remaining time for flights,
+    # removes finished flights and emits signal
+    # 'flight_arrived' for every finished flight
     def _world_tick_flights(self):
         # logger.debug('tick: server time diff: {0}'.format(self._diff_with_server_time_secs))  # 0:00:16.390197
         # iterate
@@ -218,6 +221,8 @@ class XNovaWorld(QThread):
                         0, len(self._flights)))
         # end world_tick_flights()
 
+    # can trigger signal to refresh overview page every
+    # 'self._overview_update_interval' seconds
     def _maybe_refresh_overview(self):
         if 'overview' in self._page_dnl_times:
             dt_last = self._page_dnl_times['overview']
