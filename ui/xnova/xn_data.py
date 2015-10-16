@@ -152,6 +152,8 @@ class XNShipsBundle:
         self.f_corsair = 0
         self.f_ceptor = 0
         self.f_dread = 0
+        # interplanetary rocket is also a ship, a fast one
+        self.mpr = 0
 
     def __len__(self):
         """
@@ -160,7 +162,8 @@ class XNShipsBundle:
         total = self.mt + self.bt + self.li + self.ti + self.crus + self.link \
             + self.col + self.rab + self.spy + self.bomber + self.ss + self.unik \
             + self.zs + self.lk + self.warbase \
-            + self.f_ceptor + self.f_corsair + self.f_corvett + self.f_dread
+            + self.f_ceptor + self.f_corsair + self.f_corvett + self.f_dread \
+            + self.mpr
         return total
 
     def __str__(self):
@@ -185,6 +188,7 @@ class XNShipsBundle:
         ret += sa(self.f_corsair, 'CORSAIR')
         ret += sa(self.f_corvett, 'CORVETT')
         ret += sa(self.f_dread, 'DREAD')
+        ret += sa(self.mpr, 'MPR')
         if ret.endswith('; '):
             ret = ret[0:-2]
         return ret

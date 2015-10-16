@@ -113,6 +113,10 @@ class XNovaWorld(QThread):
         self.exit(signal_code)  # QEventLoop.exit(code) makes thread's event loop to exit with code
         self.unlock()
 
+    ###################################
+    # Getters
+    ###################################
+
     def get_account_info(self) -> XNAccountInfo:
         self.lock()
         ret = self._account

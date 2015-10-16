@@ -57,7 +57,10 @@ def _parse_flight_ships(s) -> XNShipsBundle:
                     self.ships.f_ceptor = value
                 elif self._p == 'Дредноут:':
                     self.ships.f_dread = value
+                elif self._p == 'Межпланетная ракета:':
+                    self.ships.mpr = value
                 else:
+                    # ValueError: Unknown ship type: "Межпланетная ракета:"
                     raise ValueError('Unknown ship type: "{0}"'.format(self._p))
             else:
                 self._p = data
