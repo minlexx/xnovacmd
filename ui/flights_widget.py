@@ -70,10 +70,12 @@ class FlightsWidget(QWidget):
                 minutes = secs // 60
                 secs -= (minutes * 60)
                 return_str = self.tr(' (return)') if fl.direction == 'return' else ''
-                closest_fleet_str = self.tr('{0:02}:{1:02}:{2:02} {3}{4} {5} => {6}, {7} ship(s)').format(
-                    hours, minutes, secs, fl.mission, return_str,
+                closest_fleet_str = self.tr('{0:02}:{1:02}:{2:02} ||| {3}{4}: {5} => {6}, {7} ship(s)').format(
+                    hours, minutes, secs,
+                    flight_mission_for_humans(fl.mission),
+                    return_str,
                     fl.src, fl.dst, len(fl.ships))
-            self.ui.btn_show.setText(self.tr('Fleets: {0}  |||   {1}').format(
+            self.ui.btn_show.setText(self.tr('Fleets: {0}  |||  {1}').format(
                 len(flights), closest_fleet_str))
 
     @staticmethod
