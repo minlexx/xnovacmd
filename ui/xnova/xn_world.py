@@ -48,6 +48,7 @@ class XNovaWorld(QThread):
         self._cur_planet_name = ''
         self._cur_planet_coords = XNCoords(0, 0, 0)
         self._planets = []
+        self._new_messages_count = 0
         # internal need
         self._net_errors_count = 0
         self._mutex = QMutex(QMutex.Recursive)
@@ -162,6 +163,12 @@ class XNovaWorld(QThread):
         self.unlock()
         return ret
 
+    def get_new_messages_count(self) -> int:
+        self.lock()
+        ret = self._new_messages_count
+        self.unlock()
+        return ret
+
     ################################################################################
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -239,6 +246,7 @@ class XNovaWorld(QThread):
             self._server_time = self._parser_overview.server_time
             dt_diff = dt_now - self._server_time
             self._diff_with_server_time_secs = int(dt_diff.total_seconds())
+            self._new_messages_count = self._parser_overview.new_messages_count
             # run also cur planet parser on the same content
             self._parser_curplanet.parse_page_content(page_content)
             self._cur_planet_id = self._parser_curplanet.cur_planet_id

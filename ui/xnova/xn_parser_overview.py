@@ -121,6 +121,7 @@ class OverviewParser(XNParserBase):
         self._cur_flight_dst_nametype = ('', 0)
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
+        self.new_messages_count = 0
 
     def handle_starttag(self, tag: str, attrs: list):
         super(OverviewParser, self).handle_starttag(tag, attrs)
@@ -540,8 +541,8 @@ class OverviewParser(XNParserBase):
             b_id = get_attribute(attrs, 'id')
             if b_id is not None:
                 if b_id == 'new_messages':
-                    new_messages = safe_int(data)
-                    logger.info('new messages: {0}'.format(new_messages))
+                    self.new_messages_count = safe_int(data)
+                    logger.info('new messages: {0}'.format(self.new_messages_count))
         return   # from def handle_data()
 
 # own missile parser
