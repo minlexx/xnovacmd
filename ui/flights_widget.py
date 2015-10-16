@@ -35,7 +35,7 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.setColumnWidth(1, 90)
         self.ui.tw_flights.setColumnWidth(2, 120)
         self.ui.tw_flights.setColumnWidth(3, 120)
-        self.ui.tw_flights.setColumnWidth(4, 250)
+        self.ui.tw_flights.setColumnWidth(4, 350)  # wider, wider
         self.ui.tw_flights.hide()
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
