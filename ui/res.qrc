@@ -10,5 +10,6 @@
     <file alias="loading.gif">i/loading.gif</file>
     <file alias="tb_closed.png">i/tb_closed.png</file>
     <file alias="tb_open.png">i/tb_open.png</file>
+    <file alias="message.png">i/message.png</file>
   </qresource>
 </RCC>
