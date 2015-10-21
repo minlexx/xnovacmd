@@ -5,6 +5,7 @@ from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
+from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsParser
 
 
 def main():
@@ -31,7 +32,14 @@ def main():
     gp = GalaxyParser()
     content = cacher.get_page('galaxy_1_7')
     gp.parse_page_content(content)
-    gp.unscramble_galaxy_script()
+    if gp.script_body != '':
+        gp.unscramble_galaxy_script()
+        print(gp.galaxy_rows)
+    # planet buildings
+    pbp = PlanetBuildingsParser()
+    content = cacher.get_page('buildings_54450')
+    pbp.parse_page_content(content)
+    print(pbp.builds_in_progress)
 
 if __name__ == "__main__":
     main()
