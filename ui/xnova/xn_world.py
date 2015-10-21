@@ -348,26 +348,37 @@ class XNovaWorld(QThread):
         return sub_url
 
     # for internal needs, get page from server
-    # first try to get from cache
-    # if there is no page there, or it is expired, download from net
+    # converts page_name to url and calls self._get_page_url()
+    # page_name is used as key to cache page content
+    # returns page contents, or None on error
+    # (however, its return value is ignored for now)
     def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
-        page = None
-        page_path = self._page_name_to_url_path(page_name)
-        if not page_path:
+        page_url = self._page_name_to_url_path(page_name)
+        if not page_url:
+            logger.error('Failed to convert page_name=[{0}] to url!'.format(page_name))
             return None
+        return self._get_page_url(page_name, page_url, max_cache_lifetime, force_download)
+
+    # for internal needs, get url from server
+    # first try to get cached page from cache using page_name as key
+    # if there is no page there, or it is expired, download from network
+    # returns page contents, or None on error
+    # (however, its return value is ignored for now)
+    def _get_page_url(self, page_name, page_url, max_cache_lifetime=None, force_download=False):
+        page_content = None
         if not force_download:
-            # try to get cached page
-            page = self._page_cache.get_page(page_name, max_cache_lifetime)
-        if page is None:
-            # try to download
-            page = self._page_downloader.download_url_path(page_path)
-            if page:
-                self._page_cache.set_page(page_name, page)  # save in cache
+            # try to get cached page (default)
+            page_content = self._page_cache.get_page(page_name, max_cache_lifetime)
+        if page_content is None:
+            # try to download, it not in cache
+            page_content = self._page_downloader.download_url_path(page_url)
+            if page_content is not None:
+                self._page_cache.set_page(page_name, page_content)  # save in cache
                 self.on_page_downloaded(page_name)  # process downloaded page
             else:
-                # page download error
+                # download error
                 self._inc_network_errors()
-        return None
+        return page_content
 
     def _download_galaxy_page(self, galaxy_no, sys_no):
         # 'http://uni4.xnova.su/?set=galaxy&r=3&galaxy=3&system=130'
