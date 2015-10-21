@@ -5,7 +5,7 @@ from .xn_data import XNCoords, XNPlanet
 from .xn_parser import XNParserBase, safe_int, get_attribute, get_tag_classes
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class ImperiumParser(XNParserBase):
@@ -466,7 +466,7 @@ class ImperiumParser(XNParserBase):
                     # coords link <a href="?set=galaxy&r=3&galaxy=1&system=7">1:7:9</a>
                     if self._phase == 'coords':
                         self.planets[self._counter].coords.parse_str(data)
-                        logger.info('planet[{0}].coords = {1}'.format(
+                        logger.debug('planet[{0}].coords = {1}'.format(
                             self._counter, self.planets[self._counter].coords))
                         self._counter += 1
         if (tag == 'font') and (self._phase == 'res_current') and (self._phase_res == 'charge'):
