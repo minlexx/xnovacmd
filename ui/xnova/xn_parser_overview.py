@@ -271,6 +271,8 @@ class OverviewParser(XNParserBase):
         if (tag == 'div') and self.in_server_time:
             self.in_server_time = False
             return
+        # if tag == 'html':
+        #    logger.info('Total {0} flights.'.format(len(self.flights)))
 
     def handle_data2(self, data: str, tag: str, attrs: list):
         # logger.debug('data [{0}]:    path: [{1}]'.format(data, self.get_path()))
@@ -299,32 +301,32 @@ class OverviewParser(XNParserBase):
             if self._data_prev == 'Игрок:':
                 self.account.login = data
                 self._data_prev = ''
-                logger.info('Player login: {0}'.format(data))
+                # logger.debug('Player login: {0}'.format(data))
                 return
             if self._data_prev == 'Постройки:':
                 self.account.scores.buildings = safe_int(data)
                 self._data_prev = ''
-                logger.info('Buildings: {0}'.format(self.account.scores.buildings))
+                # logger.debug('Buildings: {0}'.format(self.account.scores.buildings))
                 return
             if self._data_prev == 'Флот:':
                 self.account.scores.fleet = safe_int(data)
                 self._data_prev = ''
-                logger.info('Fleet: {0}'.format(self.account.scores.fleet))
+                # logger.debug('Fleet: {0}'.format(self.account.scores.fleet))
                 return
             if self._data_prev == 'Оборона:':
                 self.account.scores.defense = safe_int(data)
                 self._data_prev = ''
-                logger.info('Defense: {0}'.format(self.account.scores.defense))
+                # logger.debug('Defense: {0}'.format(self.account.scores.defense))
                 return
             if self._data_prev == 'Наука:':
                 self.account.scores.science = safe_int(data)
                 self._data_prev = ''
-                logger.info('Science: {0}'.format(self.account.scores.science))
+                # logger.debug('Science: {0}'.format(self.account.scores.science))
                 return
             if self._data_prev == 'Всего:':
                 self.account.scores.total = safe_int(data)
                 self._data_prev = ''
-                logger.info('Total: {0}'.format(self.account.scores.total))
+                # logger.debug('Total: {0}'.format(self.account.scores.total))
                 return
             if self._data_prev == 'Место:':
                 # logger.debug('Prev.was place: {0}'.format(data))
@@ -344,7 +346,7 @@ class OverviewParser(XNParserBase):
                     logger.warn('OverviewParser failed to parse player rank delta: {0}'.format(str(ve)))
                 self._data_prev = ''
                 self.in_player_data = False
-                logger.info('Rank: {0}, delta: {1}'.format(
+                logger.info('Account Rank: {0}, delta: {1}'.format(
                     self.account.scores.rank, self.account.scores.rank_delta))
                 # logger.info(str(self.account.scores))
                 # logger.info(str(self.account))
@@ -408,16 +410,16 @@ class OverviewParser(XNParserBase):
                 self._read_next = ''
                 self.in_fraction = False
         if self.in_wins:
-            logger.info('wins: %s' % data)
+            # logger.debug('wins: %s' % data)
             self.account.scores.wins = safe_int(data)
             self.in_wins = False
         if self.in_losses:
-            logger.info('losses: %s' % data)
+            # logger.debug('losses: %s' % data)
             self.account.scores.losses = safe_int(data)
             self.in_losses = False
         if self.in_reflink:
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
-            logger.info('Account referral link: [{0}]'.format(data))
+            # logger.debug('Account referral link: [{0}]'.format(data))
             self.account.ref_link = data
             match = re.search(r'/\?(\d+)$', data)
             if match:
@@ -480,9 +482,11 @@ class OverviewParser(XNParserBase):
             if m:
                 dst_name = m.group(1)
                 self._cur_flight_dst_nametype = (dst_name, XNCoords.TYPE_PLANET)
+            # fix for ownbase missions (displayed by server as missile missions)
             # in_flight data: [. Задание: Создать базу]
+            # in_flight data: [Создать базу]
             m = re.search(r'Задание: Создать базу$', data)
-            if m:
+            if m or (data == 'Создать базу'):
                 self._cur_flight.mission = 'ownbase'
             # in_flight data: [. Задание: Межпланетная атака]
             m = re.search(r'Задание: Межпланетная атака$', data)
