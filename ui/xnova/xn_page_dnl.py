@@ -85,7 +85,7 @@ class XNovaPageDownload:
         self.error_str = errstr
 
     # real downloader function
-    # returns None on failure
+    # returns None on failure, string or binary data on success
     def download_url_path(self, url_path: str, return_binary=False):
         self.error_str = None  # clear error
         # construct url to download
