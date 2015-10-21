@@ -5,7 +5,7 @@ from .xn_data import XNCoords
 from .xn_parser import XNParserBase, safe_int
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class UserInfoParser(XNParserBase):
@@ -82,7 +82,7 @@ class UserInfoParser(XNParserBase):
         if self.in_alliance:
             if self.counter == 1:
                 self.alliance_name = data
-                logger.info('Got alliance: {0}'.format(self.alliance_name))
+                logger.debug('Got alliance: {0}'.format(self.alliance_name))
             self.in_alliance = False
             self.counter = 0
             return
@@ -91,7 +91,7 @@ class UserInfoParser(XNParserBase):
                 self.buildings = safe_int(data)
             if self.counter == 2:
                 self.buildings_rank = safe_int(data)
-                logger.info('buildings {0} place {1}'.format(self.buildings, self.buildings_rank))
+                logger.debug('buildings {0} place {1}'.format(self.buildings, self.buildings_rank))
             self.counter += 1
             if self.counter >= 3:
                 self.counter = 0
@@ -102,7 +102,7 @@ class UserInfoParser(XNParserBase):
                 self.science = safe_int(data)
             if self.counter == 2:
                 self.science_rank = safe_int(data)
-                logger.info('science {0} place {1}'.format(self.science, self.science_rank))
+                logger.debug('science {0} place {1}'.format(self.science, self.science_rank))
             self.counter += 1
             if self.counter >= 3:
                 self.counter = 0
@@ -113,7 +113,7 @@ class UserInfoParser(XNParserBase):
                 self.fleet = safe_int(data)
             if self.counter == 2:
                 self.fleet_rank = safe_int(data)
-                logger.info('fleet {0} place {1}'.format(self.fleet, self.fleet_rank))
+                logger.debug('fleet {0} place {1}'.format(self.fleet, self.fleet_rank))
             self.counter += 1
             if self.counter >= 3:
                 self.counter = 0
@@ -124,7 +124,7 @@ class UserInfoParser(XNParserBase):
                 self.defense = safe_int(data)
             if self.counter == 2:
                 self.defense_rank = safe_int(data)
-                logger.info('defense {0} place {1}'.format(self.defense, self.defense_rank))
+                logger.debug('defense {0} place {1}'.format(self.defense, self.defense_rank))
             self.counter += 1
             if self.counter >= 3:
                 self.counter = 0
@@ -135,7 +135,7 @@ class UserInfoParser(XNParserBase):
                 self.total = safe_int(data)
             if self.counter == 2:
                 self.rank = safe_int(data)
-                logger.info('total {0} rank {1}'.format(self.total, self.rank))
+                logger.debug('total {0} rank {1}'.format(self.total, self.rank))
             self.counter += 1
             if self.counter >= 3:
                 self.counter = 0
