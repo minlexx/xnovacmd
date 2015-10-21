@@ -19,7 +19,7 @@ class XNCStatusBar(QStatusBar):
         # self.btn_start = QPushButton(self.tr('start'), self)
         # self.btn_stop = QPushButton(self.tr('stop'), self)
         self.btn_signal = QPushButton(self.tr('signal reload overview'), self)
-        self.btn_test1 = QPushButton(self.tr('test parse galaxy'), self)
+        self.btn_test1 = QPushButton(self.tr('test parse'), self)
         # void	addPermanentWidget(QWidget * widget, int stretch = 0)
         # self.addPermanentWidget(self.btn_start)
         # self.addPermanentWidget(self.btn_stop)
@@ -78,4 +78,6 @@ class XNCStatusBar(QStatusBar):
     @pyqtSlot()
     def on_btn_test1(self):
         # test galaxy parser
-        self.world.signal(self.world.SIGNAL_PARSE_GALAXY, galaxy=1, system=7)
+        # self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
+        # test planet buildings parser
+        self.world.signal(self.world.SIGNAL_TEST_PARSE_PLANET_BUILDINGS, planet_id=54450)

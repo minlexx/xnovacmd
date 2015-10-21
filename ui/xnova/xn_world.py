@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QThread, QMutex
 
@@ -11,6 +12,7 @@ from .xn_parser_userinfo import UserInfoParser
 from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
+from .xn_parser_planet_buildings import PlanetBuildingsParser
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -20,7 +22,9 @@ logger = xn_logger.get(__name__, debug=True)
 class XNovaWorld(QThread):
     SIGNAL_QUIT = 0
     SIGNAL_RELOAD_PAGE = 1
-    SIGNAL_PARSE_GALAXY = 99
+    # testing signals ... ?
+    SIGNAL_TEST_PARSE_GALAXY = 100
+    SIGNAL_TEST_PARSE_PLANET_BUILDINGS = 101
 
     # signal to be emitted when initial world loading is complete
     world_load_complete = pyqtSignal()
@@ -38,6 +42,7 @@ class XNovaWorld(QThread):
         self._parser_userinfo = UserInfoParser()
         self._parser_curplanet = CurPlanetParser()
         self._parser_imperium = ImperiumParser()
+        self._parser_planet_buildings = PlanetBuildingsParser()
         # world/user info
         self._server_time = datetime.datetime.today()  # server time at last overview update
         # all we need to calc server time is actually time diff with our time:
@@ -62,6 +67,7 @@ class XNovaWorld(QThread):
         # settings
         self._overview_update_interval = 120  # seconds
         self._galaxy_cache_lifetime = 60  # seconds
+        self._planet_buildings_cache_lifetime = 60  # seconds
 
     def initialize(self, cookies_dict: dict):
         """
@@ -285,6 +291,20 @@ class XNovaWorld(QThread):
             # since we've overwritten the whole planets array, we need to
             # write current planet into it again
             self._update_current_planet()
+        elif page_name.startswith('buildings_'):
+            try:
+                m = re.match(r'buildings_(\d+)', page_name)
+                planet_id = int(m.group(1))
+                logger.debug('Parsing buildings for planet {0}'.format(planet_id))
+                self._parser_planet_buildings.clear()
+                self._parser_planet_buildings.parse_page_content(page_content)
+            except ValueError:
+                # failed to convert to int
+                logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
+            except AttributeError:
+                # no match
+                logger.exception('Invalid format for page_name=[{0}], expected buildings_123456'.format(page_name))
+                pass
 
     def on_reload_page(self):
         # logger.debug('on_reload_page(), signal args = {0}'.format(str(self._signal_kwargs)))
@@ -293,18 +313,26 @@ class XNovaWorld(QThread):
             logger.debug('on_reload_page(): reloading {0}'.format(page_name))
             self._get_page(page_name, max_cache_lifetime=1, force_download=True)
 
-    def on_parse_galaxy(self):
+    def on_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
             gal_no = self._signal_kwargs['galaxy']
             sys_no = self._signal_kwargs['system']
             logger.debug('downloading galaxy page {0},{1}'.format(gal_no, sys_no))
-            page = self._download_galaxy_page(gal_no, sys_no, force_download=True)
-            if page is not None:
+            page_content = self._download_galaxy_page(gal_no, sys_no, force_download=True)
+            if page_content is not None:
                 gp = GalaxyParser()
-                gp.parse_page_content(page)
+                gp.clear()
+                gp.parse_page_content(page_content)
                 if gp.script_body != '':
                     gp.unscramble_galaxy_script()
                     logger.debug(gp.galaxy_rows)
+
+    def on_test_parse_planet_buildings(self):
+        if 'planet_id' in self._signal_kwargs:
+            planet_id = int(self._signal_kwargs['planet_id'])
+            logger.debug('Test parse planet buildings for planet_id={0}'.format(planet_id))
+            self._download_planet_buildings(planet_id)
+            # handler will be triggered automatically in on_page_downloaded()
 
     def _update_current_planet(self):
         """
@@ -399,6 +427,13 @@ class XNovaWorld(QThread):
             return
         self._page_cache.save_image(img_path, img_bytes)
 
+    def _download_planet_buildings(self, planet_id: int):
+        # url to change current planet is:
+        #    http://uni4.xnova.su/?set=overview&cp=60668&re=0
+        page_url = '?set=buildings&cp={0}&re=0'.format(planet_id)
+        page_name = 'buildings_{0}'.format(planet_id)
+        return self._get_page_url(page_name, page_url, self._planet_buildings_cache_lifetime, False)
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -447,8 +482,10 @@ class XNovaWorld(QThread):
                 break
             if ret == self.SIGNAL_RELOAD_PAGE:
                 self.on_reload_page()
-            elif ret == self.SIGNAL_PARSE_GALAXY:
-                self.on_parse_galaxy()
+            elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
+                self.on_test_parse_galaxy()
+            elif ret == self.SIGNAL_TEST_PARSE_PLANET_BUILDINGS:
+                self.on_test_parse_planet_buildings()
         logger.debug('thread: exiting.')
 
 
