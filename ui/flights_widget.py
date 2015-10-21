@@ -83,7 +83,7 @@ class FlightsWidget(QWidget):
         self.ui.lbl_msgCount.setText(str(nmc))
 
     @staticmethod
-    def _get_mis_color(mis: str, dir_: str) -> QColor:
+    def _get_mis_bgcolor(mis: str, dir_: str) -> QColor:
         ret = QColor(255, 255, 255)
         if mis == 'ownharvest':
             ret = QColor(255, 255, 200)
@@ -101,6 +101,8 @@ class FlightsWidget(QWidget):
             ret = QColor(165, 255, 255)
         elif mis == 'ownbase':
             ret = QColor(153, 200, 255)
+        elif mis == 'attack':
+            ret = QColor(255, 230, 230)
         if dir_ == 'return':
             # darken
             ret.setRed(ret.red() * 0.8)
@@ -108,11 +110,21 @@ class FlightsWidget(QWidget):
             ret.setBlue(ret.blue() * 0.8)
         return ret
 
-    def _set_twi(self, row, col, text, bg_color=None):
+    @staticmethod
+    def _get_mis_fgcolor(mis: str) -> QColor:
+        ret = QColor(0, 0, 0)
+        if mis == 'attack':
+            ret = QColor(200, 0, 0)
+        return ret
+
+    def _set_twi(self, row, col, text, bg_color=None, fg_color=None):
         twi = QTableWidgetItem(str(text))
         if bg_color is not None:
             bgb = QBrush(QColor(bg_color), Qt.SolidPattern)
             twi.setBackground(bgb)
+        if fg_color is not None:
+            fgb = QBrush(QColor(fg_color), Qt.SolidPattern)
+            twi.setForeground(fgb)
         self.ui.tw_flights.setItem(row, col, twi)
 
     def _fl_timer_str(self, fl: XNFlight) -> str:
@@ -161,7 +173,9 @@ class FlightsWidget(QWidget):
             # timer | mission | src | dst | ships (res)
             # self.ui.tw_flights.insertRow(irow)
             self._set_twi(irow, 0, timer_str)
-            self._set_twi(irow, 1, mis_str, self._get_mis_color(fl.mission, fl.direction))
+            self._set_twi(irow, 1, mis_str,
+                          self._get_mis_bgcolor(fl.mission, fl.direction),
+                          self._get_mis_fgcolor(fl.mission))
             self._set_twi(irow, 2, str(fl.src))
             self._set_twi(irow, 3, str(fl.dst))
             self._set_twi(irow, 4, str(fl.ships) + res_str)
