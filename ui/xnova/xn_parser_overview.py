@@ -253,7 +253,7 @@ class OverviewParser(XNParserBase):
                     if len(self._cur_flight.ships) > 0:
                         # only actually having ships in it
                         self.flights.append(self._cur_flight)
-                        logger.info('Flight: {0}'.format(self._cur_flight))
+                        logger.debug('Flight: {0}'.format(self._cur_flight))
                 # logger.debug('handle_endtag(span): ending flight')
                 self.in_flight = False
                 self._num_a_with_tooltip = 0
