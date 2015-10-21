@@ -84,9 +84,16 @@ def number_format(num: int) -> str:
     while r > 0:
         ost = r % 1000
         r = (r // 1000)
-        s = str(ost) + s
+        # pad with zeroes each triplet
+        s = '{0:03}'.format(ost) + s
         if r > 0:
             s = '.' + s
+    # remove leading zeroes
+    if s.startswith('00'):
+        s = s[2:]
+    elif s.startswith('0'):
+        s = s[1:]
+    # add sign, if needed
     if num < 0:
         s = '-' + s
     return s
