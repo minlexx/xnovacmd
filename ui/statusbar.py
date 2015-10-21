@@ -18,8 +18,8 @@ class XNCStatusBar(QStatusBar):
         # testing only
         # self.btn_start = QPushButton(self.tr('start'), self)
         # self.btn_stop = QPushButton(self.tr('stop'), self)
-        self.btn_signal = QPushButton(self.tr('signal'), self)
-        self.btn_test1 = QPushButton(self.tr('test 1'), self)
+        self.btn_signal = QPushButton(self.tr('signal reload overview'), self)
+        self.btn_test1 = QPushButton(self.tr('test parse galaxy'), self)
         # void	addPermanentWidget(QWidget * widget, int stretch = 0)
         # self.addPermanentWidget(self.btn_start)
         # self.addPermanentWidget(self.btn_stop)
