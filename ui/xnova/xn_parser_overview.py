@@ -3,7 +3,7 @@ import re
 import datetime
 
 from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNShipsBundle
-from .xn_parser import XNParserBase, safe_int, get_attribute
+from .xn_parser import XNParserBase, safe_int, get_attribute, parse_time_left_str
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -496,34 +496,8 @@ class OverviewParser(XNParserBase):
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
-            hour = 0
-            minute = 0
-            second = 0
-            # 13:59:31  (hr:min:sec)
-            match = re.search(r'(\d+):(\d+):(\d+)', data)
-            if match:
-                hour = safe_int(match.group(1))
-                minute = safe_int(match.group(2))
-                second = safe_int(match.group(3))
-            else:
-                # 8:31  (min:sec)
-                match = re.search(r'(\d+):(\d+)', data)
-                if match:
-                    minute = safe_int(match.group(1))
-                    second = safe_int(match.group(2))
-                else:
-                    # server sometimes sends remaining fleet time
-                    # without seconds part: <div id="bxxfs4" class="z">38:</div>
-                    match = re.search(r'(\d+):', data)
-                    if match:
-                        minute = safe_int(match.group(1))
-                    else:
-                        # just a number (seconds)
-                        second = safe_int(data)
+            hour, minute, second = parse_time_left_str(data)
             if hour + minute + second > 0:
-                # dt_now = datetime.datetime.today()
-                # dt_arrive = datetime.datetime(dt_now.year, dt_now.month, dt_now.day,
-                #                              hour=h, minute=m, second=s)
                 # this method is more reliable:
                 time_left = datetime.timedelta(seconds=second, minutes=minute, hours=hour)
                 dt_arrive = self.server_time + time_left
