@@ -61,6 +61,7 @@ class XNovaWorld(QThread):
         self._worldtid = 0
         # settings
         self._overview_update_interval = 120  # seconds
+        self._galaxy_cache_lifetime = 60  # seconds
 
     def initialize(self, cookies_dict: dict):
         """
@@ -297,12 +298,13 @@ class XNovaWorld(QThread):
             gal_no = self._signal_kwargs['galaxy']
             sys_no = self._signal_kwargs['system']
             logger.debug('downloading galaxy page {0},{1}'.format(gal_no, sys_no))
-            page = self._download_galaxy_page(gal_no, sys_no)
+            page = self._download_galaxy_page(gal_no, sys_no, force_download=True)
             if page is not None:
-                self._page_cache.set_page('galaxy_{0}_{1}'.format(gal_no, sys_no), page)
                 gp = GalaxyParser()
                 gp.parse_page_content(page)
-                gp.unscramble_galaxy_script()
+                if gp.script_body != '':
+                    gp.unscramble_galaxy_script()
+                    logger.debug(gp.galaxy_rows)
 
     def _update_current_planet(self):
         """
@@ -350,6 +352,7 @@ class XNovaWorld(QThread):
     # for internal needs, get page from server
     # converts page_name to url and calls self._get_page_url()
     # page_name is used as key to cache page content
+    # if force_download is True, max_cache_lifetime is ignored
     # returns page contents, or None on error
     # (however, its return value is ignored for now)
     def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
@@ -362,6 +365,7 @@ class XNovaWorld(QThread):
     # for internal needs, get url from server
     # first try to get cached page from cache using page_name as key
     # if there is no page there, or it is expired, download from network
+    # if force_download is True, max_cache_lifetime is ignored
     # returns page contents, or None on error
     # (however, its return value is ignored for now)
     def _get_page_url(self, page_name, page_url, max_cache_lifetime=None, force_download=False):
@@ -380,15 +384,12 @@ class XNovaWorld(QThread):
                 self._inc_network_errors()
         return page_content
 
-    def _download_galaxy_page(self, galaxy_no, sys_no):
+    def _download_galaxy_page(self, galaxy_no, sys_no, force_download=False):
         # 'http://uni4.xnova.su/?set=galaxy&r=3&galaxy=3&system=130'
-        url_path = '?set=galaxy&r=3&galaxy={0}&system={1}'.format(galaxy_no, sys_no)
-        # do not ask cache, just donwload directly and always
-        page = self._page_downloader.download_url_path(url_path)
-        if page is None:
-            self._inc_network_errors()
-            return None
-        return page
+        page_url = '?set=galaxy&r=3&galaxy={0}&system={1}'.format(galaxy_no, sys_no)
+        page_name = 'galaxy_{0}_{1}'.format(galaxy_no, sys_no)
+        # if force_download is True, cache_lifetime is ignored
+        return self._get_page_url(page_name, page_url, self._galaxy_cache_lifetime, force_download)
 
     def _download_image(self, img_path: str):
         img_bytes = self._page_downloader.download_url_path(img_path, return_binary=True)
