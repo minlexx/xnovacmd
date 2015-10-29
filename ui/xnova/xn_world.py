@@ -111,9 +111,7 @@ class XNovaWorld(QThread):
         self._mutex.unlock()
 
     def signal_quit(self):
-        self.lock()
         self.quit()
-        self.unlock()
 
     def signal(self, signal_code=0, **kwargs):
         # logger.debug('signal: kwargs = {0}'.format(str(kwargs)))
@@ -121,8 +119,8 @@ class XNovaWorld(QThread):
         self.lock()
         if kwargs is not None:
             self._signal_kwargs = kwargs
-        self.exit(signal_code)  # QEventLoop.exit(code) makes thread's event loop to exit with code
         self.unlock()
+        self.exit(signal_code)  # QEventLoop.exit(code) makes thread's event loop to exit with code
 
     ###################################
     # Getters
@@ -140,11 +138,11 @@ class XNovaWorld(QThread):
         self.unlock()
 
     def get_flights(self) -> list:
-        if self._loading:
-            return []
-        self.lock()
-        ret = self._flights
-        self.unlock()
+        ret = []
+        # try to lock with 0ms wait, if fails, return empty list
+        if self.lock(0):
+            ret = self._flights
+            self.unlock()
         return ret
 
     def get_flight_remaining_time_secs(self, fl: XNFlight) -> int:
@@ -175,12 +173,20 @@ class XNovaWorld(QThread):
         return dt_server
 
     def get_planets(self) -> list:
-        if self._loading:
-            return []
-        self.lock()
-        ret = self._planets
-        self.unlock()
+        ret = []
+        # try to lock with 0ms wait, if fails, return empty list
+        if self.lock(0):
+            ret = self._planets
+            self.unlock()
         return ret
+
+    def get_planet(self, planet_id) -> XNPlanet:
+        pls = self.get_planets()
+        for pl in pls:
+            if pl.planet_id == planet_id:
+                return pl
+        logger.warn('Could not find planet with id: {0}'.format(planet_id))
+        return None
 
     def get_new_messages_count(self) -> int:
         self.lock()
@@ -303,9 +309,13 @@ class XNovaWorld(QThread):
             try:
                 m = re.match(r'buildings_(\d+)', page_name)
                 planet_id = int(m.group(1))
-                logger.debug('Parsing buildings for planet {0}'.format(planet_id))
+                planet = self.get_planet(planet_id)
                 self._parser_planet_buildings.clear()
                 self._parser_planet_buildings.parse_page_content(page_content)
+                if planet is not None:
+                    planet.builds_in_progress = self._parser_planet_buildings.builds_in_progress
+                    num_added = len(self._parser_planet_buildings.builds_in_progress)
+                    logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
             except ValueError:
                 # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
