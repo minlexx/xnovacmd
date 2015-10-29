@@ -70,7 +70,7 @@ class XNova_MainWindow(QWidget):
         logger.debug('closing')
         if self.tray_icon:
             self.tray_icon.hide()
-            self.tray_icon =  None
+            self.tray_icon = None
         if self.world_timer.isActive():
             self.world_timer.stop()
         if self.world.isRunning():
@@ -99,19 +99,20 @@ class XNova_MainWindow(QWidget):
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
         self.add_tab(self.login_widget, self.tr('Login'))
-        # testing only
-        pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
-        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
-        pl1.fields_busy = 90
-        pl1.fields_total = 167
-        pl1.is_current = True
-        pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
-        pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
-        pl2.fields_busy = 84
-        pl2.fields_total = 207
-        pl2.is_current = False
-        test_planets = [pl1, pl2]
-        self.setup_planets_panel(test_planets)
+        #
+        # testing only - add 'fictive' planets to test planets panel without loading
+        # pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
+        # pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
+        # pl1.fields_busy = 90
+        # pl1.fields_total = 167
+        # pl1.is_current = True
+        # pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
+        # pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
+        # pl2.fields_busy = 84
+        # pl2.fields_total = 207
+        # pl2.is_current = False
+        # test_planets = [pl1, pl2]
+        # self.setup_planets_panel(test_planets)
 
     def setup_planets_panel(self, planets: list):
         layout = self.ui.panel_planets.layout()
@@ -172,9 +173,15 @@ class XNova_MainWindow(QWidget):
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
         self.world.set_login_email(self.login_email)
+        self.world.world_load_progress.connect(self.on_world_load_progress)
         self.world.world_load_complete.connect(self.on_world_load_complete)
         self.world.flight_arrived.connect(self.on_flight_arrived)
         self.world.start()
+
+    @pyqtSlot(str, int)
+    def on_world_load_progress(self, comment: str, progress: int):
+        msg = self.tr('Loading world') + ' ({0}%) {1}...'.format(progress, comment)
+        self.setStatusMessage(msg)
 
     @pyqtSlot()
     def on_world_load_complete(self):
