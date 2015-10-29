@@ -36,6 +36,7 @@ class XNovaWorld(QThread):
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
+        self._loading = False  # true is _full_refresh() is running (world is loading)
         # helpers
         self._page_dnl_times = dict()
         self._page_cache = XNovaPageCache()
@@ -139,6 +140,8 @@ class XNovaWorld(QThread):
         self.unlock()
 
     def get_flights(self) -> list:
+        if self._loading:
+            return []
         self.lock()
         ret = self._flights
         self.unlock()
@@ -172,6 +175,8 @@ class XNovaWorld(QThread):
         return dt_server
 
     def get_planets(self) -> list:
+        if self._loading:
+            return []
         self.lock()
         ret = self._planets
         self.unlock()
@@ -442,6 +447,7 @@ class XNovaWorld(QThread):
         logger.info('thread: starting full world update')
         # full refresh always downloads all pages, ignoring cache
         self.lock()
+        self._loading = True
         # load all pages that contain useful information
         load_progress_percent = 0
         load_progress_step = 5
@@ -478,6 +484,7 @@ class XNovaWorld(QThread):
             # TODO: planet shipyard/defense builds in progress
             QThread.msleep(500)  # wait 500 ms
         QThread.msleep(500)
+        self._loading = False
         self.unlock()  # unlock before emitting any signal, just for a case...
         #
         # signal wain window that we fifnished initial loading
