@@ -17,7 +17,7 @@
    <iconset resource="res.qrc">
     <normaloff>:/i/favicon_16.png</normaloff>:/i/favicon_16.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="main_vl">
+  <layout class="QVBoxLayout" name="main_vl" stretch="0,1">
    <property name="spacing">
     <number>3</number>
    </property>
