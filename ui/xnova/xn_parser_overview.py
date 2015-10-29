@@ -459,6 +459,10 @@ class OverviewParser(XNParserBase):
             if m:
                 if self._cur_flight.mission == 'ownharvest':
                     self._cur_flight_src_nametype = ('', XNCoords.TYPE_DEBRIS_FIELD)
+            m = re.match(r'^отправленный  с военной базы (.+)$', data)
+            if m:
+                src_name = m.group(1)
+                self._cur_flight_src_nametype = (src_name, XNCoords.TYPE_WARBASE)
             m = re.match(r'^направляется к планете (.+)$', data)
             if m:
                 dst_name = m.group(1)
