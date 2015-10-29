@@ -157,7 +157,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget = None
         # create all main widgets
         # create flights widget
-        self.flights_widget = FlightsWidget(self)
+        self.flights_widget = FlightsWidget(self.ui.fr_flights)
         self.flights_widget.load_ui()
         install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
         self.ui.fr_flights.layout().addWidget(self.flights_widget)
