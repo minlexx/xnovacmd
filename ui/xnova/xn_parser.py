@@ -61,21 +61,21 @@ def parse_time_left_str(data: str) -> tuple:
     minute = 0
     second = 0
     # 13:59:31  (hr:min:sec)
-    match = re.search(r'(\d+):(\d+):(\d+)', data)
+    match = re.match(r'(\d+):(\d+):(\d+)', data)
     if match:
         hour = safe_int(match.group(1))
         minute = safe_int(match.group(2))
         second = safe_int(match.group(3))
     else:
         # 8:31  (min:sec)
-        match = re.search(r'(\d+):(\d+)', data)
+        match = re.match(r'(\d+):(\d+)', data)
         if match:
             minute = safe_int(match.group(1))
             second = safe_int(match.group(2))
         else:
             # server sometimes sends remaining fleet time
             # without seconds part: <div id="bxxfs4" class="z">38:</div>
-            match = re.search(r'(\d+):', data)
+            match = re.match(r'(\d+):', data)
             if match:
                 minute = safe_int(match.group(1))
             else:
