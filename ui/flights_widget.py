@@ -40,6 +40,20 @@ class FlightsWidget(QWidget):
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
 
+    #def minimize_height(self):
+    #    print(self.parent())
+    #    num_rows = self.ui.tw_flights.rowCount()
+    #    total_heights = 0
+    #    for i in range(num_rows):
+    #        total_heights += self.ui.tw_flights.rowHeight(i)
+    #    if total_heights < 10:
+    #        total_heights = 10
+    #    # add vertical header height
+    #    header_view = self.ui.tw_flights.verticalHeader()
+    #    if header_view is not None:
+    #        total_heights += header_view.height()
+    #    self.ui.tw_flights.setMaximumHeight(total_heights)
+
     @pyqtSlot()
     def on_showhide_fleets(self):
         if self.ui.tw_flights.isVisible():
@@ -52,6 +66,7 @@ class FlightsWidget(QWidget):
             self.setMinimumHeight(22+22+2)
             self.parent().setMinimumHeight(22+22+3)
             self.btn_show.setArrowType(Qt.DownArrow)
+            # self.minimize_height()
         self.update_button_fleet_count()
 
     def update_button_fleet_count(self):
@@ -183,6 +198,7 @@ class FlightsWidget(QWidget):
             irow += 1
         self.ui.tw_flights.setUpdatesEnabled(True)
         # self.ui.tw_flights.setCurrentCell(prev_row, prev_col)
+        self.ui.tw_flights.horizontalHeader().setStretchLastSection(True)
         self.ui.tw_flights.verticalHeader().resizeSections(QHeaderView.ResizeToContents)
         # upadte button text
         self.update_button_fleet_count()
