@@ -6,6 +6,9 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsParser
+from ui.xnova.xn_logger import get as xn_logger_get
+
+logger = xn_logger_get(__name__, debug=True)
 
 
 def main():
@@ -34,12 +37,14 @@ def main():
     gp.parse_page_content(content)
     if gp.script_body != '':
         gp.unscramble_galaxy_script()
-        print(gp.galaxy_rows)
+        logger.info('Galaxy rows follow:')
+        logger.info(gp.galaxy_rows)
     # planet buildings
     pbp = PlanetBuildingsParser()
-    content = cacher.get_page('buildings_54450')
+    content = cacher.get_page('buildings_69255')
     pbp.parse_page_content(content)
-    print(pbp.builds_in_progress)
+    logger.info('Planet builds in progress follow:')
+    logger.info(pbp.builds_in_progress)
 
 if __name__ == "__main__":
     main()
