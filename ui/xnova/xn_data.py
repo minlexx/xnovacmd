@@ -462,6 +462,28 @@ class XNDebrisField:
         return 'Debris field (Metal: {0}, Crystal: {1})'.format(self.met, self.cry)
 
 
+class XNPlanetBuildingItem:
+    """
+    Some building that is in progress on the planet
+    """
+    def __init__(self):
+        self.position = 0  # position in a queue
+        self.name = ''
+        self.level = 0
+        self.dt_end = None  # completion datetime, will hold a datetime object
+        self.remove_from_queue_link = None  # url to delete building from queue
+
+    def __str__(self):
+        end_str = 'None'
+        if self.dt_end is not None:
+            dt_end = self.dt_end
+            end_str = '{0:02}.{1:02}.{2:04} {3:02}:{4:02}:{5:02}'.format(
+                dt_end.day, dt_end.month, dt_end.year,
+                dt_end.hour, dt_end.minute, dt_end.second)
+        s = '{0}: {1} lv.{2}, end: {3}'.format(self.position, self.name, self.level, end_str)
+        return s
+
+
 class XNPlanet:
     """
     Main planet model, holding all information
