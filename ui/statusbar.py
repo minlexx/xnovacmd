@@ -80,4 +80,5 @@ class XNCStatusBar(QStatusBar):
         # test galaxy parser
         # self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
         # test planet buildings parser
-        self.world.signal(self.world.SIGNAL_TEST_PARSE_PLANET_BUILDINGS, planet_id=54450)
+        # self.world.signal(self.world.SIGNAL_TEST_PARSE_PLANET_BUILDINGS, planet_id=54450)
+        self.world.signal(self.world.SIGNAL_TEST_PARSE_PLANET_BUILDINGS, planet_id=69255)
