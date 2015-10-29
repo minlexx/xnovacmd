@@ -512,6 +512,8 @@ class XNPlanet:
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
         self.is_current = False  # used by UI to highlight current planet, that's all
+        # buildings in progress list
+        self.builds_in_progress = []
 
     def __str__(self):
         if self.coords.target_name == '':
