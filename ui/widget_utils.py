@@ -11,15 +11,15 @@ def install_layout_for_widget(widget, orientation=None, margins=None, spacing=No
     :param spacing: spacing between items in layout
     :return: None
     """
-    if widget.layout():
+    if widget.layout() is not None:
         return  # already has a layout
     direction = QBoxLayout.TopToBottom
     if orientation == Qt.Horizontal:
         direction = QBoxLayout.LeftToRight
     l = QBoxLayout(direction)
-    if margins:
+    if margins is not None:
         l.setContentsMargins(margins[0], margins[1], margins[2], margins[3])
-    if spacing:
+    if spacing is not None:
         l.setSpacing(spacing)
     widget.setLayout(l)
 
