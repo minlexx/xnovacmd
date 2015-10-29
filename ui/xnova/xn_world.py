@@ -26,6 +26,9 @@ class XNovaWorld(QThread):
     SIGNAL_TEST_PARSE_GALAXY = 100
     SIGNAL_TEST_PARSE_PLANET_BUILDINGS = 101
 
+    # signal is emitted to report full world refresh progress
+    # str is a comment what is loading now, int is a progress percent [0..100]
+    world_load_progress = pyqtSignal(str, int)
     # signal to be emitted when initial world loading is complete
     world_load_complete = pyqtSignal()
     # emitted when fleet has arrived at its destination
@@ -427,35 +430,56 @@ class XNovaWorld(QThread):
             return
         self._page_cache.save_image(img_path, img_bytes)
 
-    def _download_planet_buildings(self, planet_id: int):
+    def _download_planet_buildings(self, planet_id: int, force_download=False):
         # url to change current planet is:
         #    http://uni4.xnova.su/?set=overview&cp=60668&re=0
         page_url = '?set=buildings&cp={0}&re=0'.format(planet_id)
         page_name = 'buildings_{0}'.format(planet_id)
-        return self._get_page_url(page_name, page_url, self._planet_buildings_cache_lifetime, False)
+        return self._get_page_url(page_name, page_url, self._planet_buildings_cache_lifetime, force_download)
 
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
+        # full refresh always downloads all pages, ignoring cache
         self.lock()
         # load all pages that contain useful information
+        load_progress_percent = 0
+        load_progress_step = 5
         pages_list = ['overview', 'imperium']
-        # pages' expiration time in cache
-        pages_maxtime = [300, 300]
+        pages_maxtime = [300, 300]  # pages' expiration time in cache
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
             page_time = pages_maxtime[i]
+            self.world_load_progress.emit(page_name, load_progress_percent)
             self._get_page(page_name, max_cache_lifetime=page_time, force_download=True)
             QThread.msleep(500)  # 500ms delay before requesting next page
+            load_progress_percent += load_progress_step
+        #
         # additionally request user info page, constructed as:
         #  http://uni4.xnova.su/?set=players&id=71995
         #  This need overview parser to parse and fetch account id
+        self.world_load_progress.emit('self_user_info', load_progress_percent)
         self._get_page('self_user_info', 300, force_download=True)
-        # also download all planets pics
+        load_progress_percent += load_progress_step
+        #
+        # download all planets info
+        load_progress_left = 100 - load_progress_percent
+        load_progress_step = load_progress_left // len(self._planets)
         for pl in self._planets:
+            self.world_load_progress.emit('planet ' + pl.name, load_progress_percent)
+            load_progress_percent += load_progress_step
+            # planet image
             self._download_image(pl.pic_url)
+            QThread.msleep(100)  # wait 100 ms
+            # planet buildings in progress
+            self._download_planet_buildings(pl.planet_id, force_download=True)
+            # TODO: planet researches in progress
+            # TODO: planet factory researches in progress
+            # TODO: planet shipyard/defense builds in progress
+            QThread.msleep(500)  # wait 500 ms
         QThread.msleep(500)
         self.unlock()  # unlock before emitting any signal, just for a case...
+        #
         # signal wain window that we fifnished initial loading
         self.world_load_complete.emit()
 
@@ -491,13 +515,13 @@ class XNovaWorld(QThread):
 
 # only one instance of XNovaWorld should be!
 # well, there may be others, but for coordination it should be one
-singleton_XNovaWorld = None
+_singleton_XNovaWorld = None
 
 
 # Factory
 # Serves as singleton entry-point to get world class instance
 def XNovaWorld_instance():
-    global singleton_XNovaWorld
-    if not singleton_XNovaWorld:
-        singleton_XNovaWorld = XNovaWorld()
-    return singleton_XNovaWorld
+    global _singleton_XNovaWorld
+    if not _singleton_XNovaWorld:
+        _singleton_XNovaWorld = XNovaWorld()
+    return _singleton_XNovaWorld
