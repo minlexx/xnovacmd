@@ -249,6 +249,8 @@ class XNova_MainWindow(QWidget):
     def on_flight_arrived(self, fl: XNFlight):
         logger.debug('main window got flight arrival: {0}'.format(fl))
         mis_str = flight_mission_for_humans(fl.mission)
+        if fl.direction == 'return':
+            mis_str += ' ' + self.tr('return')
         short_fleet_info = self.tr('{0} {1} => {2}, {3} ship(s)').format(
             mis_str, fl.src, fl.dst, len(fl.ships))
         self.show_tray_message(self.tr('XNova: Fleet arrived'), short_fleet_info)
