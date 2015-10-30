@@ -1,3 +1,6 @@
+import pathlib
+import pickle
+
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, \
@@ -33,6 +36,7 @@ class XNova_MainWindow(QWidget):
         super(XNova_MainWindow, self).__init__(parent)
         # state vars
         self.uifile = 'ui/main.ui'
+        self.config_store_dir = './cache'
         self.state = self.STATE_NOT_AUTHED
         self.login_email = ''
         self.cookies_dict = {}
@@ -63,6 +67,10 @@ class XNova_MainWindow(QWidget):
         self.statusbar = XNCStatusBar(self)
         self.layout().addWidget(self.statusbar)
         self.setStatusMessage(self.tr('Not connected: Log in!'))
+        # try to restore last window size
+        ssz = self.load_cfg_val('main_size')
+        if ssz is not None:
+            self.resize(ssz[0], ssz[1])
 
     # overrides QWidget.closeEvent
     # cleanup just before the window close
@@ -80,10 +88,41 @@ class XNova_MainWindow(QWidget):
             if not wait_res:
                 logger.warn('wait failed, last chance, terminating!')
                 self.world.terminate()
+        # store window size
+        ssz = (self.width(), self.height())
+        self.store_cfg_val('main_size', ssz)
+        # accept the event
         close_event.accept()
 
     def setStatusMessage(self, msg: str):
         self.statusbar.setStatus(msg)
+
+    def store_cfg_val(self, category: str, value):
+        pickle_filename = '{0}/{1}.dat'.format(self.config_store_dir, category)
+        try:
+            cache_dir = pathlib.Path(self.config_store_dir)
+            if not cache_dir.exists():
+                cache_dir.mkdir()
+            with open(pickle_filename, 'wb') as f:
+                pickle.dump(value, f)
+        except pickle.PickleError as pe:
+            pass
+        except IOError as ioe:
+            pass
+
+    def load_cfg_val(self, category: str, default_value=None):
+        value = None
+        pickle_filename = '{0}/{1}.dat'.format(self.config_store_dir, category)
+        try:
+            with open(pickle_filename, 'rb') as f:
+                value = pickle.load(f)
+                if value is None:
+                    value = default_value
+        except pickle.PickleError as pe:
+            pass
+        except IOError as ioe:
+            pass
+        return value
 
     # convenient internal wrapper
     def add_tab(self, widget, tab_name):
@@ -247,7 +286,7 @@ class XNova_MainWindow(QWidget):
         # QSystemTrayIcon::MiddleClick	4	The system tray entry was clicked with the middle mouse button
         if reason == QSystemTrayIcon.Trigger:
             # left-click
-            self.setWindowState( (self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
+            self.setWindowState((self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
             self.show()
             return
 
