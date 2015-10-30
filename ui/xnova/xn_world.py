@@ -217,15 +217,15 @@ class XNovaWorld(QThread):
             if secs_left is None:
                 raise ValueError('Flight seconds left is None: {0}'.format(str(fl)))
             if secs_left <= 0:
-                logger.debug('==== Flight considered complete, seconds left: {0}'.format(secs_left))
-                logger.debug('==== Flight: {0}'.format(str(fl)))
+                logger.debug('==== Flight considered complete, seconds left: {0} ({1})'.format(
+                    secs_left, str(fl)))
                 # logger.debug('==== additional debug info:')
                 # logger.debug('====  - diff with server time: {0}'.format(self._diff_with_server_time_secs))
                 # logger.debug('====  - current time: {0}'.format(datetime.datetime.today()))
                 # logger.debug('====  - current server time: {0}'.format(self.get_current_server_time()))
                 finished_flights_count += 1
         if finished_flights_count > 0:
-            logger.debug('==== Removing total {0} arrived flights'.format(finished_flights_count))
+            # logger.debug('==== Removing total {0} arrived flights'.format(finished_flights_count))
             for irow in range(finished_flights_count):
                 try:
                     # finished_flight = self._flights[irow]
@@ -257,7 +257,7 @@ class XNovaWorld(QThread):
     ################################################################################
 
     def on_page_downloaded(self, page_name: str):
-        logger.debug('on_page_downloaded({0}) tid={1}'.format(page_name, self._gettid()))
+        logger.debug('on_page_downloaded( "{0}" ) tid={1}'.format(page_name, self._gettid_s()))
         # cache has the page inside before the signal was emitted!
         # we can get page content from cache
         page_content = self._page_cache.get_page(page_name)
@@ -315,7 +315,8 @@ class XNovaWorld(QThread):
                 if planet is not None:
                     planet.builds_in_progress = self._parser_planet_buildings.builds_in_progress
                     num_added = len(self._parser_planet_buildings.builds_in_progress)
-                    logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
+                    if num_added > 0:
+                        logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
             except ValueError:
                 # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
@@ -504,6 +505,18 @@ class XNovaWorld(QThread):
     def _gettid():
         sip_voidptr = QThread.currentThreadId()
         return int(sip_voidptr)
+
+    def _gettid_s(self):
+        """
+        Get thread ID as descriptive string
+        :return: 'gui' if called from main GUI thread, 'network' if from net bg thread
+        """
+        tid = self._gettid()
+        if tid == self._maintid:
+            return 'gui'
+        if tid ==self._worldtid:
+            return 'network'
+        return 'unknown_' + str(tid)
 
     def run(self):
         """
