@@ -191,6 +191,7 @@ class XNova_MainWindow(QWidget):
         self.world.world_load_progress.connect(self.on_world_load_progress)
         self.world.world_load_complete.connect(self.on_world_load_complete)
         self.world.flight_arrived.connect(self.on_flight_arrived)
+        self.world.loaded_overview.connect(self.on_loaded_overview)
         self.world.start()
 
     @pyqtSlot(str, int)
@@ -219,6 +220,7 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_loaded_overview(self):
+        logger.debug('on_loaded_overview')
         # A lot of things are updated when overview is loaded
         #  * Account information and stats
         self.overview_widget.update_account_info()

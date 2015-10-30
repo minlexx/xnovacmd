@@ -33,6 +33,8 @@ class XNovaWorld(QThread):
     world_load_complete = pyqtSignal()
     # emitted when fleet has arrived at its destination
     flight_arrived = pyqtSignal(XNFlight)
+    # emitted when overview was reloaded (but not during world refresh)
+    loaded_overview = pyqtSignal()
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -269,8 +271,9 @@ class XNovaWorld(QThread):
         # dispatch parser and merge data
         if page_name == 'overview':
             self._parser_overview.clear()
+            self._parser_overview.account = self._account  # store previous info
             self._parser_overview.parse_page_content(page_content)
-            self._account = self._parser_overview.account
+            self._account = self._parser_overview.account  # get new info
             self._flights = self._parser_overview.flights
             # get server time also calculate time diff
             self._server_time = self._parser_overview.server_time
@@ -283,6 +286,9 @@ class XNovaWorld(QThread):
             self._cur_planet_name = self._parser_curplanet.cur_planet_name
             self._cur_planet_coords = self._parser_curplanet.cur_planet_coords
             self._update_current_planet()  # it may have changed
+            # emit signal that we've loaded overview, but not during world update
+            if not self._world_is_loading:
+                self.loaded_overview.emit()
         elif page_name == 'self_user_info':
             self._parser_userinfo.parse_page_content(page_content)
             self._account.scores.buildings = self._parser_userinfo.buildings
