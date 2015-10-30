@@ -34,6 +34,7 @@ class ImperiumWidget(QWidget):
         self._layout.addWidget(self._tree)
         self._tree.show()
 
+    # called once after full world load
     def update_planets(self):
         def additem_helper(item_texts, align_flag, twi_parent=None):
             # align_flag = Qt::AlignLeft / Qt::AlignRight / Qt::AlignHCenter
@@ -48,10 +49,12 @@ class ImperiumWidget(QWidget):
                 twi_parent.addChild(twi)
             return True
 
-        planets = self._world.get_planets()
+        self._tree.clear()  # clear the tree first
+        planets = self._world.get_planets()  # get planets from the worls
+        #
+        # setup header and its labels
         header_labels = ['-']
         for i in range(len(planets)):
-            # header_labels.append(str(i))
             header_labels.append(planets[i].name)
         header_labels.append('')  # empty last column
         self._tree.setHeaderLabels(header_labels)
@@ -63,17 +66,20 @@ class ImperiumWidget(QWidget):
                 self._tree.setColumnWidth(i, 150)
             else:
                 self._tree.setColumnWidth(i, 75)
-        # names
+        #
+        # planets names
         item_strings = [self.tr('Name')]
         for pl in planets:
             item_strings.append(pl.name)
         additem_helper(item_strings, Qt.AlignHCenter)
-        # coords
+        #
+        # planets coords
         item_strings = [self.tr('Coords')]
         for pl in planets:
             item_strings.append('[{0}:{1}:{2}]'.format(pl.coords.galaxy, pl.coords.system, pl.coords.position))
         additem_helper(item_strings, Qt.AlignHCenter)
-        # fields
+        #
+        # planets fields
         item_strings = [self.tr('Fields')]
         for pl in planets:
             item_strings.append('{0}/{1}'.format(pl.fields_busy, pl.fields_total))
@@ -105,6 +111,23 @@ class ImperiumWidget(QWidget):
         additem_helper(item_strings, Qt.AlignHCenter, res_root)
         self._tree.addTopLevelItem(res_root)
         res_root.setExpanded(True)
+        #
+        # resources per hour
+        rph_root = QTreeWidgetItem([self.tr('Production')])
+        item_strings = [self.tr('Met/h')]
+        for pl in planets:
+            item_strings.append('{0}'.format(number_format(pl.res_per_hour.met)))
+        additem_helper(item_strings, Qt.AlignHCenter, rph_root)
+        item_strings = [self.tr('Cry/h')]
+        for pl in planets:
+            item_strings.append('{0}'.format(number_format(pl.res_per_hour.cry)))
+        additem_helper(item_strings, Qt.AlignHCenter, rph_root)
+        item_strings = [self.tr('Deit/h')]
+        for pl in planets:
+            item_strings.append('{0}'.format(number_format(pl.res_per_hour.deit)))
+        additem_helper(item_strings, Qt.AlignHCenter, rph_root)
+        self._tree.addTopLevelItem(rph_root)
+        rph_root.setExpanded(True)
         #
         # buildings
         buildings_root = QTreeWidgetItem([self.tr('Buildings')])
