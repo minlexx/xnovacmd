@@ -219,9 +219,15 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_loaded_overview(self):
-        # flights will be updated every second anyway in world_tick
-        # messages count also, with flights
-        self.update_planets_panel()  # current planet may have changed, update this
+        # A lot of things are updated when overview is loaded
+        #  * Account information and stats
+        self.overview_widget.update_account_info()
+        #  * flights will be updated every second anyway in on_world_timer(), so no need to call
+        #    self.flights_widget.update_flights()
+        #  * messages count also, is updated with flights
+        #  * current planet may have changed
+        self.update_planets_panel()
+        #  * server time is updated also
 
     @pyqtSlot()
     def on_world_timer(self):
