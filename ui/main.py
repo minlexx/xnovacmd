@@ -136,6 +136,21 @@ class XNova_MainWindow(QWidget):
             pw.show()
         append_trailing_spacer_to_layout(layout)
 
+    def update_planets_panel(self):
+        """
+        Calls QWidget.update() on every PlanetBarWidget
+        embedded in ui.panel_planets, causing repaint
+        """
+        layout = self.ui.panel_planets.layout()
+        if layout.count() > 0:
+            for i in range(layout.count()):
+                li = layout.itemAt(i)
+                if li is not None:
+                    wi = li.widget()
+                    if wi is not None:
+                        if isinstance(wi, PlanetsBarWidget):
+                            wi.update()
+
     @pyqtSlot(str)
     def on_login_error(self, errstr):
         logger.error('Login error: {0}'.format(errstr))
@@ -201,6 +216,12 @@ class XNova_MainWindow(QWidget):
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
         self.world_timer.start()
+
+    @pyqtSlot()
+    def on_loaded_overview(self):
+        # flights will be updated every second anyway in world_tick
+        # messages count also, with flights
+        self.update_planets_panel()  # current planet may have changed, update this
 
     @pyqtSlot()
     def on_world_timer(self):
