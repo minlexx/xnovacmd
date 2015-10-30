@@ -3,6 +3,7 @@ import re
 import datetime
 
 from .xn_parser import XNParserBase, safe_int, get_attribute, get_tag_classes, parse_time_left_str
+from .xn_data import XNPlanetBuildingItem
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -27,23 +28,15 @@ class PlanetBuildingsParser(XNParserBase):
                        building: str, level: int,
                        dt_end: datetime.datetime = None,
                        remove_link: str = None):
-        binfo = dict(
-            position=position,  # sequence number in queue, starting from 1
-            name=building, level=level,
-            dt_end=dt_end,
-            remove_link=remove_link
-        )
-        self.builds_in_progress.append(binfo)
+        bitem = XNPlanetBuildingItem()
+        bitem.name = building
+        bitem.level = level
+        bitem.position = position
+        bitem.dt_end = dt_end
+        bitem.remove_from_queue_link = remove_link
+        self.builds_in_progress.append(bitem)
         # logging
-        time_str = ''
-        if dt_end is not None:
-            time_str = 'end {0}'.format(str(dt_end))
-        rl_str = ''
-        if remove_link is not None:
-            rl_str = ' in queue, remove_link=[{0}]'.format(remove_link)
-        logger.info(' ... {0}: [{1}] lv {2}, {3}{4}'.format(
-            position, building, level, time_str, rl_str
-        ))
+        logger.info(' ...add build item: {0}'.format(str(bitem)))
 
     def handle_starttag(self, tag: str, attrs: list):
         super(PlanetBuildingsParser, self).handle_starttag(tag, attrs)
