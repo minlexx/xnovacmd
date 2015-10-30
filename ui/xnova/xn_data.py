@@ -480,7 +480,10 @@ class XNPlanetBuildingItem:
             end_str = '{0:02}.{1:02}.{2:04} {3:02}:{4:02}:{5:02}'.format(
                 dt_end.day, dt_end.month, dt_end.year,
                 dt_end.hour, dt_end.minute, dt_end.second)
-        s = '{0}: {1} lv.{2}, end: {3}'.format(self.position, self.name, self.level, end_str)
+        rl = ''
+        if self.remove_from_queue_link is not None:
+            rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
+        s = '{0}: {1} lv.{2}, end: {3}{4}'.format(self.position, self.name, self.level, end_str, rl)
         return s
 
 
