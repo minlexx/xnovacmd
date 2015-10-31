@@ -124,11 +124,6 @@ class XNova_MainWindow(QWidget):
             pass
         return value
 
-    # convenient internal wrapper
-    def add_tab(self, widget, tab_name):
-        tab_index = self.ui.tabWidget.addTab(widget, tab_name)
-        widget.show()
-
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
@@ -137,7 +132,9 @@ class XNova_MainWindow(QWidget):
         self.login_widget.load_ui()
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
-        self.add_tab(self.login_widget, self.tr('Login'))
+        tab_index = self.ui.tabWidget.addTab(self.login_widget, self.tr('Login'))
+        self.login_widget.show()
+        #self.add_tab(self.login_widget, self.tr('Login'))
         #
         # testing only - add 'fictive' planets to test planets panel without loading
         # pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
@@ -205,24 +202,30 @@ class XNova_MainWindow(QWidget):
         self.setStatusMessage(self.tr('Login OK, loading world'))
         self.login_email = login_email
         self.cookies_dict = cookies_dict
+        #
         # destroy login widget and remove its tab
         self.ui.tabWidget.removeTab(0)
         self.login_widget.close()
         self.login_widget = None
+        #
         # create all main widgets
         # create flights widget
         self.flights_widget = FlightsWidget(self.ui.fr_flights)
         self.flights_widget.load_ui()
         install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
         self.ui.fr_flights.layout().addWidget(self.flights_widget)
+        self.flights_widget.setEnabled(False)
+        #
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
-        self.add_tab(self.overview_widget, self.tr('Overview'))
+        tab_index = self.ui.tabWidget.addTab(self.overview_widget, self.tr('Overview'))
+        self.overview_widget.show()
         self.overview_widget.setEnabled(False)
+        #
         # create 2nd tab - Imperium
-        self.imperium_widget = ImperiumWidget(self)
-        self.add_tab(self.imperium_widget, self.tr('Imperium'))
+        self.imperium_widget = ImperiumWidget(self.ui.tabWidget)
+        tab_index = self.ui.tabWidget.addTab(self.imperium_widget, self.tr('Imperium'))
         self.imperium_widget.setEnabled(False)
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
@@ -243,15 +246,18 @@ class XNova_MainWindow(QWidget):
         logger.debug('main: on_world_load_complete()')
         self.setStatusMessage(self.tr('World loaded.'))
         # update account info
-        self.overview_widget.setEnabled(True)
-        self.overview_widget.update_account_info()
+        if self.overview_widget is not None:
+            self.overview_widget.setEnabled(True)
+            self.overview_widget.update_account_info()
         # update flying fleets
+        self.flights_widget.setEnabled(True)
         self.flights_widget.update_flights()
         # update planets
         planets = self.world.get_planets()
         self.setup_planets_panel(planets)
-        self.imperium_widget.setEnabled(True)
-        self.imperium_widget.update_planets()
+        if self.imperium_widget is not None:
+            self.imperium_widget.setEnabled(True)
+            self.imperium_widget.update_planets()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
@@ -262,7 +268,8 @@ class XNova_MainWindow(QWidget):
         logger.debug('on_loaded_overview')
         # A lot of things are updated when overview is loaded
         #  * Account information and stats
-        self.overview_widget.update_account_info()
+        if self.overview_widget is not None:
+            self.overview_widget.update_account_info()
         #  * flights will be updated every second anyway in on_world_timer(), so no need to call
         #    self.flights_widget.update_flights()
         #  * messages count also, is updated with flights
