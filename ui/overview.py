@@ -1,34 +1,27 @@
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QToolBox, QBoxLayout
+from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-from .xnova.xn_data import fraction_from_name
+import widget_utils
+
+from .xnova.xn_data import fraction_from_name, XNAccountInfo
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 
 
-# Manages "Overview" tab widget
-class OverviewWidget(QWidget):
+class  Overview_AccStatsWidget(QWidget):
     def __init__(self, parent=None):
-        super(OverviewWidget, self).__init__(parent)
-        # state vars
-        self.uifile = 'ui/overview.ui'
-        # objects, sub-windows
+        super(Overview_AccStatsWidget, self).__init__(parent)
         self.ui = None
-        self.icon_open = None
-        self.icon_closed = None
-        self.prev_index = -1
-        self.world = XNovaWorld_instance()
 
     def load_ui(self):
-        self.icon_open = QIcon(':/i/tb_open.png')
-        self.icon_closed = QIcon(':/i/tb_closed.png')
-        self.ui = uic.loadUi(self.uifile, self)
+        self.ui = uic.loadUi('ui/overview_accstats.ui', self)
         self.ui.gb_account.setTitle(self.tr('Player:'))
-        self.ui.tw_accStats.setColumnWidth(0, 120)
+        # stats columns widths
+        self.ui.tw_accStats.setColumnWidth(0, 130)
         self.ui.tw_accStats.setColumnWidth(1, 300)
         # init translatable table rows values in 1st column
         self.set_as_item(0, 0, self.tr('Buildings:'))
@@ -42,26 +35,13 @@ class OverviewWidget(QWidget):
         self.set_as_item(8, 0, self.tr('Credits:'))
         self.set_as_item(9, 0, self.tr('Fraction:'))
         self.set_as_item(10, 0, self.tr('Alliance:'))
-        # tool box items
-        self.ui.toolBox.setItemText(0, self.tr('Overview'))
-        self.ui.toolBox.setItemIcon(0, self.icon_closed)
-        self.ui.toolBox.setItemText(1, self.tr('Stats'))
-        self.ui.toolBox.setItemIcon(1, self.icon_open)
-        self.ui.toolBox.setCurrentIndex(1)
-        self.prev_index = 1
-        self.ui.toolBox.currentChanged.connect(self.on_tb_currentChanged)
-        layout = self.ui.toolBox.layout()
-        if layout is not None:
-            if isinstance(layout, QBoxLayout):
-                layout.setContentsMargins(1, 1, 1, 1)
-                layout.setSpacing(0)
 
     def set_as_item(self, row: int, col: int, text):
         twi = QTableWidgetItem(str(text))
         self.ui.tw_accStats.setItem(row, col, twi)
 
-    def update_account_info(self):
-        a = self.world.get_account_info()
+    def update_account_info(self, a: XNAccountInfo):
+        # a = self.world.get_account_info()
         self.ui.gb_account.setTitle(self.tr('Player: {0} (id={1})').format(a.login, a.id))
         self.set_as_item(0, 1, self.tr('{0} rank {1}').format(
             a.scores.buildings, a.scores.buildings_rank))
@@ -91,9 +71,37 @@ class OverviewWidget(QWidget):
             twi = QTableWidgetItem(icon, str(a.scores.fraction))
             self.ui.tw_accStats.setItem(9, 1, twi)
 
-    @pyqtSlot(int)
-    def on_tb_currentChanged(self, index):
-        # logger.debug('current changed: {0}'.format(index))
-        self.ui.toolBox.setItemIcon(self.prev_index, self.icon_closed)
-        self.ui.toolBox.setItemIcon(index, self.icon_open)
-        self.prev_index = index
+
+# Manages "Overview" tab widget
+class OverviewWidget(QWidget):
+    def __init__(self, parent=None):
+        super(OverviewWidget, self).__init__(parent)
+        # objects, sub-windows
+        self.ui = None
+        self._btn_reload = None
+        self._aswidget = None
+        self.world = XNovaWorld_instance()
+        # self.icon_open = None
+        # self.icon_closed = None
+        # self.prev_index = -1
+
+    def load_ui(self):
+        # self.icon_open = QIcon(':/i/tb_open.png')
+        # self.icon_closed = QIcon(':/i/tb_closed.png')
+        # layout
+        self._layout = QVBoxLayout()
+        self.setLayout(self._layout)
+        # sub-windows
+        # reload button
+        self._btn_reload = QPushButton(self.tr('Reload'), self)
+        self.layout().addWidget(self._btn_reload)
+        # account stats widget
+        self._aswidget = Overview_AccStatsWidget(self)
+        self._aswidget.load_ui()
+        self.layout().addWidget(self.aswidget)
+        self._aswidget.show()
+
+    def update_account_info(self):
+        a = self.world.get_account_info()
+        if self._aswidget is not None:
+            self._aswidget.update_account_info(a)
