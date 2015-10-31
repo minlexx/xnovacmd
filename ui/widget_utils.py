@@ -1,17 +1,22 @@
 from PyQt5.QtCore import Qt, QCoreApplication
 from PyQt5.QtWidgets import QWidget, QLayout, QBoxLayout, QLayoutItem
 
+import ui.xnova.xn_logger
+
+logger = ui.xnova.xn_logger.get(__name__, debug=True)
+
 
 def install_layout_for_widget(widget, orientation=None, margins=None, spacing=None):
     """
     Installs a layout to widget, if it does not have it already.
     :param widget: target widget
     :param orientation: Qt.Vertical (default) / Qt.Horizontal
-    :param margins: layou margins = (11, 11, 11, 11) from Qt docs, style dependent
+    :param margins: layout margins = (11, 11, 11, 11) from Qt docs, style dependent
     :param spacing: spacing between items in layout
     :return: None
     """
     if widget.layout() is not None:
+        logger.debug('Widget {0} already has a layout, skipping'.format(widget.windowTitle()))
         return  # already has a layout
     direction = QBoxLayout.TopToBottom
     if orientation == Qt.Horizontal:
