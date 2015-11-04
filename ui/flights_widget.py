@@ -1,11 +1,13 @@
 import datetime
 
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QSize
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
-from PyQt5.QtGui import QColor, QBrush
+from PyQt5.QtGui import QColor, QBrush, QIcon
 
 from .widget_utils import flight_mission_for_humans, number_format
+from ui.customwidgets.my_buttons import ButtonTextOverIcon
+
 from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -20,10 +22,19 @@ class FlightsWidget(QWidget):
         self.uifile = 'ui/flights_widget.ui'
         # objects, sub-windows
         self.ui = None
+        self.btn_mewmsg = None
         self.world = XNovaWorld_instance()
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
+        # new messages button
+        self.btn_mewmsg = ButtonTextOverIcon(self)
+        self.btn_mewmsg.setText('0')
+        self.btn_mewmsg.setIcon(QIcon(':/i/message.png'))
+        self.btn_mewmsg.setIconSize(QSize(24, 16))
+        self.btn_mewmsg.setMinimumSize(QSize(30, 22))
+        self.btn_mewmsg.setMaximumSize(QSize(30, 22))
+        self.ui.horizontalLayout.insertWidget(0, self.btn_mewmsg, 0)
         # configure table widget
         self.ui.tw_flights.setColumnCount(5)
         self.ui.tw_flights.setRowCount(0)
@@ -39,6 +50,7 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.hide()
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
+        self.btn_mewmsg.clicked.connect(self.on_messages_clicked)
 
     #def minimize_height(self):
     #    print(self.parent())
@@ -95,7 +107,11 @@ class FlightsWidget(QWidget):
 
     def update_new_messages_count(self):
         nmc = self.world.get_new_messages_count()
-        self.ui.lbl_msgCount.setText(str(nmc))
+        # self.ui.lbl_msgCount.setText(str(nmc))
+        txt = ''
+        if nmc > 0:
+            txt = str(nmc)
+        self.btn_mewmsg.setText(txt)
 
     @staticmethod
     def _get_mis_bgcolor(mis: str, dir_: str) -> QColor:
@@ -203,3 +219,7 @@ class FlightsWidget(QWidget):
         # upadte button text
         self.update_button_fleet_count()
         self.update_new_messages_count()
+
+    @pyqtSlot()
+    def on_messages_clicked(self):
+        logger.debug('on_messages_clicked')
