@@ -6,6 +6,8 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsParser
+from ui.xnova.xn_parser_techtree import TechtreeParser
+
 from ui.xnova.xn_logger import get as xn_logger_get
 
 logger = xn_logger_get(__name__, debug=True)
@@ -45,6 +47,10 @@ def main():
     pbp.parse_page_content(content)
     logger.info('Planet builds in progress follow:')
     logger.info(pbp.builds_in_progress)
+    # techtree
+    ttp = TechtreeParser()
+    content = cacher.get_page('techtree')
+    ttp.parse_page_content(content)
 
 if __name__ == "__main__":
     main()
