@@ -13,6 +13,7 @@ from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
 from .xn_parser_planet_buildings import PlanetBuildingsParser
+from .xn_parser_techtree import TechtreeParser
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -49,6 +50,7 @@ class XNovaWorld(QThread):
         self._parser_curplanet = CurPlanetParser()
         self._parser_imperium = ImperiumParser()
         self._parser_planet_buildings = PlanetBuildingsParser()
+        self._parser_techtree = TechtreeParser()
         # world/user info
         self._server_time = datetime.datetime.today()  # server time at last overview update
         # all we need to calc server time is actually time diff with our time:
@@ -58,7 +60,8 @@ class XNovaWorld(QThread):
         self._cur_planet_id = 0
         self._cur_planet_name = ''
         self._cur_planet_coords = XNCoords(0, 0, 0)
-        self._planets = []
+        self._planets = []  # list of XNPlanet
+        self._techtree = []  # list of tuples (gid, name, category)
         self._new_messages_count = 0
         # internal need
         self._net_errors_count = 0
@@ -311,6 +314,12 @@ class XNovaWorld(QThread):
             # since we've overwritten the whole planets array, we need to
             # write current planet into it again
             self._update_current_planet()
+        elif page_name == 'techtree':
+            self._parser_techtree.clear()
+            self._parser_techtree.parse_page_content(page_content)
+            # store techtree, if there is successful parse of anything
+            if len(self._parser_techtree.techtree) > 0:
+                self._techtree = self._parser_techtree.techtree
         elif page_name.startswith('buildings_'):
             try:
                 m = re.match(r'buildings_(\d+)', page_name)
@@ -329,7 +338,6 @@ class XNovaWorld(QThread):
             except AttributeError:
                 # no match
                 logger.exception('Invalid format for page_name=[{0}], expected buildings_123456'.format(page_name))
-                pass
 
     def on_reload_page(self):
         # logger.debug('on_reload_page(), signal args = {0}'.format(str(self._signal_kwargs)))
@@ -388,6 +396,7 @@ class XNovaWorld(QThread):
         urls_dict = dict()
         urls_dict['overview'] = '?set=overview'
         urls_dict['imperium'] = '?set=imperium'
+        urls_dict['techtree'] = '?set=techtree'
         sub_url = None
         if page_name in urls_dict:
             return urls_dict[page_name]
@@ -468,8 +477,8 @@ class XNovaWorld(QThread):
         # load all pages that contain useful information
         load_progress_percent = 0
         load_progress_step = 5
-        pages_list = ['overview', 'imperium']
-        pages_maxtime = [300, 300]  # pages' expiration time in cache
+        pages_list = ['techtree', 'overview', 'imperium']
+        pages_maxtime = [3600, 300, 300]  # pages' expiration time in cache
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
             page_time = pages_maxtime[i]
@@ -499,7 +508,7 @@ class XNovaWorld(QThread):
             # TODO: planet researches in progress
             # TODO: planet factory researches in progress
             # TODO: planet shipyard/defense builds in progress
-            QThread.msleep(500)  # wait 500 ms
+            QThread.msleep(400)  # wait 400 ms
         QThread.msleep(500)
         self._world_is_loading = False
         self.unlock()  # unlock before emitting any signal, just for a case...
