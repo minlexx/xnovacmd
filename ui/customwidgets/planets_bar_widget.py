@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox
 from PyQt5.QtGui import QPaintEvent, QPainter, QPainterPath, QFont, QFontMetrics, \
     QImage, QColor, QPen, QBrush, QMouseEvent
 
-from .xnova.xn_data import XNCoords, XNPlanet
-from .xnova import xn_logger
+from ui.xnova.xn_data import XNCoords, XNPlanet
+from ui.xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 

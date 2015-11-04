@@ -3,20 +3,21 @@ import pickle
 
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, \
-    QLayout, QBoxLayout, QLayoutItem
+from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon
 from PyQt5.QtGui import QIcon, QCloseEvent
 
-from .widget_utils import install_layout_for_widget, append_trailing_spacer_to_layout, \
-    remove_trailing_spacer_from_layout, flight_mission_for_humans
+from .widget_utils import install_layout_for_widget, \
+    append_trailing_spacer_to_layout, \
+    remove_trailing_spacer_from_layout, \
+    flight_mission_for_humans
 from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
-from .planets_panel import PlanetsBarWidget
 from .overview import OverviewWidget
 from .imperium import ImperiumWidget
+from .customwidgets.planets_bar_widget import PlanetsBarWidget
 
-from .xnova.xn_data import XNCoords, XNFlight, XNPlanet
+from .xnova.xn_data import XNFlight
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 

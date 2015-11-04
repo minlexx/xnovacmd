@@ -3,8 +3,6 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QIcon
 
-import widget_utils
-
 from .xnova.xn_data import fraction_from_name, XNAccountInfo
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger

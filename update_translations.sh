@@ -10,7 +10,7 @@ SOURCES="app.py \
     ui/overview.py \
     ui/flights_widget.ui \
     ui/flights_widget.py \
-    ui/planets_panel.py \
+    ui/customwidgets/planets_bar_widget.py \
     ui/statusbar.py \
     ui/widget_utils.py \
     ui/imperium.py"
