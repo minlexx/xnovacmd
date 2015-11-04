@@ -14,6 +14,10 @@ class TechtreeParser(XNParserBase):
         # internal
         self._in_cat = ''
 
+    def clear(self):
+        self.techtree = []
+        self._in_cat = ''
+
     def add_item(self, gid: int, name: str):
         tt_tuple = (gid, name, self._in_cat)
         self.techtree.append(tt_tuple)
