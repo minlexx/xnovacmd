@@ -535,3 +535,11 @@ class XNPlanet:
             if m is not None:
                 self.is_base = True
 
+    # TODO: change this from item_name to item_ID when we will load item IDs
+    def is_build_in_progress(self, build_name: str):
+        if len(self.builds_in_progress) < 1:
+            return False
+        for b in self.builds_in_progress:
+            if b.name == build_name:
+                return True
+        return False
