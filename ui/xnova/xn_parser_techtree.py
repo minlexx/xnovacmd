@@ -4,7 +4,7 @@ import re
 from .xn_parser import XNParserBase, safe_int, get_attribute
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class TechtreeParser(XNParserBase):
@@ -38,6 +38,9 @@ class TechtreeParser(XNParserBase):
                     gid = safe_int(m.group(1))
                     self.add_item(gid, data)
             return
+
+    def handle_starttag(self, tag: str, attrs: list):
+        super(TechtreeParser, self).handle_starttag(tag, attrs)
         # track current category
         # <div id="tabs-0" - buildings
         # <div id="tabs-15" - buildings special
