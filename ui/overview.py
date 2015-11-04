@@ -98,7 +98,7 @@ class OverviewWidget(QWidget):
         # account stats widget
         self._aswidget = Overview_AccStatsWidget(self)
         self._aswidget.load_ui()
-        self.layout().addWidget(self.aswidget)
+        self.layout().addWidget(self._aswidget)
         self._aswidget.show()
 
     def update_account_info(self):
