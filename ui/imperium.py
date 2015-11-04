@@ -145,7 +145,11 @@ class ImperiumWidget(QWidget):
         additem_helper(item_strings, Qt.AlignHCenter, buildings_root)
         item_strings = [self.tr('Solar station')]
         for pl in planets:
-            item_strings.append('{0}'.format(pl.buildings.solar_station))
+            # testing: detect solar station level up
+            addstr = '{0}'.format(pl.buildings.solar_station)
+            if pl.is_build_in_progress('Солнечная батарея'):
+                addstr = '{0} -> {1}'.format(pl.buildings.solar_station, pl.buildings.solar_station+1)
+            item_strings.append(addstr)
         additem_helper(item_strings, Qt.AlignHCenter, buildings_root)
         item_strings = [self.tr('Nuclear station')]
         for pl in planets:
