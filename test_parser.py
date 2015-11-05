@@ -44,11 +44,15 @@ def main():
     # planet buildings
     pbp = PlanetBuildingsProgressParser()
     pba = PlanetBuildingsAvailParser()
-    content = cacher.get_page('buildings_54450')
+    content = cacher.get_page('buildings_57862')  # Geminate
     pba.parse_page_content(content)
     pbp.parse_page_content(content)
+    logger.info('Planet buildings follow:')
+    for ba in pba.builds_avail:
+        logger.info(str(ba))
     logger.info('Planet builds in progress follow:')
-    logger.info(pbp.builds_in_progress)
+    for bp in pbp.builds_in_progress:
+        logger.info(str(bp))
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
