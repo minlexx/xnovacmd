@@ -250,6 +250,7 @@ class XNova_MainWindow(QWidget):
         if self.overview_widget is not None:
             self.overview_widget.setEnabled(True)
             self.overview_widget.update_account_info()
+            self.overview_widget.update_builds()
         # update flying fleets
         self.flights_widget.setEnabled(True)
         self.flights_widget.update_flights()
