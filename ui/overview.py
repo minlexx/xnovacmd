@@ -1,10 +1,10 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, \
-    QHBoxLayout, QGroupBox
-from PyQt5.QtGui import QIcon
+    QHBoxLayout, QGroupBox, QLabel, QProgressBar
+from PyQt5.QtGui import QIcon, QFont
 
-from .xnova.xn_data import fraction_from_name, XNAccountInfo
+from .xnova.xn_data import fraction_from_name, XNAccountInfo, XNPlanet, XNPlanetBuildingItem
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
@@ -71,6 +71,47 @@ class  Overview_AccStatsWidget(QWidget):
             self.ui.tw_accStats.setItem(9, 1, twi)
 
 
+class Overview_BuildProgressWidget(QWidget):
+    def __init__(self, parent=None):
+        super(Overview_BuildProgressWidget, self).__init__(parent)
+        self.load_ui()
+
+    def load_ui(self):
+        self._layout = QHBoxLayout()
+        self._layout.setContentsMargins(1, 1, 1, 1)
+        self._layout.setSpacing(1)
+        self.setLayout(self._layout)
+        self._lbl_planetName = QLabel(self)
+        self._lbl_planetName.setText('')
+        font = self._lbl_planetName.font()
+        font.setWeight(QFont.Bold)  # fix label font weight to bold
+        self._lbl_planetName.setFont(font)
+        self._lbl_planetName.setMinimumWidth(70)
+        self._layout.addWidget(self._lbl_planetName)
+        self._lbl_planetCoords = QLabel(self)
+        self._lbl_planetCoords.setText('[0:0:0]')
+        self._lbl_planetCoords.setMinimumWidth(55)
+        self._layout.addWidget(self._lbl_planetCoords)
+        self._pb = QProgressBar(self)
+        self._pb.setRange(0, 99)
+        self._pb.setValue(0)
+        self._layout.addWidget(self._pb)
+        self._btn_cancel = QPushButton(self.tr('Cancel'), self)
+        self._layout.addWidget(self._btn_cancel)
+
+    def update_from_planet(self, planet: XNPlanet):
+        self._lbl_planetName.setText(planet.name)
+        self._lbl_planetCoords.setText('[{0}:{1}:{2}]'.format(
+            planet.coords.galaxy, planet.coords.system, planet.coords.position))
+        if len(planet.buildings_items) > 0:
+            for bi in planet.buildings_items:
+                if bi.dt_end is not None:
+                    secs_passed = bi.seconds_total - bi.seconds_left
+                    percent_complete = (100 * secs_passed) // bi.seconds_total
+                    self._pb.setValue(percent_complete)
+                    return
+
+
 # Manages "Overview" tab widget
 class OverviewWidget(QWidget):
     def __init__(self, parent=None):
@@ -83,6 +124,7 @@ class OverviewWidget(QWidget):
         # self.icon_open = None
         # self.icon_closed = None
         # self.prev_index = -1
+        self.bp_widgets = []
 
     def load_ui(self):
         # self.icon_open = QIcon(':/i/tb_open.png')
@@ -115,4 +157,14 @@ class OverviewWidget(QWidget):
             self._aswidget.update_account_info(a)
 
     def update_builds(self):
-        pass
+        if len(self.bp_widgets) > 0:
+            for bpw in self.bp_widgets:
+                bpw.close()
+                del bpw
+        self.bp_widgets = []
+        planets = self.world.get_planets()
+        for pl in planets:
+            bpw = Overview_BuildProgressWidget(self)
+            bpw.update_from_planet(pl)
+            self._layout_builds.addWidget(bpw)
+            self.bp_widgets.append(bpw)
