@@ -1,6 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, \
+    QHBoxLayout, QGroupBox
 from PyQt5.QtGui import QIcon
 
 from .xnova.xn_data import fraction_from_name, XNAccountInfo
@@ -88,11 +89,20 @@ class OverviewWidget(QWidget):
         # self.icon_closed = QIcon(':/i/tb_closed.png')
         # layout
         self._layout = QVBoxLayout()
+        self._layout_topbuttons = QHBoxLayout()
         self.setLayout(self._layout)
+        self._layout.addLayout(self._layout_topbuttons)
         # sub-windows
         # reload button
         self._btn_reload = QPushButton(self.tr('Reload'), self)
-        self.layout().addWidget(self._btn_reload)
+        self._layout_topbuttons.addWidget(self._btn_reload)
+        self._layout_topbuttons.addStretch()
+        # group box to hold builds info
+        self._gb_builds = QGroupBox(self)
+        self._gb_builds.setTitle(self.tr('Jobs'))
+        self._layout_builds = QVBoxLayout()
+        self._gb_builds.setLayout(self._layout_builds)
+        self._layout.addWidget(self._gb_builds)
         # account stats widget
         self._aswidget = Overview_AccStatsWidget(self)
         self._aswidget.load_ui()
@@ -103,3 +113,6 @@ class OverviewWidget(QWidget):
         a = self.world.get_account_info()
         if self._aswidget is not None:
             self._aswidget.update_account_info(a)
+
+    def update_builds(self):
+        pass
