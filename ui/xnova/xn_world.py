@@ -12,7 +12,7 @@ from .xn_parser_userinfo import UserInfoParser
 from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
-from .xn_parser_planet_buildings import PlanetBuildingsParser
+from .xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
 from .xn_parser_techtree import TechtreeParser
 from . import xn_logger
 
@@ -49,7 +49,8 @@ class XNovaWorld(QThread):
         self._parser_userinfo = UserInfoParser()
         self._parser_curplanet = CurPlanetParser()
         self._parser_imperium = ImperiumParser()
-        self._parser_planet_buildings = PlanetBuildingsParser()
+        self._parser_planet_buildings_avail = PlanetBuildingsAvailParser()
+        self._parser_planet_buildings_progress = PlanetBuildingsProgressParser()
         self._parser_techtree = TechtreeParser()
         # world/user info
         self._server_time = datetime.datetime.today()  # server time at last overview update
@@ -325,12 +326,18 @@ class XNovaWorld(QThread):
                 m = re.match(r'buildings_(\d+)', page_name)
                 planet_id = int(m.group(1))
                 planet = self.get_planet(planet_id)
-                self._parser_planet_buildings.clear()
-                self._parser_planet_buildings.parse_page_content(page_content)
+                # get available buildings to build
+                self._parser_planet_buildings_avail.clear()
+                self._parser_planet_buildings_avail.parse_page_content(page_content)
+                # get buildings in progress on the same page
+                self._parser_planet_buildings_progress.clear()
+                self._parser_planet_buildings_progress.parse_page_content(page_content)
                 if planet is not None:
-                    planet.builds_in_progress = self._parser_planet_buildings.builds_in_progress
-                    num_added = len(self._parser_planet_buildings.builds_in_progress)
+                    planet.buildings_items = self._parser_planet_buildings_avail.builds_avail
+                    num_added = len(self._parser_planet_buildings_progress.builds_in_progress)
                     if num_added > 0:
+                        for bip in self._parser_planet_buildings_progress.builds_in_progress:
+                            planet.add_build_in_progress(bip)
                         logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
             except ValueError:
                 # failed to convert to int

@@ -2,16 +2,111 @@
 import re
 import datetime
 
-from .xn_parser import XNParserBase, safe_int, get_attribute, get_tag_classes, parse_time_left_str
+from .xn_parser import XNParserBase, safe_int, get_attribute,\
+    get_tag_classes, parse_time_left_str, parse_build_total_time_sec
 from .xn_data import XNPlanetBuildingItem
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
-class PlanetBuildingsParser(XNParserBase):
+class PlanetBuildingsAvailParser(XNParserBase):
     def __init__(self):
-        super(PlanetBuildingsParser, self).__init__()
+        super(PlanetBuildingsAvailParser, self).__init__()
+        # public
+        self.builds_avail = []
+        # private
+        self._cur_item = XNPlanetBuildingItem()
+        self.clear()
+
+    def clear(self):
+        self.builds_avail = []
+        # clear internals
+        self._in_div_viewport_buildings = False
+        self._in_div_title = False
+        self._in_div_actions = False
+        # current parsing building item
+        self._cur_item = XNPlanetBuildingItem()
+
+    def handle_starttag(self, tag: str, attrs: list):
+        super(PlanetBuildingsAvailParser, self).handle_starttag(tag, attrs)
+        if tag == 'div':
+            div_classes = get_tag_classes(attrs)
+            if div_classes is None:
+                return
+            if ('viewport' in div_classes) and ('buildings' in div_classes):
+                self._in_div_viewport_buildings = True
+                return
+            if 'title' in div_classes:
+                self._in_div_title = True
+                return
+            if 'actions' in div_classes:
+                self._in_div_actions = True
+                return
+
+    def handle_endtag(self, tag: str):
+        super(PlanetBuildingsAvailParser, self).handle_endtag(tag)
+        if tag == 'div':
+            if self._in_div_viewport_buildings and self._in_div_title and self._in_div_actions:
+                self._in_div_viewport_buildings = False
+                self._in_div_title = False
+                self._in_div_actions = False
+                # store build item to list
+                self.builds_avail.append(self._cur_item)
+                # log
+                logger.debug(' -- Planet building avail: (gid={1}) {0} lv {2}, upgrade time {3} secs'.format(
+                    self._cur_item.name, self._cur_item.gid,
+                    self._cur_item.level, self._cur_item.seconds_total
+                ))
+                # logger.debug('-------------------------')
+                # clear current item from temp data
+                self._cur_item = XNPlanetBuildingItem()
+                return
+
+    def handle_data2(self, data: str, tag: str, attrs: list):
+        super(PlanetBuildingsAvailParser, self).handle_data2(data, tag, attrs)
+        # if self._in_div_viewport_buildings:
+        #    logger.debug('  handle_data2(tag={0}, data={1}, attrs={2})'.format(tag, data, attrs))
+        if tag == 'a':
+            if self._in_div_viewport_buildings and self._in_div_title and (not self._in_div_actions):
+                # <a href=?set=infos&gid=1>Рудник металла</a>
+                a_href = get_attribute(attrs, 'href')
+                if a_href is None:
+                    return
+                m = re.match(r'\?set=infos&gid=(\d+)', a_href)
+                if m is None:
+                    return
+                gid = safe_int(m.group(1))
+                # store info
+                self._cur_item.name = data
+                self._cur_item.gid = gid
+                # logger.debug('   <a> in title: [{0}] gid=[{1}]'.format(data, gid))
+        if tag == 'span':
+            span_classes = get_tag_classes(attrs)
+            if self._in_div_actions:
+                if span_classes is None:
+                    return
+                if 'positive' in span_classes:
+                    # <span class="positive">27</span>
+                    level = safe_int(data)
+                    # store info about level, only if it is not stored yet
+                    if self._cur_item.level == 0:
+                        self._cur_item.level = level
+                        # logger.debug('   level = [{0}]'.format(level))
+        if tag == 'br':
+            if self._in_div_actions:
+                # <br>" Время: 1 д. 14 ч. 44 мин. 15 с. "
+                if data.startswith('Время:'):
+                    build_time = data[7:]
+                    bt_secs = parse_build_total_time_sec(build_time)
+                    # store info
+                    self._cur_item.seconds_total = bt_secs
+                    # logger.debug('   build time: [{0}] ({1} secs)'.format(build_time, bt_secs))
+
+
+class PlanetBuildingsProgressParser(XNParserBase):
+    def __init__(self):
+        super(PlanetBuildingsProgressParser, self).__init__()
         # output vars
         self.builds_in_progress = []
         # state vars
@@ -32,14 +127,14 @@ class PlanetBuildingsParser(XNParserBase):
         bitem.name = building
         bitem.level = level
         bitem.position = position
-        bitem.dt_end = dt_end
         bitem.remove_from_queue_link = remove_link
+        bitem.set_end_time(dt_end)  # also calculates seconds_left, if possible
         self.builds_in_progress.append(bitem)
         # logging
         logger.info(' ...add build item: {0}'.format(str(bitem)))
 
     def handle_starttag(self, tag: str, attrs: list):
-        super(PlanetBuildingsParser, self).handle_starttag(tag, attrs)
+        super(PlanetBuildingsProgressParser, self).handle_starttag(tag, attrs)
         tag_id = get_attribute(attrs, 'id')
         # <table class="table" id="building">
         if tag == 'table':
@@ -47,7 +142,7 @@ class PlanetBuildingsParser(XNParserBase):
                 self.in_curbuild_table = True
 
     def handle_data2(self, data: str, tag: str, attrs: list):
-        super(PlanetBuildingsParser, self).handle_data2(data, tag, attrs)
+        super(PlanetBuildingsProgressParser, self).handle_data2(data, tag, attrs)
         # tag_classes = get_tag_classes(attrs)
         # <td class="c" width="50%"> 1: Рудник металла 26 </td>
         if self.in_curbuild_table:
@@ -91,7 +186,7 @@ class PlanetBuildingsParser(XNParserBase):
         return  # def handle_data2()
 
     def handle_endtag(self, tag: str):
-        super(PlanetBuildingsParser, self).handle_endtag(tag)
+        super(PlanetBuildingsProgressParser, self).handle_endtag(tag)
         if self.in_curbuild_table:
             if tag == 'table':
                 self.in_curbuild_table = False

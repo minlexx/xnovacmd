@@ -483,10 +483,14 @@ class XNPlanetBuildingItem:
             end_str = '{0:02}.{1:02}.{2:04} {3:02}:{4:02}:{5:02}'.format(
                 dt_end.day, dt_end.month, dt_end.year,
                 dt_end.hour, dt_end.minute, dt_end.second)
+        secs_str = ''
+        if self.seconds_total != -1:
+            secs_str = ' {0} left / {0} total secs'.format(self.seconds_left, self.seconds_total)
         rl = ''
         if self.remove_from_queue_link is not None:
             rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
-        s = '{0}: {1} lv.{2}, end: {3}{4}'.format(self.position, self.name, self.level, end_str, rl)
+        s = '{0}: {1} lv.{2}, end: {3}{4}{5}'.format(self.position, self.name, self.level,
+                                                     end_str, secs_str, rl)
         return s
 
     def set_end_time(self, dt: datetime.datetime):
@@ -494,7 +498,7 @@ class XNPlanetBuildingItem:
         self.calc_seconds_left()
 
     def calc_seconds_left(self):
-        if self.dt_end is None:
+        if not isinstance(self.dt_end, datetime.datetime):
             self.seconds_left = -1
             return
         dt_now = datetime.datetime.now()
@@ -523,6 +527,7 @@ class XNPlanet:
         self.prod_powers = XNPlanetProductionPowers()
         self.ships = XNShipsBundle()
         self.buildings = XNBuildingsBundle()
+        self.buildings_items = []  # list of XNPlanetBuildingItem
         self.defense = XNDefenseBundle()
         self.moon = None  # planet may have moon
         self.is_moon = False  # or may be a moon itself
@@ -530,8 +535,6 @@ class XNPlanet:
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
         self.is_current = False  # used by UI to highlight current planet, that's all
-        # buildings in progress list
-        self.builds_in_progress = []
 
     def __str__(self):
         if self.coords.target_name == '':
@@ -550,11 +553,23 @@ class XNPlanet:
             if m is not None:
                 self.is_base = True
 
+    def add_build_in_progress(self, ba: XNPlanetBuildingItem):
+        if len(self.buildings_items) < 1:
+            return False
+        for bi in self.buildings_items:
+            if bi.name == ba.name:
+                bi.position = ba.position
+                bi.dt_end = ba.dt_end
+                bi.seconds_left = ba.seconds_left
+                bi.remove_from_queue_link = ba.remove_from_queue_link
+                return True
+        return False
+
     # TODO: change this from item_name to item_ID when we will load item IDs
     def is_build_in_progress(self, build_name: str):
-        if len(self.builds_in_progress) < 1:
+        if len(self.buildings_items) < 1:
             return False
-        for b in self.builds_in_progress:
-            if b.name == build_name:
+        for b in self.buildings_items:
+            if (b.name == build_name) and (b.dt_end is not None):
                 return True
         return False
