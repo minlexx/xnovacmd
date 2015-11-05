@@ -484,8 +484,11 @@ class XNPlanetBuildingItem:
                 dt_end.day, dt_end.month, dt_end.year,
                 dt_end.hour, dt_end.minute, dt_end.second)
         secs_str = ''
-        if self.seconds_total != -1:
-            secs_str = ' {0} left / {0} total secs'.format(self.seconds_left, self.seconds_total)
+        if self.seconds_total >= 0:
+            secs_str = ' ('
+            if self.seconds_left >= 0:
+                secs_str += '{0} left, '.format(self.seconds_left)
+            secs_str += '{0} total secs)'.format(self.seconds_total)
         rl = ''
         if self.remove_from_queue_link is not None:
             rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
