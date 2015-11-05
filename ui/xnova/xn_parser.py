@@ -98,7 +98,7 @@ def parse_build_total_time_sec(s: str) -> int:
         # skip empty
         if len(part_stripped) < 1:
             continue
-        logger.debug('          part_stripped = {0}'.format(part_stripped))
+        # logger.debug('          part_stripped = {0}'.format(part_stripped))
         # check for seconds [30 с]
         m = re.match(r'(\d+)\sс', part_stripped)
         if m is not None:
