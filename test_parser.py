@@ -5,7 +5,7 @@ from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
-from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsParser
+from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsProgressParser, PlanetBuildingsAvailParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
@@ -42,8 +42,10 @@ def main():
         logger.info('Galaxy rows follow:')
         logger.info(gp.galaxy_rows)
     # planet buildings
-    pbp = PlanetBuildingsParser()
-    content = cacher.get_page('buildings_69255')
+    pbp = PlanetBuildingsProgressParser()
+    pba = PlanetBuildingsAvailParser()
+    content = cacher.get_page('buildings_54450')
+    pba.parse_page_content(content)
     pbp.parse_page_content(content)
     logger.info('Planet builds in progress follow:')
     logger.info(pbp.builds_in_progress)
