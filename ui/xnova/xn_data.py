@@ -468,9 +468,12 @@ class XNPlanetBuildingItem:
     """
     def __init__(self):
         self.position = 0  # position in a queue
+        self.gid = 0  # building item type ID
         self.name = ''
         self.level = 0
         self.dt_end = None  # completion datetime, will hold a datetime object
+        self.seconds_left = -1  # seconds left for this building to complete
+        self.seconds_total = -1  # total seconds to build this item
         self.remove_from_queue_link = None  # url to delete building from queue
 
     def __str__(self):
@@ -485,6 +488,18 @@ class XNPlanetBuildingItem:
             rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
         s = '{0}: {1} lv.{2}, end: {3}{4}'.format(self.position, self.name, self.level, end_str, rl)
         return s
+
+    def set_end_time(self, dt: datetime.datetime):
+        self.dt_end = dt
+        self.calc_seconds_left()
+
+    def calc_seconds_left(self):
+        if self.dt_end is None:
+            self.seconds_left = -1
+            return
+        dt_now = datetime.datetime.now()
+        td = self.dt_end - dt_now
+        self.seconds_left = int(td.total_seconds())
 
 
 class XNPlanet:
