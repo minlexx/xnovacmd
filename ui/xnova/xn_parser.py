@@ -84,6 +84,45 @@ def parse_time_left_str(data: str) -> tuple:
     return hour, minute, second
 
 
+# example of inputs
+#   "2 д. 3 ч. 51 мин. 30 с."
+#   "4 ч. 1 мин. 50 с."
+#   "34 мин. 54 с."
+#   "41 с."
+# returns total seconds required
+def parse_build_total_time_sec(s: str) -> int:
+    total_seconds = 0
+    parts = s.split('.')
+    for part in parts:
+        part_stripped = part.strip()
+        # skip empty
+        if len(part_stripped) < 1:
+            continue
+        logger.debug('          part_stripped = {0}'.format(part_stripped))
+        # check for seconds [30 с]
+        m = re.match(r'(\d+)\sс', part_stripped)
+        if m is not None:
+            total_seconds += safe_int(m.group(1))
+        else:
+            # check for minutes [51 мин]
+            m = re.match(r'(\d+)\sмин', part_stripped)
+            if m is not None:
+                total_seconds += safe_int(m.group(1)) * 60
+            else:
+                # check for hours [3 ч]
+                m = re.match(r'(\d+)\sч', part_stripped)
+                if m is not None:
+                    total_seconds += safe_int(m.group(1)) * 3600
+                else:
+                    # check for days [2 д]
+                    m = re.match(r'(\d+)\sд', part_stripped)
+                    if m is not None:
+                        total_seconds += safe_int(m.group(1)) * 86400
+                    else:
+                        raise ValueError('Unknown buildtime partial spec: [{0}]'.format(part_stripped))
+    return total_seconds
+
+
 # extends html.parser.HTMLParser class
 # by remembering tags path
 class XNParserBase(html.parser.HTMLParser):
