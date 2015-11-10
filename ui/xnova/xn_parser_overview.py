@@ -500,6 +500,7 @@ class OverviewParser(XNParserBase):
         if self.in_flight_time and self.in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
+            # or <div id="bxxfs2" class="z">1:3:25:50</div>
             hour, minute, second = parse_time_left_str(data)
             if hour + minute + second > 0:
                 # this method is more reliable:

@@ -50,6 +50,7 @@ def get_tag_classes(attrs: list) -> list:
 
 
 # examples of valid inputs:
+#    "1:3:25:50" - treated (1 day, 3 hr, 25 min, 50 ses)
 #    "8:59:9", "13:59:31" - treated as (hr:min:sec)
 #    "8:31" - treated as (min:sec)
 #    "38:"  - also min:sec, with empty seconds part
@@ -60,6 +61,23 @@ def parse_time_left_str(data: str) -> tuple:
     hour = 0
     minute = 0
     second = 0
+    # first the largest match, (days:hr:min:sec)
+    match = re.match(r'(\d+):(\d+):(\d+):(\d+)', data)
+    if match:
+        days = safe_int(match.group(1))
+        hour = safe_int(match.group(2))
+        minute = safe_int(match.group(3))
+        second = safe_int(match.group(4))
+        hour += 24 * days
+        return hour, minute, second
+    # very rare case, where the seconds part is missing: (days:hr:min:)
+    match = re.match(r'(\d+):(\d+):(\d+):', data)
+    if match:
+        days = safe_int(match.group(1))
+        hour = safe_int(match.group(2))
+        minute = safe_int(match.group(3))
+        hour += 24 * days
+        return hour, minute, second
     # 13:59:31  (hr:min:sec)
     match = re.match(r'(\d+):(\d+):(\d+)', data)
     if match:
