@@ -81,17 +81,30 @@ class Overview_BuildProgressWidget(QWidget):
         self._layout.setContentsMargins(1, 1, 1, 1)
         self._layout.setSpacing(1)
         self.setLayout(self._layout)
+        # label - planet name
         self._lbl_planetName = QLabel(self)
         self._lbl_planetName.setText('')
         font = self._lbl_planetName.font()
         font.setWeight(QFont.Bold)  # fix label font weight to bold
         self._lbl_planetName.setFont(font)
-        self._lbl_planetName.setMinimumWidth(70)
+        self._lbl_planetName.setMinimumWidth(100)
         self._layout.addWidget(self._lbl_planetName)
+        # label - planet coords
         self._lbl_planetCoords = QLabel(self)
-        self._lbl_planetCoords.setText('[0:0:0]')
-        self._lbl_planetCoords.setMinimumWidth(55)
+        self._lbl_planetCoords.setText(' [0:0:0] ')
+        self._lbl_planetCoords.setMinimumWidth(60)
         self._layout.addWidget(self._lbl_planetCoords)
+        # label - building name (and lvl)
+        self._lbl_buildName = QLabel(self)
+        self._lbl_buildName.setText('')
+        self._lbl_buildName.setMinimumWidth(200)
+        self._layout.addWidget(self._lbl_buildName)
+        # label - build time left
+        self._lbl_buildTime = QLabel(self)
+        self._lbl_buildTime.setText('')
+        self._lbl_buildTime.setMinimumWidth(70)
+        self._layout.addWidget(self._lbl_buildTime)
+        # progress bar
         self._pb = QProgressBar(self)
         self._pb.setRange(0, 99)
         self._pb.setValue(0)
@@ -101,7 +114,7 @@ class Overview_BuildProgressWidget(QWidget):
 
     def update_from_planet(self, planet: XNPlanet):
         self._lbl_planetName.setText(planet.name)
-        self._lbl_planetCoords.setText('[{0}:{1}:{2}]'.format(
+        self._lbl_planetCoords.setText(' [{0}:{1}:{2}] '.format(
             planet.coords.galaxy, planet.coords.system, planet.coords.position))
         if len(planet.buildings_items) > 0:
             for bi in planet.buildings_items:
@@ -109,7 +122,31 @@ class Overview_BuildProgressWidget(QWidget):
                     secs_passed = bi.seconds_total - bi.seconds_left
                     percent_complete = (100 * secs_passed) // bi.seconds_total
                     self._pb.setValue(percent_complete)
+                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                    # calc and set time left
+                    secs_left = bi.seconds_left
+                    hours_left = secs_left // 3600
+                    secs_left -= hours_left * 3600
+                    mins_left = secs_left // 60
+                    secs_left -= mins_left * 60
+                    bl_str = '({0:02}:{1:02}:{2:02})'.format(hours_left, mins_left, secs_left)
+                    self._lbl_buildTime.setText(bl_str)
                     return
+
+    def get_els_widths(self):
+        plname_w = self._lbl_planetName.width()
+        plcoords_w = self._lbl_planetCoords.width()
+        bname_w = self._lbl_buildName.width()
+        btime_w = self._lbl_buildTime.width()
+        return  plname_w + plcoords_w + bname_w + btime_w
+
+    def make_as_wide_as(self, maxwidth: int):
+        my_w = self.get_els_widths()
+        if my_w >= maxwidth:
+            return
+        width_not_enough = maxwidth - my_w
+        btime_w = self._lbl_buildTime.width()
+        self._lbl_buildTime.setMinimumWidth(btime_w + width_not_enough)
 
 
 # Manages "Overview" tab widget
@@ -143,6 +180,8 @@ class OverviewWidget(QWidget):
         self._gb_builds = QGroupBox(self)
         self._gb_builds.setTitle(self.tr('Jobs'))
         self._layout_builds = QVBoxLayout()
+        self._layout_builds.setContentsMargins(1, 1, 1, 1)
+        self._layout_builds.setSpacing(1)
         self._gb_builds.setLayout(self._layout_builds)
         self._layout.addWidget(self._gb_builds)
         # account stats widget
@@ -164,7 +203,19 @@ class OverviewWidget(QWidget):
         self.bp_widgets = []
         planets = self.world.get_planets()
         for pl in planets:
-            bpw = Overview_BuildProgressWidget(self)
-            bpw.update_from_planet(pl)
-            self._layout_builds.addWidget(bpw)
-            self.bp_widgets.append(bpw)
+            if pl.has_build_in_progress:
+                bpw = Overview_BuildProgressWidget(self)
+                bpw.update_from_planet(pl)
+                self._layout_builds.addWidget(bpw)
+                self.bp_widgets.append(bpw)
+        # make equal widths
+        # this is not working, why?
+        #maxwidth = -1
+        #for bpw in self.bp_widgets:
+        #    w = bpw.get_els_widths()
+        #    logger.debug('got width: {0}'.format(w))
+        #    if w > maxwidth:
+        #        maxwidth = w
+        #for bpw in self.bp_widgets:
+        #    w = bpw.make_as_wide_as(maxwidth)
+        #logger.debug('got max width: {0}'.format(maxwidth))
