@@ -75,8 +75,10 @@ class FlightsWidget(QWidget):
             self.btn_show.setArrowType(Qt.RightArrow)
         else:
             self.ui.tw_flights.show()
-            self.setMinimumHeight(22+22+2)
-            self.parent().setMinimumHeight(22+22+3)
+            base_h = 22 + 22
+            grow_h = 100
+            self.setMinimumHeight(base_h + grow_h)
+            self.parent().setMinimumHeight(base_h + grow_h + 1)
             self.btn_show.setArrowType(Qt.DownArrow)
             # self.minimize_height()
         self.update_button_fleet_count()
