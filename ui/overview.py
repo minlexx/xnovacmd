@@ -110,7 +110,9 @@ class Overview_BuildProgressWidget(QWidget):
         self._pb.setValue(0)
         self._layout.addWidget(self._pb)
         # button cancel (5)
-        self._btn_cancel = QPushButton(self.tr('Cancel'), self)
+        self._btn_cancel = QPushButton(self)
+        self._btn_cancel.setText('')
+        self._btn_cancel.setIcon(QIcon(':i/cancel.png'))
         self._layout.addWidget(self._btn_cancel)
 
     def update_from_planet(self, planet: XNPlanet):
@@ -184,12 +186,13 @@ class OverviewWidget(QWidget):
         self._layout.addLayout(self._layout_topbuttons)
         # sub-windows
         # reload button
-        self._btn_reload = QPushButton(self.tr('Reload'), self)
+        self._btn_reload = QPushButton(self.tr('Refresh overview'), self)
+        self._btn_reload.setIcon(QIcon(':i/reload.png'))
         self._layout_topbuttons.addWidget(self._btn_reload)
         self._layout_topbuttons.addStretch()
         # group box to hold builds info
         self._gb_builds = QGroupBox(self)
-        self._gb_builds.setTitle(self.tr('Jobs'))
+        self._gb_builds.setTitle(self.tr('Building Jobs'))
         self._layout_builds = QVBoxLayout()
         self._layout_builds.setContentsMargins(1, 1, 1, 1)
         self._layout_builds.setSpacing(1)
