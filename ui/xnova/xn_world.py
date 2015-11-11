@@ -43,6 +43,7 @@ class XNovaWorld(QThread):
         # helpers
         self._page_dnl_times = dict()
         self._page_cache = XNovaPageCache()
+        self._page_cache.save_load_encoding = 'UTF-8'
         self._page_downloader = XNovaPageDownload()
         # parsers
         self._parser_overview = OverviewParser()

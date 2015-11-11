@@ -20,7 +20,7 @@ class XNovaPageCache:
         self._page_cache_dir = './cache/page'
         self._img_cache_dir = './cache/img'
         self.save_load_encoding = locale.getpreferredencoding()
-        logger.debug('Locale preferred encoding: {0}'.format(self.save_load_encoding))
+        logger.info('Locale preferred encoding: {0}'.format(self.save_load_encoding))
 
     # scan ./cache directory and load all files into memory
     def load_from_disk_cache(self, clean=True):
@@ -75,6 +75,9 @@ class XNovaPageCache:
             f.close()
         except IOError as ioe:
             logger.error('set_page("{0}", ...): IOError: {1}'.format(page_name, str(ioe)))
+        except UnicodeEncodeError as uee:
+            logger.critical('set_page("{0}", ...): UnicodeEncodeError: {1}'.format(page_name, str(uee)))
+            logger.critical('   self.save_load_encoding is "{0}"'.format(self.save_load_encoding))
 
     def save_image(self, img_path: str, img_bytes: bytes):
         img_path_plain = img_path.replace('/', '_')
