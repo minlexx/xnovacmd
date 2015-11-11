@@ -118,7 +118,7 @@ class Overview_BuildProgressWidget(QWidget):
             planet.coords.galaxy, planet.coords.system, planet.coords.position))
         if len(planet.buildings_items) > 0:
             for bi in planet.buildings_items:
-                if bi.dt_end is not None:
+                if bi.is_in_progress():
                     secs_passed = bi.seconds_total - bi.seconds_left
                     percent_complete = (100 * secs_passed) // bi.seconds_total
                     self._pb.setValue(percent_complete)
@@ -138,7 +138,9 @@ class Overview_BuildProgressWidget(QWidget):
         plcoords_w = self._lbl_planetCoords.width()
         bname_w = self._lbl_buildName.width()
         btime_w = self._lbl_buildTime.width()
-        return  plname_w + plcoords_w + bname_w + btime_w
+        ret_w = plname_w + plcoords_w + bname_w + btime_w
+        logger.debug('w {0}+{1}+{2}+{3}={4}'.format(plname_w, plcoords_w, bname_w, btime_w, ret_w))
+        return  ret_w
 
     def make_as_wide_as(self, maxwidth: int):
         my_w = self.get_els_widths()
@@ -209,13 +211,15 @@ class OverviewWidget(QWidget):
                 self._layout_builds.addWidget(bpw)
                 self.bp_widgets.append(bpw)
         # make equal widths
+        self._equalize_builds_widths()
+
+    def _equalize_builds_widths(self):
         # this is not working, why?
-        #maxwidth = -1
-        #for bpw in self.bp_widgets:
-        #    w = bpw.get_els_widths()
-        #    logger.debug('got width: {0}'.format(w))
-        #    if w > maxwidth:
-        #        maxwidth = w
-        #for bpw in self.bp_widgets:
-        #    w = bpw.make_as_wide_as(maxwidth)
-        #logger.debug('got max width: {0}'.format(maxwidth))
+        maxwidth = -1
+        for bpw in self.bp_widgets:
+            w = bpw.get_els_widths()
+            if w > maxwidth:
+                maxwidth = w
+        for bpw in self.bp_widgets:
+            w = bpw.make_as_wide_as(maxwidth)
+        logger.debug('got max width: {0}'.format(maxwidth))
