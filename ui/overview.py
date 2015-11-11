@@ -114,6 +114,7 @@ class Overview_BuildProgressWidget(QWidget):
         self._btn_cancel.setText('')
         self._btn_cancel.setIcon(QIcon(':i/cancel.png'))
         self._layout.addWidget(self._btn_cancel)
+        self._btn_cancel.clicked.connect(self.on_btn_cancel)
 
     def update_from_planet(self, planet: XNPlanet):
         self._lbl_planetName.setText(planet.name)
@@ -161,6 +162,10 @@ class Overview_BuildProgressWidget(QWidget):
         btime_w = self._lbl_buildTime.width()
         self._lbl_buildTime.setMinimumWidth(btime_w + width_not_enough)
 
+    @pyqtSlot()
+    def on_btn_cancel(self):
+        logger.debug('Overview_BuildProgressWidget: cancel clicked')
+
 
 # Manages "Overview" tab widget
 class OverviewWidget(QWidget):
@@ -188,6 +193,7 @@ class OverviewWidget(QWidget):
         # reload button
         self._btn_reload = QPushButton(self.tr('Refresh overview'), self)
         self._btn_reload.setIcon(QIcon(':i/reload.png'))
+        self._btn_reload.clicked.connect(self.on_btn_refresh_overview)
         self._layout_topbuttons.addWidget(self._btn_reload)
         self._layout_topbuttons.addStretch()
         # group box to hold builds info
@@ -234,3 +240,7 @@ class OverviewWidget(QWidget):
         for bpw in self.bp_widgets:
             w = bpw.make_as_wide_as(maxwidth)
         logger.debug('got max width: {0}'.format(maxwidth))
+
+    @pyqtSlot()
+    def on_btn_refresh_overview(self):
+        self.world.signal(self.world.SIGNAL_RELOAD_PAGE, page_name='overview')
