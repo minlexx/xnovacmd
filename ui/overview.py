@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, QRect
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, \
     QHBoxLayout, QGroupBox, QLabel, QProgressBar
 from PyQt5.QtGui import QIcon, QFont
@@ -81,7 +81,7 @@ class Overview_BuildProgressWidget(QWidget):
         self._layout.setContentsMargins(1, 1, 1, 1)
         self._layout.setSpacing(1)
         self.setLayout(self._layout)
-        # label - planet name
+        # label - planet name (0)
         self._lbl_planetName = QLabel(self)
         self._lbl_planetName.setText('')
         font = self._lbl_planetName.font()
@@ -89,26 +89,27 @@ class Overview_BuildProgressWidget(QWidget):
         self._lbl_planetName.setFont(font)
         self._lbl_planetName.setMinimumWidth(100)
         self._layout.addWidget(self._lbl_planetName)
-        # label - planet coords
+        # label - planet coords (1)
         self._lbl_planetCoords = QLabel(self)
         self._lbl_planetCoords.setText(' [0:0:0] ')
         self._lbl_planetCoords.setMinimumWidth(60)
         self._layout.addWidget(self._lbl_planetCoords)
-        # label - building name (and lvl)
+        # label - building name (and lvl) (2)
         self._lbl_buildName = QLabel(self)
         self._lbl_buildName.setText('')
         self._lbl_buildName.setMinimumWidth(200)
         self._layout.addWidget(self._lbl_buildName)
-        # label - build time left
+        # label - build time left (3)
         self._lbl_buildTime = QLabel(self)
         self._lbl_buildTime.setText('')
         self._lbl_buildTime.setMinimumWidth(70)
         self._layout.addWidget(self._lbl_buildTime)
-        # progress bar
+        # progress bar (4)
         self._pb = QProgressBar(self)
         self._pb.setRange(0, 99)
         self._pb.setValue(0)
         self._layout.addWidget(self._pb)
+        # button cancel (5)
         self._btn_cancel = QPushButton(self.tr('Cancel'), self)
         self._layout.addWidget(self._btn_cancel)
 
@@ -134,10 +135,17 @@ class Overview_BuildProgressWidget(QWidget):
                     return
 
     def get_els_widths(self):
-        plname_w = self._lbl_planetName.width()
-        plcoords_w = self._lbl_planetCoords.width()
-        bname_w = self._lbl_buildName.width()
-        btime_w = self._lbl_buildTime.width()
+        # that is incorrect, we should probably not use widgets widths
+        # but instead use layout items geometries
+        #plname_w = self._lbl_planetName.width()
+        #plcoords_w = self._lbl_planetCoords.width()
+        #bname_w = self._lbl_buildName.width()
+        #btime_w = self._lbl_buildTime.width()
+        plname_w = self._layout.itemAt(0).geometry().width()
+        plcoords_w = self._layout.itemAt(1).geometry().width()
+        bname_w = self._layout.itemAt(2).geometry().width()
+        btime_w = self._layout.itemAt(3).geometry().width()
+        # total width
         ret_w = plname_w + plcoords_w + bname_w + btime_w
         logger.debug('w {0}+{1}+{2}+{3}={4}'.format(plname_w, plcoords_w, bname_w, btime_w, ret_w))
         return  ret_w
