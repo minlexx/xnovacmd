@@ -285,6 +285,8 @@ class XNova_MainWindow(QWidget):
             self.world.world_tick()
         if self.flights_widget:
             self.flights_widget.update_flights()
+        if self.overview_widget:
+            self.overview_widget.update_builds()
 
     @pyqtSlot(int)
     def on_tray_icon_activated(self, reason):
