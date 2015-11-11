@@ -87,17 +87,17 @@ class Overview_BuildProgressWidget(QWidget):
         font = self._lbl_planetName.font()
         font.setWeight(QFont.Bold)  # fix label font weight to bold
         self._lbl_planetName.setFont(font)
-        self._lbl_planetName.setMinimumWidth(100)
+        self._lbl_planetName.setMinimumWidth(120)
         self._layout.addWidget(self._lbl_planetName)
         # label - planet coords (1)
         self._lbl_planetCoords = QLabel(self)
         self._lbl_planetCoords.setText(' [0:0:0] ')
-        self._lbl_planetCoords.setMinimumWidth(60)
+        self._lbl_planetCoords.setMinimumWidth(70)
         self._layout.addWidget(self._lbl_planetCoords)
         # label - building name (and lvl) (2)
         self._lbl_buildName = QLabel(self)
         self._lbl_buildName.setText('')
-        self._lbl_buildName.setMinimumWidth(200)
+        self._lbl_buildName.setMinimumWidth(220)
         self._layout.addWidget(self._lbl_buildName)
         # label - build time left (3)
         self._lbl_buildTime = QLabel(self)
@@ -141,6 +141,7 @@ class Overview_BuildProgressWidget(QWidget):
         #plcoords_w = self._lbl_planetCoords.width()
         #bname_w = self._lbl_buildName.width()
         #btime_w = self._lbl_buildTime.width()
+        # this works the same way :(
         plname_w = self._layout.itemAt(0).geometry().width()
         plcoords_w = self._layout.itemAt(1).geometry().width()
         bname_w = self._layout.itemAt(2).geometry().width()
@@ -218,11 +219,10 @@ class OverviewWidget(QWidget):
                 bpw.update_from_planet(pl)
                 self._layout_builds.addWidget(bpw)
                 self.bp_widgets.append(bpw)
-        # make equal widths
-        self._equalize_builds_widths()
+        # make equal widths (this is not working, why?)
+        # self._equalize_builds_widths()
 
     def _equalize_builds_widths(self):
-        # this is not working, why?
         maxwidth = -1
         for bpw in self.bp_widgets:
             w = bpw.get_els_widths()
