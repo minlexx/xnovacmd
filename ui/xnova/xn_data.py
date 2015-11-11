@@ -464,7 +464,8 @@ class XNDebrisField:
 
 class XNPlanetBuildingItem:
     """
-    Some building that is in progress on the planet
+    Some building that can be built on the planet
+    or is in progress of building on the planet
     """
     def __init__(self):
         self.position = 0  # position in a queue
@@ -507,6 +508,11 @@ class XNPlanetBuildingItem:
         dt_now = datetime.datetime.now()
         td = self.dt_end - dt_now
         self.seconds_left = int(td.total_seconds())
+
+    def is_in_progress(self):
+        if (self.seconds_left > 0) and (self.dt_end is not None):
+            return True
+        return False
 
 
 class XNPlanet:
@@ -575,6 +581,6 @@ class XNPlanet:
         if len(self.buildings_items) < 1:
             return False
         for b in self.buildings_items:
-            if (b.name == build_name) and (b.dt_end is not None):
+            if (b.name == build_name) and (b.is_in_progress()):
                 return True
         return False
