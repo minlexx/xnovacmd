@@ -289,30 +289,28 @@ class XNFlight:
 
 
 class XNFraction:
-    def __init__(self, name=None, race_id=None, ico=None):
+    def __init__(self, name=None, race_id=None):
         self.name = ''
         if name is not None:
             self.name = name
         self.race_id = 0
-        if race_id > 0:
+        if race_id is not None:
             self.race_id = race_id
-        self.ico_name = ''
-        if ico is not None:
-            self.ico_name = ico
+        self.ico_name = 'race{0}.gif'.format(self.race_id)
 
 
 def fraction_from_name(name: str) -> XNFraction:
     if name == 'Конфедерация':
-        ret = XNFraction('Конфедерация', 1, 'race1.gif')
+        ret = XNFraction(name, 1)
         return ret
     elif name == 'Бионики':
-        ret = XNFraction('Бионики', 2, 'race2.gif')
+        ret = XNFraction(name, 2)
         return ret
     elif name == 'Сайлоны':
-        ret = XNFraction('Сайлоны', 3, 'race3.gif')
+        ret = XNFraction(name, 3)
         return ret
     elif name == 'Древние':
-        ret = XNFraction('Древние', 4, 'race4.gif')
+        ret = XNFraction(name, 4)
         return ret
     else:
         return None
