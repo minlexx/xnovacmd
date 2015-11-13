@@ -357,7 +357,10 @@ class XNovaWorld(QThread):
                 self._parser_shipyard_progress.server_time = self._server_time
                 self._parser_shipyard_progress.parse_page_content(page_content)
                 if planet is not None:
-                    logger.debug('Got shipyard for planet [{0}]'.format(planet.name))
+                    if len(self._parser_shipyard_progress.shipyard_items) > 0:
+                        logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
+                            planet.name, len(self._parser_shipyard_progress.shipyard_items)))
+                        planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_items
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
