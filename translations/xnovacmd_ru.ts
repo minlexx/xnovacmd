@@ -657,17 +657,17 @@ Res: {0}</source>
         <translation type="obsolete">Статистика</translation>
     </message>
     <message>
-        <location filename="overview.py" line="209"/>
+        <location filename="overview.py" line="210"/>
         <source>Refresh overview</source>
         <translation>Обновить обзор</translation>
     </message>
     <message>
-        <location filename="overview.py" line="216"/>
+        <location filename="overview.py" line="217"/>
         <source>Building Jobs</source>
         <translation>Текущие постройки</translation>
     </message>
     <message>
-        <location filename="overview.py" line="224"/>
+        <location filename="overview.py" line="225"/>
         <source>Shipyard Jobs</source>
         <translation>Постройки в верфях</translation>
     </message>
@@ -849,17 +849,17 @@ Res: {0}</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="249"/>
+        <location filename="main.py" line="250"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="336"/>
+        <location filename="main.py" line="337"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="334"/>
+        <location filename="main.py" line="335"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
@@ -869,14 +869,29 @@ Res: {0}</source>
         <translation>Империя</translation>
     </message>
     <message>
-        <location filename="main.py" line="243"/>
+        <location filename="main.py" line="244"/>
         <source>Loading world</source>
         <translation>Загрузка мира</translation>
     </message>
     <message>
-        <location filename="main.py" line="333"/>
+        <location filename="main.py" line="334"/>
         <source>return</source>
         <translation>возврат</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="346"/>
+        <source>{0} lv.{1}</source>
+        <translation>{0} ур.{1}</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="347"/>
+        <source>{0} has built {1}</source>
+        <translation>планета {0} достроила {1}</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="348"/>
+        <source>XNova: Building complete</source>
+        <translation>XNova: Постройка завершена</translation>
     </message>
 </context>
 </TS>
