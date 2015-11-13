@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 import re
 
@@ -7,6 +8,7 @@ from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
 from .xn_data import XNCoords, XNFlight, XNPlanet
+from .xn_techtree import XNTechTree_instance
 from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
 from .xn_parser_curplanet import CurPlanetParser
@@ -65,7 +67,7 @@ class XNovaWorld(QThread):
         self._cur_planet_name = ''
         self._cur_planet_coords = XNCoords(0, 0, 0)
         self._planets = []  # list of XNPlanet
-        self._techtree = []  # list of tuples (gid, name, category)
+        self._techtree = XNTechTree_instance()
         self._new_messages_count = 0
         # internal need
         self._net_errors_count = 0
@@ -324,7 +326,7 @@ class XNovaWorld(QThread):
             self._parser_techtree.parse_page_content(page_content)
             # store techtree, if there is successful parse of anything
             if len(self._parser_techtree.techtree) > 0:
-                self._techtree = self._parser_techtree.techtree
+                self._techtree.init_techtree(self._parser_techtree.techtree)
         elif page_name.startswith('buildings_'):
             try:
                 m = re.match(r'buildings_(\d+)', page_name)
