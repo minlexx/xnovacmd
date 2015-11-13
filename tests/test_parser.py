@@ -2,6 +2,7 @@
 import unittest
 
 from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
+from ui.xnova.xn_parser_shipyard import parse_js_array_decl
 
 
 class TestParserTimes(unittest.TestCase):
@@ -38,3 +39,17 @@ class TestParserTimes(unittest.TestCase):
         # secs
         secs = parse_build_total_time_sec('41 с.')
         self.assertEqual(secs, 41)
+
+    def test_parse_js_array_decl(self):
+        # random string
+        self.assertIsNone(parse_js_array_decl('abc'))
+        # not full string
+        s = 'c = new Array('
+        self.assertIsNone(parse_js_array_decl('c = new Array('))
+        # simple ints array
+        self.assertEqual(parse_js_array_decl('c = new Array(11,123,4567);'), [11, 123, 4567])
+        # simple strings array
+        self.assertEqual(parse_js_array_decl("b = new Array('Корсар','Звезда смерти');"),
+                         ['Корсар', 'Звезда смерти'])
+        # test skip empty parts
+        self.assertEqual(parse_js_array_decl("c = new Array(11,123,4567,'');"), [11, 123, 4567])
