@@ -128,4 +128,4 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                     self._cur_item.dt_end = self.server_time + datetime.timedelta(
                         days=0, seconds=self._cur_item.seconds_left)
                     self.shipyard_items.append(self._cur_item)
-                    logger.info(' ...add shipyard item'.format(str(self._cur_item)))
+                    logger.info(' ...add shipyard item {0}'.format(str(self._cur_item)))
