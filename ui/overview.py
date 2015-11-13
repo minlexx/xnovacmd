@@ -145,6 +145,7 @@ class Overview_BuildProgressWidget(QWidget):
                         self._set_buildtime(bi)
                         return
         else:
+            self._btn_cancel.setEnabled(False)  # cannot cancel shipyard jobs
             # set from shipyard item
             for bi in planet.shipyard_progress_items:
                 self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
