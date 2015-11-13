@@ -470,10 +470,13 @@ class XNPlanetBuildingItem:
         self.gid = 0  # building item type ID
         self.name = ''
         self.level = 0
+        self.quantity = 0  # for shipyard building item
+        self.seconds_for_item = 0  # for shipyard item
         self.dt_end = None  # completion datetime, will hold a datetime object
         self.seconds_left = -1  # seconds left for this building to complete
         self.seconds_total = -1  # total seconds to build this item (-1 if building is not available)
         self.remove_from_queue_link = None  # url to delete building from queue
+        self.is_shipyard_item = False
 
     def __str__(self):
         end_str = 'None'
@@ -491,7 +494,12 @@ class XNPlanetBuildingItem:
         rl = ''
         if self.remove_from_queue_link is not None:
             rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
-        s = '{0}: {1} lv.{2}, end: {3}{4}{5}'.format(self.position, self.name, self.level,
+        lv_str = ''
+        if self.is_shipyard_item:
+            lv_str = '{0} pcs.'.format(self.quantity)
+        else:
+            lv_str = 'lv.{0}'.format(self.level)
+        s = '{0}: {1} {2}, end: {3}{4}{5}'.format(self.position, self.name, lv_str,
                                                      end_str, secs_str, rl)
         return s
 
