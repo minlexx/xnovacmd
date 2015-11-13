@@ -7,7 +7,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QThread, QMutex
 from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
-from .xn_data import XNCoords, XNFlight, XNPlanet
+from .xn_data import XNCoords, XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xn_techtree import XNTechTree_instance
 from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
@@ -214,6 +214,7 @@ class XNovaWorld(QThread):
         # This is called from GUI thread =(
         self.lock()
         self._world_tick_flights()
+        self._world_tick_planets()
         self._maybe_refresh_overview()
         self.unlock()
 
@@ -252,7 +253,46 @@ class XNovaWorld(QThread):
                     logger.error('IndexError while clearing finished flights: ')
                     logger.error(' deleting index {0}, while total list len: {1}'.format(
                         0, len(self._flights)))
-        # end world_tick_flights()
+        # end _world_tick_flights()
+
+    def _world_tick_planets(self):
+        """
+        This should do the following:
+        - increase planet resources every second
+        - move planet buildings progress
+        :return: None
+        """
+        for planet in self._planets:
+            # tick resources
+            # calc resource speed per second
+            mps = planet.res_per_hour.met / 3600
+            cps = planet.res_per_hour.cry / 3600
+            dps = planet.res_per_hour.deit / 3600
+            # add resource per second
+            planet.res_current.met += mps
+            planet.res_current.cry += cps
+            planet.res_current.deit += dps
+            # tick buildings in progress
+            if planet.has_build_in_progress:
+                todel_list = []
+                for bitem in planet.buildings_items:
+                    if bitem.is_in_progress():
+                        bitem.seconds_left -= 1
+                        if bitem.seconds_left <= 0:
+                            todel_list.append(bitem)
+                if len(todel_list) > 0:
+                    for bitem in todel_list:
+                        planet.buildings_items.remove(bitem)
+            # tick shipyard builds in progress
+            todel_list = []
+            for bitem in planet.shipyard_progress_items:
+                bitem.seconds_left -= 1
+                if bitem.seconds_left <= 0:
+                    todel_list.append(bitem)
+            if len(todel_list) > 0:
+                for bitem in todel_list:
+                    planet.shipyard_progress_items.remove(bitem)
+        # end _world_tick_planets()
 
     # can trigger signal to refresh overview page every
     # 'self._overview_update_interval' seconds
