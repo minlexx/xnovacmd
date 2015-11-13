@@ -543,6 +543,7 @@ class XNPlanet:
         self.ships = XNShipsBundle()
         self.buildings = XNBuildingsBundle()
         self.buildings_items = []  # list of XNPlanetBuildingItem
+        self.shipyard_progress_items = []  # list of XNPlanetBuildingItem
         self.defense = XNDefenseBundle()
         self.moon = None  # planet may have moon
         self.is_moon = False  # or may be a moon itself
