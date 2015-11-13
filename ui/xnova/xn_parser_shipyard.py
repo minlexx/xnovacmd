@@ -5,6 +5,7 @@ import datetime
 from .xn_parser import XNParserBase, safe_int, get_attribute,\
     get_tag_classes, parse_time_left_str, parse_build_total_time_sec
 from .xn_data import XNPlanetBuildingItem
+from .xn_techtree import XNTechTree_instance
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -116,6 +117,7 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                 for i in range(len(bnames)):
                     self._cur_item.is_shipyard_item = True
                     self._cur_item.name = bnames[i]
+                    self._cur_item.gid = XNTechTree_instance().find_gid_by_name(self._cur_item.name)
                     self._cur_item.quantity = bqs[i]  # level as quantity
                     self._cur_item.position = position + i
                     self._cur_item.seconds_total = bqs[i] * btimes[i]
