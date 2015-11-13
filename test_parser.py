@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import datetime
 from ui.xnova.xn_page_cache import XNovaPageCache
 from ui.xnova.xn_parser_overview import OverviewParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
@@ -6,6 +7,7 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsProgressParser, PlanetBuildingsAvailParser
+from ui.xnova.xn_parser_shipyard import ShipyardBuildsInProgressParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
@@ -16,11 +18,13 @@ logger = xn_logger_get(__name__, debug=True)
 def main():
     # load file
     cacher = XNovaPageCache()
+    cacher.save_load_encoding = 'UTF-8'  # force encoding
     cacher.load_from_disk_cache(clean=True)
     content = cacher.get_page('overview')
     # parse overview
     p1 = OverviewParser()
     p1.parse_page_content(content)
+    server_time = p1.server_time
     # parse user info
     content = cacher.get_page('self_user_info')
     p2 = UserInfoParser()
@@ -53,6 +57,11 @@ def main():
     logger.info('Planet builds in progress follow:')
     for bp in pbp.builds_in_progress:
         logger.info(str(bp))
+    # planet shipyard
+    content = cacher.get_page('shipyard_57064')  # Tama's shipyard
+    psyp = ShipyardBuildsInProgressParser()
+    psyp.server_time = server_time
+    psyp.parse_page_content(content)
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
