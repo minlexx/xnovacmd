@@ -116,26 +116,40 @@ class Overview_BuildProgressWidget(QWidget):
         self._layout.addWidget(self._btn_cancel)
         self._btn_cancel.clicked.connect(self.on_btn_cancel)
 
-    def update_from_planet(self, planet: XNPlanet):
+    def _set_percent_complete(self, bi: XNPlanetBuildingItem):
+        secs_passed = bi.seconds_total - bi.seconds_left
+        percent_complete = (100 * secs_passed) // bi.seconds_total
+        self._pb.setValue(percent_complete)
+
+    def _set_buildtime(self, bi: XNPlanetBuildingItem):
+        # calc and set time left
+        secs_left = bi.seconds_left
+        hours_left = secs_left // 3600
+        secs_left -= hours_left * 3600
+        mins_left = secs_left // 60
+        secs_left -= mins_left * 60
+        bl_str = '({0:02}:{1:02}:{2:02})'.format(hours_left, mins_left, secs_left)
+        self._lbl_buildTime.setText(bl_str)
+
+    def update_from_planet(self, planet: XNPlanet, shipyard=False):
         self._lbl_planetName.setText(planet.name)
         self._lbl_planetCoords.setText(' [{0}:{1}:{2}] '.format(
             planet.coords.galaxy, planet.coords.system, planet.coords.position))
-        if len(planet.buildings_items) > 0:
-            for bi in planet.buildings_items:
-                if bi.is_in_progress():
-                    secs_passed = bi.seconds_total - bi.seconds_left
-                    percent_complete = (100 * secs_passed) // bi.seconds_total
-                    self._pb.setValue(percent_complete)
-                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
-                    # calc and set time left
-                    secs_left = bi.seconds_left
-                    hours_left = secs_left // 3600
-                    secs_left -= hours_left * 3600
-                    mins_left = secs_left // 60
-                    secs_left -= mins_left * 60
-                    bl_str = '({0:02}:{1:02}:{2:02})'.format(hours_left, mins_left, secs_left)
-                    self._lbl_buildTime.setText(bl_str)
-                    return
+        if not shipyard:
+            # set from normal building
+            if len(planet.buildings_items) > 0:
+                for bi in planet.buildings_items:
+                    if bi.is_in_progress():
+                        self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                        self._set_percent_complete(bi)
+                        self._set_buildtime(bi)
+                        return
+        else:
+            # set from shipyard item
+            for bi in planet.shipyard_progress_items:
+                self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
+                self._set_percent_complete(bi)
+                self._set_buildtime(bi)
 
     def get_els_widths(self):
         # that is incorrect, we should probably not use widgets widths
@@ -180,6 +194,7 @@ class OverviewWidget(QWidget):
         # self.icon_closed = None
         # self.prev_index = -1
         self.bp_widgets = []
+        self.bp_widgets_sy = []
 
     def load_ui(self):
         # self.icon_open = QIcon(':/i/tb_open.png')
@@ -204,6 +219,14 @@ class OverviewWidget(QWidget):
         self._layout_builds.setSpacing(1)
         self._gb_builds.setLayout(self._layout_builds)
         self._layout.addWidget(self._gb_builds)
+        # groupbox to hold shipyard builds info
+        self._gb_shipyard = QGroupBox(self)
+        self._gb_shipyard.setTitle(self.tr('Shipyard Jobs'))
+        self._layout_sy = QVBoxLayout()
+        self._layout_sy.setContentsMargins(1, 1, 1, 1)
+        self._layout_sy.setSpacing(1)
+        self._gb_shipyard.setLayout(self._layout_sy)
+        self._layout.addWidget(self._gb_shipyard)
         # account stats widget
         self._aswidget = Overview_AccStatsWidget(self)
         self._aswidget.load_ui()
@@ -220,14 +243,24 @@ class OverviewWidget(QWidget):
             for bpw in self.bp_widgets:
                 bpw.close()
                 del bpw
+        if len(self.bp_widgets_sy) > 0:
+            for bpw in self.bp_widgets_sy:
+                bpw.close()
+                del bpw
         self.bp_widgets = []
+        self.bp_widgets_sy = []
         planets = self.world.get_planets()
         for pl in planets:
             if pl.has_build_in_progress:
                 bpw = Overview_BuildProgressWidget(self)
-                bpw.update_from_planet(pl)
+                bpw.update_from_planet(pl, shipyard=False)
                 self._layout_builds.addWidget(bpw)
                 self.bp_widgets.append(bpw)
+            if len(pl.shipyard_progress_items) > 0:
+                bpsy = Overview_BuildProgressWidget(self)
+                bpsy.update_from_planet(pl, shipyard=True)
+                self._layout_sy.addWidget(bpsy)
+                self.bp_widgets_sy.append(bpsy)
         # make equal widths (this is not working, why?)
         # self._equalize_builds_widths()
 
