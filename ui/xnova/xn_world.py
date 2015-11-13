@@ -37,6 +37,8 @@ class XNovaWorld(QThread):
     world_load_complete = pyqtSignal()
     # emitted when fleet has arrived at its destination
     flight_arrived = pyqtSignal(XNFlight)
+    # emitted when building has completed on planet
+    build_complete = pyqtSignal(XNPlanet, XNPlanetBuildingItem)
     # emitted when overview was reloaded (but not during world refresh)
     loaded_overview = pyqtSignal()
 
@@ -283,6 +285,7 @@ class XNovaWorld(QThread):
                 if len(todel_list) > 0:
                     for bitem in todel_list:
                         planet.buildings_items.remove(bitem)
+                        self.build_complete.emit(planet, bitem)
             # tick shipyard builds in progress
             todel_list = []
             for bitem in planet.shipyard_progress_items:
@@ -292,6 +295,7 @@ class XNovaWorld(QThread):
             if len(todel_list) > 0:
                 for bitem in todel_list:
                     planet.shipyard_progress_items.remove(bitem)
+                    self.build_complete.emit(planet, bitem)
         # end _world_tick_planets()
 
     # can trigger signal to refresh overview page every
