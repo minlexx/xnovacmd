@@ -17,7 +17,7 @@ from .overview import OverviewWidget
 from .imperium import ImperiumWidget
 from .customwidgets.planets_bar_widget import PlanetsBarWidget
 
-from .xnova.xn_data import XNFlight
+from .xnova.xn_data import XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
@@ -234,6 +234,7 @@ class XNova_MainWindow(QWidget):
         self.world.world_load_progress.connect(self.on_world_load_progress)
         self.world.world_load_complete.connect(self.on_world_load_complete)
         self.world.flight_arrived.connect(self.on_flight_arrived)
+        self.world.build_complete.connect(self.on_building_complete)
         self.world.loaded_overview.connect(self.on_loaded_overview)
         self.world.start()
 
@@ -326,10 +327,21 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(XNFlight)
     def on_flight_arrived(self, fl: XNFlight):
-        logger.debug('main window got flight arrival: {0}'.format(fl))
+        logger.debug('main: flight arrival: {0}'.format(fl))
         mis_str = flight_mission_for_humans(fl.mission)
         if fl.direction == 'return':
             mis_str += ' ' + self.tr('return')
         short_fleet_info = self.tr('{0} {1} => {2}, {3} ship(s)').format(
             mis_str, fl.src, fl.dst, len(fl.ships))
         self.show_tray_message(self.tr('XNova: Fleet arrived'), short_fleet_info)
+
+    @pyqtSlot(XNPlanet, XNPlanetBuildingItem)
+    def on_building_complete(self, planet: XNPlanet, bitem: XNPlanetBuildingItem):
+        logger.debug('main: build complete: on planet {0}: {1}'.format(
+            planet.name, str(bitem)))
+        if bitem.is_shipyard_item:
+            binfo_str = '{0} x {1}'.format(bitem.quantity, bitem.name)
+        else:
+            binfo_str = self.tr('{0} lv.{1}').format(bitem.name, bitem.level)
+        msg = self.tr('{0} has built {1}').format(planet.name, binfo_str)
+        self.show_tray_message(self.tr('XNova: Building complete'), msg)
