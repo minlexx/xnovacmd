@@ -657,14 +657,19 @@ Res: {0}</source>
         <translation type="obsolete">Статистика</translation>
     </message>
     <message>
-        <location filename="overview.py" line="189"/>
+        <location filename="overview.py" line="209"/>
         <source>Refresh overview</source>
         <translation>Обновить обзор</translation>
     </message>
     <message>
-        <location filename="overview.py" line="195"/>
+        <location filename="overview.py" line="216"/>
         <source>Building Jobs</source>
-        <translation>Задания постройки</translation>
+        <translation>Текущие постройки</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="224"/>
+        <source>Shipyard Jobs</source>
+        <translation>Постройки в верфях</translation>
     </message>
 </context>
 <context>
@@ -798,10 +803,10 @@ Res: {0}</source>
     <message>
         <location filename="statusbar.py" line="21"/>
         <source>signal reload overview</source>
-        <translation>сигнал обновить обзор</translation>
+        <translation type="obsolete">сигнал обновить обзор</translation>
     </message>
     <message>
-        <location filename="statusbar.py" line="22"/>
+        <location filename="statusbar.py" line="21"/>
         <source>test parse</source>
         <translation>тест парсера</translation>
     </message>
