@@ -96,21 +96,21 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                     m = re.match(r'g = (\d+);', line)
                     if m is not None:
                         time_passed = safe_int(m.group(1))
-                        logger.debug('  got time_passed = {0}'.format(time_passed))
+                        # logger.debug('  got time_passed = {0}'.format(time_passed))
                 if line.startswith('p = '):
                     m = re.match(r'p = (\d+);', line)
                     if m is not None:
                         position = safe_int(m.group(1)) + 1
-                        logger.debug('  got position = {0}'.format(position))
+                        # logger.debug('  got position = {0}'.format(position))
                 if line.startswith('c = new Array('):
                     btimes = parse_js_array_decl(line)
-                    logger.debug('  got btimes = {0}'.format(str(btimes)))
+                    # logger.debug('  got btimes = {0}'.format(str(btimes)))
                 if line.startswith('b = new Array('):
                     bnames = parse_js_array_decl(line)
-                    logger.debug('  got bnames = {0}'.format(str(bnames)))
+                    # logger.debug('  got bnames = {0}'.format(str(bnames)))
                 if line.startswith('a = new Array('):
                     bqs = parse_js_array_decl(line)
-                    logger.debug('  got bqs = {0}'.format(str(bqs)))
+                    # logger.debug('  got bqs = {0}'.format(str(bqs)))
             # get only first item from this queue
             if len(bnames) > 0:
                 for i in range(len(bnames)):
@@ -128,4 +128,4 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                     self._cur_item.dt_end = self.server_time + datetime.timedelta(
                         days=0, seconds=self._cur_item.seconds_left)
                     self.shipyard_items.append(self._cur_item)
-                    print(str(self._cur_item))
+                    logger.info(' ...add shipyard item'.format(str(self._cur_item)))
