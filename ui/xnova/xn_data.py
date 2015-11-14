@@ -541,9 +541,10 @@ class XNPlanet:
         self.energy = XNPlanetEnergyInfo()
         self.prod_powers = XNPlanetProductionPowers()
         self.ships = XNShipsBundle()
-        self.buildings = XNBuildingsBundle()
-        self.buildings_items = []  # list of XNPlanetBuildingItem
-        self.shipyard_progress_items = []  # list of XNPlanetBuildingItem
+        self.buildings = XNBuildingsBundle()  # buildings levels, from Imperium
+        self.buildings_items = []  # list of XNPlanetBuildingItem, buildings available to build
+        self.shipyard_tems = []  # list of XNPlanetBuildingItem, ships available to build
+        self.shipyard_progress_items = []  # list of XNPlanetBuildingItem, ships in progress
         self.defense = XNDefenseBundle()
         self.moon = None  # planet may have moon
         self.is_moon = False  # or may be a moon itself
@@ -598,3 +599,6 @@ class XNPlanet:
             if (b.name == build_name) and (b.is_in_progress()):
                 return True
         return False
+
+    def lab_level(self):
+        return self.buildings.lab
