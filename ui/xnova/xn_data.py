@@ -584,6 +584,7 @@ class XNPlanet:
         return False
 
     def check_builds_in_progress(self):
+        self.has_build_in_progress = False  # assume no builds in progress
         for bi in self.buildings_items:
             if bi.is_in_progress():
                 self.has_build_in_progress = True
