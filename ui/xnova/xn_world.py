@@ -583,12 +583,13 @@ class XNovaWorld(QThread):
             QThread.msleep(100)  # wait 100 ms
             # planet buildings in progress
             self._download_planet_buildings(pl.planet_id, force_download=True)
+            QThread.msleep(100)  # wait 100 ms
             # TODO: planet researches in progress
             # TODO: planet factory researches in progress
             # planet shipyard/defense builds in progress
             self._download_planet_shipyard(pl.planet_id, force_download=True)
-            QThread.msleep(400)  # wait 400 ms
-        QThread.msleep(500)
+            QThread.msleep(100)  # wait
+        QThread.msleep(100)
         self._world_is_loading = False
         self.unlock()  # unlock before emitting any signal, just for a case...
         #
