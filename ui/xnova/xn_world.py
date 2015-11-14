@@ -276,16 +276,18 @@ class XNovaWorld(QThread):
             planet.res_current.deit += dps
             # tick buildings in progress
             if planet.has_build_in_progress:
-                todel_list = []
+                num_completed = 0
                 for bitem in planet.buildings_items:
                     if bitem.is_in_progress():
                         bitem.seconds_left -= 1
                         if bitem.seconds_left <= 0:
-                            todel_list.append(bitem)
-                if len(todel_list) > 0:
-                    for bitem in todel_list:
-                        planet.buildings_items.remove(bitem)
-                        self.build_complete.emit(planet, bitem)
+                            bitem.seconds_left = -1
+                            bitem.dt_end = None  # mark as stopped
+                            bitem.level += 1 # level increased
+                            num_completed += 1
+                            self.build_complete.emit(planet, bitem)
+                if num_completed > 0:
+                    planet.check_builds_in_progress()
             # tick shipyard builds in progress
             todel_list = []
             for bitem in planet.shipyard_progress_items:
