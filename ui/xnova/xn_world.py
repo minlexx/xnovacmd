@@ -15,7 +15,7 @@ from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
 from .xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
-from ui.xnova.xn_parser_shipyard import ShipyardBuildsInProgressParser
+from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from .xn_parser_techtree import TechtreeParser
 from . import xn_logger
 
@@ -57,6 +57,7 @@ class XNovaWorld(QThread):
         self._parser_imperium = ImperiumParser()
         self._parser_planet_buildings_avail = PlanetBuildingsAvailParser()
         self._parser_planet_buildings_progress = PlanetBuildingsProgressParser()
+        self._parser_shipyard_ships_avail = ShipyardShipsAvailParser()
         self._parser_shipyard_progress = ShipyardBuildsInProgressParser()
         self._parser_techtree = TechtreeParser()
         # world/user info
@@ -401,14 +402,17 @@ class XNovaWorld(QThread):
                 planet_id = int(m.group(1))
                 planet = self.get_planet(planet_id)
                 # go parse
+                self._parser_shipyard_ships_avail.clear()
+                self._parser_shipyard_ships_avail.parse_page_content(page_content)
                 self._parser_shipyard_progress.clear()
                 self._parser_shipyard_progress.server_time = self._server_time
                 self._parser_shipyard_progress.parse_page_content(page_content)
                 if planet is not None:
-                    if len(self._parser_shipyard_progress.shipyard_items) > 0:
+                    planet.shipyard_tems = self._parser_shipyard_ships_avail.ships_avail
+                    planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_progress_items
+                    if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
                         logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
-                            planet.name, len(self._parser_shipyard_progress.shipyard_items)))
-                        planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_items
+                            planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
