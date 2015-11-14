@@ -87,7 +87,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
             if self._in_div_actions:
                 if span_classes is None:
                     return
-                if 'positive' in span_classes:
+                if ('positive' in span_classes) or ('negative' in span_classes):
                     # <span class="positive">27</span>
                     level = safe_int(data)
                     # store info about level, only if it is not stored yet
