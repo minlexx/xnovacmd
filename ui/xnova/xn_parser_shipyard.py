@@ -11,20 +11,100 @@ from . import xn_logger
 logger = xn_logger.get(__name__, debug=True)
 
 
-class ShipyardBuildingsAvailParser(XNParserBase):
-    """
-    TODO: incomplete and unused
-    """
+class ShipyardShipsAvailParser(XNParserBase):
     def __init__(self):
-        super(ShipyardBuildingsAvailParser, self).__init__()
+        super(ShipyardShipsAvailParser, self).__init__()
         # public
-        self.builds_avail = []
+        self.ships_avail = []
         # private
         self._cur_item = XNPlanetBuildingItem()
+        self._in_div_viewport_buildings = False
+        self._in_div_title = False
+        self._in_div_actions = False
         self.clear()
 
     def clear(self):
-        pass
+        self.ships_avail = []
+        # clear internals
+        self._in_div_viewport_buildings = False
+        self._in_div_title = False
+        self._in_div_actions = False
+        # current parsing building item
+        self._cur_item = XNPlanetBuildingItem()
+
+    def handle_starttag(self, tag: str, attrs: list):
+        super(ShipyardShipsAvailParser, self).handle_starttag(tag, attrs)
+        if tag == 'div':
+            div_classes = get_tag_classes(attrs)
+            if div_classes is None:
+                return
+            if ('viewport' in div_classes) and ('buildings' in div_classes):
+                self._in_div_viewport_buildings = True
+                return
+            if 'title' in div_classes:
+                self._in_div_title = True
+                return
+            if 'actions' in div_classes:
+                self._in_div_actions = True
+                return
+
+    def handle_endtag(self, tag: str):
+        super(ShipyardShipsAvailParser, self).handle_endtag(tag)
+        if tag == 'div':
+            if self._in_div_viewport_buildings and self._in_div_title and self._in_div_actions:
+                self._in_div_viewport_buildings = False
+                self._in_div_title = False
+                self._in_div_actions = False
+                # store build item to list
+                self.ships_avail.append(self._cur_item)
+                # log
+                logger.debug(' -- Planet ship avail: (gid={0}) {1} x {2} build time {3} secs'.format(
+                    self._cur_item.gid, self._cur_item.name,
+                    self._cur_item.quantity, self._cur_item.seconds_total
+                ))
+                # clear current item from temp data
+                self._cur_item = XNPlanetBuildingItem()
+                return
+
+    def handle_data2(self, data: str, tag: str, attrs: list):
+        super(ShipyardShipsAvailParser, self).handle_data2(data, tag, attrs)
+        # if self._in_div_viewport_buildings:
+        #    logger.debug('  handle_data2(tag={0}, data={1}, attrs={2})'.format(tag, data, attrs))
+        if tag == 'a':
+            if self._in_div_viewport_buildings and self._in_div_title and (not self._in_div_actions):
+                # <a href=?set=infos&gid=202>Малый транспорт</a>
+                a_href = get_attribute(attrs, 'href')
+                if a_href is None:
+                    return
+                m = re.match(r'\?set=infos&gid=(\d+)', a_href)
+                if m is None:
+                    return
+                gid = safe_int(m.group(1))
+                # store info
+                self._cur_item.name = data
+                self._cur_item.gid = gid
+                # logger.debug('   <a> in title: [{0}] gid=[{1}]'.format(data, gid))
+        if tag == 'span':
+            span_classes = get_tag_classes(attrs)
+            if self._in_div_viewport_buildings and self._in_div_title and (not self._in_div_actions):
+                if span_classes is None:
+                    return
+                if ('positive' in span_classes) or ('negative' in span_classes):
+                    # (<span class="positive">302</span>)
+                    # (<span class="negative">0</span>)
+                    quantity = safe_int(data)
+                    self._cur_item.quantity = quantity
+                    # logger.debug('   quantity = [{0}]'.format(quantity))
+        if tag == 'div':
+            if self._in_div_actions:
+                # <div class="actions">
+                #   	Время: 3 мин. 27 с.
+                if data.startswith('Время:'):
+                    build_time = data[7:]
+                    bt_secs = parse_build_total_time_sec(build_time)
+                    # store info
+                    self._cur_item.seconds_total = bt_secs
+                    # logger.debug('   build time: [{0}] ({1} secs)'.format(build_time, bt_secs))
 
 
 # example of inputs:
@@ -54,11 +134,15 @@ class ShipyardBuildsInProgressParser(XNParserBase):
     def __init__(self):
         super(ShipyardBuildsInProgressParser, self).__init__()
         self.server_time = datetime.datetime.now()
-        self.shipyard_items = []
+        self.shipyard_progress_items = []
+        # internals
+        self._cur_item = XNPlanetBuildingItem()
+        self._in_form = False
+        self._next_script = False
         self.clear()
 
     def clear(self):
-        self.shipyard_items = []
+        self.shipyard_progress_items = []
         self._cur_item = XNPlanetBuildingItem()
         self._in_form = False
         self._next_script = False
@@ -129,5 +213,5 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                     # calc end time (it should be set)
                     self._cur_item.dt_end = self.server_time + datetime.timedelta(
                         days=0, seconds=self._cur_item.seconds_left)
-                    self.shipyard_items.append(self._cur_item)
-                    logger.info(' ...add shipyard item {0}'.format(str(self._cur_item)))
+                    self.shipyard_progress_items.append(self._cur_item)
+                    logger.info(' ...add ship in progress {0}'.format(str(self._cur_item)))
