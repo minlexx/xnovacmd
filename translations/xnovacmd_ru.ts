@@ -886,7 +886,7 @@ Res: {0}</source>
     <message>
         <location filename="main.py" line="347"/>
         <source>{0} has built {1}</source>
-        <translation>планета {0} достроила {1}</translation>
+        <translation>{0}: достроено {1}</translation>
     </message>
     <message>
         <location filename="main.py" line="348"/>
