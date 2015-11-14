@@ -7,7 +7,7 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsProgressParser, PlanetBuildingsAvailParser
-from ui.xnova.xn_parser_shipyard import ShipyardBuildsInProgressParser
+from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
@@ -62,6 +62,9 @@ def main():
     psyp = ShipyardBuildsInProgressParser()
     psyp.server_time = server_time
     psyp.parse_page_content(content)
+    # planet ships available
+    psap = ShipyardShipsAvailParser()
+    psap.parse_page_content(content)
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
