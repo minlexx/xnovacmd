@@ -3,7 +3,7 @@ import re
 import datetime
 
 from .xn_parser import XNParserBase, safe_int, get_attribute,\
-    get_tag_classes, parse_time_left_str, parse_build_total_time_sec
+    get_tag_classes, parse_build_total_time_sec
 from .xn_data import XNPlanetBuildingItem
 from .xn_techtree import XNTechTree_instance
 from . import xn_logger
@@ -18,6 +18,12 @@ class PlanetBuildingsAvailParser(XNParserBase):
         self.builds_avail = []
         # private
         self._cur_item = XNPlanetBuildingItem()
+        self._in_div_viewport_buildings = False
+        self._in_div_overContent = False
+        self._in_div_title = False
+        self._in_div_actions = False
+        self._got_level = False
+        self._img_resource = ''  # met, cry, deit, energy
         self.clear()
 
     def clear(self):
@@ -30,27 +36,26 @@ class PlanetBuildingsAvailParser(XNParserBase):
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
         self._got_level = False
-        self._got_price_met = False
-        self._got_price_cry = False
-        self._got_price_deit = False
+        self._img_resource = ''
 
     def add_price(self, data: str):
-        if not self._got_price_met:
-            self._got_price_met = True
+        if self._img_resource == 'met':
             self._cur_item.cost_met = safe_int(data)
             logger.debug('    cost met: {0}'.format(self._cur_item.cost_met))
             return
-        if not self._got_price_cry:
-            self._got_price_cry = True
+        if self._img_resource == 'cry':
             self._cur_item.cost_cry = safe_int(data)
             logger.debug('    cost cry: {0}'.format(self._cur_item.cost_cry))
             return
-        if not self._got_price_deit:
-            self._got_price_deit = True
+        if self._img_resource == 'deit':
             self._cur_item.cost_deit = safe_int(data)
             logger.debug('    cost deit: {0}'.format(self._cur_item.cost_deit))
             return
-        logger.error('add_price: all prices added, why another one? ({0})'.format(data))
+        if self._img_resource == 'energy':
+            self._cur_item.cost_energy = safe_int(data)
+            logger.debug('    cost energy: {0}'.format(self._cur_item.cost_energy))
+            return
+        logger.error('Unknown current resource image: [{0}]'.format(self._img_resource))
 
     def handle_starttag(self, tag: str, attrs: list):
         super(PlanetBuildingsAvailParser, self).handle_starttag(tag, attrs)
@@ -70,6 +75,20 @@ class PlanetBuildingsAvailParser(XNParserBase):
             if 'overContent' in div_classes:
                 self._in_div_overContent = True
                 return
+            return
+        if tag == 'img':
+            if self._in_div_overContent:
+                img_src = get_attribute(attrs, 'src')
+                # logger.debug('img in div overContent [{0}]'.format(img_src))
+                if img_src == 'skins/default/images/s_metall.png':
+                    self._img_resource = 'met'
+                if img_src == 'skins/default/images/s_kristall.png':
+                    self._img_resource = 'cry'
+                if img_src == 'skins/default/images/s_deuterium.png':
+                    self._img_resource = 'deit'
+                if img_src == 'skins/default/images/s_energie.png':
+                    self._img_resource = 'energy'
+            return
 
     def handle_endtag(self, tag: str):
         super(PlanetBuildingsAvailParser, self).handle_endtag(tag)
@@ -90,9 +109,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 # clear current item from temp data
                 self._cur_item = XNPlanetBuildingItem()
                 self._got_level = False
-                self._got_price_met = False
-                self._got_price_cry = False
-                self._got_price_deit = False
+                self._img_resource = ''
                 return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
