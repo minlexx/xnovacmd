@@ -183,5 +183,7 @@ class ResearchAvailParser(XNParserBase):
                     dt_end = self.server_time + datetime.timedelta(seconds=secs_left)
                     self._cur_item.seconds_left = secs_left
                     self._cur_item.dt_end = dt_end
-                    logger.debug('    in progress, seconds left = {0}, dt_end = {1}'.format(
-                        secs_left, str(self._cur_item.dt_end)))
+                    self._cur_item.remove_link = '?set=buildings&mode=research&cmd=cancel&tech={0}'.\
+                        format(self._cur_item.gid)
+                    logger.debug('    in progress, seconds left = {0}, dt_end = {1}, remove_link = [{2}]'.format(
+                        secs_left, str(self._cur_item.dt_end), self._cur_item.remove_link))
