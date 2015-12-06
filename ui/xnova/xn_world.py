@@ -2,7 +2,7 @@
 import datetime
 import re
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QThread, QMutex
+from PyQt5.QtCore import pyqtSignal, QThread, QMutex
 
 from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
@@ -15,7 +15,8 @@ from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
 from .xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
-from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
+from .xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
+from .xn_parser_research import ResearchAvailParser
 from .xn_parser_techtree import TechtreeParser
 from . import xn_logger
 
@@ -59,6 +60,7 @@ class XNovaWorld(QThread):
         self._parser_planet_buildings_progress = PlanetBuildingsProgressParser()
         self._parser_shipyard_ships_avail = ShipyardShipsAvailParser()
         self._parser_shipyard_progress = ShipyardBuildsInProgressParser()
+        self._parser_researches_avail = ResearchAvailParser()
         self._parser_techtree = TechtreeParser()
         # world/user info
         self._server_time = datetime.datetime.today()  # server time at last overview update
@@ -87,6 +89,7 @@ class XNovaWorld(QThread):
         self._galaxy_cache_lifetime = 60  # seconds
         self._planet_buildings_cache_lifetime = 60  # seconds
         self._planet_shipyard_cache_lifetime = 60  # seconds
+        self._planet_research_cache_lifetime = 60  # seconds
 
     def initialize(self, cookies_dict: dict):
         """
@@ -417,6 +420,24 @@ class XNovaWorld(QThread):
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
+        elif page_name.startswith('research_'):
+            try:
+                m = re.match(r'research_(\d+)', page_name)
+                planet_id = int(m.group(1))
+                planet = self.get_planet(planet_id)
+                # go parse
+                self._parser_researches_avail.clear()
+                self._parser_researches_avail.server_time = self._server_time
+                self._parser_researches_avail.parse_page_content(page_content)
+                if planet is not None:
+                    planet.research_items = self._parser_researches_avail.researches_avail
+                    if len(self._parser_researches_avail.researches_avail) > 0:
+                        logger.info('Planet {0} has {1} researches avail'.format(
+                            planet.name, len(self._parser_researches_avail.researches_avail)))
+            except AttributeError:  # no match
+                logger.exception('Invalid format for page_name=[{0}], expected research_123456'.format(page_name))
+            except ValueError:  # failed to convert to int
+                logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
         else:
             logger.warn('on_page_downloaded(): Unhandled page name [{0}]. This may be not a problem, but...'.format(page_name))
 
@@ -557,6 +578,13 @@ class XNovaWorld(QThread):
         return self._get_page_url(page_name, page_url,
                                   self._planet_shipyard_cache_lifetime, force_download)
 
+    def _download_planet_researches(self, planet_id: int, force_download=False):
+        # url: http://uni4.xnova.su/?set=buildings&mode=research&cp=57064&re=0
+        page_url = '?set=buildings&mode=research&cp={0}&re=0'.format(planet_id)
+        page_name = 'research_{0}'.format(planet_id)
+        return self._get_page_url(page_name, page_url,
+                                  self._planet_research_cache_lifetime, force_download)
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -595,7 +623,9 @@ class XNovaWorld(QThread):
             # planet buildings in progress
             self._download_planet_buildings(pl.planet_id, force_download=True)
             self.msleep(100)  # wait 100 ms
-            # TODO: planet researches in progress
+            # planet researches in progress
+            self._download_planet_researches(pl.planet_id, force_download=True)
+            self.msleep(100)
             # TODO: planet factory researches in progress
             # planet shipyard/defense builds in progress
             self._download_planet_shipyard(pl.planet_id, force_download=True)
