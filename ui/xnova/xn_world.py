@@ -536,9 +536,14 @@ class XNovaWorld(QThread):
             return
         self._page_cache.save_image(img_path, img_bytes)
 
-    def _download_planet_buildings(self, planet_id: int, force_download=False):
+    def _download_planet_overview(self, planet_id: int, force_download=False):
         # url to change current planet is:
         #    http://uni4.xnova.su/?set=overview&cp=60668&re=0
+        page_url = '?set=overview&cp={0}&re=0'.format(planet_id)
+        page_name = 'overview'
+        return self._get_page_url(page_name, page_url, 1, force_download)
+
+    def _download_planet_buildings(self, planet_id: int, force_download=False):
         page_url = '?set=buildings&cp={0}&re=0'.format(planet_id)
         page_name = 'buildings_{0}'.format(planet_id)
         return self._get_page_url(page_name, page_url,
@@ -568,7 +573,7 @@ class XNovaWorld(QThread):
             page_time = pages_maxtime[i]
             self.world_load_progress.emit(page_name, load_progress_percent)
             self._get_page(page_name, max_cache_lifetime=page_time, force_download=True)
-            QThread.msleep(500)  # 500ms delay before requesting next page
+            self.msleep(500)  # 500ms delay before requesting next page
             load_progress_percent += load_progress_step
         #
         # additionally request user info page, constructed as:
@@ -582,20 +587,24 @@ class XNovaWorld(QThread):
         load_progress_left = 100 - load_progress_percent
         load_progress_step = load_progress_left // len(self._planets)
         for pl in self._planets:
-            self.world_load_progress.emit('planet ' + pl.name, load_progress_percent)
+            self.world_load_progress.emit(self.tr('Planet') + ' ' + pl.name, load_progress_percent)
             load_progress_percent += load_progress_step
             # planet image
             self._download_image(pl.pic_url)
-            QThread.msleep(100)  # wait 100 ms
+            self.msleep(100)  # wait 100 ms
             # planet buildings in progress
             self._download_planet_buildings(pl.planet_id, force_download=True)
-            QThread.msleep(100)  # wait 100 ms
+            self.msleep(100)  # wait 100 ms
             # TODO: planet researches in progress
             # TODO: planet factory researches in progress
             # planet shipyard/defense builds in progress
             self._download_planet_shipyard(pl.planet_id, force_download=True)
-            QThread.msleep(100)  # wait
-        QThread.msleep(100)
+            self.msleep(100)  # wait
+        self.msleep(100)
+        # restore original current planet that was before full world refresh
+        # because world refresh changes it by loading every planet
+        logger.info('Restoring current planet to #{0} ({1})'.format(self._cur_planet_id, self._cur_planet_name))
+        self._download_planet_overview(self._cur_planet_id, force_download=True)
         self._world_is_loading = False
         self.unlock()  # unlock before emitting any signal, just for a case...
         #
