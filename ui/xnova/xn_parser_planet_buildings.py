@@ -24,10 +24,33 @@ class PlanetBuildingsAvailParser(XNParserBase):
         self.builds_avail = []
         # clear internals
         self._in_div_viewport_buildings = False
+        self._in_div_overContent = False
         self._in_div_title = False
         self._in_div_actions = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
+        self._got_level = False
+        self._got_price_met = False
+        self._got_price_cry = False
+        self._got_price_deit = False
+
+    def add_price(self, data: str):
+        if not self._got_price_met:
+            self._got_price_met = True
+            self._cur_item.cost_met = safe_int(data)
+            logger.debug('    cost met: {0}'.format(self._cur_item.cost_met))
+            return
+        if not self._got_price_cry:
+            self._got_price_cry = True
+            self._cur_item.cost_cry = safe_int(data)
+            logger.debug('    cost cry: {0}'.format(self._cur_item.cost_cry))
+            return
+        if not self._got_price_deit:
+            self._got_price_deit = True
+            self._cur_item.cost_deit = safe_int(data)
+            logger.debug('    cost deit: {0}'.format(self._cur_item.cost_deit))
+            return
+        logger.error('add_price: all prices added, why another one? ({0})'.format(data))
 
     def handle_starttag(self, tag: str, attrs: list):
         super(PlanetBuildingsAvailParser, self).handle_starttag(tag, attrs)
@@ -44,6 +67,8 @@ class PlanetBuildingsAvailParser(XNParserBase):
             if 'actions' in div_classes:
                 self._in_div_actions = True
                 return
+            if 'overContent' in div_classes:
+                self._in_div_overContent = True
 
     def handle_endtag(self, tag: str):
         super(PlanetBuildingsAvailParser, self).handle_endtag(tag)
@@ -52,6 +77,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 self._in_div_viewport_buildings = False
                 self._in_div_title = False
                 self._in_div_actions = False
+                self._in_div_overContent = False
                 # store build item to list
                 self.builds_avail.append(self._cur_item)
                 # log
@@ -62,6 +88,10 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 # logger.debug('-------------------------')
                 # clear current item from temp data
                 self._cur_item = XNPlanetBuildingItem()
+                self._got_level = False
+                self._got_price_met = False
+                self._got_price_cry = False
+                self._got_price_deit = False
                 return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
@@ -81,7 +111,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 # store info
                 self._cur_item.name = data
                 self._cur_item.gid = gid
-                # logger.debug('   <a> in title: [{0}] gid=[{1}]'.format(data, gid))
+                logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
             if self._in_div_actions:
@@ -91,9 +121,22 @@ class PlanetBuildingsAvailParser(XNParserBase):
                     # <span class="positive">27</span>
                     level = safe_int(data)
                     # store info about level, only if it is not stored yet
-                    if self._cur_item.level == 0:
+                    if not self._got_level:
                         self._cur_item.level = level
-                        # logger.debug('   level = [{0}]'.format(level))
+                        self._got_level = True
+                        logger.debug('    level = [{0}]'.format(level))
+            if self._in_div_overContent:
+                if span_classes is None:
+                    return
+                # not enough resources to build
+                if ('resNo' in span_classes) and ('tooltip' in span_classes):
+                    # logger.debug('    span resNo tooltip in div overContent: {0}'.format(data))
+                    self.add_price(data)
+                # have enough resources to build
+                if 'resYes' in span_classes:
+                    if data != 'Построить':
+                        # logger.debug('    span resYes in div overContent: {0}'.format(data))
+                        self.add_price(data)
         if tag == 'br':
             if self._in_div_actions:
                 # <br>" Время: 1 д. 14 ч. 44 мин. 15 с. "
