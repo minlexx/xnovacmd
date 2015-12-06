@@ -69,6 +69,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 return
             if 'overContent' in div_classes:
                 self._in_div_overContent = True
+                return
 
     def handle_endtag(self, tag: str):
         super(PlanetBuildingsAvailParser, self).handle_endtag(tag)
