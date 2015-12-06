@@ -1,5 +1,6 @@
 __pycache__
 .idea
+.directory
 cache/**
 unhandled_exception.log
 galaxy.db
