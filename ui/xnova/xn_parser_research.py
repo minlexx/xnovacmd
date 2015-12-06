@@ -39,6 +39,7 @@ class ResearchAvailParser(XNParserBase):
         self._in_div_brp = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
+        self._cur_item.is_research_item = True
         self._got_level = False
         self._img_resource = ''
 
