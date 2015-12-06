@@ -72,6 +72,7 @@ def main():
     # planet researches available
     content = cacher.get_page('research_57064')  # Tama
     prap = ResearchAvailParser()
+    prap.server_time = server_time
     prap.parse_page_content(content)
     logger.info('Planet researches available follow:')
     for ra in prap.researches_avail:
