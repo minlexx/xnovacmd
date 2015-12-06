@@ -477,6 +477,10 @@ class XNPlanetBuildingItem:
         self.seconds_total = -1  # total seconds to build this item (-1 if building is not available)
         self.remove_from_queue_link = None  # url to delete building from queue
         self.is_shipyard_item = False
+        # building price (for 1 item)
+        self.cost_met = 0
+        self.cost_cry = 0
+        self.cost_deit = 0
 
     def __str__(self):
         end_str = 'None'
