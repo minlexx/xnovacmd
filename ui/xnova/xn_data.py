@@ -504,8 +504,20 @@ class XNPlanetBuildingItem:
             lv_str = '{0} pcs.'.format(self.quantity)
         else:
             lv_str = 'lv.{0}'.format(self.level)
-        s = '{0}: {1} {2}, end: {3}{4}{5}'.format(self.position, self.name, lv_str,
-                                                     end_str, secs_str, rl)
+        price_str = ''
+        if (self.cost_met > 0) or (self.cost_cry > 0) or (self.cost_deit > 0) or (self.cost_energy > 0):
+            price_str = ' (Price:'
+            if self.cost_met > 0:
+                price_str += ' {0} met'.format(self.cost_met)
+            if self.cost_cry > 0:
+                price_str += ' {0} cry'.format(self.cost_cry)
+            if self.cost_deit > 0:
+                price_str += ' {0} deit'.format(self.cost_deit)
+            if self.cost_energy > 0:
+                price_str += ' {0} energy'.format(self.cost_energy)
+            price_str += ')'
+        s = '{0}: {1} {2}, end: {3}{4}{5}{6}'.format(self.position, self.name, lv_str,
+                                                     end_str, secs_str, rl, price_str)
         return s
 
     def set_end_time(self, dt: datetime.datetime):
