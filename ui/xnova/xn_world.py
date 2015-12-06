@@ -302,6 +302,17 @@ class XNovaWorld(QThread):
                 for bitem in todel_list:
                     planet.shipyard_progress_items.remove(bitem)
                     self.build_complete.emit(planet, bitem)
+            # tick planet researches
+            num_completed = 0
+            for bitem in planet.research_items:
+                if bitem.is_in_progress():
+                    bitem.seconds_left -= 1
+                    if bitem.seconds_left <= 0:
+                        bitem.seconds_left = -1
+                        bitem.dt_end = None  # mark as stopped
+                        bitem.level += 1
+                        num_completed += 1
+                        self.build_complete.emit(planet, bitem)
         # end _world_tick_planets()
 
     # can trigger signal to refresh overview page every
