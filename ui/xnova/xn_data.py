@@ -582,12 +582,17 @@ class XNPlanet:
             add_type = ' (base)'
         return str(self.coords) + add_type
 
-    def detect_base_by_pic_url(self):
+    def detect_type_by_pic_url(self):
         self.is_base = False
         if self.pic_url is not None:
             m = re.search(r's_baseplanet01.jpg$', self.pic_url)
             if m is not None:
                 self.is_base = True
+                return
+            m = re.search(r'mond.jpg$', self.pic_url)
+            if m is not None:
+                self.is_moon = True
+                return
 
     def add_build_in_progress(self, ba: XNPlanetBuildingItem):
         if len(self.buildings_items) < 1:

@@ -93,7 +93,7 @@ class ImperiumParser(XNParserBase):
                             planet = XNPlanet()
                             planet.planet_id = pid
                             planet.pic_url = self.planet_pics[self._counter]
-                            planet.detect_base_by_pic_url()
+                            planet.detect_type_by_pic_url()
                             self.planets.append(planet)
                             self._counter += 1
                         # reset counter, it will count current planet to store info to
