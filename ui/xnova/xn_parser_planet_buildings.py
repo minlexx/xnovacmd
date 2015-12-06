@@ -231,14 +231,18 @@ class PlanetBuildingsProgressParser(XNParserBase):
                     # first argument to BuildTimeout is (possibly) seconds left
                     # third is planet_id
                     if data.startswith('BuildTimeout'):
-                        m = re.match(r'BuildTimeout\((\d+),', data)
+                        m = re.match(r'BuildTimeout\((\d+), (\d+), (\d+),', data)
                         if m is not None:
                             secs_left = safe_int(m.group(1))
+                            var_pk = safe_int(m.group(2))
+                            planet_id = safe_int(m.group(3))
                             td = datetime.timedelta(seconds=secs_left)
                             dt_now = datetime.datetime.today()
                             dt_end = dt_now + td
+                            # construct remove link
+                            remove_link = '?set=buildings&listid={0}&cmd=cancel&planet={1}'.format(var_pk, planet_id)
                             # logger.debug('dt_now={0}, td={1}, dt_end={2}'.format(dt_now, td, dt_end))
-                            self.add_build_info(self._position, self._building, self._level, dt_end)
+                            self.add_build_info(self._position, self._building, self._level, dt_end, remove_link)
             if tag == 'a':
                 # remove from queue (Architector only)
                 # <a href="?set=buildings&listid=2&cmd=remove&planet=54450">Удалить</a>
