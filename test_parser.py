@@ -8,6 +8,7 @@ from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_galaxy import GalaxyParser
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsProgressParser, PlanetBuildingsAvailParser
 from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
+from ui.xnova.xn_parser_research import ResearchAvailParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
@@ -68,6 +69,13 @@ def main():
     logger.info('Planet ships available follow:')
     for sa in psap.ships_avail:
         logger.info(str(sa))
+    # planet researches available
+    content = cacher.get_page('research_57064')  # Tama
+    prap = ResearchAvailParser()
+    prap.parse_page_content(content)
+    logger.info('Planet researches available follow:')
+    for ra in prap.researches_avail:
+        logger.info(str(ra))
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
