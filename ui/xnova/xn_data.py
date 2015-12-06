@@ -481,6 +481,7 @@ class XNPlanetBuildingItem:
         self.cost_met = 0
         self.cost_cry = 0
         self.cost_deit = 0
+        self.cost_energy = 0
 
     def __str__(self):
         end_str = 'None'
