@@ -65,6 +65,9 @@ def main():
     # planet ships available
     psap = ShipyardShipsAvailParser()
     psap.parse_page_content(content)
+    logger.info('Planet ships available follow:')
+    for sa in psap.ships_avail:
+        logger.info(str(sa))
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
