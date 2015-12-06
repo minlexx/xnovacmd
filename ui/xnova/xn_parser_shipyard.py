@@ -3,12 +3,12 @@ import re
 import datetime
 
 from .xn_parser import XNParserBase, safe_int, get_attribute,\
-    get_tag_classes, parse_time_left_str, parse_build_total_time_sec
+    get_tag_classes, parse_build_total_time_sec
 from .xn_data import XNPlanetBuildingItem
 from .xn_techtree import XNTechTree_instance
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class ShipyardShipsAvailParser(XNParserBase):
@@ -21,6 +21,8 @@ class ShipyardShipsAvailParser(XNParserBase):
         self._in_div_viewport_buildings = False
         self._in_div_title = False
         self._in_div_actions = False
+        self._in_div_overContent = False
+        self._img_resource = ''  # met, cry, deit, energy
         self.clear()
 
     def clear(self):
@@ -31,6 +33,26 @@ class ShipyardShipsAvailParser(XNParserBase):
         self._in_div_actions = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
+        self._img_resource = ''
+
+    def add_price(self, data: str):
+        if self._img_resource == 'met':
+            self._cur_item.cost_met = safe_int(data)
+            logger.debug('    cost met: {0}'.format(self._cur_item.cost_met))
+            return
+        if self._img_resource == 'cry':
+            self._cur_item.cost_cry = safe_int(data)
+            logger.debug('    cost cry: {0}'.format(self._cur_item.cost_cry))
+            return
+        if self._img_resource == 'deit':
+            self._cur_item.cost_deit = safe_int(data)
+            logger.debug('    cost deit: {0}'.format(self._cur_item.cost_deit))
+            return
+        if self._img_resource == 'energy':
+            self._cur_item.cost_energy = safe_int(data)
+            logger.debug('    cost energy: {0}'.format(self._cur_item.cost_energy))
+            return
+        logger.error('Unknown current resource image: [{0}]'.format(self._img_resource))
 
     def handle_starttag(self, tag: str, attrs: list):
         super(ShipyardShipsAvailParser, self).handle_starttag(tag, attrs)
@@ -47,6 +69,23 @@ class ShipyardShipsAvailParser(XNParserBase):
             if 'actions' in div_classes:
                 self._in_div_actions = True
                 return
+            if 'overContent' in div_classes:
+                self._in_div_overContent = True
+                return
+            return
+        if tag == 'img':
+            if self._in_div_overContent:
+                img_src = get_attribute(attrs, 'src')
+                # logger.debug('img in div overContent [{0}]'.format(img_src))
+                if img_src == 'skins/default/images/s_metall.png':
+                    self._img_resource = 'met'
+                if img_src == 'skins/default/images/s_kristall.png':
+                    self._img_resource = 'cry'
+                if img_src == 'skins/default/images/s_deuterium.png':
+                    self._img_resource = 'deit'
+                if img_src == 'skins/default/images/s_energie.png':
+                    self._img_resource = 'energy'
+            return
 
     def handle_endtag(self, tag: str):
         super(ShipyardShipsAvailParser, self).handle_endtag(tag)
@@ -64,6 +103,7 @@ class ShipyardShipsAvailParser(XNParserBase):
                 ))
                 # clear current item from temp data
                 self._cur_item = XNPlanetBuildingItem()
+                self._img_resource = ''
                 return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
@@ -83,7 +123,7 @@ class ShipyardShipsAvailParser(XNParserBase):
                 # store info
                 self._cur_item.name = data
                 self._cur_item.gid = gid
-                # logger.debug('   <a> in title: [{0}] gid=[{1}]'.format(data, gid))
+                logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
             if self._in_div_viewport_buildings and self._in_div_title and (not self._in_div_actions):
@@ -94,7 +134,19 @@ class ShipyardShipsAvailParser(XNParserBase):
                     # (<span class="negative">0</span>)
                     quantity = safe_int(data)
                     self._cur_item.quantity = quantity
-                    # logger.debug('   quantity = [{0}]'.format(quantity))
+                    logger.debug('    quantity = [{0}]'.format(quantity))
+            if self._in_div_overContent:
+                if span_classes is None:
+                    return
+                # not enough resources to build
+                if ('resNo' in span_classes) and ('tooltip' in span_classes):
+                    # logger.debug('    span resNo tooltip in div overContent: {0}'.format(data))
+                    self.add_price(data)
+                # have enough resources to build
+                if 'resYes' in span_classes:
+                    if data != 'Построить':
+                        # logger.debug('    span resYes in div overContent: {0}'.format(data))
+                        self.add_price(data)
         if tag == 'div':
             if self._in_div_actions:
                 # <div class="actions">
@@ -104,7 +156,7 @@ class ShipyardShipsAvailParser(XNParserBase):
                     bt_secs = parse_build_total_time_sec(build_time)
                     # store info
                     self._cur_item.seconds_total = bt_secs
-                    # logger.debug('   build time: [{0}] ({1} secs)'.format(build_time, bt_secs))
+                    logger.debug('    build time: [{0}] ({1} secs)'.format(build_time, bt_secs))
 
 
 # example of inputs:
