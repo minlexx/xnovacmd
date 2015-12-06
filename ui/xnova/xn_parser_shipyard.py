@@ -31,6 +31,7 @@ class ShipyardShipsAvailParser(XNParserBase):
         self._in_div_viewport_buildings = False
         self._in_div_title = False
         self._in_div_actions = False
+        self._in_div_overContent = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
         self._img_resource = ''
