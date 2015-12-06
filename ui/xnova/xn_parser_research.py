@@ -16,23 +16,30 @@ class ResearchAvailParser(XNParserBase):
         super(ResearchAvailParser, self).__init__()
         # public
         self.researches_avail = []
+        self.server_time = datetime.datetime.today()
         # private
         self._cur_item = XNPlanetBuildingItem()
         self._in_div_viewport_buildings = False
         self._in_div_title = False
         self._in_div_actions = False
         self._in_div_overContent = False
+        self._in_div_brp = False
+        self._got_level = False
         self._img_resource = ''  # met, cry, deit, energy
         self.clear()
 
     def clear(self):
         self.researches_avail = []
+        self.server_time = datetime.datetime.today()
         # clear internals
         self._in_div_viewport_buildings = False
         self._in_div_title = False
         self._in_div_actions = False
+        self._in_div_overContent = False
+        self._in_div_brp = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
+        self._got_level = False
         self._img_resource = ''
 
     def add_price(self, data: str):
@@ -58,6 +65,7 @@ class ResearchAvailParser(XNParserBase):
         super(ResearchAvailParser, self).handle_starttag(tag, attrs)
         if tag == 'div':
             div_classes = get_tag_classes(attrs)
+            div_id = get_attribute(attrs, 'id')
             if div_classes is None:
                 return
             if ('viewport' in div_classes) and ('buildings' in div_classes):
@@ -71,6 +79,9 @@ class ResearchAvailParser(XNParserBase):
                 return
             if 'overContent' in div_classes:
                 self._in_div_overContent = True
+                return
+            if div_id == 'brp':
+                self._in_div_brp = True
                 return
             return
         if tag == 'img':
@@ -90,20 +101,23 @@ class ResearchAvailParser(XNParserBase):
     def handle_endtag(self, tag: str):
         super(ResearchAvailParser, self).handle_endtag(tag)
         if tag == 'div':
-            if self._in_div_viewport_buildings and self._in_div_title and self._in_div_actions:
+            if self._in_div_viewport_buildings and self._in_div_title and \
+                    self._in_div_actions and (not self._in_div_brp):
                 self._in_div_viewport_buildings = False
                 self._in_div_title = False
                 self._in_div_actions = False
+                self._in_div_overContent = False
                 # store build item to list
                 self.researches_avail.append(self._cur_item)
                 # log
-                logger.debug(' -- Planet research avail: (gid={0}) {1} x {2} build time {3} secs'.format(
+                logger.debug(' -- Planet research avail: (gid={0}) {1} lv {2} build time {3} secs'.format(
                     self._cur_item.gid, self._cur_item.name,
-                    self._cur_item.quantity, self._cur_item.seconds_total
+                    self._cur_item.level, self._cur_item.seconds_total
                 ))
                 # clear current item from temp data
                 self._cur_item = XNPlanetBuildingItem()
                 self._img_resource = ''
+                self._got_level = False
                 return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
@@ -126,15 +140,6 @@ class ResearchAvailParser(XNParserBase):
                 logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
-            if self._in_div_viewport_buildings and self._in_div_title and (not self._in_div_actions):
-                if span_classes is None:
-                    return
-                if ('positive' in span_classes) or ('negative' in span_classes):
-                    # (<span class="positive">302</span>)
-                    # (<span class="negative">0</span>)
-                    quantity = safe_int(data)
-                    self._cur_item.quantity = quantity
-                    logger.debug('    quantity = [{0}]'.format(quantity))
             if self._in_div_overContent:
                 if span_classes is None:
                     return
@@ -147,13 +152,35 @@ class ResearchAvailParser(XNParserBase):
                     if data != 'Построить':
                         # logger.debug('    span resYes in div overContent: {0}'.format(data))
                         self.add_price(data)
-        if tag == 'div':
+        if tag == 'br':
             if self._in_div_actions:
-                # <div class="actions">
-                #   	Время: 3 мин. 27 с.
+                # <br>" Время: 1 д. 14 ч. 44 мин. 15 с. "
                 if data.startswith('Время:'):
                     build_time = data[7:]
                     bt_secs = parse_build_total_time_sec(build_time)
                     # store info
                     self._cur_item.seconds_total = bt_secs
                     logger.debug('    build time: [{0}] ({1} secs)'.format(build_time, bt_secs))
+        if tag == 'font':
+            if self._in_div_actions:
+                if not self._got_level:
+                    self._got_level = True
+                    self._cur_item.level = safe_int(data)
+                    logger.debug('    level: [{0}]'.format(self._cur_item.level))
+        if tag == 'script':
+            if self._in_div_brp:
+                logger.debug('    <script> in div actions, is in progress')
+                self._in_div_brp = False
+                lines = data.split('\n', maxsplit=6)
+                if len(lines) < 6:
+                    return
+                # 6th line is "ss = 52632;" // seconds left for building to complete
+                line = lines[5].strip()
+                m = re.match(r'ss = (\d+);', line)
+                if m is not None:
+                    secs_left = safe_int(m.group(1))
+                    dt_end = self.server_time + datetime.timedelta(seconds=secs_left)
+                    self._cur_item.seconds_left = secs_left
+                    self._cur_item.dt_end = dt_end
+                    logger.debug('    in progress, seconds left = {0}, dt_end = {1}'.format(
+                        secs_left, str(self._cur_item.dt_end)))
