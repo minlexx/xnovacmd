@@ -475,7 +475,7 @@ class XNPlanetBuildingItem:
         self.dt_end = None  # completion datetime, will hold a datetime object
         self.seconds_left = -1  # seconds left for this building to complete
         self.seconds_total = -1  # total seconds to build this item (-1 if building is not available)
-        self.remove_from_queue_link = None  # url to delete building from queue
+        self.remove_link = None  # url to delete building from queue
         # building price (for 1 item)
         self.cost_met = 0
         self.cost_cry = 0
@@ -499,8 +499,8 @@ class XNPlanetBuildingItem:
                 secs_str += '{0} left, '.format(self.seconds_left)
             secs_str += '{0} total secs)'.format(self.seconds_total)
         rl = ''
-        if self.remove_from_queue_link is not None:
-            rl = ', remove_link = [{0}]'.format(self.remove_from_queue_link)
+        if self.remove_link is not None:
+            rl = ', remove_link = [{0}]'.format(self.remove_link)
         lv_str = ''
         if self.is_shipyard_item:
             lv_str = '{0} pcs.'.format(self.quantity)
@@ -604,7 +604,7 @@ class XNPlanet:
                 bi.position = ba.position
                 bi.dt_end = ba.dt_end
                 bi.seconds_left = ba.seconds_left
-                bi.remove_from_queue_link = ba.remove_from_queue_link
+                bi.remove_link = ba.remove_link
                 self.has_build_in_progress = True
                 return True
         return False

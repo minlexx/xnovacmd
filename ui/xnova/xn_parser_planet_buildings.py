@@ -190,7 +190,7 @@ class PlanetBuildingsProgressParser(XNParserBase):
         bitem.gid = XNTechTree_instance().find_gid_by_name(building)
         bitem.level = level
         bitem.position = position
-        bitem.remove_from_queue_link = remove_link
+        bitem.remove_link = remove_link
         bitem.set_end_time(dt_end)  # also calculates seconds_left, if possible
         self.builds_in_progress.append(bitem)
         # logging
