@@ -29,7 +29,7 @@ class FlightsWidget(QWidget):
         self.ui = uic.loadUi(self.uifile, self)
         # new messages button
         self.btn_mewmsg = ButtonTextOverIcon(self)
-        self.btn_mewmsg.setText('0')
+        self.btn_mewmsg.setText('')
         self.btn_mewmsg.setIcon(QIcon(':/i/message.png'))
         self.btn_mewmsg.setIconSize(QSize(24, 16))
         self.btn_mewmsg.setMinimumSize(QSize(30, 22))
@@ -109,7 +109,6 @@ class FlightsWidget(QWidget):
 
     def update_new_messages_count(self):
         nmc = self.world.get_new_messages_count()
-        # self.ui.lbl_msgCount.setText(str(nmc))
         txt = ''
         if nmc > 0:
             txt = str(nmc)

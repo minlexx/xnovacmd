@@ -14,6 +14,7 @@ class ButtonTextOverIcon(QPushButton):
     """
     def __init__(self, parent=None):
         super(ButtonTextOverIcon, self).__init__(parent)
+        self._text = ''
         # set default values
         self.setOutlineColorWidth(QColor(255, 255, 255, 64), 3)
         self.setTextColor(QColor(64, 64, 64))
@@ -21,6 +22,9 @@ class ButtonTextOverIcon(QPushButton):
         font = self.font()
         font.setWeight(QFont.Bold)
         self.setFont(font)
+
+    def setText(self, p_str: str):
+        self._text = p_str
 
     def setTextColor(self, color: QColor):
         self.text_color = color
@@ -46,17 +50,14 @@ class ButtonTextOverIcon(QPushButton):
         painter.drawText(x, y, text)
 
     def paintEvent(self, evt: QPaintEvent):
-        # save our text
-        text = self.text()
-        self.setText('')
         # default painting, should paint icon
         super(ButtonTextOverIcon, self).paintEvent(evt)
-        # draw text, only if it not empty string
-        if (text is not None) and (text != ''):
+        # draw text over it, only if it not empty string
+        if (self._text is not None) and (self._text != ''):
             # calculate the width of text in pixels
             font = self.font()
             font_metrics = QFontMetrics(font)
-            text_width = font_metrics.width(text)
+            text_width = font_metrics.width(self._text)
             text_height = font_metrics.height()
             # calculate text output coordinates centered
             w = self.width()
@@ -66,6 +67,4 @@ class ButtonTextOverIcon(QPushButton):
             # draw text, centered inside window
             painter = QPainter(self)
             y += font_metrics.ascent()  # Note: The y-position is used as the baseline of the font. add it
-            self._drawTextShadow(painter, x, y, text)
-        # restore text
-        self.setText(text)
+            self._drawTextShadow(painter, x, y, self._text)
