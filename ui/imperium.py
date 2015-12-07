@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QTreeWidget, QTreeWidgetItem
 from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
@@ -15,13 +15,26 @@ class ImperiumWidget(QWidget):
         # objects, sub-windows
         self._world = XNovaWorld_instance()
         self._layout = None
+        self._layout_topbuttons = None
         self._tree = None
+        self._btn_reload = None
         # initialization
         self.setup_ui()
 
     def setup_ui(self):
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
+        # create layout for top line of buttons
+        self._layout_topbuttons = QHBoxLayout()
+        self._layout.addLayout(self._layout_topbuttons)
+        # create reload button
+        self._btn_reload = QPushButton(self.tr('Refresh imperium'), self)
+        self._btn_reload.setIcon(QIcon(':i/reload.png'))
+        self._btn_reload.clicked.connect(self.on_btn_refresh_imperium)
+        self._layout_topbuttons.addWidget(self._btn_reload)
+        # finalize top buttons layout
+        self._layout_topbuttons.addStretch()
+        # create tree
         self._tree = QTreeWidget(self)
         self._tree.setAnimated(False)
         self._tree.setExpandsOnDoubleClick(True)
@@ -338,3 +351,8 @@ class ImperiumWidget(QWidget):
         # add/expand
         self._tree.addTopLevelItem(fleet_root)
         fleet_root.setExpanded(True)
+
+    @pyqtSlot()
+    def on_btn_refresh_imperium(self):
+        logger.debug('refresh imperium clicked')
+        self._world.signal(self._world.SIGNAL_RELOAD_PAGE, page_name='imperium')
