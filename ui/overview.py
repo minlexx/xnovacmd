@@ -79,14 +79,17 @@ class Overview_BuildProgressWidget(QWidget):
     def __init__(self, parent=None):
         super(Overview_BuildProgressWidget, self).__init__(parent)
         self.planet = None
+        self.building_item = None
         self.is_shipyard = False
         self.is_research = False
         self.load_ui()
 
     def __str__(self) -> str:
-        ret = '(hidden)'
+        ret = ''
         if self.planet is not None:
-            ret = self.planet.name
+            ret += self.planet.name + ' '
+        if self.building_item is not None:
+            ret += self.building_item.name
             if self.is_shipyard:
                 ret += ' (shipyard)'
             if self.is_research:
@@ -136,6 +139,7 @@ class Overview_BuildProgressWidget(QWidget):
     def hide(self):
         super(Overview_BuildProgressWidget, self).hide()
         self.planet = None
+        self.building_item = None
         self.is_shipyard = False
         self.is_research = False
 
@@ -156,6 +160,7 @@ class Overview_BuildProgressWidget(QWidget):
 
     def update_from_planet(self, planet: XNPlanet, typ: str = ''):
         self.planet = planet
+        self.building_item = None
         self.is_shipyard = False
         self.is_research = False
         # config UI
@@ -167,6 +172,7 @@ class Overview_BuildProgressWidget(QWidget):
             if len(planet.buildings_items) > 0:
                 for bi in planet.buildings_items:
                     if bi.is_in_progress():
+                        self.building_item = bi
                         self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
                         self._set_percent_complete(bi)
                         self._set_buildtime(bi)
@@ -177,14 +183,16 @@ class Overview_BuildProgressWidget(QWidget):
             self._btn_cancel.setEnabled(False)  # cannot cancel shipyard jobs
             # set from shipyard item
             for bi in planet.shipyard_progress_items:
+                self.building_item = bi
                 self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
                 self._set_percent_complete(bi)
                 self._set_buildtime(bi)
-            return
+                return
         elif typ == BPW_TYPE_RESEARCH:
             self.is_research = True
             for bi in planet.research_items:
                 if bi.is_in_progress():
+                    self.building_item = bi
                     self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
                     self._set_percent_complete(bi)
                     self._set_buildtime(bi)
@@ -222,7 +230,11 @@ class Overview_BuildProgressWidget(QWidget):
 
     @pyqtSlot()
     def on_btn_cancel(self):
-        logger.debug('Overview_BuildProgressWidget: cancel clicked')
+        remove_link = None
+        if self.building_item is not None:
+            remove_link = self.building_item.remove_link
+        logger.debug('Overview_BuildProgressWidget: cancel clicked, remove_link = [{0}]'.\
+                     format(remove_link))
 
 
 # Manages "Overview" tab widget
