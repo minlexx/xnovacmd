@@ -42,6 +42,8 @@ class XNovaWorld(QThread):
     build_complete = pyqtSignal(XNPlanet, XNPlanetBuildingItem)
     # emitted when overview was reloaded (but not during world refresh)
     loaded_overview = pyqtSignal()
+    # emitted when imperium was reloaded (but not during world refresh)
+    loaded_imperium = pyqtSignal()
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -382,6 +384,9 @@ class XNovaWorld(QThread):
             # since we've overwritten the whole planets array, we need to
             # write current planet into it again
             self._update_current_planet()
+            # emit signal that we've loaded overview, but not during world update
+            if not self._world_is_loading:
+                self.loaded_imperium.emit()
         elif page_name == 'techtree':
             self._parser_techtree.clear()
             self._parser_techtree.parse_page_content(page_content)
