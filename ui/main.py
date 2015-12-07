@@ -231,11 +231,13 @@ class XNova_MainWindow(QWidget):
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
         self.world.set_login_email(self.login_email)
+        # connect signals from world
         self.world.world_load_progress.connect(self.on_world_load_progress)
         self.world.world_load_complete.connect(self.on_world_load_complete)
         self.world.flight_arrived.connect(self.on_flight_arrived)
         self.world.build_complete.connect(self.on_building_complete)
         self.world.loaded_overview.connect(self.on_loaded_overview)
+        self.world.loaded_imperium.connect(self.on_loaded_imperium)
         self.world.start()
 
     @pyqtSlot(str, int)
@@ -279,6 +281,17 @@ class XNova_MainWindow(QWidget):
         #  * current planet may have changed
         self.update_planets_panel()
         #  * server time is updated also
+
+    @pyqtSlot()
+    def on_loaded_imperium(self):
+        logger.debug('on_loaded_imperium')
+        # need to update imperium widget
+        if self.imperium_widget is not None:
+            self.imperium_widget.update_planets()
+        # the important note here is that imperium update is the only place where
+        # the planets list is read, so number of planets, their names, etc may change here
+        # Do we need to update planets panel also?
+        self.update_planets_panel()
 
     @pyqtSlot()
     def on_world_timer(self):
