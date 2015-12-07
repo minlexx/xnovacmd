@@ -121,7 +121,7 @@
         <translation type="obsolete">Флоты: {0}  |||   {1}</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="200"/>
+        <location filename="flights_widget.py" line="199"/>
         <source>
 return</source>
         <translation>
@@ -159,7 +159,7 @@ Res: {0}</source>
         <translation type="obsolete">0</translation>
     </message>
     <message>
-        <location filename="flights_widget.py" line="208"/>
+        <location filename="flights_widget.py" line="207"/>
         <source>Res: {0} m / {1} c {2} d</source>
         <translation>Ресы: {0} м / {1} к {2} д</translation>
     </message>
@@ -657,105 +657,110 @@ Res: {0}</source>
         <translation type="obsolete">Статистика</translation>
     </message>
     <message>
-        <location filename="overview.py" line="210"/>
+        <location filename="overview.py" line="267"/>
         <source>Refresh overview</source>
         <translation>Обновить обзор</translation>
     </message>
     <message>
-        <location filename="overview.py" line="217"/>
+        <location filename="overview.py" line="274"/>
         <source>Building Jobs</source>
         <translation>Текущие постройки</translation>
     </message>
     <message>
-        <location filename="overview.py" line="225"/>
+        <location filename="overview.py" line="282"/>
         <source>Shipyard Jobs</source>
         <translation>Постройки в верфях</translation>
+    </message>
+    <message>
+        <location filename="overview.py" line="290"/>
+        <source>Researches</source>
+        <translation>Исследования</translation>
     </message>
 </context>
 <context>
     <name>Overview_AccStatsWidget</name>
     <message>
-        <location filename="overview.py" line="21"/>
+        <location filename="overview.py" line="25"/>
         <source>Player:</source>
         <translation>Игрок:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="26"/>
+        <location filename="overview.py" line="30"/>
         <source>Buildings:</source>
         <translation>Постройки:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="27"/>
+        <location filename="overview.py" line="31"/>
         <source>Fleet:</source>
         <translation>Флот:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="28"/>
+        <location filename="overview.py" line="32"/>
         <source>Defense:</source>
         <translation>Оборона:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="29"/>
+        <location filename="overview.py" line="33"/>
         <source>Science:</source>
         <translation>Наука:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="30"/>
+        <location filename="overview.py" line="34"/>
         <source>Total:</source>
         <translation>Всего:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="31"/>
+        <location filename="overview.py" line="35"/>
         <source>Industry:</source>
         <translation>Промышленность:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="32"/>
+        <location filename="overview.py" line="36"/>
         <source>Military:</source>
         <translation>Военный опыт:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="33"/>
+        <location filename="overview.py" line="37"/>
         <source>Wins/Losses:</source>
         <translation>Побед/Поражений:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="34"/>
+        <location filename="overview.py" line="38"/>
         <source>Credits:</source>
         <translation>Кредиты:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="35"/>
+        <location filename="overview.py" line="39"/>
         <source>Fraction:</source>
         <translation>Фракция:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="36"/>
+        <location filename="overview.py" line="40"/>
         <source>Alliance:</source>
         <translation>Альянс:</translation>
     </message>
     <message>
-        <location filename="overview.py" line="44"/>
+        <location filename="overview.py" line="48"/>
         <source>Player: {0} (id={1})</source>
         <translation>Игрок: {0} (id={1})</translation>
     </message>
     <message>
-        <location filename="overview.py" line="51"/>
+        <location filename="overview.py" line="55"/>
         <source>{0} rank {1}</source>
         <translation>{0} место {1}</translation>
     </message>
     <message>
-        <location filename="overview.py" line="57"/>
+        <location filename="overview.py" line="61"/>
         <source>{0} rank {1} ({2})</source>
         <translation>{0} место {1} ({2})</translation>
     </message>
     <message>
-        <location filename="overview.py" line="61"/>
+        <location filename="overview.py" line="65"/>
         <source>{0} lv ({1}/{2} exp)</source>
         <translation>{0} ур ({1}/{2}) exp</translation>
     </message>
     <message>
-        <location filename="overview.py" line="63"/>
+        <location filename="overview.py" line="67"/>
         <source>{0} W / {1} L</source>
         <translation>{0} W / {1} L</translation>
     </message>
@@ -809,6 +814,14 @@ Res: {0}</source>
         <location filename="statusbar.py" line="21"/>
         <source>test parse</source>
         <translation>тест парсера</translation>
+    </message>
+</context>
+<context>
+    <name>XNovaWorld</name>
+    <message>
+        <location filename="xn_world.py" line="630"/>
+        <source>Planet</source>
+        <translation>Планета</translation>
     </message>
 </context>
 <context>
