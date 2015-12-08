@@ -816,9 +816,14 @@ Res: {0}</source>
         <translation type="obsolete">сигнал обновить обзор</translation>
     </message>
     <message>
-        <location filename="statusbar.py" line="21"/>
+        <location filename="statusbar.py" line="25"/>
         <source>test parse</source>
         <translation>тест парсера</translation>
+    </message>
+    <message>
+        <location filename="statusbar.py" line="50"/>
+        <source>Loading world</source>
+        <translation type="unfinished">Загрузка мира</translation>
     </message>
 </context>
 <context>
@@ -889,7 +894,7 @@ Res: {0}</source>
     <message>
         <location filename="main.py" line="246"/>
         <source>Loading world</source>
-        <translation>Загрузка мира</translation>
+        <translation type="obsolete">Загрузка мира</translation>
     </message>
     <message>
         <location filename="main.py" line="349"/>
