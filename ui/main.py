@@ -96,7 +96,7 @@ class XNova_MainWindow(QWidget):
         close_event.accept()
 
     def setStatusMessage(self, msg: str):
-        self.statusbar.setStatus(msg)
+        self.statusbar.set_status(msg)
 
     def store_cfg_val(self, category: str, value):
         pickle_filename = '{0}/{1}.dat'.format(self.config_store_dir, category)
@@ -242,12 +242,12 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(str, int)
     def on_world_load_progress(self, comment: str, progress: int):
-        msg = self.tr('Loading world') + ' ({0}%) {1}...'.format(progress, comment)
-        self.setStatusMessage(msg)
+        self.statusbar.set_world_load_progress(comment, progress)
 
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
+        self.statusbar.set_world_load_progress(None, -1)  # turn off progress display
         self.setStatusMessage(self.tr('World loaded.'))
         # update account info
         if self.overview_widget is not None:

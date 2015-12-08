@@ -1,6 +1,5 @@
-from PyQt5.QtCore import pyqtSlot, QCoreApplication
-from PyQt5.QtWidgets import QWidget, QStatusBar, QPushButton
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -15,6 +14,11 @@ class XNCStatusBar(QStatusBar):
         self.world = XNovaWorld_instance()
         # initialization
         self.setSizeGripEnabled(True)
+        # sub-widgets
+        self.progressbar = QProgressBar(self)
+        self.progressbar.hide()
+        self.progressbar.setValue(0)
+        self.progressbar.setRange(0, 99)
         # testing only
         # self.btn_start = QPushButton(self.tr('start'), self)
         # self.btn_stop = QPushButton(self.tr('stop'), self)
@@ -30,11 +34,28 @@ class XNCStatusBar(QStatusBar):
         self.show()
         # self.showMessage('wow')
 
-    def setupUi(self):
-        pass
-
-    def setStatus(self, msg: str, timeout: int=0):
+    def set_status(self, msg: str, timeout: int=0):
         self.showMessage(msg, timeout)
+
+    def set_world_load_progress(self, comment: str, progress: int):
+        """
+        Display world load progress in status bar
+        :param comment: string comment of what is currently loading
+        :param progress: percent progress, or -1 to disable
+        """
+        if progress != -1:
+            if not self.progressbar.isVisible():
+                self.insertPermanentWidget(0, self.progressbar)
+                self.progressbar.show()
+            msg = self.tr('Loading world') + ' ({0}%) {1}...'.format(progress, comment)
+            logger.debug(msg)
+            self.progressbar.setValue(progress)
+            self.set_status(msg)
+        else:
+            self.removeWidget(self.progressbar)
+            self.progressbar.hide()
+            self.progressbar.reset()
+            self.clearMessage()
 
 # some functions may be useful, documentation:
 # void QStatusBar::clearMessage()
