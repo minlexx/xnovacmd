@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
+
 from .widget_utils import number_format
 
 logger = xn_logger.get(__name__, debug=True)
@@ -63,7 +64,7 @@ class ImperiumWidget(QWidget):
             return True
 
         self._tree.clear()  # clear the tree first
-        planets = self._world.get_planets()  # get planets from the worls
+        planets = self._world.get_planets()  # get planets from the world
         #
         # setup header and its labels
         header_labels = ['-']
@@ -351,6 +352,23 @@ class ImperiumWidget(QWidget):
         # add/expand
         self._tree.addTopLevelItem(fleet_root)
         fleet_root.setExpanded(True)
+
+    def update_planet_resources(self):
+        res_top_twi = self._tree.topLevelItem(3)  # 4th top level item is "Resources"
+        if res_top_twi is None:
+            return
+        res_met_twi = res_top_twi.child(0)   # first child is metal
+        res_cry_twi = res_top_twi.child(1)   # 2nd is crystal
+        res_deit_twi = res_top_twi.child(2)  # 3rd is deit
+        if (res_met_twi is None) or (res_cry_twi is None) or (res_deit_twi is None):
+            return
+        planets = self._world.get_planets()  # get planets from the world
+        ncolumn = 1  # column #0 is description, planets start at #1
+        for planet in planets:
+            res_met_twi.setText(ncolumn, number_format(int(planet.res_current.met)))
+            res_cry_twi.setText(ncolumn, number_format(int(planet.res_current.cry)))
+            res_deit_twi.setText(ncolumn, number_format(int(planet.res_current.deit)))
+            ncolumn += 1
 
     @pyqtSlot()
     def on_btn_refresh_imperium(self):

@@ -301,6 +301,8 @@ class XNova_MainWindow(QWidget):
             self.flights_widget.update_flights()
         if self.overview_widget:
             self.overview_widget.update_builds()
+        if self.imperium_widget:
+            self.imperium_widget.update_planet_resources()
 
     @pyqtSlot(int)
     def on_tray_icon_activated(self, reason):
