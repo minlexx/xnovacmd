@@ -15,6 +15,7 @@ from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
 from .xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
+from .xn_parser_planet_energy import PlanetEnergyParser
 from .xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from .xn_parser_research import ResearchAvailParser
 from .xn_parser_techtree import TechtreeParser
@@ -60,6 +61,7 @@ class XNovaWorld(QThread):
         self._parser_imperium = ImperiumParser()
         self._parser_planet_buildings_avail = PlanetBuildingsAvailParser()
         self._parser_planet_buildings_progress = PlanetBuildingsProgressParser()
+        self._parser_planet_energy = PlanetEnergyParser()
         self._parser_shipyard_ships_avail = ShipyardShipsAvailParser()
         self._parser_shipyard_progress = ShipyardBuildsInProgressParser()
         self._parser_researches_avail = ResearchAvailParser()
@@ -404,6 +406,9 @@ class XNovaWorld(QThread):
                 # get buildings in progress on the same page
                 self._parser_planet_buildings_progress.clear()
                 self._parser_planet_buildings_progress.parse_page_content(page_content)
+                # get planet energy info
+                self._parser_planet_energy.clear()
+                self._parser_planet_energy.parse_page_content(page_content)
                 if planet is not None:
                     planet.buildings_items = self._parser_planet_buildings_avail.builds_avail
                     num_added = len(self._parser_planet_buildings_progress.builds_in_progress)
@@ -411,6 +416,9 @@ class XNovaWorld(QThread):
                         for bip in self._parser_planet_buildings_progress.builds_in_progress:
                             planet.add_build_in_progress(bip)
                         logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
+                    # save planet energy info
+                    planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    planet.energy.energy_total = self._parser_planet_energy.energy_total
             except ValueError:  # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
             except AttributeError:  # no match
@@ -426,12 +434,18 @@ class XNovaWorld(QThread):
                 self._parser_shipyard_progress.clear()
                 self._parser_shipyard_progress.server_time = self._server_time
                 self._parser_shipyard_progress.parse_page_content(page_content)
+                # get planet energy info
+                self._parser_planet_energy.clear()
+                self._parser_planet_energy.parse_page_content(page_content)
                 if planet is not None:
                     planet.shipyard_tems = self._parser_shipyard_ships_avail.ships_avail
                     planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_progress_items
                     if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
                         logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
                             planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
+                    # save planet energy info
+                    planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
@@ -445,11 +459,17 @@ class XNovaWorld(QThread):
                 self._parser_researches_avail.clear()
                 self._parser_researches_avail.server_time = self._server_time
                 self._parser_researches_avail.parse_page_content(page_content)
+                # get planet energy info
+                self._parser_planet_energy.clear()
+                self._parser_planet_energy.parse_page_content(page_content)
                 if planet is not None:
                     planet.research_items = self._parser_researches_avail.researches_avail
                     if len(self._parser_researches_avail.researches_avail) > 0:
                         logger.info('Planet {0} has {1} researches avail'.format(
                             planet.name, len(self._parser_researches_avail.researches_avail)))
+                    # save planet energy info
+                    planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected research_123456'.format(page_name))
             except ValueError:  # failed to convert to int
