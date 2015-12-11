@@ -261,70 +261,70 @@ class ImperiumWidget(QWidget):
         total_res = 0
         for pl in planets:
             total_res += pl.defense.ru
-            item_strings.append('{0}'.format(pl.defense.ru))
+            item_strings.append(number_format(pl.defense.ru))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Light Laser')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.ll
-            item_strings.append('{0}'.format(pl.defense.ll))
+            item_strings.append(number_format(pl.defense.ll))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Heavy Laser')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.tl
-            item_strings.append('{0}'.format(pl.defense.tl))
+            item_strings.append(number_format(pl.defense.tl))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Gauss')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.gauss
-            item_strings.append('{0}'.format(pl.defense.gauss))
+            item_strings.append(number_format(pl.defense.gauss))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Ion')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.ion
-            item_strings.append('{0}'.format(pl.defense.ion))
+            item_strings.append(number_format(pl.defense.ion))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Plasma')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.plasma
-            item_strings.append('{0}'.format(pl.defense.plasma))
+            item_strings.append(number_format(pl.defense.plasma))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Small Dome')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.small_dome
-            item_strings.append('{0}'.format(pl.defense.small_dome))
+            item_strings.append(number_format(pl.defense.small_dome))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Big Dome')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.big_dome
-            item_strings.append('{0}'.format(pl.defense.big_dome))
+            item_strings.append(number_format(pl.defense.big_dome))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Defender Missile')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.defender_rocket
-            item_strings.append('{0}'.format(pl.defense.defender_rocket))
+            item_strings.append(number_format(pl.defense.defender_rocket))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         item_strings = [self.tr('Attack Missile')]
         total_res = 0
         for pl in planets:
             total_res += pl.defense.attack_rocket
-            item_strings.append('{0}'.format(pl.defense.attack_rocket))
+            item_strings.append(number_format(pl.defense.attack_rocket))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
         # add/expand
