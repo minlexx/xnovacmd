@@ -396,6 +396,7 @@ class ImperiumWidget(QWidget):
             return
         planets = self._world.get_planets()  # get planets from the world
         ncolumn = 1  # column #0 is description, planets start at #1
+        totals = [0, 0, 0]  # count total resources
         for planet in planets:
             res_met_twi.setText(ncolumn, number_format(int(planet.res_current.met)))
             res_cry_twi.setText(ncolumn, number_format(int(planet.res_current.cry)))
@@ -403,6 +404,13 @@ class ImperiumWidget(QWidget):
             res_en_twi.setText(ncolumn, '{0} / {1}'.format(
                 planet.energy.energy_left, planet.energy.energy_total))
             ncolumn += 1
+            totals[0] += int(planet.res_current.met)
+            totals[1] += int(planet.res_current.cry)
+            totals[2] += int(planet.res_current.deit)
+        # set values for "totals" column
+        res_met_twi.setText(ncolumn, number_format(totals[0]))
+        res_cry_twi.setText(ncolumn, number_format(totals[1]))
+        res_deit_twi.setText(ncolumn, number_format(totals[2]))
 
     @pyqtSlot()
     def on_btn_refresh_imperium(self):
