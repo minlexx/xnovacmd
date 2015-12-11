@@ -115,7 +115,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_current.met)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
-z        #
+        #
         item_strings = [self.tr('Crystal')]
         total_res = 0
         for pl in planets:
