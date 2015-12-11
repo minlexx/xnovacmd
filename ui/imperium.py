@@ -362,7 +362,9 @@ class ImperiumWidget(QWidget):
         res_met_twi = res_top_twi.child(0)   # first child is metal
         res_cry_twi = res_top_twi.child(1)   # 2nd is crystal
         res_deit_twi = res_top_twi.child(2)  # 3rd is deit
-        if (res_met_twi is None) or (res_cry_twi is None) or (res_deit_twi is None):
+        res_en_twi = res_top_twi.child(3)    # 4th is energy
+        if (res_met_twi is None) or (res_cry_twi is None) or (res_deit_twi is None) \
+                or (res_en_twi is None):
             return
         planets = self._world.get_planets()  # get planets from the world
         ncolumn = 1  # column #0 is description, planets start at #1
@@ -370,6 +372,8 @@ class ImperiumWidget(QWidget):
             res_met_twi.setText(ncolumn, number_format(int(planet.res_current.met)))
             res_cry_twi.setText(ncolumn, number_format(int(planet.res_current.cry)))
             res_deit_twi.setText(ncolumn, number_format(int(planet.res_current.deit)))
+            res_en_twi.setText(ncolumn, '{0} / {1}'.format(
+                planet.energy.energy_left, planet.energy.energy_total))
             ncolumn += 1
 
     @pyqtSlot()
