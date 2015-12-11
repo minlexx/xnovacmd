@@ -349,98 +349,155 @@ class ImperiumWidget(QWidget):
         # fleet
         fleet_root = QTreeWidgetItem([self.tr('Fleet')])
         item_strings = [self.tr('Small Transport')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.mt))
+            total_res += pl.ships.mt
+            item_strings.append(number_format(pl.ships.mt))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Big Transport')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.bt))
+            total_res += pl.ships.bt
+            item_strings.append(number_format(pl.ships.bt))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Light Fighter')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.li))
+            total_res += pl.ships.li
+            item_strings.append(number_format(pl.ships.li))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Heavy Fighter')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.ti))
+            total_res += pl.ships.ti
+            item_strings.append(number_format(pl.ships.ti))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Cruiser')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.crus))
+            total_res += pl.ships.crus
+            item_strings.append(number_format(pl.ships.crus))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Battleship')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.link))
+            total_res += pl.ships.link
+            item_strings.append(number_format(pl.ships.link))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Colonizer')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.col))
+            total_res += pl.ships.col
+            item_strings.append(number_format(pl.ships.col))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Refiner')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.rab))
+            total_res += pl.ships.rab
+            item_strings.append(number_format(pl.ships.rab))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Spy')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.spy))
+            total_res += pl.ships.spy
+            item_strings.append(number_format(pl.ships.spy))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Bomber')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.bomber))
+            total_res += pl.ships.bomber
+            item_strings.append(number_format(pl.ships.bomber))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Solar Satellite')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.ss))
+            total_res += pl.ships.ss
+            item_strings.append(number_format(pl.ships.ss))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Destroyer')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.unik))
+            total_res += pl.ships.unik
+            item_strings.append(number_format(pl.ships.unik))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Death Star')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.zs))
+            total_res += pl.ships.zs
+            item_strings.append(number_format(pl.ships.zs))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('BattleCruiser')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.lk))
+            total_res += pl.ships.lk
+            item_strings.append(number_format(pl.ships.lk))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('War Base')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.warbase))
+            total_res += pl.ships.warbase
+            item_strings.append(number_format(pl.ships.warbase))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Corvett')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.f_corvett))
+            total_res += pl.ships.f_corvett
+            item_strings.append(number_format(pl.ships.f_corvett))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Interceptor')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.f_ceptor))
+            total_res += pl.ships.f_ceptor
+            item_strings.append(number_format(pl.ships.f_ceptor))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Dreadnought')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.f_dread))
+            total_res += pl.ships.f_dread
+            item_strings.append(number_format(pl.ships.f_dread))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         #
         item_strings = [self.tr('Corsair')]
+        total_res = 0
         for pl in planets:
-            item_strings.append('{0}'.format(pl.ships.f_corsair))
+            total_res += pl.ships.f_corsair
+            item_strings.append(number_format(pl.ships.f_corsair))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, fleet_root)
         # add/expand
         self._tree.addTopLevelItem(fleet_root)
