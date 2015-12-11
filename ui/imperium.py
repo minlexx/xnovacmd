@@ -72,7 +72,7 @@ class ImperiumWidget(QWidget):
         header_labels = ['-']
         for i in range(len(planets)):
             header_labels.append(planets[i].name)
-        header_labels.append('')  # empty last column
+        header_labels.append(self.tr('Total'))  # last column - totals
         self._tree.setHeaderLabels(header_labels)
         # alignment of text in header labels
         self._tree.header().setDefaultAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
@@ -97,29 +97,48 @@ class ImperiumWidget(QWidget):
         #
         # planets fields
         item_strings = [self.tr('Fields')]
+        total_busy = 0
+        total_fields = 0
         for pl in planets:
-            item_strings.append('{0}/{1}'.format(pl.fields_busy, pl.fields_total))
+            total_busy += pl.fields_busy
+            total_fields = pl.fields_total
+            item_strings.append('{0} / {1}'.format(pl.fields_busy, pl.fields_total))
+        item_strings.append('{0} / {1}'.format(total_busy, total_fields))
         additem_helper(item_strings)
         #
         # resources
         res_root = QTreeWidgetItem([self.tr('Resources')])
         item_strings = [self.tr('Metal')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_current.met
             item_strings.append('{0}'.format(number_format(pl.res_current.met)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
         item_strings = [self.tr('Crystal')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_current.cry
             item_strings.append('{0}'.format(number_format(pl.res_current.cry)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
         item_strings = [self.tr('Deit')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_current.deit
             item_strings.append('{0}'.format(number_format(pl.res_current.deit)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
         item_strings = [self.tr('Energy')]
+        total_busy = 0
+        total_fields = 0
         for pl in planets:
+            total_busy += pl.energy.energy_left
+            total_fields += pl.energy.energy_total
             item_strings.append('{0} / {1}'.format(
                 number_format(pl.energy.energy_left),
                 number_format(pl.energy.energy_total)))
+        item_strings.append('{0} / {1}'.format(total_busy, total_fields))
         additem_helper(item_strings, res_root)
         item_strings = [self.tr('Charge')]
         for pl in planets:
@@ -131,16 +150,25 @@ class ImperiumWidget(QWidget):
         # resources per hour
         rph_root = QTreeWidgetItem([self.tr('Production')])
         item_strings = [self.tr('Met/h')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_per_hour.met
             item_strings.append('{0}'.format(number_format(pl.res_per_hour.met)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, rph_root)
         item_strings = [self.tr('Cry/h')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_per_hour.cry
             item_strings.append('{0}'.format(number_format(pl.res_per_hour.cry)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, rph_root)
         item_strings = [self.tr('Deit/h')]
+        total_res = 0
         for pl in planets:
+            total_res += pl.res_per_hour.deit
             item_strings.append('{0}'.format(number_format(pl.res_per_hour.deit)))
+        item_strings.append(number_format(total_res))
         additem_helper(item_strings, rph_root)
         self._tree.addTopLevelItem(rph_root)
         rph_root.setExpanded(True)
