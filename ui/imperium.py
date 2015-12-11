@@ -115,6 +115,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_current.met)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
+z        #
         item_strings = [self.tr('Crystal')]
         total_res = 0
         for pl in planets:
@@ -122,6 +123,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_current.cry)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
+        #
         item_strings = [self.tr('Deit')]
         total_res = 0
         for pl in planets:
@@ -129,6 +131,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_current.deit)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, res_root)
+        #
         item_strings = [self.tr('Energy')]
         total_busy = 0
         total_fields = 0
@@ -140,6 +143,7 @@ class ImperiumWidget(QWidget):
                 number_format(pl.energy.energy_total)))
         item_strings.append('{0} / {1}'.format(total_busy, total_fields))
         additem_helper(item_strings, res_root)
+        #
         item_strings = [self.tr('Charge')]
         for pl in planets:
             item_strings.append('{0}%'.format(pl.energy.charge_percent))
@@ -156,6 +160,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_per_hour.met)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, rph_root)
+        #
         item_strings = [self.tr('Cry/h')]
         total_res = 0
         for pl in planets:
@@ -163,6 +168,7 @@ class ImperiumWidget(QWidget):
             item_strings.append('{0}'.format(number_format(pl.res_per_hour.cry)))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, rph_root)
+        #
         item_strings = [self.tr('Deit/h')]
         total_res = 0
         for pl in planets:
@@ -264,6 +270,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.ru))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Light Laser')]
         total_res = 0
         for pl in planets:
@@ -271,6 +278,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.ll))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Heavy Laser')]
         total_res = 0
         for pl in planets:
@@ -278,6 +286,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.tl))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Gauss')]
         total_res = 0
         for pl in planets:
@@ -285,6 +294,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.gauss))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Ion')]
         total_res = 0
         for pl in planets:
@@ -292,6 +302,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.ion))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Plasma')]
         total_res = 0
         for pl in planets:
@@ -299,6 +310,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.plasma))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Small Dome')]
         total_res = 0
         for pl in planets:
@@ -306,6 +318,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.small_dome))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Big Dome')]
         total_res = 0
         for pl in planets:
@@ -313,6 +326,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.big_dome))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Defender Missile')]
         total_res = 0
         for pl in planets:
@@ -320,6 +334,7 @@ class ImperiumWidget(QWidget):
             item_strings.append(number_format(pl.defense.defender_rocket))
         item_strings.append(number_format(total_res))
         additem_helper(item_strings, defense_root)
+        #
         item_strings = [self.tr('Attack Missile')]
         total_res = 0
         for pl in planets:
@@ -337,74 +352,92 @@ class ImperiumWidget(QWidget):
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.mt))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Big Transport')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.bt))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Light Fighter')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.li))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Heavy Fighter')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.ti))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Cruiser')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.crus))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Battleship')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.link))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Colonizer')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.col))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Refiner')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.rab))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Spy')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.spy))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Bomber')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.bomber))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Solar Satellite')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.ss))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Destroyer')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.unik))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Death Star')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.zs))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('BattleCruiser')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.lk))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('War Base')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.warbase))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Corvett')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.f_corvett))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Interceptor')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.f_ceptor))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Dreadnought')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.f_dread))
         additem_helper(item_strings, fleet_root)
+        #
         item_strings = [self.tr('Corsair')]
         for pl in planets:
             item_strings.append('{0}'.format(pl.ships.f_corsair))
