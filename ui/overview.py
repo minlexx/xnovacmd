@@ -8,6 +8,8 @@ from .xnova.xn_data import fraction_from_name, XNAccountInfo, XNPlanet, XNPlanet
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
+from .widget_utils import number_format
+
 logger = xn_logger.get(__name__, debug=True)
 
 
@@ -47,19 +49,19 @@ class  Overview_AccStatsWidget(QWidget):
         # a = self.world.get_account_info()
         self.ui.gb_account.setTitle(self.tr('Player: {0} (id={1})').format(a.login, a.id))
         self.set_as_item(0, 1, self.tr('{0} rank {1}').format(
-            a.scores.buildings, a.scores.buildings_rank))
+            number_format(a.scores.buildings), a.scores.buildings_rank))
         self.set_as_item(1, 1, self.tr('{0} rank {1}').format(
-            a.scores.fleet, a.scores.fleet_rank))
+            number_format(a.scores.fleet), a.scores.fleet_rank))
         self.set_as_item(2, 1, self.tr('{0} rank {1}').format(
-            a.scores.defense, a.scores.defense_rank))
+            number_format(a.scores.defense), a.scores.defense_rank))
         self.set_as_item(3, 1, self.tr('{0} rank {1}').format(
-            a.scores.science, a.scores.science_rank))
+            number_format(a.scores.science), a.scores.science_rank))
         # total: 15156 rank 195 (+2)
         rank_delta_str = '+' + str(a.scores.rank_delta)  # explicit "+" sign
         if a.scores.rank_delta < 0:
             rank_delta_str = str(a.scores.rank_delta)
         self.set_as_item(4, 1, self.tr('{0} rank {1} ({2})').format(
-            a.scores.total, a.scores.rank, rank_delta_str))
+            number_format(a.scores.total), a.scores.rank, rank_delta_str))
         self.set_as_item(5, 1, self.tr('{0} lv ({1}/{2} exp)').format(
             a.scores.industry_level, a.scores.industry_exp[0], a.scores.industry_exp[1]))
         self.set_as_item(6, 1, self.tr('{0} lv ({1}/{2} exp)').format(
