@@ -296,7 +296,7 @@ class XNFraction:
         self.race_id = 0
         if race_id is not None:
             self.race_id = race_id
-        self.ico_name = 'race{0}.gif'.format(self.race_id)
+        self.ico_name = 'race{0}.png'.format(self.race_id)
 
 
 def fraction_from_name(name: str) -> XNFraction:

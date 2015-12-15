@@ -1,10 +1,10 @@
 <RCC>
   <qresource prefix="i">
     <file alias="pb01_tex.png">i/pb01_tex.png</file>
-    <file alias="race1.gif">i/race1.gif</file>
-    <file alias="race2.gif">i/race2.gif</file>
-    <file alias="race3.gif">i/race3.gif</file>
-    <file alias="race4.gif">i/race4.gif</file>
+    <file alias="race1.png">i/race1.png</file>
+    <file alias="race2.png">i/race2.png</file>
+    <file alias="race3.png">i/race3.png</file>
+    <file alias="race4.png">i/race4.png</file>
     <file alias="favicon_16.png">i/favicon_16.png</file>
     <file alias="favicon_32.png">i/favicon_32.png</file>
     <file alias="loading.gif">i/loading.gif</file>
