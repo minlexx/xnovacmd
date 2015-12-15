@@ -5,8 +5,10 @@
     <file alias="race2.png">i/race2.png</file>
     <file alias="race3.png">i/race3.png</file>
     <file alias="race4.png">i/race4.png</file>
-    <file alias="favicon_16.png">i/favicon_16.png</file>
-    <file alias="favicon_32.png">i/favicon_32.png</file>
+    <file alias="xnova_logo_32.png">i/xnova_logo_32.png</file>
+    <file alias="xnova_logo_48.png">i/xnova_logo_48.png</file>
+    <file alias="xnova_logo_64.png">i/xnova_logo_64.png</file>
+    <file alias="xnova_logo_128.png">i/xnova_logo_128.png</file>
     <file alias="loading.gif">i/loading.gif</file>
     <file alias="message.png">i/message.png</file>
     <file alias="cancel.png">i/cancel.png</file>

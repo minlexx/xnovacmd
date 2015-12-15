@@ -57,10 +57,10 @@ class XNova_MainWindow(QWidget):
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
-        self.setWindowIcon(QIcon(':/i/favicon_32.png'))
+        self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
-            self.tray_icon = QSystemTrayIcon(QIcon(':/i/favicon_16.png'), self)
+            self.tray_icon = QSystemTrayIcon(QIcon(':/i/xnova_logo_32.png'), self)
             self.tray_icon.setToolTip(self.tr('XNova Commander'))
             self.tray_icon.activated.connect(self.on_tray_icon_activated)
             self.tray_icon.show()
