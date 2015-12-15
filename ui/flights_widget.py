@@ -1,5 +1,3 @@
-import datetime
-
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QSize
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
