@@ -139,8 +139,8 @@ class ImperiumWidget(QWidget):
             total_busy += pl.energy.energy_left
             total_fields += pl.energy.energy_total
             item_strings.append('{0} / {1}'.format(
-                number_format(pl.energy.energy_left),
-                number_format(pl.energy.energy_total)))
+                    pl.energy.energy_left,
+                    pl.energy.energy_total))
         item_strings.append('{0} / {1}'.format(total_busy, total_fields))
         additem_helper(item_strings, res_root)
         #
