@@ -9,6 +9,10 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class CollapsibleFrame(QFrame):
+
+    expanded = pyqtSignal()
+    collapsed = pyqtSignal()
+
     def __init__(self, parent: QWidget = None):
         # Constructs a frame widget with frame style NoFrame and a 1-pixel frame width.
         super(CollapsibleFrame, self).__init__(parent)
@@ -54,16 +58,27 @@ class CollapsibleFrame(QFrame):
     def removeWidget(self, widget: QWidget):
         self._panel_layout.removeWidget(widget)
 
+    def is_expanded(self) -> bool:
+        return not self._is_collapsed
+
+    def expand(self):
+        self._button.setArrowType(Qt.DownArrow)
+        self._panel.setVisible(True)
+        self._is_collapsed = False
+
+    def collapse(self):
+        self._panel.setVisible(False)
+        self._button.setArrowType(Qt.RightArrow)
+        self._is_collapsed = True
+
     @pyqtSlot()
     def on_button_click(self):
         logger.debug('button clicked')
         if self._is_collapsed:
-            self._panel.setVisible(True)
-            self._button.setArrowType(Qt.DownArrow)
-            self._is_collapsed = False
+            self.expand()
+            self.expanded.emit()
             return
         else:
-            self._panel.setVisible(False)
-            self._button.setArrowType(Qt.RightArrow)
-            self._is_collapsed = True
+            self.collapse()
+            self.collapsed.emit()
             return
