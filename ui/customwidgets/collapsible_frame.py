@@ -29,7 +29,7 @@ class CollapsibleFrame(QFrame):
         self._button.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self._button.setAutoRaise(False)
         self._button.setText('CollapsibleFrame')
-        self._button.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
+        self._button.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
         self._layout.addWidget(self._button, 0)
         self._button.setVisible(True)
         # group box
