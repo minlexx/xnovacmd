@@ -302,6 +302,7 @@ class XNovaWorld(QThread):
                 bitem.seconds_left -= 1
                 if bitem.seconds_left <= 0:
                     todel_list.append(bitem)
+                break  # only one (first) item is IN PROGRESS, others WAIT !!!
             if len(todel_list) > 0:
                 for bitem in todel_list:
                     planet.shipyard_progress_items.remove(bitem)
