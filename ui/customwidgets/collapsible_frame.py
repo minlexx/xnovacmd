@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QToolButton, QVBoxLayout, QLayout, 
 
 from ui.xnova import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class CollapsibleFrame(QFrame):
@@ -73,7 +73,6 @@ class CollapsibleFrame(QFrame):
 
     @pyqtSlot()
     def on_button_click(self):
-        logger.debug('button clicked')
         if self._is_collapsed:
             self.expand()
             self.expanded.emit()
