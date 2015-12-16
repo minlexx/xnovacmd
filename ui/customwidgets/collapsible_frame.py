@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
-from PyQt5.QtWidgets import QWidget, QFrame, QToolButton, QVBoxLayout, QLayout
+from PyQt5.QtWidgets import QWidget, QFrame, QToolButton, QVBoxLayout, QLayout, QSizePolicy
 
 from ui.xnova import xn_logger
 
@@ -15,13 +15,13 @@ class CollapsibleFrame(QFrame):
         # possible values are:
         #   QFrame.NoFrame, QFrame.Box, QFrame.Panel, QFrame.StyledPanel,
         #   QFrame.HLine, QFrame.VLine, QFrame.WinPanel
-        self.setFrameShape(QFrame.Box)
+        self.setFrameShape(QFrame.StyledPanel)
         # possible values are:  QFrame.Plain, QFrame.Raised, QFrame.Sunken
         self.setFrameShadow(QFrame.Plain)
         # layout
         self._layout = QVBoxLayout()
-        self._layout.setContentsMargins(1, 1, 1, 1)
-        self._layout.setSpacing(1)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(0)
         self.setLayout(self._layout)
         # button
         self._button = QToolButton(self)
@@ -29,12 +29,17 @@ class CollapsibleFrame(QFrame):
         self._button.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self._button.setAutoRaise(False)
         self._button.setText('CollapsibleFrame')
-        self._layout.addWidget(self._button)
+        self._button.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
+        self._layout.addWidget(self._button, 0)
         self._button.setVisible(True)
         # group box
         self._panel = QWidget(self)
         self._layout.addWidget(self._panel)
         self._panel.setVisible(False)
+        self._panel_layout = QVBoxLayout()
+        self._panel_layout.setContentsMargins(1, 1, 1, 1)
+        self._panel_layout.setSpacing(2)
+        self._panel.setLayout(self._panel_layout)
         # connect signals
         self._button.clicked.connect(self.on_button_click)
         # private state variables
@@ -43,11 +48,11 @@ class CollapsibleFrame(QFrame):
     def setTitle(self, title: str):
         self._button.setText(title)
 
-    def setInternalLayout(self, layout):
-        self._panel.setLayout(layout)
+    def addWidget(self, widget: QWidget):
+        self._panel_layout.addWidget(widget)
 
-    def internalLayout(self) -> QLayout:
-        return self._panel.layout()
+    def removeWidget(self, widget: QWidget):
+        self._panel_layout.removeWidget(widget)
 
     @pyqtSlot()
     def on_button_click(self):
