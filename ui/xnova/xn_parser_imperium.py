@@ -20,6 +20,9 @@ class ImperiumParser(XNParserBase):
         self.planet_ids = []
         self.planet_pics = []
         self.planets = []
+        # used to store planet energy_total, since we cannot
+        # parse it from imperium pagem and overwriting it with zeroes
+        self._planet_energy_totals = dict()
 
     def clear(self):
         self.in_imp_1 = False
@@ -27,6 +30,10 @@ class ImperiumParser(XNParserBase):
         self._phase = 'pics'
         self._phase_res = ''
         self._counter = 0
+        # save planet energy totals
+        self._planet_energy_totals = dict()
+        for pl in self.planets:
+            self._planet_energy_totals[pl.planet_id] = pl.energy.energy_total
         # somewhat output data
         self.planet_ids = []
         self.planet_pics = []
@@ -535,4 +542,10 @@ class ImperiumParser(XNParserBase):
             #    logger.debug('Planet {0} buildings: {1}'.format(str(pl), str(pl.buildings)))
             #    logger.debug('Planet {0} ships:     {1}'.format(str(pl), str(pl.ships)))
             #    logger.debug('Planet {0} defense:   {1}'.format(str(pl), str(pl.defense)))
+            # restore planets energy totals
+            for planet_id in self._planet_energy_totals.keys():
+                for pl in self.planets:
+                    if pl.planet_id == planet_id:
+                        pl.energy.energy_total = self._planet_energy_totals[planet_id]
+                        break
             return
