@@ -8,6 +8,7 @@ from .xnova.xn_data import fraction_from_name, XNAccountInfo, XNPlanet, XNPlanet
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
+from .customwidgets.collapsible_frame import CollapsibleFrame
 from .widget_utils import number_format
 
 logger = xn_logger.get(__name__, debug=True)
@@ -248,16 +249,12 @@ class OverviewWidget(QWidget):
         self._btn_reload = None
         self._aswidget = None
         self.world = XNovaWorld_instance()
-        # self.icon_open = None
-        # self.icon_closed = None
-        # self.prev_index = -1
+        # build progress widgets
         self.bp_widgets = dict()  # build progress widgets
         self.bp_widgets_sy = dict()  # shipyard build progress widgets
         self.bp_widgets_res = dict()  # researches build progress widgets
 
     def load_ui(self):
-        # self.icon_open = QIcon(':/i/tb_open.png')
-        # self.icon_closed = QIcon(':/i/tb_closed.png')
         # layout
         self._layout = QVBoxLayout()
         self._layout_topbuttons = QHBoxLayout()
@@ -271,34 +268,29 @@ class OverviewWidget(QWidget):
         self._layout_topbuttons.addWidget(self._btn_reload)
         self._layout_topbuttons.addStretch()
         # group box to hold builds info
-        self._gb_builds = QGroupBox(self)
+        self._gb_builds = CollapsibleFrame(self)
         self._gb_builds.setTitle(self.tr('Building Jobs'))
-        self._layout_builds = QVBoxLayout()
-        self._layout_builds.setContentsMargins(1, 1, 1, 1)
-        self._layout_builds.setSpacing(1)
-        self._gb_builds.setLayout(self._layout_builds)
         self._layout.addWidget(self._gb_builds)
         # groupbox to hold shipyard builds info
-        self._gb_shipyard = QGroupBox(self)
+        self._gb_shipyard = CollapsibleFrame(self)
         self._gb_shipyard.setTitle(self.tr('Shipyard Jobs'))
-        self._layout_sy = QVBoxLayout()
-        self._layout_sy.setContentsMargins(1, 1, 1, 1)
-        self._layout_sy.setSpacing(1)
-        self._gb_shipyard.setLayout(self._layout_sy)
         self._layout.addWidget(self._gb_shipyard)
         # groupbox to hold researches in progress info
-        self._gb_research = QGroupBox(self)
+        self._gb_research = CollapsibleFrame(self)
         self._gb_research.setTitle(self.tr('Researches'))
-        self._layout_research = QVBoxLayout()
-        self._layout_research.setContentsMargins(1, 1, 1, 1)
-        self._layout_research.setSpacing(1)
-        self._gb_research.setLayout(self._layout_research)
         self._layout.addWidget(self._gb_research)
+        # groupbox to hold account stats widget
+        self._gb_accstats = CollapsibleFrame(self)
+        self._gb_accstats.setTitle(self.tr('Statistics'))
+        self._layout.addWidget(self._gb_accstats)
         # account stats widget
         self._aswidget = Overview_AccStatsWidget(self)
         self._aswidget.load_ui()
-        self.layout().addWidget(self._aswidget)
         self._aswidget.show()
+        self._gb_accstats.addWidget(self._aswidget)
+        self._gb_accstats.expand()  # staticstics expanded by default
+        # add final spacer
+        self._layout.addStretch()
 
     def update_account_info(self):
         a = self.world.get_account_info()
@@ -311,7 +303,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets[planet_id]
             # create BPW for planet
             bpw = Overview_BuildProgressWidget(self)
-            self._layout_builds.addWidget(bpw)
+            self._gb_builds.addWidget(bpw)
             self.bp_widgets[planet_id] = bpw
             bpw.hide()
             return bpw
@@ -320,7 +312,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets_sy[planet_id]
             # create BPW for planet shipyard
             bpw = Overview_BuildProgressWidget(self)
-            self._layout_sy.addWidget(bpw)
+            self._gb_shipyard.addWidget(bpw)
             self.bp_widgets_sy[planet_id] = bpw
             bpw.hide()
             return bpw
@@ -329,7 +321,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets_res[planet_id]
             # create BPW for planet shipyard
             bpw = Overview_BuildProgressWidget(self)
-            self._layout_research.addWidget(bpw)
+            self._gb_research.addWidget(bpw)
             self.bp_widgets_res[planet_id] = bpw
             bpw.hide()
             return bpw
