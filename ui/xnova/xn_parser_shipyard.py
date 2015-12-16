@@ -268,3 +268,5 @@ class ShipyardBuildsInProgressParser(XNParserBase):
                         days=0, seconds=self._cur_item.seconds_left)
                     self.shipyard_progress_items.append(self._cur_item)
                     logger.info(' ...add ship in progress {0}'.format(str(self._cur_item)))
+                    # create a new item that will be added next time
+                    self._cur_item = XNPlanetBuildingItem()
