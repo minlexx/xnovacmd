@@ -126,6 +126,7 @@ class OverviewParser(XNParserBase):
         self.in_server_time = False
         self.new_messages_count = 0
         self.in_RO = False  # vacation mode
+        self.online_players = 0
 
     def handle_starttag(self, tag: str, attrs: list):
         super(OverviewParser, self).handle_starttag(tag, attrs)
@@ -538,6 +539,14 @@ class OverviewParser(XNParserBase):
                 if b_id == 'new_messages':
                     self.new_messages_count = safe_int(data)
                     logger.info('new messages: {0}'.format(self.new_messages_count))
+        # find current online players count
+        if tag == 'a':
+            # <a onclick="" title="Игроков в сети" style="color:green">35</a>
+            a_style = get_attribute(attrs, 'style')
+            a_title = get_attribute(attrs, 'title')
+            if (a_title == 'Игроков в сети') and (a_style == 'color:green'):
+                self.online_players = safe_int(data)
+                logger.info('Online players = {0}'.format(self.online_players))
         return   # from def handle_data()
 
 # own missile parser
