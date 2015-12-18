@@ -42,14 +42,16 @@ class SettingsWidget(QWidget):
         self._sections_list.setSelectionBehavior(QAbstractItemView.SelectItems)
         self._sections_list.setIconSize(QSize(32, 32))
         self._sections_list.setViewMode(QListView.IconMode)
-        self._sections_list.setMaximumWidth(50)
-        self._sections_list.setGridSize(QSize(40, 40))
+        self._sections_list.setMaximumWidth(80)
+        self._sections_list.setGridSize(QSize(64, 64))
         self._sections_list.setFlow(QListView.TopToBottom)
         self._sections_list.setMovement(QListView.Static)  # items cannot be moved by user
         lwi = QListWidgetItem()
         lwi.setText(self.tr('Network'))
-        lwi.setIcon(QIcon(':/i/settings_network.png'))
+        lwi.setTextAlignment(Qt.AlignCenter)
+        lwi.setIcon(QIcon(':/i/settings_network_32.png'))
         self._sections_list.addItem(lwi)
+        lwi.setSelected(True)
         self._sections_list.currentItemChanged.connect(self.on_section_current_item_changed)
         self._sections_list.itemSelectionChanged.connect(self.on_section_selection_changed)
         self._layout_stacks.addWidget(self._sections_list)
@@ -73,6 +75,8 @@ class SettingsWidget(QWidget):
         self._layout_main.addLayout(self._layout_stacks)
         self._layout_main.addLayout(self._layout_okcancel)
         self.setLayout(self._layout_main)
+        self.setWindowTitle(self.tr('Settings'))
+        self.setWindowIcon(QIcon(':/i/settings_32.png'))
         #
         self.load_settings()
 
