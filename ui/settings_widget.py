@@ -18,7 +18,7 @@ class Settings_Net(QWidget):
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
         # construct layout
-        min_width = 120
+        min_width = 150
         self.user_agents = dict()
         self.user_agents['chrome_win7_x64'] = ('Chrome 41, Windows 7 x64',
                                                'Mozilla/5.0 (Windows NT 6.1; WOW64) '
@@ -88,7 +88,7 @@ class Settings_Net(QWidget):
         self._l_proxy.addWidget(self._cb_proxy)
         self._layout.addLayout(self._l_proxy)
         self._l_proxy_s = QHBoxLayout()
-        self._lbl_proxy_s = QLabel(self.tr('Proxy addr:port'), self)
+        self._lbl_proxy_s = QLabel(self.tr('Proxy addr:port:'), self)
         self._lbl_proxy_s.setMinimumWidth(min_width)
         self._le_proxy_addr = QLineEdit(self)
         self._l_proxy_s.addWidget(self._lbl_proxy_s)
@@ -232,6 +232,7 @@ class SettingsWidget(QWidget):
         self._btn_ok.setIcon(QIcon(':/i/save.png'))
         self._btn_cancel = QPushButton(self)
         self._btn_cancel.setText(self.tr('Cancel'))
+        self._btn_cancel.setIcon(QIcon(':/i/cancel.png'))
         self._layout_okcancel.addStretch()
         self._layout_okcancel.addWidget(self._btn_ok)
         self._layout_okcancel.addWidget(self._btn_cancel)
