@@ -11,6 +11,7 @@ from .widget_utils import install_layout_for_widget, \
     remove_trailing_spacer_from_layout, \
     flight_mission_for_humans
 from .statusbar import XNCStatusBar
+from .settings_widget import SettingsWidget
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
@@ -49,6 +50,8 @@ class XNova_MainWindow(QWidget):
         self.flights_widget = None
         self.overview_widget = None
         self.imperium_widget = None
+        self.settings_widget = SettingsWidget(self)
+        self.settings_widget.hide()
         # initialization
         self.load_ui()
         self.world = XNovaWorld_instance()
@@ -344,6 +347,8 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_show_settings(self):
         logger.info('Showing settings dialog')
+        if self.settings_widget is not None:
+            self.settings_widget.show()
 
     @pyqtSlot(XNFlight)
     def on_flight_arrived(self, fl: XNFlight):
