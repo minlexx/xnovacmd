@@ -66,6 +66,7 @@ class XNova_MainWindow(QWidget):
             self.tray_icon.show()
         # create status bar
         self.statusbar = XNCStatusBar(self)
+        self.statusbar.requestShowSettings.connect(self.on_show_settings)
         self.layout().addWidget(self.statusbar)
         self.setStatusMessage(self.tr('Not connected: Log in!'))
         # try to restore last window size
@@ -339,6 +340,10 @@ class XNova_MainWindow(QWidget):
             self.tray_icon.showMessage(title, message, icon_type, timeout_ms)
         else:
             logger.info('This system does not support tray icon messages.')
+
+    @pyqtSlot()
+    def on_show_settings(self):
+        logger.info('Showing settings dialog')
 
     @pyqtSlot(XNFlight)
     def on_flight_arrived(self, fl: XNFlight):

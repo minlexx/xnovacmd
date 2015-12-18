@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSlot, QSize
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QSize
 from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar
 from PyQt5.QtGui import QIcon
 
@@ -9,6 +9,9 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class XNCStatusBar(QStatusBar):
+
+    requestShowSettings = pyqtSignal()
+
     def __init__(self, parent=None):
         super(XNCStatusBar, self).__init__(parent)
         # state vars
@@ -26,6 +29,7 @@ class XNCStatusBar(QStatusBar):
         self._btn_settings.setText('')
         self._btn_settings.setIcon(QIcon(':/i/settings_32.png'))
         self._btn_settings.setIconSize(QSize(16, 16))
+        self._btn_settings.clicked.connect(self.on_btn_settings)
         # testing only
         self._btn_test1 = QPushButton(self.tr('test parse'), self)
         self.addPermanentWidget(self._btn_test1)
@@ -56,6 +60,10 @@ class XNCStatusBar(QStatusBar):
             self._progressbar.hide()
             self._progressbar.reset()
             self.clearMessage()
+
+    @pyqtSlot()
+    def on_btn_settings(self):
+        self.requestShowSettings.emit()
 
 # some functions may be useful, documentation:
 # void QStatusBar::clearMessage()
