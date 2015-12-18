@@ -79,6 +79,7 @@ class XNovaWorld(QThread):
         self._planets = []  # list of XNPlanet
         self._techtree = XNTechTree_instance()
         self._new_messages_count = 0
+        self._server_online_players = 0
         # internal need
         self._net_errors_count = 0
         self._mutex = QMutex(QMutex.Recursive)
@@ -358,6 +359,7 @@ class XNovaWorld(QThread):
             self._diff_with_server_time_secs = int(dt_diff.total_seconds())
             self._new_messages_count = self._parser_overview.new_messages_count
             self._vacation_mode = self._parser_overview.in_RO
+            self._server_online_players = self._parser_overview.online_players
             # run also cur planet parser on the same content
             self._parser_curplanet.parse_page_content(page_content)
             self._cur_planet_id = self._parser_curplanet.cur_planet_id
