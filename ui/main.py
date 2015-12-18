@@ -14,7 +14,7 @@ from .statusbar import XNCStatusBar
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
-from .imperium import ImperiumWidget
+from .imperium_widget import ImperiumWidget
 from .customwidgets.planets_bar_widget import PlanetsBarWidget
 
 from .xnova.xn_data import XNFlight, XNPlanet, XNPlanetBuildingItem
