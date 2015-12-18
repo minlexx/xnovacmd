@@ -13,6 +13,7 @@
         <file alias="message.png">i/message.png</file>
         <file alias="cancel.png">i/cancel.png</file>
         <file alias="reload.png">i/reload.png</file>
+        <file alias="save.png">i/save.png</file>
         <file alias="settings_32.png">i/settings_32.png</file>
         <file alias="settings_network_32.png">i/settings_network_32.png</file>
     </qresource>
