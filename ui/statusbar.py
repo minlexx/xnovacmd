@@ -1,5 +1,6 @@
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QSize
 from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar
+from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -15,24 +16,23 @@ class XNCStatusBar(QStatusBar):
         # initialization
         self.setSizeGripEnabled(True)
         # sub-widgets
-        self.progressbar = QProgressBar(self)
-        self.progressbar.hide()
-        self.progressbar.setValue(0)
-        self.progressbar.setRange(0, 99)
+        # progressbar
+        self._progressbar = QProgressBar(self)
+        self._progressbar.hide()
+        self._progressbar.setValue(0)
+        self._progressbar.setRange(0, 99)
+        # settings button
+        self._btn_settings = QPushButton(self)
+        self._btn_settings.setText('')
+        self._btn_settings.setIcon(QIcon(':/i/settings_32.png'))
+        self._btn_settings.setIconSize(QSize(16, 16))
         # testing only
-        # self.btn_start = QPushButton(self.tr('start'), self)
-        # self.btn_stop = QPushButton(self.tr('stop'), self)
-        self.btn_test1 = QPushButton(self.tr('test parse'), self)
-        # void	addPermanentWidget(QWidget * widget, int stretch = 0)
-        # self.addPermanentWidget(self.btn_start)
-        # self.addPermanentWidget(self.btn_stop)
-        self.addPermanentWidget(self.btn_test1)
-        # self.btn_start.clicked.connect(self.on_btn_start)
-        # self.btn_stop.clicked.connect(self.on_btn_stop)
-        self.btn_test1.clicked.connect(self.on_btn_test1)
+        self._btn_test1 = QPushButton(self.tr('test parse'), self)
+        self.addPermanentWidget(self._btn_test1)
+        self._btn_test1.clicked.connect(self.on_btn_test1)
         #
+        self.addPermanentWidget(self._btn_settings)  # should be las right widget
         self.show()
-        # self.showMessage('wow')
 
     def set_status(self, msg: str, timeout: int=0):
         self.showMessage(msg, timeout)
@@ -44,17 +44,17 @@ class XNCStatusBar(QStatusBar):
         :param progress: percent progress, or -1 to disable
         """
         if progress != -1:
-            if not self.progressbar.isVisible():
-                self.insertPermanentWidget(0, self.progressbar)
-                self.progressbar.show()
+            if not self._progressbar.isVisible():
+                self.insertPermanentWidget(0, self._progressbar)
+                self._progressbar.show()
             msg = self.tr('Loading world') + ' ({0}%) {1}...'.format(progress, comment)
             logger.debug(msg)
-            self.progressbar.setValue(progress)
+            self._progressbar.setValue(progress)
             self.set_status(msg)
         else:
-            self.removeWidget(self.progressbar)
-            self.progressbar.hide()
-            self.progressbar.reset()
+            self.removeWidget(self._progressbar)
+            self._progressbar.hide()
+            self._progressbar.reset()
             self.clearMessage()
 
 # some functions may be useful, documentation:
