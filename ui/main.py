@@ -346,7 +346,6 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_show_settings(self):
-        logger.info('Showing settings dialog')
         if self.settings_widget is not None:
             self.settings_widget.show()
 
