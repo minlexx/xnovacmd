@@ -125,7 +125,7 @@ class OverviewParser(XNParserBase):
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
         self.new_messages_count = 0
-        self.is_RO = False  # vacation mode
+        self.in_RO = False  # vacation mode
 
     def handle_starttag(self, tag: str, attrs: list):
         super(OverviewParser, self).handle_starttag(tag, attrs)
