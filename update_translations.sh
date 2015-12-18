@@ -13,8 +13,9 @@ SOURCES="app.py \
     ui/customwidgets/planets_bar_widget.py \
     ui/statusbar.py \
     ui/widget_utils.py \
-    ui/imperium.py \
-    ui/xnova/xn_world.py"
+    ui/imperium_widget.py \
+    ui/xnova/xn_world.py \
+    ui/settings_widget.py"
 
 echo "TS files: $TS_FILES"
 echo "Sources: $SOURCES"
