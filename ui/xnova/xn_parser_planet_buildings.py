@@ -129,6 +129,9 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 # store info
                 self._cur_item.name = data
                 self._cur_item.gid = gid
+                # we know the gid, we know the build link
+                # format: "?set=buildings&cmd=insert&building=3"
+                self._cur_item.build_link = '?set=buildings&cmd=insert&building={0}'.format(gid)
                 logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
