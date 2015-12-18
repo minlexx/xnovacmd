@@ -70,6 +70,7 @@ class XNovaWorld(QThread):
         self._server_time = datetime.datetime.today()  # server time at last overview update
         # all we need to calc server time is actually time diff with our time:
         self._diff_with_server_time_secs = 0  # calculated as: our_time - server_time
+        self._vacation_mode = False
         self._account = XNAccountInfo()
         self._flights = []
         self._cur_planet_id = 0
@@ -356,6 +357,7 @@ class XNovaWorld(QThread):
             dt_diff = dt_now - self._server_time
             self._diff_with_server_time_secs = int(dt_diff.total_seconds())
             self._new_messages_count = self._parser_overview.new_messages_count
+            self._vacation_mode = self._parser_overview.in_RO
             # run also cur planet parser on the same content
             self._parser_curplanet.parse_page_content(page_content)
             self._cur_planet_id = self._parser_curplanet.cur_planet_id

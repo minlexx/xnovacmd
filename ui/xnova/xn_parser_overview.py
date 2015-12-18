@@ -125,6 +125,7 @@ class OverviewParser(XNParserBase):
         self.server_time = datetime.datetime.today()
         self.in_server_time = False
         self.new_messages_count = 0
+        self.is_RO = False  # vacation mode
 
     def handle_starttag(self, tag: str, attrs: list):
         super(OverviewParser, self).handle_starttag(tag, attrs)
@@ -275,7 +276,15 @@ class OverviewParser(XNParserBase):
         #    logger.info('Total {0} flights.'.format(len(self.flights)))
 
     def handle_data2(self, data: str, tag: str, attrs: list):
-        # logger.debug('data [{0}]:    path: [{1}]'.format(data, self.get_path()))
+        # detect vacation mode
+        if tag == 'font':
+            # <font color="red">Включен режим отпуска! Функциональность игры ограничена.</font>
+            font_color = get_attribute(attrs, 'color')
+            if font_color is not None:
+                if font_color == 'red':
+                    if data == 'Включен режим отпуска! Функциональность игры ограничена.':
+                        self.in_RO = True
+                        return
         if data == 'Игрок:':
             self.in_player_data = True
             self._data_prev = data
