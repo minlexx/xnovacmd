@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QSize
-from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar
+from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel
 from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
@@ -24,6 +24,8 @@ class XNCStatusBar(QStatusBar):
         self._progressbar.hide()
         self._progressbar.setValue(0)
         self._progressbar.setRange(0, 99)
+        # online players counter
+        self._lbl_online = QLabel(self.tr('Online') + ': 0', self)
         # settings button
         self._btn_settings = QPushButton(self)
         self._btn_settings.setText('')
@@ -35,6 +37,7 @@ class XNCStatusBar(QStatusBar):
         self.addPermanentWidget(self._btn_test1)
         self._btn_test1.clicked.connect(self.on_btn_test1)
         #
+        self.addPermanentWidget(self._lbl_online)  # before the last
         self.addPermanentWidget(self._btn_settings)  # should be las right widget
         self.show()
 
@@ -60,6 +63,10 @@ class XNCStatusBar(QStatusBar):
             self._progressbar.hide()
             self._progressbar.reset()
             self.clearMessage()
+
+    def update_online_players_count(self):
+        op = self.world.get_online_players()
+        self._lbl_online.setText(self.tr('Online') + ': {0}'.format(op))
 
     @pyqtSlot()
     def on_btn_settings(self):

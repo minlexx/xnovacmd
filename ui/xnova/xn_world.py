@@ -218,6 +218,9 @@ class XNovaWorld(QThread):
         self.unlock()
         return ret
 
+    def get_online_players(self):
+        return self._server_online_players
+
     ################################################################################
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,

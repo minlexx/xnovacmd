@@ -267,6 +267,8 @@ class XNova_MainWindow(QWidget):
         if self.imperium_widget is not None:
             self.imperium_widget.setEnabled(True)
             self.imperium_widget.update_planets()
+        # update statusbar
+        self.statusbar.update_online_players_count()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
@@ -285,6 +287,7 @@ class XNova_MainWindow(QWidget):
         #  * current planet may have changed
         self.update_planets_panel()
         #  * server time is updated also
+        self.statusbar.update_online_players_count()
 
     @pyqtSlot()
     def on_loaded_imperium(self):
