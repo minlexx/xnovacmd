@@ -9,7 +9,7 @@ from PyQt5.QtGui import QIcon
 from ui.xnova import xn_logger
 
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class Settings_Net(QWidget):
@@ -103,7 +103,6 @@ class Settings_Net(QWidget):
     @pyqtSlot(int)
     def on_cb_eb_current_index_changed(self, index: int):
         key_id = str(self._cb_eb.currentData(Qt.UserRole))
-        # logger.debug('cb_eb changed: {0}'.format(key_id))
         if key_id == 'custom':
             self._le_ua.setEnabled(True)
             return
@@ -178,10 +177,8 @@ class Settings_Net(QWidget):
         if idx >= 0:
             user_agent_id = str(self._cb_eb.itemData(idx, Qt.UserRole))
             cfg['net']['user_agent_id'] = user_agent_id
-            logger.debug('saving user_agent_id = {0}'.format(user_agent_id))
         user_agent = self._le_ua.text().strip()
         if user_agent != '':
-            logger.debug('saving user_agent = {0}'.format(user_agent))
             cfg['net']['user_agent'] = user_agent
         # deal with proxy
         idx = self._cb_proxy.currentIndex()
@@ -192,6 +189,7 @@ class Settings_Net(QWidget):
             cfg['net']['proxy'] = 'http://' + proxy_addr
         elif idx == 2:
             cfg['net']['proxy'] = 'socks5://' + proxy_addr
+        logger.debug('Saved network config')
 
 
 class SettingsWidget(QWidget):
