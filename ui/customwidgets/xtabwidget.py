@@ -17,17 +17,21 @@ class XTabWidget(QFrame):
     def __init__(self, QWidget_parent=None):
         super(XTabWidget, self).__init__(QWidget_parent)
         # setup self frame
-        self.setFrameShadow(QFrame.Plain)
-        self.setFrameShape(QFrame.Box)
+        self.setFrameShadow(QFrame.Raised)
+        self.setFrameShape(QFrame.StyledPanel)
         # layouts
         self._layout = QVBoxLayout()
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(2)
         self._layout_top = QHBoxLayout()
+        self._layout_top.setContentsMargins(0, 0, 0, 0)
         # stacked widget
         self._stack = QStackedWidget(self)
         # tab bar
         self._tabbar = QTabBar(self)
         self._tabbar.setTabsClosable(True)
         self._tabbar.setMovable(False)
+        self._tabbar.setExpanding(False)
         self._tabbar.setShape(QTabBar.RoundedNorth)
         self._tabbar.currentChanged.connect(self.on_tab_current_changed)
         self._tabbar.tabCloseRequested.connect(self.on_tab_close_requested)
@@ -58,6 +62,9 @@ class XTabWidget(QFrame):
 
     def tabBar(self) -> QTabBar:
         return self._tabbar
+
+    def enableButtonAdd(self, enableState: bool = True):
+        self._btn_add.setEnabled(enableState)
 
     @pyqtSlot()
     def on_btn_add_clicked(self):
