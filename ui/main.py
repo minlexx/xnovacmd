@@ -2,9 +2,10 @@ import pathlib
 import pickle
 
 from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QTabWidget, QTabBar
-from PyQt5.QtGui import QIcon, QCloseEvent
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QThread
+from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QTabWidget, QTabBar, \
+    QMenu, QAction, QPushButton
+from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
 
 from .widget_utils import install_layout_for_widget, \
     append_trailing_spacer_to_layout, \
@@ -64,7 +65,10 @@ class XNova_MainWindow(QWidget):
         # tweak ui
         self.ui.tabWidget.setTabPosition(QTabWidget.North)
         self.ui.tabWidget.setTabsClosable(True)
+        self.ui.tabWidget.setMovable(False)
         self.ui.tabWidget.tabCloseRequested.connect(self.on_tab_close_requested)
+        # self.ui.tabWidget.tabBarClicked.connect(self.on_tab_bar_clicked)
+        # self.ui.tabWidget.tabBar().tabMoved.connect(self.on_tab_moved)
         # system tray icon
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
@@ -134,12 +138,13 @@ class XNova_MainWindow(QWidget):
             pass
         return value
 
-    def add_tab(self, widget: QWidget, title: str, closeable: bool = True):
+    def add_tab(self, widget: QWidget, title: str, closeable: bool = True) -> int:
         tab_index = self.ui.tabWidget.addTab(widget, title)
         if not closeable:
             tab_bar = self.ui.tabWidget.tabBar()  # get tab bar
             tab_bar.setTabButton(tab_index, QTabBar.RightSide, None)
             tab_bar.setTabButton(tab_index, QTabBar.LeftSide, None)  # it MAY be on the left too!!
+        return tab_index
 
     # called by main application object just after main window creation
     # to show login widget and begin login process
@@ -207,6 +212,22 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot(int)
     def on_tab_close_requested(self, idx: int):
         logger.debug('tab close requested: {0}'.format(idx))
+        if idx <= 1:  # cannot close overview or imperium tabs
+            return
+        self.ui.tabWidget.removeTab(idx)
+
+    #@pyqtSlot(int)
+    #def on_tab_bar_clicked(self, idx: int):
+    #    logger.debug('tab bar clicked: {0}'.format(idx))
+    #    if idx == self.adder_tab_index:
+    #        pos = QCursor.pos()
+    #        logger.debug('adder tab, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
+    #        menu = QMenu('title', self)
+    #        menu.addAction(QAction('test 1', self))
+    #        menu.addAction(QAction('test 2', self))
+    #        action_ret = menu.exec(pos)
+    #        if action_ret is not None:
+    #            logger.debug('action = {0}'.format(action_ret.text()))
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
@@ -248,6 +269,7 @@ class XNova_MainWindow(QWidget):
         self.imperium_widget = ImperiumWidget(self.ui.tabWidget)
         self.add_tab(self.imperium_widget, self.tr('Imperium'), closeable=False)
         self.imperium_widget.setEnabled(False)
+        #
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
         self.world.set_login_email(self.login_email)
@@ -267,6 +289,7 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
+        # update statusbar
         self.statusbar.set_world_load_progress(None, -1)  # turn off progress display
         self.setStatusMessage(self.tr('World loaded.'))
         # update account info
