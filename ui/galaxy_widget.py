@@ -148,7 +148,9 @@ class GalaxyCoordSingleSelectorWidget(QFrame):
 class GalaxyCoordsSelectorWidget(QFrame):
     """
     Groups together two controls to select galaxy and system
-    coordinates with a button to navigate there
+    coordinates with a button to navigate there.
+    TODO: it can also show selector of your current planets,
+    TODO: and maybe bookmarks? :D
     """
 
     coordsChanged = pyqtSignal(int, int)
@@ -181,6 +183,7 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._layout.addWidget(self._galaxy_selector)
         self._layout.addWidget(self._system_selector)
         self._layout.addWidget(self._btn_navigate)
+        self._layout.addStretch()
 
     def coordGalaxy(self) -> int:
         return self._coords[0]
