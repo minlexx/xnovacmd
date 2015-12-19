@@ -3,7 +3,7 @@ import pickle
 
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon
+from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QTabWidget, QTabBar
 from PyQt5.QtGui import QIcon, QCloseEvent
 
 from .widget_utils import install_layout_for_widget, \
@@ -61,6 +61,11 @@ class XNova_MainWindow(QWidget):
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
         self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
+        # tweak ui
+        self.ui.tabWidget.setTabPosition(QTabWidget.North)
+        self.ui.tabWidget.setTabsClosable(True)
+        self.ui.tabWidget.tabCloseRequested.connect(self.on_tab_close_requested)
+        # system tray icon
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
             self.tray_icon = QSystemTrayIcon(QIcon(':/i/xnova_logo_32.png'), self)
@@ -129,6 +134,13 @@ class XNova_MainWindow(QWidget):
             pass
         return value
 
+    def add_tab(self, widget: QWidget, title: str, closeable: bool = True):
+        tab_index = self.ui.tabWidget.addTab(widget, title)
+        if not closeable:
+            tab_bar = self.ui.tabWidget.tabBar()  # get tab bar
+            tab_bar.setTabButton(tab_index, QTabBar.RightSide, None)
+            tab_bar.setTabButton(tab_index, QTabBar.LeftSide, None)  # it MAY be on the left too!!
+
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
@@ -137,9 +149,9 @@ class XNova_MainWindow(QWidget):
         self.login_widget.load_ui()
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
-        tab_index = self.ui.tabWidget.addTab(self.login_widget, self.tr('Login'))
+        # tab_index = self.ui.tabWidget.addTab(self.login_widget, self.tr('Login'))
         self.login_widget.show()
-        #self.add_tab(self.login_widget, self.tr('Login'))
+        self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         #
         # testing only - add 'fictive' planets to test planets panel without loading
         # pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
@@ -192,6 +204,10 @@ class XNova_MainWindow(QWidget):
                         if isinstance(wi, PlanetsBarWidget):
                             wi.update()
 
+    @pyqtSlot(int)
+    def on_tab_close_requested(self, idx: int):
+        logger.debug('tab close requested: {0}'.format(idx))
+
     @pyqtSlot(str)
     def on_login_error(self, errstr):
         logger.error('Login error: {0}'.format(errstr))
@@ -224,13 +240,13 @@ class XNova_MainWindow(QWidget):
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self)
         self.overview_widget.load_ui()
-        tab_index = self.ui.tabWidget.addTab(self.overview_widget, self.tr('Overview'))
+        self.add_tab(self.overview_widget, self.tr('Overview'), closeable=False)
         self.overview_widget.show()
         self.overview_widget.setEnabled(False)
         #
         # create 2nd tab - Imperium
         self.imperium_widget = ImperiumWidget(self.ui.tabWidget)
-        tab_index = self.ui.tabWidget.addTab(self.imperium_widget, self.tr('Imperium'))
+        self.add_tab(self.imperium_widget, self.tr('Imperium'), closeable=False)
         self.imperium_widget.setEnabled(False)
         # initialize XNova world updater
         self.world.initialize(cookies_dict)
