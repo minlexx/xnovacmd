@@ -1,10 +1,9 @@
 import pathlib
 import pickle
 
-from PyQt5 import uic
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QThread
-from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QTabWidget, QTabBar, \
-    QMenu, QAction, QPushButton
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer
+from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
+    QScrollArea, QMenu, QAction, QPushButton, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
 
 from .statusbar import XNCStatusBar
@@ -39,38 +38,72 @@ class XNova_MainWindow(QWidget):
     STATE_AUTHED = 1
 
     def __init__(self, parent=None):
-        super(XNova_MainWindow, self).__init__(parent)
+        super(XNova_MainWindow, self).__init__(parent, Qt.Window)
         # state vars
-        self.uifile = 'ui/main.ui'
         self.config_store_dir = './cache'
         self.state = self.STATE_NOT_AUTHED
         self.login_email = ''
         self.cookies_dict = {}
-        # objects, sub-windows
-        self.ui = None
-        self.tray_icon = None
-        self.statusbar = None
+        #
+        # init UI
+        self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
+        self.setWindowTitle('XNova Commander')
+        # main layouts
+        self._layout = QVBoxLayout()
+        self._layout.setContentsMargins(0, 2, 0, 0)
+        self._layout.setSpacing(3)
+        self.setLayout(self._layout)
+        self._horizontal_layout = QHBoxLayout()
+        self._horizontal_layout.setContentsMargins(0, 0, 0, 0)
+        self._horizontal_layout.setSpacing(6)
+        # flights frame
+        self._fr_flights = QFrame(self)
+        self._fr_flights.setMinimumHeight(22)
+        self._fr_flights.setFrameShape(QFrame.NoFrame)
+        self._fr_flights.setFrameShadow(QFrame.Plain)
+        # planets bar scrollarea
+        self._sa_planets = QScrollArea(self)
+        self._sa_planets.setMinimumWidth(125)
+        self._sa_planets.setMaximumWidth(125)
+        self._sa_planets.setFrameShape(QFrame.NoFrame)
+        self._sa_planets.setFrameShadow(QFrame.Plain)
+        self._sa_planets.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self._sa_planets.setWidgetResizable(True)
+        self._panel_planets = QWidget(self._sa_planets)
+        self._layout_pp = QVBoxLayout()
+        self._panel_planets.setLayout(self._layout_pp)
+        self._lbl_planets = QLabel(self.tr('Planets:'), self._panel_planets)
+        self._lbl_planets.setMaximumHeight(32)
+        self._layout_pp.addWidget(self._lbl_planets)
+        self._layout_pp.addStretch()
+        self._sa_planets.setWidget(self._panel_planets)
+        #
+        # tab widget
+        self._tabwidget = XTabWidget(self)
+        self._tabwidget.enableButtonAdd(False)
+        self._tabwidget.tabCloseRequested.connect(self.on_tab_close_requested)
+        self._tabwidget.addClicked.connect(self.on_tab_add_clicked)
+        #
+        # create status bar
+        self._statusbar = XNCStatusBar(self)
+        self._statusbar.requestShowSettings.connect(self.on_show_settings)
+        self.setStatusMessage(self.tr('Not connected: Log in!'))
+        #
+        # tab widget pages
         self.login_widget = None
         self.flights_widget = None
         self.overview_widget = None
         self.imperium_widget = None
         self.settings_widget = SettingsWidget(self)
         self.settings_widget.hide()
-        # initialization
-        self.load_ui()
-        self.world = XNovaWorld_instance()
-        self.world_timer = QTimer(self)
-        self.world_timer.timeout.connect(self.on_world_timer)
-
-    def load_ui(self):
-        self.ui = uic.loadUi(self.uifile, self)
-        self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
-        # tweak ui
-        self._tabwidget = XTabWidget(self)
-        self._tabwidget.enableButtonAdd(False)
-        self.ui.horizontalLayout.addWidget(self._tabwidget)
-        self._tabwidget.tabCloseRequested.connect(self.on_tab_close_requested)
-        self._tabwidget.addClicked.connect(self.on_tab_add_clicked)
+        #
+        # finalize layouts
+        self._horizontal_layout.addWidget(self._sa_planets)
+        self._horizontal_layout.addWidget(self._tabwidget)
+        self._layout.addWidget(self._fr_flights)
+        self._layout.addLayout(self._horizontal_layout)
+        self._layout.addWidget(self._statusbar)
+        #
         # system tray icon
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
@@ -78,21 +111,24 @@ class XNova_MainWindow(QWidget):
             self.tray_icon.setToolTip(self.tr('XNova Commander'))
             self.tray_icon.activated.connect(self.on_tray_icon_activated)
             self.tray_icon.show()
-        # create status bar
-        self.statusbar = XNCStatusBar(self)
-        self.statusbar.requestShowSettings.connect(self.on_show_settings)
-        self.layout().addWidget(self.statusbar)
-        self.setStatusMessage(self.tr('Not connected: Log in!'))
+        else:
+            self.tray_icon = None
+        #
         # try to restore last window size
         ssz = self.load_cfg_val('main_size')
         if ssz is not None:
             self.resize(ssz[0], ssz[1])
+        #
+        # world initialization
+        self.world = XNovaWorld_instance()
+        self.world_timer = QTimer(self)
+        self.world_timer.timeout.connect(self.on_world_timer)
 
     # overrides QWidget.closeEvent
     # cleanup just before the window close
     def closeEvent(self, close_event: QCloseEvent):
         logger.debug('closing')
-        if self.tray_icon:
+        if self.tray_icon is not None:
             self.tray_icon.hide()
             self.tray_icon = None
         if self.world_timer.isActive():
@@ -111,7 +147,7 @@ class XNova_MainWindow(QWidget):
         close_event.accept()
 
     def setStatusMessage(self, msg: str):
-        self.statusbar.set_status(msg)
+        self._statusbar.set_status(msg)
 
     def store_cfg_val(self, category: str, value):
         pickle_filename = '{0}/{1}.dat'.format(self.config_store_dir, category)
@@ -173,7 +209,7 @@ class XNova_MainWindow(QWidget):
         # self.setup_planets_panel(test_planets)
 
     def setup_planets_panel(self, planets: list):
-        layout = self.ui.panel_planets.layout()
+        layout = self._panel_planets.layout()
         layout.setSpacing(0)
         remove_trailing_spacer_from_layout(layout)
         # remove all previous planet widgets from planets panel
@@ -188,7 +224,7 @@ class XNova_MainWindow(QWidget):
                             wi.close()
                             del wi
         for pl in planets:
-            pw = PlanetsBarWidget(self.ui.panel_planets)
+            pw = PlanetsBarWidget(self._panel_planets)
             pw.setPlanet(pl)
             layout.addWidget(pw)
             pw.show()
@@ -199,7 +235,7 @@ class XNova_MainWindow(QWidget):
         Calls QWidget.update() on every PlanetBarWidget
         embedded in ui.panel_planets, causing repaint
         """
-        layout = self.ui.panel_planets.layout()
+        layout = self._panel_planets.layout()
         if layout.count() > 0:
             for i in range(layout.count()):
                 li = layout.itemAt(i)
@@ -252,10 +288,10 @@ class XNova_MainWindow(QWidget):
         #
         # create all main widgets
         # create flights widget
-        self.flights_widget = FlightsWidget(self.ui.fr_flights)
+        self.flights_widget = FlightsWidget(self._fr_flights)
         self.flights_widget.load_ui()
-        install_layout_for_widget(self.ui.fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
-        self.ui.fr_flights.layout().addWidget(self.flights_widget)
+        install_layout_for_widget(self._fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
+        self._fr_flights.layout().addWidget(self.flights_widget)
         self.flights_widget.setEnabled(False)
         #
         # create overview widget and add it as first tab
@@ -284,13 +320,13 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(str, int)
     def on_world_load_progress(self, comment: str, progress: int):
-        self.statusbar.set_world_load_progress(comment, progress)
+        self._statusbar.set_world_load_progress(comment, progress)
 
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
         # update statusbar
-        self.statusbar.set_world_load_progress(None, -1)  # turn off progress display
+        self._statusbar.set_world_load_progress(None, -1)  # turn off progress display
         self.setStatusMessage(self.tr('World loaded.'))
         # update account info
         if self.overview_widget is not None:
@@ -307,7 +343,7 @@ class XNova_MainWindow(QWidget):
             self.imperium_widget.setEnabled(True)
             self.imperium_widget.update_planets()
         # update statusbar
-        self.statusbar.update_online_players_count()
+        self._statusbar.update_online_players_count()
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
@@ -326,7 +362,7 @@ class XNova_MainWindow(QWidget):
         #  * current planet may have changed
         self.update_planets_panel()
         #  * server time is updated also
-        self.statusbar.update_online_players_count()
+        self._statusbar.update_online_players_count()
 
     @pyqtSlot()
     def on_loaded_imperium(self):
