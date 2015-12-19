@@ -14,7 +14,7 @@
    <string>XNova Commander</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="res.qrc">
+   <iconset>
     <normaloff>:/i/favicon_16.png</normaloff>:/i/favicon_16.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="main_vl" stretch="0,1">
@@ -53,7 +53,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,10">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
      <item>
       <widget class="QScrollArea" name="sa_planets">
        <property name="minimumSize">
@@ -85,7 +85,7 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>108</width>
+          <width>130</width>
           <height>451</height>
          </rect>
         </property>
@@ -112,16 +112,6 @@
          </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
       </widget>
      </item>
     </layout>

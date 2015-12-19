@@ -7,17 +7,20 @@ from PyQt5.QtWidgets import QWidget, QMessageBox, QSystemTrayIcon, QTabWidget, Q
     QMenu, QAction, QPushButton
 from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
 
-from .widget_utils import install_layout_for_widget, \
-    append_trailing_spacer_to_layout, \
-    remove_trailing_spacer_from_layout, \
-    flight_mission_for_humans
 from .statusbar import XNCStatusBar
 from .settings_widget import SettingsWidget
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 from .imperium_widget import ImperiumWidget
+
 from .customwidgets.planets_bar_widget import PlanetsBarWidget
+from .customwidgets.xtabwidget import XTabWidget
+
+from .widget_utils import install_layout_for_widget, \
+    append_trailing_spacer_to_layout, \
+    remove_trailing_spacer_from_layout, \
+    flight_mission_for_humans
 
 from .xnova.xn_data import XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xnova.xn_world import XNovaWorld_instance
@@ -63,12 +66,11 @@ class XNova_MainWindow(QWidget):
         self.ui = uic.loadUi(self.uifile, self)
         self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
         # tweak ui
-        self.ui.tabWidget.setTabPosition(QTabWidget.North)
-        self.ui.tabWidget.setTabsClosable(True)
-        self.ui.tabWidget.setMovable(False)
-        self.ui.tabWidget.tabCloseRequested.connect(self.on_tab_close_requested)
-        # self.ui.tabWidget.tabBarClicked.connect(self.on_tab_bar_clicked)
-        # self.ui.tabWidget.tabBar().tabMoved.connect(self.on_tab_moved)
+        self._tabwidget = XTabWidget(self)
+        self._tabwidget.enableButtonAdd(False)
+        self.ui.horizontalLayout.addWidget(self._tabwidget)
+        self._tabwidget.tabCloseRequested.connect(self.on_tab_close_requested)
+        self._tabwidget.addClicked.connect(self.on_tab_add_clicked)
         # system tray icon
         if QSystemTrayIcon.isSystemTrayAvailable():
             logger.debug('System tray icon is available, showing')
@@ -139,22 +141,20 @@ class XNova_MainWindow(QWidget):
         return value
 
     def add_tab(self, widget: QWidget, title: str, closeable: bool = True) -> int:
-        tab_index = self.ui.tabWidget.addTab(widget, title)
-        if not closeable:
-            tab_bar = self.ui.tabWidget.tabBar()  # get tab bar
-            tab_bar.setTabButton(tab_index, QTabBar.RightSide, None)
-            tab_bar.setTabButton(tab_index, QTabBar.LeftSide, None)  # it MAY be on the left too!!
+        tab_index = self._tabwidget.addTab(widget, title, closeable)
         return tab_index
+
+    def remove_tab(self, index: int):
+        self._tabwidget.removeTab(index)
 
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
         # create and show login widget as first tab
-        self.login_widget = LoginWidget(self.ui.tabWidget)
+        self.login_widget = LoginWidget(self._tabwidget)
         self.login_widget.load_ui()
         self.login_widget.loginError.connect(self.on_login_error)
         self.login_widget.loginOk.connect(self.on_login_ok)
-        # tab_index = self.ui.tabWidget.addTab(self.login_widget, self.tr('Login'))
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         #
@@ -214,20 +214,19 @@ class XNova_MainWindow(QWidget):
         logger.debug('tab close requested: {0}'.format(idx))
         if idx <= 1:  # cannot close overview or imperium tabs
             return
-        self.ui.tabWidget.removeTab(idx)
+        self.remove_tab(idx)
 
-    #@pyqtSlot(int)
-    #def on_tab_bar_clicked(self, idx: int):
-    #    logger.debug('tab bar clicked: {0}'.format(idx))
-    #    if idx == self.adder_tab_index:
-    #        pos = QCursor.pos()
-    #        logger.debug('adder tab, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
-    #        menu = QMenu('title', self)
-    #        menu.addAction(QAction('test 1', self))
-    #        menu.addAction(QAction('test 2', self))
-    #        action_ret = menu.exec(pos)
-    #        if action_ret is not None:
-    #            logger.debug('action = {0}'.format(action_ret.text()))
+    @pyqtSlot()
+    def on_tab_add_clicked(self):
+        logger.debug('tab bar add clicked:')
+        pos = QCursor.pos()
+        logger.debug('adder tab, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
+        menu = QMenu('title', self)
+        menu.addAction(QAction('test 1', self))
+        menu.addAction(QAction('test 2', self))
+        action_ret = menu.exec(pos)
+        if action_ret is not None:
+            logger.debug('action = {0}'.format(action_ret.text()))
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
@@ -245,8 +244,10 @@ class XNova_MainWindow(QWidget):
         self.login_email = login_email
         self.cookies_dict = cookies_dict
         #
+        self._tabwidget.enableButtonAdd(True)
+        #
         # destroy login widget and remove its tab
-        self.ui.tabWidget.removeTab(0)
+        self.remove_tab(0)
         self.login_widget.close()
         self.login_widget = None
         #
@@ -259,14 +260,14 @@ class XNova_MainWindow(QWidget):
         self.flights_widget.setEnabled(False)
         #
         # create overview widget and add it as first tab
-        self.overview_widget = OverviewWidget(self)
+        self.overview_widget = OverviewWidget(self._tabwidget)
         self.overview_widget.load_ui()
         self.add_tab(self.overview_widget, self.tr('Overview'), closeable=False)
         self.overview_widget.show()
         self.overview_widget.setEnabled(False)
         #
         # create 2nd tab - Imperium
-        self.imperium_widget = ImperiumWidget(self.ui.tabWidget)
+        self.imperium_widget = ImperiumWidget(self._tabwidget)
         self.add_tab(self.imperium_widget, self.tr('Imperium'), closeable=False)
         self.imperium_widget.setEnabled(False)
         #
