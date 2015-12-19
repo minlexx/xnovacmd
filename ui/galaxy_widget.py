@@ -48,7 +48,7 @@ class GalaxyCoordSingleSelectorWidget(QFrame):
         self._title = 'Coord select'
         #
         # setup frame
-        self.setFrameShape(QFrame.NoFrame)
+        self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShadow(QFrame.Raised)
         #
         self._layout = QVBoxLayout()
@@ -61,18 +61,21 @@ class GalaxyCoordSingleSelectorWidget(QFrame):
         self._lbl_title.setText(self._title)
         self._btn_left.setText('<-')
         self._btn_left.setMaximumWidth(32)
+        self._btn_left.clicked.connect(self.on_left)
         self._btn_right.setText('->')
         self._btn_right.setMaximumWidth(32)
+        self._btn_right.clicked.connect(self.on_right)
         self._le_coord.setText(str(self._coord_value))
         self._le_coord.setMaximumWidth(32)
-        self._le_coord.setInputMask('9')  # ASCII digit required. 0-9.
         self._le_coord.returnPressed.connect(self.on_le_returnPressed)
+        self._le_coord.editingFinished.connect(self.on_le_editFinished)
         #
+        self._layout.addWidget(self._lbl_title, 0, Qt.AlignCenter)
         self._layout_buttons.addWidget(self._btn_left)
         self._layout_buttons.addWidget(self._le_coord)
         self._layout_buttons.addWidget(self._btn_right)
-        self._layout.addWidget(self._lbl_title)
         self._layout.addLayout(self._layout_buttons)
+        self.setLayout(self._layout)
 
     def coord(self) -> int:
         return self._coord_value
@@ -118,9 +121,28 @@ class GalaxyCoordSingleSelectorWidget(QFrame):
         if self._coord_value != prev_value:
             self.coordChanged.emit(self._coord_value)
 
+    def _read_lineedit_value(self, do_emit: bool = True):
+        prev_value = self._coord_value
+        txt = self._le_coord.text()
+        val = self._coord_value
+        try:
+            val = int(txt)
+        except ValueError:
+            pass
+        self.setCoord(val)
+        if do_emit:
+            if self._coord_value != prev_value:
+                self.coordChanged.emit(self._coord_value)
+
     @pyqtSlot()
     def on_le_returnPressed(self):
-        logger.debug('return pressed')
+        # logger.debug('return pressed')
+        self._read_lineedit_value(do_emit=True)
+
+    @pyqtSlot()
+    def on_le_editFinished(self):
+        # logger.debug('edit finished')
+        self._read_lineedit_value(do_emit=False)
 
 
 class GalaxyCoordsSelectorWidget(QFrame):
@@ -198,6 +220,9 @@ class GalaxyCoordsSelectorWidget(QFrame):
 
     @pyqtSlot()
     def on_btn_navigate(self):
+        # get actual coords
+        self._coords[0] = self._galaxy_selector.coord()
+        self._coords[1] = self._system_selector.coord()
         # just force refresh like coords changed
         self.coordsChanged.emit(self._coords[0], self._coords[1])
 
