@@ -1,7 +1,7 @@
 import pathlib
 import pickle
 
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant
 from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
     QScrollArea, QMenu, QAction, QPushButton, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
@@ -21,7 +21,7 @@ from .widget_utils import install_layout_for_widget, \
     remove_trailing_spacer_from_layout, \
     flight_mission_for_humans
 
-from .xnova.xn_data import XNFlight, XNPlanet, XNPlanetBuildingItem
+from .xnova.xn_data import XNCoords, XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
 
@@ -80,7 +80,7 @@ class XNova_MainWindow(QWidget):
         #
         # tab widget
         self._tabwidget = XTabWidget(self)
-        self._tabwidget.enableButtonAdd(False)
+        # self._tabwidget.enableButtonAdd(False)
         self._tabwidget.tabCloseRequested.connect(self.on_tab_close_requested)
         self._tabwidget.addClicked.connect(self.on_tab_add_clicked)
         #
@@ -193,20 +193,25 @@ class XNova_MainWindow(QWidget):
         self.login_widget.loginOk.connect(self.on_login_ok)
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
-        #
-        # testing only - add 'fictive' planets to test planets panel without loading
-        # pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
-        # pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
-        # pl1.fields_busy = 90
-        # pl1.fields_total = 167
-        # pl1.is_current = True
-        # pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
-        # pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
-        # pl2.fields_busy = 84
-        # pl2.fields_total = 207
-        # pl2.is_current = False
-        # test_planets = [pl1, pl2]
-        # self.setup_planets_panel(test_planets)
+        # self.test_setup_planets_panel()
+
+    def test_setup_planets_panel(self):
+        """
+        testing only - add 'fictive' planets to test planets panel without loading data
+        :return: None
+        """
+        pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
+        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
+        pl1.fields_busy = 90
+        pl1.fields_total = 167
+        pl1.is_current = True
+        pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
+        pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
+        pl2.fields_busy = 84
+        pl2.fields_total = 207
+        pl2.is_current = False
+        test_planets = [pl1, pl2]
+        self.setup_planets_panel(test_planets)
 
     def setup_planets_panel(self, planets: list):
         layout = self._panel_planets.layout()
@@ -255,13 +260,26 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_tab_add_clicked(self):
         pos = QCursor.pos()
-        logger.debug('tab bar add clicked, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
-        menu = QMenu('title', self)
-        menu.addAction(QAction('test 1', self))
-        menu.addAction(QAction('test 2', self))
+        planets = self.world.get_planets()
+        # logger.debug('tab bar add clicked, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
+        menu = QMenu(self)
+        # galaxy view
+        galaxy_action = QAction(menu)
+        galaxy_action.setText(self.tr('Galaxy view'))
+        galaxy_action.setData(QVariant('galaxy'))
+        menu.addAction(galaxy_action)
+        # planets
+        menu.addSection(self.tr('Add planet tab'))
+        for planet in planets:
+            action = QAction(menu)
+            action.setText('{0} {1}'.format(planet.name, planet.coords.coords_str()))
+            action.setData(QVariant(planet.planet_id))
+            menu.addAction(action)
         action_ret = menu.exec(pos)
         if action_ret is not None:
-            logger.debug('action = {0}'.format(action_ret.text()))
+            logger.debug('selected action data = {1}'.format(str(action_ret.data())))
+            if action_ret == galaxy_action:
+                logger.debug('action_ret == galaxy_action')
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
@@ -278,8 +296,6 @@ class XNova_MainWindow(QWidget):
         self.setStatusMessage(self.tr('Login OK, loading world'))
         self.login_email = login_email
         self.cookies_dict = cookies_dict
-        #
-        self._tabwidget.enableButtonAdd(True)
         #
         # destroy login widget and remove its tab
         self.remove_tab(0)
@@ -325,8 +341,10 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot()
     def on_world_load_complete(self):
         logger.debug('main: on_world_load_complete()')
+        # enable adding new tabs
+        self._tabwidget.enableButtonAdd(True)
         # update statusbar
-        self._statusbar.set_world_load_progress(None, -1)  # turn off progress display
+        self._statusbar.set_world_load_progress('', -1)  # turn off progress display
         self.setStatusMessage(self.tr('World loaded.'))
         # update account info
         if self.overview_widget is not None:
