@@ -218,9 +218,8 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot()
     def on_tab_add_clicked(self):
-        logger.debug('tab bar add clicked:')
         pos = QCursor.pos()
-        logger.debug('adder tab, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
+        logger.debug('tab bar add clicked, cursor pos = ({0}, {1})'.format(pos.x(), pos.y()))
         menu = QMenu('title', self)
         menu.addAction(QAction('test 1', self))
         menu.addAction(QAction('test 2', self))
