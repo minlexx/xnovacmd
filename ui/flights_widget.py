@@ -20,19 +20,19 @@ class FlightsWidget(QWidget):
         self.uifile = 'ui/flights_widget.ui'
         # objects, sub-windows
         self.ui = None
-        self.btn_mewmsg = None
+        self.btn_newmsg = None
         self.world = XNovaWorld_instance()
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
         # new messages button
-        self.btn_mewmsg = ButtonTextOverIcon(self)
-        self.btn_mewmsg.setText('')
-        self.btn_mewmsg.setIcon(QIcon(':/i/message.png'))
-        self.btn_mewmsg.setIconSize(QSize(24, 16))
-        self.btn_mewmsg.setMinimumSize(QSize(30, 22))
-        self.btn_mewmsg.setMaximumSize(QSize(30, 22))
-        self.ui.horizontalLayout.insertWidget(0, self.btn_mewmsg, 0)
+        self.btn_newmsg = ButtonTextOverIcon(self)
+        self.btn_newmsg.setText('')
+        self.btn_newmsg.setIcon(QIcon(':/i/message.png'))
+        self.btn_newmsg.setIconSize(QSize(24, 16))
+        self.btn_newmsg.setMinimumSize(QSize(30, 22))
+        self.btn_newmsg.setMaximumSize(QSize(30, 22))
+        self.ui.horizontalLayout.insertWidget(0, self.btn_newmsg, 0)
         # configure table widget
         self.ui.tw_flights.setColumnCount(5)
         self.ui.tw_flights.setRowCount(0)
@@ -48,7 +48,7 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.hide()
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
-        self.btn_mewmsg.clicked.connect(self.on_messages_clicked)
+        self.btn_newmsg.clicked.connect(self.on_messages_clicked)
 
     #def minimize_height(self):
     #    print(self.parent())
@@ -110,7 +110,8 @@ class FlightsWidget(QWidget):
         txt = ''
         if nmc > 0:
             txt = str(nmc)
-        self.btn_mewmsg.setText(txt)
+        self.btn_newmsg.setText(txt)
+        self.btn_newmsg.update()
 
     @staticmethod
     def _get_mis_bgcolor(mis: str, dir_: str) -> QColor:
