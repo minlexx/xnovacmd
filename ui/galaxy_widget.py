@@ -66,7 +66,7 @@ class GalaxyCoordSingleSelectorWidget(QFrame):
         self._le_coord.setText(str(self._coord_value))
         self._le_coord.setMaximumWidth(32)
         self._le_coord.setInputMask('9')  # ASCII digit required. 0-9.
-        self._le_coord.returnPressed.coonect(self.on_le_returnPressed)
+        self._le_coord.returnPressed.connect(self.on_le_returnPressed)
         #
         self._layout_buttons.addWidget(self._btn_left)
         self._layout_buttons.addWidget(self._le_coord)
