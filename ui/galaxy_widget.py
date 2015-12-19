@@ -1,8 +1,7 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant
-from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
-    QScrollArea, QMenu, QAction, QPushButton, QLabel, QVBoxLayout, QHBoxLayout, \
-    QLineEdit
-from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
+from PyQt5.QtWidgets import QWidget, QFrame, QScrollArea, QMenu, QAction, \
+    QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
+from PyQt5.QtGui import QIcon, QCursor
 
 from ui.xnova.xn_world import XNovaWorld_instance
 from ui.xnova import xn_logger
