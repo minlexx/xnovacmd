@@ -33,9 +33,9 @@ class XNCStatusBar(QStatusBar):
         self._btn_settings.setIconSize(QSize(16, 16))
         self._btn_settings.clicked.connect(self.on_btn_settings)
         # testing only
-        self._btn_test1 = QPushButton(self.tr('test parse'), self)
-        self.addPermanentWidget(self._btn_test1)
-        self._btn_test1.clicked.connect(self.on_btn_test1)
+        #self._btn_test1 = QPushButton(self.tr('test parse'), self)
+        #self.addPermanentWidget(self._btn_test1)
+        #self._btn_test1.clicked.connect(self.on_btn_test1)
         #
         self.addPermanentWidget(self._lbl_online)  # before the last
         self.addPermanentWidget(self._btn_settings)  # should be las right widget
@@ -78,22 +78,7 @@ class XNCStatusBar(QStatusBar):
 # void QStatusBar::addWidget(QWidget * widget, int stretch = 0)
 # void QStatusBar::removeWidget(QWidget * widget)
 
-    # testing only
-    @pyqtSlot()
-    def on_btn_start(self):
-        if not self.world.isRunning():
-            logger.debug('starting')
-            self.world.start()
-
-    # testing only
-    @pyqtSlot()
-    def on_btn_stop(self):
-        if self.world.isRunning():
-            logger.debug('stopping')
-            # same as self.world.quit()
-            self.world.signal_quit()
-
-    @pyqtSlot()
-    def on_btn_test1(self):
-        # test galaxy parser
-        self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
+    #@pyqtSlot()
+    #def on_btn_test1(self):
+    #    # test galaxy parser
+    #    self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
