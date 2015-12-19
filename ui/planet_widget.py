@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QScrollArea, QMenu, QAction, \
     QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
 from PyQt5.QtGui import QIcon, QCursor
 
+from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem
 from ui.xnova.xn_world import XNovaWorld_instance
 from ui.xnova import xn_logger
 
@@ -16,7 +17,9 @@ class PlanetWidget(QFrame):
     """
     def __init__(self, parent: QWidget):
         super(PlanetWidget, self).__init__(parent)
+        #
         self.world = XNovaWorld_instance()
+        self._planet = XNPlanet()
         # setup frame
         self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShadow(QFrame.Raised)
@@ -25,3 +28,6 @@ class PlanetWidget(QFrame):
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(2)
         self.setLayout(self._layout)
+
+    def setPlanet(self, planet: XNPlanet):
+        self._planet = planet
