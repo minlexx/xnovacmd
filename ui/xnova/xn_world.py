@@ -219,7 +219,10 @@ class XNovaWorld(QThread):
         return ret
 
     def get_online_players(self):
-        return self._server_online_players
+        self.lock()
+        ret = self._server_online_players
+        self.unlock()
+        return ret
 
     ################################################################################
     # this should re-calculate all user's object statuses
