@@ -18,7 +18,8 @@ class XTabWidget(QFrame):
         super(XTabWidget, self).__init__(QWidget_parent)
         # setup self frame
         self.setFrameShadow(QFrame.Raised)
-        self.setFrameShape(QFrame.StyledPanel)
+        # self.setFrameShape(QFrame.StyledPanel)
+        self.setFrameShape(QFrame.NoFrame)
         # layouts
         self._layout = QVBoxLayout()
         self._layout.setContentsMargins(0, 0, 0, 0)
