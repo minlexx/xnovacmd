@@ -69,7 +69,6 @@ class XTabWidget(QFrame):
 
     @pyqtSlot()
     def on_btn_add_clicked(self):
-        logger.debug('+++')
         self.addClicked.emit()
 
     @pyqtSlot(int)
