@@ -27,7 +27,7 @@ class XNCoords:
 
     def __str__(self):
         name_str = '{0} '.format(self.target_name) if self.target_name != '' else ''
-        coords_str = '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
+        coords_str = self.coords_str()
         type_str = ''  # default for planet coordinates
         if self.target_type == self.TYPE_DEBRIS_FIELD:
             type_str = ' (field) '
@@ -36,6 +36,9 @@ class XNCoords:
         elif self.target_type == self.TYPE_WARBASE:
             type_str = ' (base) '
         return '{0}{1}{2}'.format(name_str, type_str, coords_str)
+
+    def coords_str(self) -> str:
+        return '[{0}:{1}:{2}]'.format(self.galaxy, self.system, self.position)
 
     def set_gsp(self, g: int, s: int, p: int):
         self.galaxy = g
