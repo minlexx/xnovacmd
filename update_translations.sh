@@ -2,7 +2,6 @@
 TS_FILES="translations/xnovacmd_ru.ts"
 
 SOURCES="app.py \
-    ui/main.ui \
     ui/main.py \
     ui/login_widget.ui \
     ui/login_widget.py \

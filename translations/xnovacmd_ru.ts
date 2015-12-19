@@ -553,12 +553,12 @@ Res: {0}</source>
     <message>
         <location filename="main.ui" line="14"/>
         <source>XNova Commander</source>
-        <translation>XNova Commander</translation>
+        <translation type="obsolete">XNova Commander</translation>
     </message>
     <message>
         <location filename="main.ui" line="96"/>
         <source>Planets:</source>
-        <translation>Планеты:</translation>
+        <translation type="obsolete">Планеты:</translation>
     </message>
 </context>
 <context>
@@ -928,57 +928,57 @@ Res: {0}</source>
 <context>
     <name>XNova_MainWindow</name>
     <message>
-        <location filename="main.py" line="79"/>
+        <location filename="main.py" line="112"/>
         <source>XNova Commander</source>
         <translation>XNova Commander</translation>
     </message>
     <message>
-        <location filename="main.py" line="86"/>
+        <location filename="main.py" line="91"/>
         <source>Not connected: Log in!</source>
         <translation>Не подключено: залогинься!</translation>
     </message>
     <message>
-        <location filename="main.py" line="160"/>
+        <location filename="main.py" line="196"/>
         <source>Login</source>
         <translation>Авторизация</translation>
     </message>
     <message>
-        <location filename="main.py" line="235"/>
+        <location filename="main.py" line="271"/>
         <source>Login error: {0}</source>
         <translation>Ошибка входа: {0}</translation>
     </message>
     <message>
-        <location filename="main.py" line="236"/>
+        <location filename="main.py" line="272"/>
         <source>Login error:</source>
         <translation>Ошибка авторизации:</translation>
     </message>
     <message>
-        <location filename="main.py" line="243"/>
+        <location filename="main.py" line="279"/>
         <source>Login OK, loading world</source>
         <translation>Авторизация успешна, загружаю мир</translation>
     </message>
     <message>
-        <location filename="main.py" line="265"/>
+        <location filename="main.py" line="301"/>
         <source>Overview</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="main.py" line="295"/>
+        <location filename="main.py" line="331"/>
         <source>World loaded.</source>
         <translation>Мир загружен.</translation>
     </message>
     <message>
-        <location filename="main.py" line="403"/>
+        <location filename="main.py" line="439"/>
         <source>XNova: Fleet arrived</source>
         <translation>XNova: флот долетел</translation>
     </message>
     <message>
-        <location filename="main.py" line="401"/>
+        <location filename="main.py" line="437"/>
         <source>{0} {1} =&gt; {2}, {3} ship(s)</source>
         <translation>{0} {1} =&gt; {2}, {3} корабл(ей)</translation>
     </message>
     <message>
-        <location filename="main.py" line="271"/>
+        <location filename="main.py" line="307"/>
         <source>Imperium</source>
         <translation>Империя</translation>
     </message>
@@ -988,24 +988,29 @@ Res: {0}</source>
         <translation type="obsolete">Загрузка мира</translation>
     </message>
     <message>
-        <location filename="main.py" line="400"/>
+        <location filename="main.py" line="436"/>
         <source>return</source>
         <translation>возврат</translation>
     </message>
     <message>
-        <location filename="main.py" line="412"/>
+        <location filename="main.py" line="448"/>
         <source>{0} lv.{1}</source>
         <translation>{0} ур.{1}</translation>
     </message>
     <message>
-        <location filename="main.py" line="413"/>
+        <location filename="main.py" line="449"/>
         <source>{0} has built {1}</source>
         <translation>{0}: достроено {1}</translation>
     </message>
     <message>
-        <location filename="main.py" line="414"/>
+        <location filename="main.py" line="450"/>
         <source>XNova: Building complete</source>
         <translation>XNova: Постройка завершена</translation>
+    </message>
+    <message>
+        <location filename="main.py" line="76"/>
+        <source>Planets:</source>
+        <translation>Планеты:</translation>
     </message>
 </context>
 </TS>
