@@ -12,6 +12,7 @@ from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 from .imperium_widget import ImperiumWidget
+from .galaxy_widget import GalaxyWidget
 
 from .customwidgets.planets_bar_widget import PlanetsBarWidget
 from .customwidgets.xtabwidget import XTabWidget
@@ -80,7 +81,7 @@ class XNova_MainWindow(QWidget):
         #
         # tab widget
         self._tabwidget = XTabWidget(self)
-        # self._tabwidget.enableButtonAdd(False)
+        self._tabwidget.enableButtonAdd(False)
         self._tabwidget.tabCloseRequested.connect(self.on_tab_close_requested)
         self._tabwidget.addClicked.connect(self.on_tab_add_clicked)
         #
@@ -277,9 +278,12 @@ class XNova_MainWindow(QWidget):
             menu.addAction(action)
         action_ret = menu.exec(pos)
         if action_ret is not None:
-            logger.debug('selected action data = {1}'.format(str(action_ret.data())))
+            logger.debug('selected action data = {0}'.format(str(action_ret.data())))
             if action_ret == galaxy_action:
                 logger.debug('action_ret == galaxy_action')
+                gw = GalaxyWidget(self._tabwidget)
+                self.add_tab(gw, self.tr('Galaxy'), closeable=True)
+                gw.show()
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
