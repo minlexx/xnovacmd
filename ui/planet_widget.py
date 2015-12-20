@@ -61,6 +61,7 @@ class PlanetWidget(QFrame):
         self._layout.addWidget(self._cf_buildings)
         self._layout.addWidget(self._cf_shipyard)
         self._layout.addWidget(self._cf_research)
+        self._layout.addStretch()
 
     def get_tab_type(self) -> str:
         return 'planet'
