@@ -27,6 +27,10 @@ class GalaxyView(QFrame):
         # temp
         self._layout.addWidget(QLabel('galaxy view', self))
 
+    def show_coords(self, galaxy: int, system: int):
+        # placeholder
+        pass
+
 
 class GalaxyOwnPlanetSelectorWidget(QFrame):
 
@@ -242,7 +246,7 @@ class GalaxyCoordsSelectorWidget(QFrame):
     def coords(self) -> list:
         return self._coords
 
-    def setCoords(self, galaxy: int, system: int):
+    def setCoords(self, galaxy: int, system: int, do_emit: bool = True):
         prev_coords = self._coords
         self._galaxy_selector.setCoord(galaxy)  # does all range-checking
         self._system_selector.setCoord(system)  # does all range-checking
@@ -250,8 +254,9 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._coords[0] = self._galaxy_selector.coord()
         self._coords[1] = self._system_selector.coord()
         # compare and emit
-        if (prev_coords[0] != self._coords[0]) or (prev_coords[1] != self._coords[1]):
-            self.coordsChanged.emit(self._coords[0], self._coords[1])
+        if do_emit:
+            if (prev_coords[0] != self._coords[0]) or (prev_coords[1] != self._coords[1]):
+                self.coordsChanged.emit(self._coords[0], self._coords[1])
 
     def setGalaxyRange(self, gal_min: int, gal_max: int):
         self._galaxy_selector.setCoordRange(gal_min, gal_max)
@@ -317,5 +322,10 @@ class GalaxyWidget(QWidget):
         self._layout.addWidget(self._sa_galaxy)
 
     @pyqtSlot(int, int)
-    def on_coords_cahnged(self, gal: int, sys: int):
-        logger.debug('on_coords_changed ({0}, {1})'.format(gal, sys))
+    def on_coords_cahnged(self, galaxy: int, system: int):
+        logger.debug('on_coords_changed ({0}, {1})'.format(galaxy, system))
+        self._galaxyview.show_coords(galaxy, system)
+
+    def setCoords(self, galaxy: int, system: int):
+        self._galaxy_coords.setCoords(galaxy, system, do_emit=False)
+        self._galaxyview.show_coords(galaxy, system)
