@@ -58,8 +58,18 @@ class XTabWidget(QFrame):
         return
 
     def removeTab(self, index: int):
+        # remove from tab bar
         self._tabbar.removeTab(index)
-        self._stack.removeWidget(self._stack.widget(index))
+        # remove from stacked widget
+        widget = self._stack.widget(index)
+        if widget is not None:
+            # Removes widget from the QStackedWidget. i.e., widget
+            # is not deleted but simply removed from the stacked layout,
+            # causing it to be hidden.
+            self._stack.removeWidget(widget)
+            # and now we probably want to delete it to avoid memory leak
+            widget.close()
+            widget.deleteLater()
 
     def tabBar(self) -> QTabBar:
         return self._tabbar
