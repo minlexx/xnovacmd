@@ -80,6 +80,18 @@ class XTabWidget(QFrame):
     def setCurrentIndex(self, index: int):
         self._tabbar.setCurrentIndex(index)
 
+    def count(self) -> int:
+        return self._tabbar.count()
+
+    def tabWidget(self, index: int):
+        """
+        Return page widget, inserted at index index
+        :param index:
+        :return: QWidget inserted at specified index, or None
+        """
+        widget = self._stack.widget(index)
+        return widget
+
     @pyqtSlot()
     def on_btn_add_clicked(self):
         self.addClicked.emit()
