@@ -2,19 +2,24 @@
 TS_FILES="translations/xnovacmd_ru.ts"
 
 SOURCES="app.py \
-    ui/main.py \
-    ui/login_widget.ui \
-    ui/login_widget.py \
-    ui/overview.py \
-    ui/overview.py \
-    ui/flights_widget.ui \
     ui/flights_widget.py \
-    ui/customwidgets/planets_bar_widget.py \
+    ui/flights_widget.ui \
+    ui/galaxy_widget.py \
+    ui/imperium_widget.py \
+    ui/login_widget.py \
+    ui/login_widget.ui \
+    ui/main.py \
+    ui/overview.py \
+    ui/overview_accstats.ui \
+    ui/planet_widget.py \
+    ui/settings_widget.py \
     ui/statusbar.py \
     ui/widget_utils.py \
-    ui/imperium_widget.py \
-    ui/xnova/xn_world.py \
-    ui/settings_widget.py"
+    ui/customwidgets/collapsible_frame.py \
+    ui/customwidgets/my_buttons.py \
+    ui/customwidgets/planets_bar_widget.py \
+    ui/customwidgets/xtabwidget.py \
+    ui/xnova/xn_world.py"
 
 echo "TS files: $TS_FILES"
 echo "Sources: $SOURCES"
