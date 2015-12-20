@@ -218,6 +218,9 @@ class XNova_MainWindow(QWidget):
             pw.setPlanet(pl)
             layout.addWidget(pw)
             pw.show()
+            # connections from each planet bar widget
+            pw.requestOpenGalaxy.connect(self.on_request_open_galaxy_tab)
+            pw.requestOpenPlanet.connect(self.on_request_open_planet_tab)
         append_trailing_spacer_to_layout(layout)
 
     def update_planets_panel(self):
@@ -460,6 +463,24 @@ class XNova_MainWindow(QWidget):
             binfo_str = self.tr('{0} lv.{1}').format(bitem.name, bitem.level)
         msg = self.tr('{0} has built {1}').format(planet.name, binfo_str)
         self.show_tray_message(self.tr('XNova: Building complete'), msg)
+
+    @pyqtSlot(XNCoords)
+    def on_request_open_galaxy_tab(self, coords: XNCoords):
+        gw = GalaxyWidget(self)
+        gw.setCoords(coords.galaxy, coords.system)
+        self.add_tab(gw, self.tr('Galaxy'), closeable=True)
+
+    @pyqtSlot(int)
+    def on_request_open_planet_tab(self, planet_id: int):
+        tab_index = self.find_open_tab_for_planet(planet_id)
+
+    def find_open_tab_for_planet(self, planet_id: int) -> int:
+        """
+        Finds tab index where specified planet is already opened
+        :param planet_id: planet id to search for
+        :return: tab index, or -1 if not found
+        """
+        return -1
 
     def test_setup_planets_panel(self):
         """
