@@ -1,6 +1,6 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant
 from PyQt5.QtWidgets import QWidget, QFrame, QScrollArea, QMenu, QAction, \
-    QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
+    QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QComboBox
 from PyQt5.QtGui import QIcon, QCursor
 
 from ui.xnova.xn_world import XNovaWorld_instance
@@ -26,6 +26,49 @@ class GalaxyView(QFrame):
         self.setLayout(self._layout)
         # temp
         self._layout.addWidget(QLabel('galaxy view', self))
+
+
+class GalaxyOwnPlanetSelectorWidget(QFrame):
+
+    planetSelected = pyqtSignal(int)
+
+    def __init__(self, parent: QWidget):
+        super(GalaxyOwnPlanetSelectorWidget, self).__init__(parent)
+        self.world = XNovaWorld_instance()
+        # setup frame
+        self.setFrameShadow(QFrame.Raised)
+        self.setFrameShape(QFrame.StyledPanel)
+        # layout
+        self._layout = QVBoxLayout()
+        self._layout.setContentsMargins(6, 6, 6, 6)
+        self._layout.setSpacing(0)
+        self.setLayout(self._layout)
+        # label
+        self._lbl = QLabel(self.tr('Select planet:'), self)
+        # combo
+        self._cb = QComboBox(self)
+        self._cb.setEditable(False)
+        self._cb.setInsertPolicy(QComboBox.InsertAtBottom)
+        self._cb.currentIndexChanged.connect(self.on_cb_currentChanged)
+        # finalize layout
+        self._layout.addWidget(self._lbl, 0, Qt.AlignHCenter)
+        self._layout.addWidget(self._cb, 0, Qt.AlignCenter)
+        # ...
+        self.fill_planets()
+
+    def fill_planets(self):
+        planets = self.world.get_planets()
+        for pl in planets:
+            st = '{0} {1}'.format(pl.name, pl.coords.coords_str())
+            dt = QVariant(pl.planet_id)
+            self._cb.addItem(st, dt)
+
+    @pyqtSlot(int)
+    def on_cb_currentChanged(self, index: int):
+        if index == -1:
+            return
+        planet_id = int(self._cb.currentData(Qt.UserRole))
+        self.planetSelected.emit(planet_id)
 
 
 class GalaxyCoordSingleSelectorWidget(QFrame):
@@ -148,8 +191,7 @@ class GalaxyCoordsSelectorWidget(QFrame):
     """
     Groups together two controls to select galaxy and system
     coordinates with a button to navigate there.
-    TODO: it can also show selector of your current planets,
-    TODO: and maybe bookmarks? :D
+    TODO: it can also show maybe bookmarks? :D
     """
 
     coordsChanged = pyqtSignal(int, int)
@@ -158,6 +200,7 @@ class GalaxyCoordsSelectorWidget(QFrame):
         super(GalaxyCoordsSelectorWidget, self).__init__(parent)
         # data
         self._coords = [1, 1]  # galaxy, system
+        self.world = XNovaWorld_instance()
         #
         # setup frame
         self.setFrameShape(QFrame.NoFrame)
@@ -167,6 +210,9 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(3)
         self.setLayout(self._layout)
+        #
+        self._planet_selector = GalaxyOwnPlanetSelectorWidget(self)
+        self._planet_selector.planetSelected.connect(self.on_planet_selected)
         #
         self._galaxy_selector = GalaxyCoordSingleSelectorWidget(self)
         self._galaxy_selector.setCoordRange(1, 5)
@@ -181,6 +227,7 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._btn_navigate.setText(self.tr('Navigate'))
         self._btn_navigate.clicked.connect(self.on_btn_navigate)
         #
+        self._layout.addWidget(self._planet_selector, 0)
         self._layout.addWidget(self._galaxy_selector, 0)
         self._layout.addWidget(self._system_selector, 0)
         self._layout.addWidget(self._btn_navigate, 0)
@@ -229,6 +276,14 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._coords[1] = self._system_selector.coord()
         # just force refresh like coords changed
         self.coordsChanged.emit(self._coords[0], self._coords[1])
+
+    @pyqtSlot(int)
+    def on_planet_selected(self, planet_id: int):
+        planet = self.world.get_planet(planet_id)
+        if planet is None:
+            return
+        logger.debug('    navigating to: {0}'.format(planet.coords.coords_str()))
+        self.setCoords(planet.coords.galaxy, planet.coords.system)
 
 
 class GalaxyWidget(QWidget):
