@@ -468,7 +468,8 @@ class XNova_MainWindow(QWidget):
     def on_request_open_galaxy_tab(self, coords: XNCoords):
         gw = GalaxyWidget(self)
         gw.setCoords(coords.galaxy, coords.system)
-        self.add_tab(gw, self.tr('Galaxy'), closeable=True)
+        idx = self.add_tab(gw, self.tr('Galaxy'), closeable=True)
+        self._tabwidget.setCurrentIndex(idx)
 
     @pyqtSlot(int)
     def on_request_open_planet_tab(self, planet_id: int):
