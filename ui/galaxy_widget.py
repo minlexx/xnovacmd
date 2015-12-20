@@ -329,3 +329,10 @@ class GalaxyWidget(QWidget):
     def setCoords(self, galaxy: int, system: int):
         self._galaxy_coords.setCoords(galaxy, system, do_emit=False)
         self._galaxyview.show_coords(galaxy, system)
+
+    def coords(self) -> list:
+        ret = self._galaxy_coords.coords()
+        return ret
+
+    def get_tab_type(self) -> str:
+        return 'galaxy'
