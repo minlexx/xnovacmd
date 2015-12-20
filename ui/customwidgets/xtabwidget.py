@@ -55,7 +55,7 @@ class XTabWidget(QFrame):
             self._tabbar.setTabButton(tab_index, QTabBar.LeftSide, None)  # it MAY be on the left too!!
         # add widget into stackedwidget
         self._stack.addWidget(widget)
-        return
+        return tab_index
 
     def removeTab(self, index: int):
         # remove from tab bar
@@ -76,6 +76,9 @@ class XTabWidget(QFrame):
 
     def enableButtonAdd(self, enableState: bool = True):
         self._btn_add.setEnabled(enableState)
+
+    def setCurrentIndex(self, index: int):
+        self._tabbar.setCurrentIndex(index)
 
     @pyqtSlot()
     def on_btn_add_clicked(self):
