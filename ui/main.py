@@ -289,10 +289,11 @@ class XNova_MainWindow(QWidget):
             # else consider this is planet widget
             planet_id = int(action_ret.data())
             planet = self.world.get_planet(planet_id)
-            pw = PlanetWidget(self._tabwidget)
-            pw.setPlanet(planet)
-            self.add_tab(pw, planet.name, closeable=True)
-            pw.show()
+            if planet is not None:
+                pw = PlanetWidget(self._tabwidget)
+                pw.setPlanet(planet)
+                self.add_tab(pw, planet.name, closeable=True)
+                pw.show()
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
