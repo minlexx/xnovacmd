@@ -196,7 +196,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         # self.test_setup_planets_panel()
-        self.test_planet_tab()
+        # self.test_planet_tab()
 
     def setup_planets_panel(self, planets: list):
         layout = self._panel_planets.layout()
@@ -476,6 +476,14 @@ class XNova_MainWindow(QWidget):
     @pyqtSlot(int)
     def on_request_open_planet_tab(self, planet_id: int):
         tab_index = self.find_open_tab_for_planet(planet_id)
+        if tab_index == -1:
+            # create new tab for planet
+            planet = self.world.get_planet(planet_id)
+            pw = PlanetWidget(self)
+            pw.setPlanet(planet)
+            tab_index = self.add_tab(pw, planet.name, closeable=True)
+        # switch to that tab
+        self._tabwidget.setCurrentIndex(tab_index)
 
     def find_open_tab_for_planet(self, planet_id: int) -> int:
         """
@@ -483,6 +491,21 @@ class XNova_MainWindow(QWidget):
         :param planet_id: planet id to search for
         :return: tab index, or -1 if not found
         """
+        cnt = self._tabwidget.count()
+        if cnt < 3:
+            return -1  # only overview and imperium tabs are present
+        for index in range(2, cnt):
+            tab_page = self._tabwidget.tabWidget(index)
+            if tab_page is not None:
+                try:
+                    tab_type = tab_page.get_tab_type()
+                    if tab_type == 'planet':
+                        tab_planet = tab_page.planet()
+                        if tab_planet.planet_id == planet_id:
+                            # we have found tab index where this planet is already opened
+                            return index
+                except AttributeError:  # not all pages may have method get_tab_type()
+                    pass
         return -1
 
     def test_setup_planets_panel(self):
