@@ -468,16 +468,18 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(XNCoords)
     def on_request_open_galaxy_tab(self, coords: XNCoords):
-        gw = GalaxyWidget(self)
-        gw.setCoords(coords.galaxy, coords.system)
-        idx = self.add_tab(gw, self.tr('Galaxy'), closeable=True)
-        self._tabwidget.setCurrentIndex(idx)
+        tab_index = self.find_tab_for_galaxy(coords.galaxy, coords.system)
+        if tab_index == -1:  # create new tab for these coords
+            gw = GalaxyWidget(self)
+            gw.setCoords(coords.galaxy, coords.system)
+            tab_index = self.add_tab(gw, self.tr('Galaxy'), closeable=True)
+        # switch to that tab
+        self._tabwidget.setCurrentIndex(tab_index)
 
     @pyqtSlot(int)
     def on_request_open_planet_tab(self, planet_id: int):
-        tab_index = self.find_open_tab_for_planet(planet_id)
-        if tab_index == -1:
-            # create new tab for planet
+        tab_index = self.find_tab_for_planet(planet_id)
+        if tab_index == -1: # create new tab for planet
             planet = self.world.get_planet(planet_id)
             pw = PlanetWidget(self)
             pw.setPlanet(planet)
@@ -485,7 +487,7 @@ class XNova_MainWindow(QWidget):
         # switch to that tab
         self._tabwidget.setCurrentIndex(tab_index)
 
-    def find_open_tab_for_planet(self, planet_id: int) -> int:
+    def find_tab_for_planet(self, planet_id: int) -> int:
         """
         Finds tab index where specified planet is already opened
         :param planet_id: planet id to search for
@@ -503,6 +505,30 @@ class XNova_MainWindow(QWidget):
                         tab_planet = tab_page.planet()
                         if tab_planet.planet_id == planet_id:
                             # we have found tab index where this planet is already opened
+                            return index
+                except AttributeError:  # not all pages may have method get_tab_type()
+                    pass
+        return -1
+
+    def find_tab_for_galaxy(self, galaxy: int, system: int) -> int:
+        """
+        Finds tab index where specified galaxy view is already opened
+        :param galaxy: galaxy target coordinate
+        :param system: system target coordinate
+        :return: tab index, or -1 if not found
+        """
+        cnt = self._tabwidget.count()
+        if cnt < 3:
+            return -1  # only overview and imperium tabs are present
+        for index in range(2, cnt):
+            tab_page = self._tabwidget.tabWidget(index)
+            if tab_page is not None:
+                try:
+                    tab_type = tab_page.get_tab_type()
+                    if tab_type == 'galaxy':
+                        coords = tab_page.coords()
+                        if (coords[0] == galaxy) and (coords[1] == system):
+                            # we have found galaxy tab index where this place is already opened
                             return index
                 except AttributeError:  # not all pages may have method get_tab_type()
                     pass
