@@ -13,6 +13,7 @@ from .flights_widget import FlightsWidget
 from .overview import OverviewWidget
 from .imperium_widget import ImperiumWidget
 from .galaxy_widget import GalaxyWidget
+from .planet_widget import PlanetWidget
 
 from .customwidgets.planets_bar_widget import PlanetsBarWidget
 from .customwidgets.xtabwidget import XTabWidget
@@ -266,11 +267,11 @@ class XNova_MainWindow(QWidget):
         menu = QMenu(self)
         # galaxy view
         galaxy_action = QAction(menu)
-        galaxy_action.setText(self.tr('Galaxy view'))
+        galaxy_action.setText(self.tr('Add galaxy view'))
         galaxy_action.setData(QVariant('galaxy'))
         menu.addAction(galaxy_action)
         # planets
-        menu.addSection(self.tr('Add planet tab'))
+        menu.addSection(self.tr('-- Planet tabs: --'))
         for planet in planets:
             action = QAction(menu)
             action.setText('{0} {1}'.format(planet.name, planet.coords.coords_str()))
@@ -284,6 +285,14 @@ class XNova_MainWindow(QWidget):
                 gw = GalaxyWidget(self._tabwidget)
                 self.add_tab(gw, self.tr('Galaxy'), closeable=True)
                 gw.show()
+                return
+            # else consider this is planet widget
+            planet_id = int(action_ret.data())
+            planet = self.world.get_planet(planet_id)
+            pw = PlanetWidget(self._tabwidget)
+            pw.setPlanet(planet)
+            self.add_tab(pw, planet.name, closeable=True)
+            pw.show()
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
