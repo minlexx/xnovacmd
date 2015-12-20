@@ -284,7 +284,6 @@ class XNova_MainWindow(QWidget):
                 logger.debug('action_ret == galaxy_action')
                 gw = GalaxyWidget(self._tabwidget)
                 self.add_tab(gw, self.tr('Galaxy'), closeable=True)
-                gw.show()
                 return
             # else consider this is planet widget
             planet_id = int(action_ret.data())
@@ -293,7 +292,6 @@ class XNova_MainWindow(QWidget):
                 pw = PlanetWidget(self._tabwidget)
                 pw.setPlanet(planet)
                 self.add_tab(pw, planet.name, closeable=True)
-                pw.show()
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
