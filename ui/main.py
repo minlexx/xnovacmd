@@ -196,24 +196,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         # self.test_setup_planets_panel()
-
-    def test_setup_planets_panel(self):
-        """
-        testing only - add 'fictive' planets to test planets panel without loading data
-        :return: None
-        """
-        pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
-        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
-        pl1.fields_busy = 90
-        pl1.fields_total = 167
-        pl1.is_current = True
-        pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
-        pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
-        pl2.fields_busy = 84
-        pl2.fields_total = 207
-        pl2.is_current = False
-        test_planets = [pl1, pl2]
-        self.setup_planets_panel(test_planets)
+        self.test_planet_tab()
 
     def setup_planets_panel(self, planets: list):
         layout = self._panel_planets.layout()
@@ -254,7 +237,7 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(int)
     def on_tab_close_requested(self, idx: int):
-        logger.debug('tab close requested: {0}'.format(idx))
+        # logger.debug('tab close requested: {0}'.format(idx))
         if idx <= 1:  # cannot close overview or imperium tabs
             return
         self.remove_tab(idx)
@@ -477,3 +460,37 @@ class XNova_MainWindow(QWidget):
             binfo_str = self.tr('{0} lv.{1}').format(bitem.name, bitem.level)
         msg = self.tr('{0} has built {1}').format(planet.name, binfo_str)
         self.show_tray_message(self.tr('XNova: Building complete'), msg)
+
+    def test_setup_planets_panel(self):
+        """
+        Testing only - add 'fictive' planets to test planets panel without loading data
+        :return: None
+        """
+        pl1 = XNPlanet('Arnon', XNCoords(1, 7, 6))
+        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
+        pl1.fields_busy = 90
+        pl1.fields_total = 167
+        pl1.is_current = True
+        pl2 = XNPlanet('Safizon', XNCoords(1, 232, 7))
+        pl2.pic_url = 'skins/default/planeten/small/s_dschjungelplanet05.jpg'
+        pl2.fields_busy = 84
+        pl2.fields_total = 207
+        pl2.is_current = False
+        test_planets = [pl1, pl2]
+        self.setup_planets_panel(test_planets)
+
+    def test_planet_tab(self):
+        """
+        Testing only - add 'fictive' planet tab to test UI without loading world
+        :return:
+        """
+        # construct planet
+        pl1 = XNPlanet('Arnon', coords=XNCoords(1, 7, 6), planet_id=12345)
+        pl1.pic_url = 'skins/default/planeten/small/s_normaltempplanet08.jpg'
+        pl1.fields_busy = 90
+        pl1.fields_total = 167
+        pl1.is_current = True
+        # planet widget
+        plw = PlanetWidget(self._tabwidget)
+        self.add_tab(plw, pl1.name, closeable=True)
+        plw.setPlanet(pl1)
