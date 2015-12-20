@@ -164,6 +164,8 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self.setFrameShadow(QFrame.Raised)
         #
         self._layout = QHBoxLayout()
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(3)
         self.setLayout(self._layout)
         #
         self._galaxy_selector = GalaxyCoordSingleSelectorWidget(self)
@@ -179,10 +181,10 @@ class GalaxyCoordsSelectorWidget(QFrame):
         self._btn_navigate.setText(self.tr('Navigate'))
         self._btn_navigate.clicked.connect(self.on_btn_navigate)
         #
-        self._layout.addWidget(self._galaxy_selector)
-        self._layout.addWidget(self._system_selector)
-        self._layout.addWidget(self._btn_navigate)
-        self._layout.addStretch()
+        self._layout.addWidget(self._galaxy_selector, 0)
+        self._layout.addWidget(self._system_selector, 0)
+        self._layout.addWidget(self._btn_navigate, 0)
+        self._layout.addStretch(1)
 
     def coordGalaxy(self) -> int:
         return self._coords[0]
