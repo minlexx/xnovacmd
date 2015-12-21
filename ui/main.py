@@ -484,7 +484,20 @@ class XNova_MainWindow(QWidget):
         # update all builds in overview widget
         if self.overview_widget:
             self.overview_widget.update_builds()
-        # TODO: update all planet tabs with new planet references
+        # update all planet tabs with new planet references
+        cnt = self._tabwidget.count()
+        if cnt > 2:
+            for index in range(2, cnt):
+                tab_page = self._tabwidget.tabWidget(index)
+                if tab_page is not None:
+                    try:
+                        tab_type = tab_page.get_tab_type()
+                        if tab_type == 'planet':
+                            tab_planet = tab_page.planet()
+                            new_planet = self.world.get_planet(tab_planet.planet_id)
+                            tab_page.setPlanet(new_planet)
+                    except AttributeError:  # not all pages may have method get_tab_type()
+                        pass
 
     @pyqtSlot()
     def on_world_timer(self):
