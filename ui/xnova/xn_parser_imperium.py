@@ -23,6 +23,7 @@ class ImperiumParser(XNParserBase):
         # used to store planet energy_total, since we cannot
         # parse it from imperium pagem and overwriting it with zeroes
         self._planet_energy_totals = dict()
+        self._planet_prev_build_items = dict()
 
     def clear(self):
         self.in_imp_1 = False
@@ -30,14 +31,39 @@ class ImperiumParser(XNParserBase):
         self._phase = 'pics'
         self._phase_res = ''
         self._counter = 0
-        # save planet energy totals
+        # store state that will be otherwise cleared by imperium update
         self._planet_energy_totals = dict()
-        for pl in self.planets:
-            self._planet_energy_totals[pl.planet_id] = pl.energy.energy_total
+        self._planet_prev_build_items = dict()
+        self.save_previous_info()
         # somewhat output data
         self.planet_ids = []
         self.planet_pics = []
         self.planets = []
+
+    def save_previous_info(self):
+        for pl in self.planets:
+            self._planet_energy_totals[pl.planet_id] = pl.energy.energy_total
+            self._planet_prev_build_items[pl.planet_id] = dict()
+            self._planet_prev_build_items[pl.planet_id]['bi'] = pl.buildings_items
+            self._planet_prev_build_items[pl.planet_id]['ri'] = pl.research_items
+            self._planet_prev_build_items[pl.planet_id]['si'] = pl.shipyard_tems
+            self._planet_prev_build_items[pl.planet_id]['spi'] = pl.shipyard_progress_items
+
+    def restore_previous_info(self):
+        # restore planets energy totals
+        for planet_id in self._planet_energy_totals.keys():
+            for pl in self.planets:
+                if pl.planet_id == planet_id:
+                    pl.energy.energy_total = self._planet_energy_totals[planet_id]
+                    break
+        # restore planet buildings items
+        for planet_id in self._planet_prev_build_items.keys():
+            for pl in self.planets:
+                if pl.planet_id == planet_id:
+                    pl.buildings_items = self._planet_prev_build_items[planet_id]['bi']
+                    pl.research_items = self._planet_prev_build_items[planet_id]['ri']
+                    pl.shipyard_tems = self._planet_prev_build_items[planet_id]['si']
+                    pl.shipyard_progress_items = self._planet_prev_build_items[planet_id]['spi']
 
     def handle_starttag(self, tag: str, attrs: list):
         super(ImperiumParser, self).handle_starttag(tag, attrs)
@@ -542,10 +568,5 @@ class ImperiumParser(XNParserBase):
             #    logger.debug('Planet {0} buildings: {1}'.format(str(pl), str(pl.buildings)))
             #    logger.debug('Planet {0} ships:     {1}'.format(str(pl), str(pl.ships)))
             #    logger.debug('Planet {0} defense:   {1}'.format(str(pl), str(pl.defense)))
-            # restore planets energy totals
-            for planet_id in self._planet_energy_totals.keys():
-                for pl in self.planets:
-                    if pl.planet_id == planet_id:
-                        pl.energy.energy_total = self._planet_energy_totals[planet_id]
-                        break
-            return
+            # restore some planets previous data
+            self.restore_previous_info()
