@@ -96,6 +96,7 @@ class ShipyardShipsAvailParser(XNParserBase):
                 self._in_div_title = False
                 self._in_div_actions = False
                 # store build item to list
+                self._cur_item.is_shipyard_item = True
                 self.ships_avail.append(self._cur_item)
                 # log
                 logger.debug(' -- Planet ship avail: (gid={0}) {1} x {2} build time {3} secs'.format(
