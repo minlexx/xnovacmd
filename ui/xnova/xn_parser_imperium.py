@@ -47,6 +47,7 @@ class ImperiumParser(XNParserBase):
             self._planet_prev_build_items[pl.planet_id]['bi'] = pl.buildings_items
             self._planet_prev_build_items[pl.planet_id]['ri'] = pl.research_items
             self._planet_prev_build_items[pl.planet_id]['si'] = pl.shipyard_tems
+            self._planet_prev_build_items[pl.planet_id]['di'] = pl.defense_items
             self._planet_prev_build_items[pl.planet_id]['spi'] = pl.shipyard_progress_items
 
     def restore_previous_info(self):
@@ -63,6 +64,7 @@ class ImperiumParser(XNParserBase):
                     pl.buildings_items = self._planet_prev_build_items[planet_id]['bi']
                     pl.research_items = self._planet_prev_build_items[planet_id]['ri']
                     pl.shipyard_tems = self._planet_prev_build_items[planet_id]['si']
+                    pl.defense_items = self._planet_prev_build_items[planet_id]['di']
                     pl.shipyard_progress_items = self._planet_prev_build_items[planet_id]['spi']
 
     def handle_starttag(self, tag: str, attrs: list):

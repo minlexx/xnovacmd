@@ -570,6 +570,7 @@ class XNPlanet:
         self.shipyard_tems = []  # list of XNPlanetBuildingItem, ships available to build
         self.shipyard_progress_items = []  # list of XNPlanetBuildingItem, ships in progress
         self.research_items = []  # list of XNPlanetBuildingItem, researches available AND in progress
+        self.defense_items = []  # list of XNPlanetBuildingItem, defenses avail to build
         # this is calculated by planet itself based on pic_url (called by imperium parser)
         self.moon = None  # reference to moon, planet may have moon
         self.is_moon = False  # or planet may be a moon itself
