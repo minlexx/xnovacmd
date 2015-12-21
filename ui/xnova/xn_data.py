@@ -114,7 +114,7 @@ class XNAccountInfo:
     Holds information about user profile (name, main planet) and statistics
     """
     def __init__(self):
-        self.email = '' # set from caller ? not from site
+        self.email = ''  # set from caller ? not from site
         # collected from overview page
         self.id = 0
         self.ref_link = ''
@@ -505,7 +505,6 @@ class XNPlanetBuildingItem:
         rl = ''
         if self.remove_link is not None:
             rl = ', remove_link = [{0}]'.format(self.remove_link)
-        lv_str = ''
         if self.is_shipyard_item:
             lv_str = '{0} pcs.'.format(self.quantity)
         else:
@@ -561,17 +560,19 @@ class XNPlanet:
         self.fields_total = 0
         self.res_current = XNResourceBundle(0, 0, 0)
         self.res_per_hour = XNResourceBundle(0, 0, 0)
-        self.energy = XNPlanetEnergyInfo()
+        self.energy = XNPlanetEnergyInfo()  # partially filled from buildings parser
         self.prod_powers = XNPlanetProductionPowers()
         self.ships = XNShipsBundle()
-        self.buildings = XNBuildingsBundle()  # buildings levels, from Imperium
-        self.buildings_items = []  # list of XNPlanetBuildingItem, buildings available to build and in progress
+        self.buildings = XNBuildingsBundle()
+        self.defense = XNDefenseBundle()
+        # these items are filled in by specialized planet pages parsers
+        self.buildings_items = []  # list of XNPlanetBuildingItem, buildings available AND in progress
         self.shipyard_tems = []  # list of XNPlanetBuildingItem, ships available to build
         self.shipyard_progress_items = []  # list of XNPlanetBuildingItem, ships in progress
-        self.research_items = []  # list of XNPlanetBuildingItem, researches available to build and in progress
-        self.defense = XNDefenseBundle()
-        self.moon = None  # planet may have moon
-        self.is_moon = False  # or may be a moon itself
+        self.research_items = []  # list of XNPlanetBuildingItem, researches available AND in progress
+        # this is calculated by planet itself based on pic_url (called by imperium parser)
+        self.moon = None  # reference to moon, planet may have moon
+        self.is_moon = False  # or planet may be a moon itself
         self.is_base = False
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
