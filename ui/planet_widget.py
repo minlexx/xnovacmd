@@ -133,7 +133,7 @@ class PlanetWidget(QFrame):
 
     def setPlanet(self, planet: XNPlanet):
         self._planet = planet
-        self._bipanel.setup_from_planet(planet)
+        self._bipanel.setup_from_planet(self._planet)
 
     def planet(self) -> XNPlanet:
         return self._planet
