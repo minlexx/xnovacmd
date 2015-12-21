@@ -266,7 +266,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         # self.test_setup_planets_panel()
-        # self.test_planet_tab()
+        self.test_planet_tab()
 
     def setup_planets_panel(self, planets: list):
         layout = self._panel_planets.layout()
@@ -318,7 +318,18 @@ class XNova_MainWindow(QWidget):
         # add tab and make it current
         tab_index = self.add_tab(plw, tab_title, closeable=True)
         self._tabwidget.setCurrentIndex(tab_index)
+        self._tabwidget.tabBar().setTabIcon(tab_index, QIcon(':/i/planet_32.png'))
         return tab_index
+
+    def add_tab_for_galaxy(self, coords: XNCoords = None):
+        gw = GalaxyWidget(self._tabwidget)
+        tab_title = '{0}'.format(self.tr('Galaxy'))
+        if coords is not None:
+            tab_title = '{0} {1}'.format(self.tr('Galaxy'), coords.coords_str())
+            gw.setCoords(coords.galaxy, coords.system)
+        idx = self.add_tab(gw, tab_title, closeable=True)
+        self._tabwidget.setCurrentIndex(idx)
+        self._tabwidget.tabBar().setTabIcon(idx, QIcon(':/i/galaxy_32.png'))
 
     @pyqtSlot(int)
     def on_tab_close_requested(self, idx: int):
@@ -350,9 +361,7 @@ class XNova_MainWindow(QWidget):
             logger.debug('selected action data = {0}'.format(str(action_ret.data())))
             if action_ret == galaxy_action:
                 logger.debug('action_ret == galaxy_action')
-                gw = GalaxyWidget(self._tabwidget)
-                idx = self.add_tab(gw, self.tr('Galaxy'), closeable=True)
-                self._tabwidget.setCurrentIndex(idx)
+                self.add_tab_for_galaxy()
                 return
             # else consider this is planet widget
             planet_id = int(action_ret.data())
@@ -545,10 +554,9 @@ class XNova_MainWindow(QWidget):
     def on_request_open_galaxy_tab(self, coords: XNCoords):
         tab_index = self.find_tab_for_galaxy(coords.galaxy, coords.system)
         if tab_index == -1:  # create new tab for these coords
-            gw = GalaxyWidget(self)
-            gw.setCoords(coords.galaxy, coords.system)
-            tab_index = self.add_tab(gw, self.tr('Galaxy'), closeable=True)
-        # switch to that tab
+            self.add_tab_for_galaxy(coords)
+            return
+        # else switch to that tab
         self._tabwidget.setCurrentIndex(tab_index)
 
     @pyqtSlot(int)
