@@ -380,7 +380,7 @@ class XNovaWorld(QThread):
             self._cur_planet_id = self._parser_curplanet.cur_planet_id
             self._cur_planet_name = self._parser_curplanet.cur_planet_name
             self._cur_planet_coords = self._parser_curplanet.cur_planet_coords
-            self._update_current_planet()  # it may have changed
+            self._internal_set_current_planet()  # it may have changed
             # emit signal that we've loaded overview, but not during world update
             if not self._world_is_loading:
                 self.loaded_overview.emit()
@@ -405,7 +405,7 @@ class XNovaWorld(QThread):
             self._planets = self._parser_imperium.planets
             # since we've overwritten the whole planets array, we need to
             # write current planet into it again
-            self._update_current_planet()
+            self._internal_set_current_planet()
             # emit signal that we've loaded overview, but not during world update
             if not self._world_is_loading:
                 self.loaded_imperium.emit()
@@ -520,7 +520,7 @@ class XNovaWorld(QThread):
                     gp.unscramble_galaxy_script()
                     logger.debug(gp.galaxy_rows)
 
-    def _update_current_planet(self):
+    def _internal_set_current_planet(self):
         """
         Just updates internal planets array with information
         about which of them is current one
