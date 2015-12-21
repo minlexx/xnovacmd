@@ -50,7 +50,7 @@ class XNovaWorld(QThread):
         super(XNovaWorld, self).__init__(parent)
         self._world_is_loading = False  # true is _full_refresh() is running (world is loading)
         # helpers
-        self._page_dnl_times = dict()
+        self._page_dnl_times = dict()   # last time when a page was downloaded
         self._page_cache = XNovaPageCache()
         self._page_cache.save_load_encoding = 'UTF-8'
         self._page_downloader = XNovaPageDownload()
@@ -308,7 +308,7 @@ class XNovaWorld(QThread):
                         if bitem.seconds_left <= 0:
                             bitem.seconds_left = -1
                             bitem.dt_end = None  # mark as stopped
-                            bitem.level += 1 # level increased
+                            bitem.level += 1  # level increased
                             num_completed += 1
                             self.build_complete.emit(planet, bitem)
                 if num_completed > 0:
@@ -491,20 +491,22 @@ class XNovaWorld(QThread):
                     planet.energy.energy_left = self._parser_planet_energy.energy_left
                     planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
-                logger.exception('Invalid format for page_name=[{0}], expected research_123456'.format(page_name))
+                logger.exception('Invalid format for page_name=[{0}], '
+                                 'expected research_123456'.format(page_name))
             except ValueError:  # failed to convert to int
-                logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
+                logger.exception('Failed to convert planet_id to int, '
+                                 'page_name=[{0}]'.format(page_name))
         else:
-            logger.warn('on_page_downloaded(): Unhandled page name [{0}]. This may be not a problem, but...'.format(page_name))
+            logger.warn('on_page_downloaded(): Unhandled page name [{0}]. '
+                        'This may be not a problem, but...'.format(page_name))
 
-    def on_reload_page(self):
-        # logger.debug('on_reload_page(), signal args = {0}'.format(str(self._signal_kwargs)))
+    def on_signal_reload_page(self):
         if 'page_name' in self._signal_kwargs:
             page_name = self._signal_kwargs['page_name']
             logger.debug('on_reload_page(): reloading {0}'.format(page_name))
             self._get_page(page_name, max_cache_lifetime=1, force_download=True)
 
-    def on_test_parse_galaxy(self):
+    def on_signal_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
             gal_no = self._signal_kwargs['galaxy']
             sys_no = self._signal_kwargs['system']
@@ -685,6 +687,7 @@ class XNovaWorld(QThread):
             # TODO: planet factory researches in progress
             # planet shipyard/defense builds in progress
             self._download_planet_shipyard(pl.planet_id, force_download=True)
+            # TODO: planet defense?
             self.msleep(100)  # wait
         self.msleep(100)
         # restore original current planet that was before full world refresh
@@ -731,9 +734,9 @@ class XNovaWorld(QThread):
             if ret == self.SIGNAL_QUIT:
                 break
             if ret == self.SIGNAL_RELOAD_PAGE:
-                self.on_reload_page()
+                self.on_signal_reload_page()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
-                self.on_test_parse_galaxy()
+                self.on_signal_test_parse_galaxy()
             elif ret == self.SIGNAL_TEST_PARSE_PLANET_BUILDINGS:
                 self.on_test_parse_planet_buildings()
         logger.debug('thread: exiting.')
