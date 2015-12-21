@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QSize
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QHeaderView, QPushButton
 from PyQt5.QtGui import QColor, QBrush, QIcon
 
 from .widget_utils import flight_mission_for_humans, number_format
@@ -14,25 +14,37 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class FlightsWidget(QWidget):
+
+    requestShowSettings = pyqtSignal()
+    requestShowMessages = pyqtSignal()
+
     def __init__(self, parent=None):
         super(FlightsWidget, self).__init__(parent)
         # state vars
         self.uifile = 'ui/flights_widget.ui'
         # objects, sub-windows
         self.ui = None
-        self.btn_newmsg = None
+        self._btn_newmsg = ButtonTextOverIcon(self)
+        self._btn_settings = QPushButton(self)
+        # world reference
         self.world = XNovaWorld_instance()
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
         # new messages button
-        self.btn_newmsg = ButtonTextOverIcon(self)
-        self.btn_newmsg.setText('')
-        self.btn_newmsg.setIcon(QIcon(':/i/message.png'))
-        self.btn_newmsg.setIconSize(QSize(24, 16))
-        self.btn_newmsg.setMinimumSize(QSize(30, 22))
-        self.btn_newmsg.setMaximumSize(QSize(30, 22))
-        self.ui.horizontalLayout.insertWidget(0, self.btn_newmsg, 0)
+        self._btn_newmsg.setText('')
+        self._btn_newmsg.setIcon(QIcon(':/i/message.png'))
+        self._btn_newmsg.setIconSize(QSize(24, 16))
+        self._btn_newmsg.setMinimumSize(QSize(30, 22))
+        self._btn_newmsg.setMaximumSize(QSize(30, 22))
+        self.ui.horizontalLayout.insertWidget(0, self._btn_newmsg, 0)
+        # settings button
+        self._btn_settings.setText('')
+        self._btn_settings.setIcon(QIcon(':/i/settings_32.png'))
+        self._btn_settings.setIconSize(QSize(16, 16))
+        self._btn_settings.setMaximumWidth(32)
+        self._btn_settings.clicked.connect(self.on_btn_settings)
+        self.ui.horizontalLayout.addWidget(self._btn_settings, 0)
         # configure table widget
         self.ui.tw_flights.setColumnCount(5)
         self.ui.tw_flights.setRowCount(0)
@@ -48,7 +60,11 @@ class FlightsWidget(QWidget):
         self.ui.tw_flights.hide()
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
-        self.btn_newmsg.clicked.connect(self.on_messages_clicked)
+        self._btn_newmsg.clicked.connect(self.on_messages_clicked)
+
+    def set_online_state(self, st: bool = True):
+        self._btn_newmsg.setEnabled(st)
+        self.ui.btn_show.setEnabled(st)
 
     #def minimize_height(self):
     #    print(self.parent())
@@ -110,8 +126,8 @@ class FlightsWidget(QWidget):
         txt = ''
         if nmc > 0:
             txt = str(nmc)
-        self.btn_newmsg.setText(txt)
-        self.btn_newmsg.update()
+        self._btn_newmsg.setText(txt)
+        self._btn_newmsg.update()
 
     @staticmethod
     def _get_mis_bgcolor(mis: str, dir_: str) -> QColor:
@@ -222,4 +238,8 @@ class FlightsWidget(QWidget):
 
     @pyqtSlot()
     def on_messages_clicked(self):
-        logger.debug('on_messages_clicked')
+        self.requestShowMessages.emit()
+
+    @pyqtSlot()
+    def on_btn_settings(self):
+        self.requestShowSettings.emit()

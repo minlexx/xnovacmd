@@ -1,6 +1,4 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QSize
 from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel
-from PyQt5.QtGui import QIcon
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -9,8 +7,6 @@ logger = xn_logger.get(__name__, debug=True)
 
 
 class XNCStatusBar(QStatusBar):
-
-    requestShowSettings = pyqtSignal()
 
     def __init__(self, parent=None):
         super(XNCStatusBar, self).__init__(parent)
@@ -26,19 +22,12 @@ class XNCStatusBar(QStatusBar):
         self._progressbar.setRange(0, 99)
         # online players counter
         self._lbl_online = QLabel(self.tr('Online') + ': 0', self)
-        # settings button
-        self._btn_settings = QPushButton(self)
-        self._btn_settings.setText('')
-        self._btn_settings.setIcon(QIcon(':/i/settings_32.png'))
-        self._btn_settings.setIconSize(QSize(16, 16))
-        self._btn_settings.clicked.connect(self.on_btn_settings)
         # testing only
-        #self._btn_test1 = QPushButton(self.tr('test parse'), self)
-        #self.addPermanentWidget(self._btn_test1)
-        #self._btn_test1.clicked.connect(self.on_btn_test1)
+        # self._btn_test1 = QPushButton(self.tr('test parse'), self)
+        # self.addPermanentWidget(self._btn_test1)
+        # self._btn_test1.clicked.connect(self.on_btn_test1)
         #
-        self.addPermanentWidget(self._lbl_online)  # before the last
-        self.addPermanentWidget(self._btn_settings)  # should be las right widget
+        self.addPermanentWidget(self._lbl_online)  # should be las right widget
         self.show()
 
     def set_status(self, msg: str, timeout: int=0):
@@ -67,10 +56,6 @@ class XNCStatusBar(QStatusBar):
     def update_online_players_count(self):
         op = self.world.get_online_players()
         self._lbl_online.setText(self.tr('Online') + ': {0}'.format(op))
-
-    @pyqtSlot()
-    def on_btn_settings(self):
-        self.requestShowSettings.emit()
 
 # some functions may be useful, documentation:
 # void QStatusBar::clearMessage()

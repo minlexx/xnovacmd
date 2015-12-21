@@ -88,7 +88,6 @@ class XNova_MainWindow(QWidget):
         #
         # create status bar
         self._statusbar = XNCStatusBar(self)
-        self._statusbar.requestShowSettings.connect(self.on_show_settings)
         self.setStatusMessage(self.tr('Not connected: Log in!'))
         #
         # tab widget pages
@@ -188,6 +187,13 @@ class XNova_MainWindow(QWidget):
     # called by main application object just after main window creation
     # to show login widget and begin login process
     def begin_login(self):
+        # create flights widget
+        self.flights_widget = FlightsWidget(self._fr_flights)
+        self.flights_widget.load_ui()
+        install_layout_for_widget(self._fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
+        self._fr_flights.layout().addWidget(self.flights_widget)
+        self.flights_widget.set_online_state(False)
+        self.flights_widget.requestShowSettings.connect(self.on_show_settings)
         # create and show login widget as first tab
         self.login_widget = LoginWidget(self._tabwidget)
         self.login_widget.load_ui()
@@ -311,14 +317,6 @@ class XNova_MainWindow(QWidget):
         self.login_widget.close()
         self.login_widget = None
         #
-        # create all main widgets
-        # create flights widget
-        self.flights_widget = FlightsWidget(self._fr_flights)
-        self.flights_widget.load_ui()
-        install_layout_for_widget(self._fr_flights, Qt.Vertical, margins=(1, 1, 1, 1), spacing=1)
-        self._fr_flights.layout().addWidget(self.flights_widget)
-        self.flights_widget.setEnabled(False)
-        #
         # create overview widget and add it as first tab
         self.overview_widget = OverviewWidget(self._tabwidget)
         self.overview_widget.load_ui()
@@ -361,7 +359,7 @@ class XNova_MainWindow(QWidget):
             self.overview_widget.update_account_info()
             self.overview_widget.update_builds()
         # update flying fleets
-        self.flights_widget.setEnabled(True)
+        self.flights_widget.set_online_state(True)
         self.flights_widget.update_flights()
         # update planets
         planets = self.world.get_planets()
