@@ -2,10 +2,10 @@ import pathlib
 import pickle
 import configparser
 
-from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant
+from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant, QEvent
 from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
     QScrollArea, QMenu, QAction, QPushButton, QLabel, QVBoxLayout, QHBoxLayout
-from PyQt5.QtGui import QIcon, QCloseEvent, QCursor
+from PyQt5.QtGui import QIcon, QCloseEvent, QCursor, QShowEvent, QWindowStateChangeEvent
 
 from .statusbar import XNCStatusBar
 from .settings_widget import SettingsWidget
@@ -49,6 +49,7 @@ class XNova_MainWindow(QWidget):
         self.state = self.STATE_NOT_AUTHED
         self.login_email = ''
         self.cookies_dict = {}
+        self._hidden_to_tray = False
         #
         # init UI
         self.setWindowIcon(QIcon(':/i/xnova_logo_64.png'))
@@ -150,6 +151,28 @@ class XNova_MainWindow(QWidget):
         self.store_cfg_val('main_size', ssz)
         # accept the event
         close_event.accept()
+
+    def showEvent(self, evt: QShowEvent):
+        super(XNova_MainWindow, self).showEvent(evt)
+        self._hidden_to_tray = False
+
+    def changeEvent(self, evt: QEvent):
+        super(XNova_MainWindow, self).changeEvent(evt)
+        if evt.type() == QEvent.WindowStateChange:
+            if not isinstance(evt, QWindowStateChangeEvent):
+                return
+            # make sure we only do this for minimize events
+            if (evt.oldState() != Qt.WindowMinimized) and self.isMinimized():
+                # we were minimized! explicitly hide settings widget
+                #     if it is open, otherwise it will be lost forever :(
+                if self.settings_widget is not None:
+                    if self.settings_widget.isVisible():
+                        self.settings_widget.hide()
+                # should we minimize to tray?
+                if self.cfg['tray']['icon_usage'] == 'show_min':
+                    if not self._hidden_to_tray:
+                        self._hidden_to_tray = True
+                        self.hide()
 
     def create_tray_icon(self):
         if QSystemTrayIcon.isSystemTrayAvailable():
@@ -495,6 +518,7 @@ class XNova_MainWindow(QWidget):
     def on_show_settings(self):
         if self.settings_widget is not None:
             self.settings_widget.show()
+            self.settings_widget.showNormal()
 
     @pyqtSlot(XNFlight)
     def on_flight_arrived(self, fl: XNFlight):
