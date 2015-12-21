@@ -9,7 +9,7 @@ from PyQt5.QtGui import QIcon
 from ui.xnova import xn_logger
 
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class Settings_Net(QWidget):
@@ -197,11 +197,45 @@ class Settings_Misc(QWidget):
         super(Settings_Misc, self).__init__(parent)
         self._layout = QVBoxLayout()
         self.setLayout(self._layout)
-        # label
-        self._lbl = QLabel(self.tr('Misc'), self)
+        # tray icon settings
+        self._l_ti = QHBoxLayout()
+        self._lbl_ti = QLabel(self.tr('System tray icon:'), self)
+        self._cb_ti = QComboBox(self)
+        self._cb_ti.addItem(self.tr('Do not use'), QVariant('none'))
+        self._cb_ti.addItem(self.tr('Show'), QVariant('show'))
+        self._cb_ti.addItem(self.tr('Show, minimize to tray'), QVariant('show_min'))
         # finalize layout
-        self._layout.addWidget(self._lbl)
+        self._l_ti.addWidget(self._lbl_ti)
+        self._l_ti.addWidget(self._cb_ti)
+        self._layout.addLayout(self._l_ti)
+        self._layout.addStretch()
+        #
         self.hide()
+
+    def save_to_config(self, cfg: configparser.ConfigParser):
+        # ensure there is a 'net' section
+        if 'tray' not in cfg:
+            cfg.add_section('tray')
+        # tray icon settings
+        idx = self._cb_ti.currentIndex()
+        if idx >= 0:
+            usage = str(self._cb_ti.itemData(idx, Qt.UserRole))
+            cfg['tray']['icon_usage'] = usage
+        logger.debug('Saved misc config')
+
+    def load_from_config(self, cfg: configparser.ConfigParser):
+        # defaults
+        usage = 'none'
+        if 'tray' in cfg:
+            usage = cfg['tray']['icon_usage']
+        if usage == 'none':
+            self._cb_ti.setCurrentIndex(0)
+        elif usage == 'show':
+            self._cb_ti.setCurrentIndex(1)
+        elif usage == 'show_min':
+            self._cb_ti.setCurrentIndex(2)
+        else:
+            raise ValueError('Ivalid tray icon usage setting: ' + usage)
 
 
 class SettingsWidget(QWidget):
@@ -274,10 +308,12 @@ class SettingsWidget(QWidget):
         self._cfg.read('config/net.ini', encoding='utf-8')
         # init config of all child widgets
         self._w_net.load_from_config(self._cfg)
+        self._w_misc.load_from_config(self._cfg)
 
     def save_settings(self):
         # read config from all child widgets
         self._w_net.save_to_config(self._cfg)
+        self._w_misc.save_to_config(self._cfg)
         # save to file
         try:
             with open('config/net.ini', 'wt', encoding='utf-8') as fp:
