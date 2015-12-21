@@ -16,5 +16,7 @@
         <file alias="save.png">i/save.png</file>
         <file alias="settings_32.png">i/settings_32.png</file>
         <file alias="settings_network_32.png">i/settings_network_32.png</file>
+        <file alias="galaxy_32.png">i/galaxy_32.png</file>
+        <file alias="planet_32.png">i/planet_32.png</file>
     </qresource>
 </RCC>
