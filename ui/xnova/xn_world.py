@@ -636,6 +636,14 @@ class XNovaWorld(QThread):
         return self._get_page_url(page_name, page_url,
                                   self._planet_shipyard_cache_lifetime, force_download)
 
+    def _download_planet_defense(self, planet_id: int, force_download=False):
+        # url to change current planet is:
+        #    http://uni4.xnova.su/?set=buildings&mode=defense&cp=60668&re=0
+        page_url = '?set=buildings&mode=defense&cp={0}&re=0'.format(planet_id)
+        page_name = 'defense_{0}'.format(planet_id)
+        return self._get_page_url(page_name, page_url,
+                                  self._planet_shipyard_cache_lifetime, force_download)
+
     def _download_planet_researches(self, planet_id: int, force_download=False):
         # url: http://uni4.xnova.su/?set=buildings&mode=research&cp=57064&re=0
         page_url = '?set=buildings&mode=research&cp={0}&re=0'.format(planet_id)
@@ -687,7 +695,8 @@ class XNovaWorld(QThread):
             # TODO: planet factory researches in progress
             # planet shipyard/defense builds in progress
             self._download_planet_shipyard(pl.planet_id, force_download=True)
-            # TODO: planet defense?
+            self.msleep(100)  # wait
+            self._download_planet_defense(pl.planet_id, force_download=True)
             self.msleep(100)  # wait
         self.msleep(100)
         # restore original current planet that was before full world refresh
