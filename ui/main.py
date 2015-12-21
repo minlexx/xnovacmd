@@ -473,10 +473,18 @@ class XNova_MainWindow(QWidget):
         # need to update imperium widget
         if self.imperium_widget is not None:
             self.imperium_widget.update_planets()
-        # the important note here is that imperium update is the only place where
+        # The important note here is that imperium update is the only place where
         # the planets list is read, so number of planets, their names, etc may change here
-        # Do we need to update planets panel also?
-        self.update_planets_panel()
+        # Also, imperium update OVERWRITES full planets array, so, all prev
+        # references to planets in all GUI elements must be invalidated, because
+        # they will point to unused, outdated planets
+        planets = self.world.get_planets()
+        # re-create planets sidebar
+        self.setup_planets_panel(planets)
+        # update all builds in overview widget
+        if self.overview_widget:
+            self.overview_widget.update_builds()
+        # TODO: update all planet tabs with new planet references
 
     @pyqtSlot()
     def on_world_timer(self):
