@@ -470,6 +470,35 @@ class XNovaWorld(QThread):
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
+        elif page_name.startswith('defense_'):
+            try:
+                m = re.match(r'defense_(\d+)', page_name)
+                planet_id = int(m.group(1))
+                planet = self.get_planet(planet_id)
+                # go parse
+                self._parser_shipyard_ships_avail.clear()
+                self._parser_shipyard_ships_avail.parse_page_content(page_content)
+                self._parser_shipyard_progress.clear()
+                self._parser_shipyard_progress.server_time = self._server_time
+                self._parser_shipyard_progress.parse_page_content(page_content)
+                # get planet energy info
+                self._parser_planet_energy.clear()
+                self._parser_planet_energy.parse_page_content(page_content)
+                if planet is not None:
+                    # shipyard parser ships_avail can also parse planet defenses avail
+                    planet.defense_tems = self._parser_shipyard_ships_avail.ships_avail
+                    # even in defense page, ships build queue is the same as in shipyard page
+                    planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_progress_items
+                    if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
+                        logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
+                            planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
+                    # save planet energy info
+                    planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+            except AttributeError:  # no match
+                logger.exception('Invalid format for page_name=[{0}], expected defense_123456'.format(page_name))
+            except ValueError:  # failed to convert to int
+                logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
         elif page_name.startswith('research_'):
             try:
                 m = re.match(r'research_(\d+)', page_name)
