@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant
-from PyQt5.QtWidgets import QWidget, QFrame, QScrollArea, QMenu, QAction, \
+from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
     QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
 from PyQt5.QtGui import QIcon, QCursor, QPixmap
 
@@ -15,6 +15,7 @@ logger = xn_logger.get(__name__, debug=True)
 class Planet_BasicInfoPanel(QFrame):
 
     requestOpenGalaxy = pyqtSignal(XNCoords)
+    requestRefreshPlanet = pyqtSignal()
 
     def __init__(self, parent: QWidget):
         super(Planet_BasicInfoPanel, self).__init__(parent)
@@ -32,20 +33,28 @@ class Planet_BasicInfoPanel(QFrame):
         self._vlayout = QVBoxLayout()
         self._hlayout_name_coords = QHBoxLayout()
         self._hlayout_fields = QHBoxLayout()
+        self._hlayout_btn = QHBoxLayout()
         # labels
         self._lbl_img = QLabel(self)
         self._lbl_name = QLabel(self)
         self._lbl_coords = QLabel(self)
         self._lbl_coords.linkActivated.connect(self.on_coords_link_activated)
         self._lbl_fields = QLabel()
+        # button
+        self._btn_refresh = QPushButton(self.tr('Refresh planet'), self)
+        self._btn_refresh.setIcon(QIcon(':/i/reload.png'))
+        self._btn_refresh.clicked.connect(self.on_btn_refresh_clicked)
         # finalize layout
         self._hlayout_name_coords.addWidget(self._lbl_name)
         self._hlayout_name_coords.addWidget(self._lbl_coords)
         self._hlayout_name_coords.addStretch()
         self._hlayout_fields.addWidget(self._lbl_fields)
         self._hlayout_fields.addStretch()
+        self._hlayout_btn.addWidget(self._btn_refresh)
+        self._hlayout_btn.addStretch()
         self._vlayout.addLayout(self._hlayout_name_coords)
         self._vlayout.addLayout(self._hlayout_fields)
+        self._vlayout.addLayout(self._hlayout_btn)
         self._vlayout.addStretch()
         self._layout.addWidget(self._lbl_img)
         self._layout.addLayout(self._vlayout)
@@ -75,6 +84,10 @@ class Planet_BasicInfoPanel(QFrame):
         coords.parse_str(link, raise_on_error=True)
         self.requestOpenGalaxy.emit(coords)
 
+    @pyqtSlot()
+    def on_btn_refresh_clicked(self):
+        self.requestRefreshPlanet.emit()
+
 
 class PlanetWidget(QFrame):
     """
@@ -99,6 +112,7 @@ class PlanetWidget(QFrame):
         # basic info panel
         self._bipanel = Planet_BasicInfoPanel(self)
         self._bipanel.requestOpenGalaxy.connect(self.on_request_open_galaxy)
+        self._bipanel.requestRefreshPlanet.connect(self.on_request_refresh_planet)
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
@@ -115,10 +129,6 @@ class PlanetWidget(QFrame):
         self._layout.addWidget(self._cf_research)
         self._layout.addStretch()
 
-    @pyqtSlot(XNCoords)
-    def on_request_open_galaxy(self, coords: XNCoords):
-        self.requestOpenGalaxy.emit(coords)
-
     def get_tab_type(self) -> str:
         return 'planet'
 
@@ -128,3 +138,11 @@ class PlanetWidget(QFrame):
 
     def planet(self) -> XNPlanet:
         return self._planet
+
+    @pyqtSlot(XNCoords)
+    def on_request_open_galaxy(self, coords: XNCoords):
+        self.requestOpenGalaxy.emit(coords)
+
+    @pyqtSlot()
+    def on_request_refresh_planet(self):
+        logger.debug('Received request to reload planet {0}'.format(self._planet))
