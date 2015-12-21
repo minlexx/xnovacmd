@@ -238,6 +238,18 @@ class XNova_MainWindow(QWidget):
                         if isinstance(wi, PlanetsBarWidget):
                             wi.update()
 
+    def add_tab_for_planet(self, planet: XNPlanet):
+        # construct planet widget and setup signals/slots
+        plw = PlanetWidget(self._tabwidget)
+        plw.requestOpenGalaxy.connect(self.on_request_open_galaxy_tab)
+        plw.setPlanet(planet)
+        # construct tab title
+        tab_title = '{0} {1}'.format(planet.name, planet.coords.coords_str())
+        # add tab and make it current
+        tab_index = self.add_tab(plw, tab_title, closeable=True)
+        self._tabwidget.setCurrentIndex(tab_index)
+        return tab_index
+
     @pyqtSlot(int)
     def on_tab_close_requested(self, idx: int):
         # logger.debug('tab close requested: {0}'.format(idx))
@@ -276,10 +288,7 @@ class XNova_MainWindow(QWidget):
             planet_id = int(action_ret.data())
             planet = self.world.get_planet(planet_id)
             if planet is not None:
-                pw = PlanetWidget(self._tabwidget)
-                pw.setPlanet(planet)
-                idx = self.add_tab(pw, planet.name, closeable=True)
-                self._tabwidget.setCurrentIndex(idx)
+                self.add_tab_for_planet(planet)
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
@@ -481,10 +490,10 @@ class XNova_MainWindow(QWidget):
         tab_index = self.find_tab_for_planet(planet_id)
         if tab_index == -1: # create new tab for planet
             planet = self.world.get_planet(planet_id)
-            pw = PlanetWidget(self)
-            pw.setPlanet(planet)
-            tab_index = self.add_tab(pw, planet.name, closeable=True)
-        # switch to that tab
+            if planet is not None:
+                self.add_tab_for_planet(planet)
+                return
+        # else switch to that tab
         self._tabwidget.setCurrentIndex(tab_index)
 
     def find_tab_for_planet(self, planet_id: int) -> int:
@@ -563,7 +572,5 @@ class XNova_MainWindow(QWidget):
         pl1.fields_busy = 90
         pl1.fields_total = 167
         pl1.is_current = True
-        # planet widget
-        plw = PlanetWidget(self._tabwidget)
-        self.add_tab(plw, pl1.name, closeable=True)
-        plw.setPlanet(pl1)
+        # add
+        self.add_tab_for_planet(pl1)
