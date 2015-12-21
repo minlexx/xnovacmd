@@ -1,3 +1,4 @@
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel
 
 from .xnova.xn_world import XNovaWorld_instance
@@ -23,9 +24,9 @@ class XNCStatusBar(QStatusBar):
         # online players counter
         self._lbl_online = QLabel(self.tr('Online') + ': 0', self)
         # testing only
-        # self._btn_test1 = QPushButton(self.tr('test parse'), self)
-        # self.addPermanentWidget(self._btn_test1)
-        # self._btn_test1.clicked.connect(self.on_btn_test1)
+        self._btn_test1 = QPushButton('Run script', self)
+        self.addPermanentWidget(self._btn_test1)
+        self._btn_test1.clicked.connect(self.on_btn_test1)
         #
         self.addPermanentWidget(self._lbl_online)  # should be las right widget
         self.show()
@@ -63,7 +64,13 @@ class XNCStatusBar(QStatusBar):
 # void QStatusBar::addWidget(QWidget * widget, int stretch = 0)
 # void QStatusBar::removeWidget(QWidget * widget)
 
-    #@pyqtSlot()
-    #def on_btn_test1(self):
-    #    # test galaxy parser
-    #    self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
+    @pyqtSlot()
+    def on_btn_test1(self):
+        # test galaxy parser
+        # self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
+        # test script execution
+        s = ''
+        f = open('scripts/test01.py')
+        s = f.read()
+        f.close()
+        exec(s)

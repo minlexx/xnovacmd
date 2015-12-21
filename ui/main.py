@@ -268,7 +268,7 @@ class XNova_MainWindow(QWidget):
         self.login_widget.show()
         self.add_tab(self.login_widget, self.tr('Login'), closeable=False)
         # self.test_setup_planets_panel()
-        self.test_planet_tab()
+        # self.test_planet_tab()
 
     def setup_planets_panel(self, planets: list):
         layout = self._panel_planets.layout()
