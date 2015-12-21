@@ -13,7 +13,7 @@ def printer_thread():
 
     logger.info('Planets:')
     for planet in planets:
-        logger.info(planet.name, planet.coords.coords_str())
+        logger.info('{0}'.format(str(planet)))
     logger.info('End planets.')
 
     for i in range(5):
