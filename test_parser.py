@@ -18,27 +18,31 @@ logger = xn_logger_get(__name__, debug=True)
 
 
 def main():
-    # load file
     cacher = XNovaPageCache()
     cacher.save_load_encoding = 'UTF-8'  # force encoding
     cacher.load_from_disk_cache(clean=True)
-    content = cacher.get_page('overview')
+    #
     # parse overview
+    content = cacher.get_page('overview')
     p1 = OverviewParser()
     p1.parse_page_content(content)
     server_time = p1.server_time
+    #
     # parse user info
     content = cacher.get_page('self_user_info')
     p2 = UserInfoParser()
     p2.parse_page_content(content)
+    #
     # parse imperium
     p3 = ImperiumParser()
     content = cacher.get_page('imperium')
     p3.parse_page_content(content)
+    #
     # current planet
     p4 = CurPlanetParser()
     content = cacher.get_page('overview')  # can be almost any page, overview or imperium is fine
     p4.parse_page_content(content)
+    #
     # galaxy
     gp = GalaxyParser()
     content = cacher.get_page('galaxy_1_7')
@@ -47,6 +51,7 @@ def main():
         gp.unscramble_galaxy_script()
         logger.info('Galaxy rows follow:')
         logger.info(gp.galaxy_rows)
+    #
     # planet buildings
     pbp = PlanetBuildingsProgressParser()
     pba = PlanetBuildingsAvailParser()
@@ -59,6 +64,7 @@ def main():
     logger.info('Planet builds in progress follow:')
     for bp in pbp.builds_in_progress:
         logger.info(str(bp))
+    #
     # planet shipyard
     content = cacher.get_page('shipyard_57064')  # Tama's shipyard
     psyp = ShipyardBuildsInProgressParser()
@@ -70,6 +76,16 @@ def main():
     logger.info('Planet ships available follow:')
     for sa in psap.ships_avail:
         logger.info(str(sa))
+    # planet defenses
+    psyp.clear()
+    psyp.server_time = server_time
+    psyp.parse_page_content(cacher.get_page('defense_57064'))  # Tama's defenses
+    psap.clear()
+    psap.parse_page_content(cacher.get_page('defense_57064'))  # Tama's defenses
+    logger.info('Planet defense available follow:')
+    for sa in psap.ships_avail:
+        logger.info(str(sa))
+    #
     # planet researches available
     content = cacher.get_page('research_57064')  # Tama
     prap = ResearchAvailParser()
@@ -78,10 +94,12 @@ def main():
     logger.info('Planet researches available follow:')
     for ra in prap.researches_avail:
         logger.info(str(ra))
+    #
     # techtree
     ttp = TechtreeParser()
     content = cacher.get_page('techtree')
     ttp.parse_page_content(content)
+    #
     # planet energy parser test
     pep = PlanetEnergyParser()
     content = cacher.get_page('shipyard_57064')  # can be any overview, research or shipyard page
