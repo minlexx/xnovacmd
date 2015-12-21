@@ -111,6 +111,15 @@ class XNovaWorld(QThread):
         self._maintid = self._gettid()
         logger.debug('initialized from tid={0}'.format(self._maintid))
 
+    def reload_config(self):
+        """
+        Reloads network config in page downloader and creates
+        a new HTTP session, resulting in fact in new connection!
+        :return:
+        """
+        self._page_downloader.read_config()
+        self._page_downloader.construct_session()
+
     def lock(self, timeout_ms=None, raise_on_timeout=False):
         """
         Locks thread mutex to protect thread state vars

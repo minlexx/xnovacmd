@@ -240,6 +240,8 @@ class XNova_MainWindow(QWidget):
         elif (not show_tray_icon) and (self.tray_icon is not None):
             logger.debug('settings changed, hiding tray icon')
             self.hide_tray_icon()
+        # also notify world about changed config!
+        self.world.reload_config()
 
     def add_tab(self, widget: QWidget, title: str, closeable: bool = True) -> int:
         tab_index = self._tabwidget.addTab(widget, title, closeable)

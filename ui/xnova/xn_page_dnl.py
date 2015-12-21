@@ -21,7 +21,16 @@ class XNovaPageDownload:
         self.user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
         self.error_str = None
         self.proxy = None
-        # load user-agent from config/net.ini
+        self.sess = None
+        # load config
+        self.read_config()
+        # construct requests HTTP session
+        self.construct_session()
+        # setup cookies
+        if cookies_dict:
+            self.set_cookies_from_dict(cookies_dict)
+
+    def read_config(self):
         cfg = configparser.ConfigParser()
         cfg.read('config/net.ini', encoding='utf-8')
         if 'net' in cfg:
@@ -30,7 +39,8 @@ class XNovaPageDownload:
             self.proxy = cfg['net']['proxy']
             if self.proxy == '':
                 self.proxy = None
-        # construct requests HTTP session
+
+    def construct_session(self):
         if self.proxy is not None:
             if self.proxy.startswith('socks5://'):
                 # for SOCKS5 proxy create requesocks session
@@ -38,13 +48,12 @@ class XNovaPageDownload:
                 logger.info('Using SOCKS5 proxy session (requesocks)')
         else:
             self.sess = requests.Session()  # else normal session
+            logger.info('Using normal session (requests)')
         if self.proxy is not None:
             self.sess.proxies = {'http': self.proxy, 'https': self.proxy}
             logger.info('Set HTTP/HTTPS proxy to: {0}'.format(self.proxy))
         self.sess.headers.update({'user-agent': self.user_agent})
         self.sess.headers.update({'referer': 'http://{0}/'.format(self.xnova_url)})
-        if cookies_dict:
-            self.set_cookies_from_dict(cookies_dict)
 
     def set_useragent(self, ua_str):
         self.user_agent = ua_str
