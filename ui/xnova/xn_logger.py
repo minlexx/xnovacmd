@@ -20,7 +20,9 @@ def get(name, debug=False):
     log_handler.setLevel(level)
     # but all loggers/handlers have the same global formatter
     log_handler.setFormatter(xn_log_formatter)
-    logger.addHandler(log_handler)
+    # only add log handler if there is not already one
+    if len(logger.handlers) == 0:
+        logger.addHandler(log_handler)
     return logger
 
 #############################################
