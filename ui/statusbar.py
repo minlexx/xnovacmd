@@ -1,5 +1,8 @@
+import os
+
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel
+from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel, QAction, QMenu
+from PyQt5.QtGui import QCursor
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -24,9 +27,9 @@ class XNCStatusBar(QStatusBar):
         # online players counter
         self._lbl_online = QLabel(self.tr('Online') + ': 0', self)
         # testing only
-        self._btn_test1 = QPushButton('Run script', self)
-        self.addPermanentWidget(self._btn_test1)
-        self._btn_test1.clicked.connect(self.on_btn_test1)
+        self._btn_runscript = QPushButton('Run script', self)
+        self._btn_runscript.clicked.connect(self.on_run_script)
+        self.addPermanentWidget(self._btn_runscript)
         #
         self.addPermanentWidget(self._lbl_online)  # should be las right widget
         self.show()
@@ -65,12 +68,26 @@ class XNCStatusBar(QStatusBar):
 # void QStatusBar::removeWidget(QWidget * widget)
 
     @pyqtSlot()
-    def on_btn_test1(self):
-        # test galaxy parser
-        # self.world.signal(self.world.SIGNAL_TEST_PARSE_GALAXY, galaxy=1, system=7)
-        # test script execution
+    def on_run_script(self):
+        files = os.listdir('scripts')
+        files.sort()
+        script_files = [fn for fn in files if fn[0] != '.' and fn.endswith('.py')]
+        # print(script_files)
+        menu = QMenu(self)
+        for script_filename in script_files:
+            act = QAction(menu)
+            act.setText('Run "scripts/' + script_filename + '"...')
+            act.setData('scripts/' + script_filename)
+            menu.addAction(act)
+        act_ret = menu.exec(QCursor.pos())
+        if act_ret is None:
+            return
+        script_filename = str(act_ret.data())
         s = ''
-        f = open('scripts/test01.py')
-        s = f.read()
-        f.close()
-        exec(s)
+        try:
+            with open(script_filename, 'rt', encoding='utf-8') as f:
+                s = f.read()
+        except IOError:
+            pass
+        if s != '':
+            exec(s)
