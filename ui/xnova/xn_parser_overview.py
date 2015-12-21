@@ -97,51 +97,83 @@ def _parse_flight_resources(s) -> XNResourceBundle:
 class OverviewParser(XNParserBase):
     def __init__(self):
         super(OverviewParser, self).__init__()
-        self.clear()
-
-    def clear(self):
-        self.in_player_data = False
-        self.in_prom_level = False
-        self.in_military_level = False
-        self.in_credits = False
-        self.in_fraction = False
-        self.in_wins = False
-        self.in_losses = False
-        self.in_reflink = False
-        self.in_flight = False
-        self.in_flight_time = False
-        self.in_flight_time_arrival = False
-        self.in_enemy_message_span = False
+        # output data
+        self.account = XNAccountInfo()
+        self.flights = []
+        self.server_time = datetime.datetime.today()
+        self.new_messages_count = 0
+        self.online_players = 0
+        self.in_RO = False  # vacation mode
+        # internals
+        self._in_player_data = False
+        self._in_prom_level = False
+        self._in_military_level = False
+        self._in_credits = False
+        self._in_fraction = False
+        self._in_wins = False
+        self._in_losses = False
+        self._in_reflink = False
+        self._in_flight = False
+        self._in_flight_time = False
+        self._in_flight_time_arrival = False
+        self._in_enemy_message_span = False
         self._data_prev = ''
         self._read_next = ''
         self._num_a_with_tooltip = 0
         self._num_a_with_galaxy = 0
-        self.account = XNAccountInfo()
-        self.flights = []
         self._cur_flight = XNFlight()
         self._cur_flight_arrive_dt = None
         self._cur_flight_src_nametype = ('', 0)
         self._cur_flight_dst_nametype = ('', 0)
+        self._in_server_time = False
+        #
+        self.clear()
+
+    def clear(self):
+        # output data
+        self.account = XNAccountInfo()
+        self.flights = []
         self.server_time = datetime.datetime.today()
-        self.in_server_time = False
         self.new_messages_count = 0
-        self.in_RO = False  # vacation mode
         self.online_players = 0
+        self.in_RO = False  # vacation mode
+        # internals
+        self._in_player_data = False
+        self._in_prom_level = False
+        self._in_military_level = False
+        self._in_credits = False
+        self._in_fraction = False
+        self._in_wins = False
+        self._in_losses = False
+        self._in_reflink = False
+        self._in_flight = False
+        self._in_flight_time = False
+        self._in_flight_time_arrival = False
+        self._in_enemy_message_span = False
+        self._data_prev = ''
+        self._read_next = ''
+        self._num_a_with_tooltip = 0
+        self._num_a_with_galaxy = 0
+        self._cur_flight = XNFlight()
+        self._cur_flight_arrive_dt = None
+        self._cur_flight_src_nametype = ('', 0)
+        self._cur_flight_dst_nametype = ('', 0)
+        self._in_server_time = False
 
     def handle_starttag(self, tag: str, attrs: list):
         super(OverviewParser, self).handle_starttag(tag, attrs)
         if (tag == 'img') and (len(attrs) > 0):
             if ('src', '/images/wins.gif') in attrs:
-                self.in_wins = True
+                self._in_wins = True
             if ('src', '/images/losses.gif') in attrs:
-                self.in_losses = True
+                self._in_losses = True
             return
         if (tag == 'a') and (len(attrs) > 0):
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
             if ('href', '?set=refers') in attrs:
-                self.in_reflink = True
+                self._in_reflink = True
                 return
-            if self.in_flight:
+            if self._in_flight:
                 data_tooltip_content = ''
                 href = ''
                 for attr_tuple in attrs:
@@ -184,7 +216,7 @@ class OverviewParser(XNParserBase):
             # check special span case that is send message to enemy attacker:
             # <span class='sprite skin_m'></span>
             if span_class == 'sprite skin_m':
-                self.in_enemy_message_span = True
+                self._in_enemy_message_span = True
                 return
             # check that span class is flight:
             #  class="return ownattack"
@@ -202,7 +234,7 @@ class OverviewParser(XNParserBase):
                 # this not span about flying fleet
                 return
             # logger.debug('--> In flight: {0}'.format(str(classes)))  # ['return', 'owntransport']
-            self.in_flight = True
+            self._in_flight = True
             self._num_a_with_tooltip = 0
             self._num_a_with_galaxy = 0
             self._cur_flight = XNFlight()
@@ -216,7 +248,7 @@ class OverviewParser(XNParserBase):
                     tr_class = attr_tuple[1]
             if (tr_class == 'flight') or (tr_class == 'return'):
                 # table row with flight info, or building
-                self.in_flight_time = True
+                self._in_flight_time = True
         # change flight time detection from "arrival time" in font tag
         # to "time left" in <div id="bxxfs2" class="z">8:59:9</div>
         # which comes just before the font tag
@@ -234,19 +266,19 @@ class OverviewParser(XNParserBase):
                     div_id = attr_tuple[1]
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             if (div_class == 'pull-right') and (div_id == 'clock'):
-                self.in_server_time = True
+                self._in_server_time = True
             # <div id="bxxfs2" class="z">8:59:9</div>
-            if (div_class == 'z') and self.in_flight_time:
-                self.in_flight_time_arrival = True
+            if (div_class == 'z') and self._in_flight_time:
+                self._in_flight_time_arrival = True
 
     def handle_endtag(self, tag: str):
         super(OverviewParser, self).handle_endtag(tag)
         if tag == 'span':
             # special case when enemy attack fleet, contains inner span tag
-            if self.in_enemy_message_span:
-                self.in_enemy_message_span = False
+            if self._in_enemy_message_span:
+                self._in_enemy_message_span = False
                 return
-            if self.in_flight:
+            if self._in_flight:
                 # save flight arrive time
                 self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
                 # validate this is flight
@@ -257,7 +289,7 @@ class OverviewParser(XNParserBase):
                         self.flights.append(self._cur_flight)
                         logger.debug('Flight: {0}'.format(self._cur_flight))
                 # logger.debug('handle_endtag(span): ending flight')
-                self.in_flight = False
+                self._in_flight = False
                 self._num_a_with_tooltip = 0
                 self._num_a_with_galaxy = 0
                 self._cur_flight = None
@@ -266,12 +298,12 @@ class OverviewParser(XNParserBase):
                 self._cur_flight_dst_nametype = ('', 0)
             return
         # ^^ channged flight time detection from font tag to div
-        if (tag == 'div') and self.in_flight_time_arrival and self.in_flight_time:
+        if (tag == 'div') and self._in_flight_time_arrival and self._in_flight_time:
             # end processing of <div id="bxxfs2" class="z">8:59:9</div>
-            self.in_flight_time = False
-            self.in_flight_time_arrival = False
-        if (tag == 'div') and self.in_server_time:
-            self.in_server_time = False
+            self._in_flight_time = False
+            self._in_flight_time_arrival = False
+        if (tag == 'div') and self._in_server_time:
+            self._in_server_time = False
             return
         # if tag == 'html':
         #    logger.info('Total {0} flights.'.format(len(self.flights)))
@@ -287,27 +319,27 @@ class OverviewParser(XNParserBase):
                         self.in_RO = True
                         return
         if data == 'Игрок:':
-            self.in_player_data = True
+            self._in_player_data = True
             self._data_prev = data
             return
         if data == 'Промышленный уровень':
-            self.in_prom_level = True
+            self._in_prom_level = True
             self._read_next = 'prom_level'
             return
         if data == 'Военный уровень':
-            self.in_military_level = True
+            self._in_military_level = True
             self._read_next = 'mil_level'
             return
         if data == 'Кредиты':
-            self.in_credits = True
+            self._in_credits = True
             self._read_next = 'credits'
             return
         if data == 'Фракция:':
-            self.in_fraction = True
+            self._in_fraction = True
             self._read_next = 'fr'
             return
         ###########################
-        if self.in_player_data:
+        if self._in_player_data:
             if self._data_prev == 'Игрок:':
                 self.account.login = data
                 self._data_prev = ''
@@ -355,7 +387,7 @@ class OverviewParser(XNParserBase):
                 except ValueError as ve:
                     logger.warn('OverviewParser failed to parse player rank delta: {0}'.format(str(ve)))
                 self._data_prev = ''
-                self.in_player_data = False
+                self._in_player_data = False
                 logger.info('Account Rank: {0}, delta: {1}'.format(
                     self.account.scores.rank, self.account.scores.rank_delta))
                 # logger.info(str(self.account.scores))
@@ -365,7 +397,7 @@ class OverviewParser(XNParserBase):
             self._data_prev = data
             return
         # end in_player_data
-        if self.in_prom_level:
+        if self._in_prom_level:
             if self._read_next == 'prom_level':
                 # [7 из 100]
                 match = re.match(r'(\d+)\sиз\s(\d+)', data)
@@ -384,11 +416,11 @@ class OverviewParser(XNParserBase):
                     exp_m = int(match.group(2))
                     self.account.scores.industry_exp = (exp, exp_m,)
                 self._read_next = ''
-                self.in_prom_level = False
+                self._in_prom_level = False
                 return
             return
         # end in_prom_level
-        if self.in_military_level:
+        if self._in_military_level:
             if self._read_next == 'mil_level':
                 # [7 из 100]
                 match = re.match(r'(\d+)\sиз\s(\d+)', data)
@@ -405,36 +437,36 @@ class OverviewParser(XNParserBase):
                     exp_m = int(match.group(2))
                     self.account.scores.military_exp = (exp, exp_m,)
                 self._read_next = ''
-                self.in_military_level = False
+                self._in_military_level = False
                 return
             return
-        if self.in_credits:
+        if self._in_credits:
             if self._read_next == 'credits':
                 self.account.scores.credits = safe_int(data)
-                self.in_credits = False
+                self._in_credits = False
                 self._read_next = ''
             return
-        if self.in_fraction:
+        if self._in_fraction:
             if self._read_next == 'fr':
                 self.account.scores.fraction = data
                 self._read_next = ''
-                self.in_fraction = False
-        if self.in_wins:
+                self._in_fraction = False
+        if self._in_wins:
             # logger.debug('wins: %s' % data)
             self.account.scores.wins = safe_int(data)
-            self.in_wins = False
-        if self.in_losses:
+            self._in_wins = False
+        if self._in_losses:
             # logger.debug('losses: %s' % data)
             self.account.scores.losses = safe_int(data)
-            self.in_losses = False
-        if self.in_reflink:
+            self._in_losses = False
+        if self._in_reflink:
             # <th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a>
             # logger.debug('Account referral link: [{0}]'.format(data))
             self.account.ref_link = data
             match = re.search(r'/\?(\d+)$', data)
             if match:
                 self.account.id = safe_int(match.group(1))
-            self.in_reflink = False
+            self._in_reflink = False
         if self._num_a_with_galaxy > 0:
             # logger.debug('{0}: galaxy ref [{1}]'.format(self._num_a_with_galaxy, data))
             xc = XNCoords()
@@ -451,7 +483,7 @@ class OverviewParser(XNParserBase):
                     self._num_a_with_galaxy = 0  # stop here
             except ValueError:
                 pass
-        if self.in_flight:
+        if self._in_flight:
             m = re.match(r'^отправленный с планеты (.+)$', data)
             if m:
                 src_name = m.group(1)
@@ -507,7 +539,7 @@ class OverviewParser(XNParserBase):
             if m:
                 self._cur_flight.mission = 'ownmissile'
             # logger.debug('in_flight data: [{0}]'.format(data))
-        if self.in_flight_time and self.in_flight_time_arrival:
+        if self._in_flight_time and self._in_flight_time_arrival:
             # first in was arrival time: <font color="lime">13:59:31</font>
             # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
             # or <div id="bxxfs2" class="z">1:3:25:50</div>
@@ -520,7 +552,7 @@ class OverviewParser(XNParserBase):
                 # logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
                 #    time_left, dt_arrive))
                 return
-        if self.in_server_time:
+        if self._in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data)
             if match:
