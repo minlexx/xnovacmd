@@ -589,6 +589,19 @@ class XNPlanet:
             add_type = ' (base)'
         return str(self.coords) + add_type
 
+    def equals(self, other) -> bool:
+        """
+        Compares planets by planet_id only.
+        :param other: other XNPlanet to compare to
+        :return: True, if other planet has planet_id == self.planet_id
+        """
+        try:
+            if self.planet_id == other.planet_id:
+                return True
+        except AttributeError:
+            pass
+        return False
+
     def detect_type_by_pic_url(self):
         self.is_base = False
         if self.pic_url is not None:
