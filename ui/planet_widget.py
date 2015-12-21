@@ -79,7 +79,6 @@ class Planet_BasicInfoPanel(QFrame):
 
     @pyqtSlot(str)
     def on_coords_link_activated(self, link: str):
-        logger.debug('link activated: {0}'.format(link))
         coords = XNCoords()
         coords.parse_str(link, raise_on_error=True)
         self.requestOpenGalaxy.emit(coords)
