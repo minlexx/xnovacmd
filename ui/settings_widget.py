@@ -1,6 +1,6 @@
 import configparser
 
-from PyQt5.QtCore import pyqtSlot, Qt, QSize, QVariant
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QSize, QVariant
 from PyQt5.QtWidgets import QWidget, QStackedWidget, QPushButton, QLineEdit, QLabel, \
     QVBoxLayout, QHBoxLayout, QComboBox, QGroupBox, QListWidget, QListView, \
     QAbstractItemView, QListWidgetItem
@@ -239,6 +239,9 @@ class Settings_Misc(QWidget):
 
 
 class SettingsWidget(QWidget):
+
+    settings_changed = pyqtSignal()
+
     def __init__(self, parent: QWidget):
         super(SettingsWidget, self).__init__(parent, Qt.Window)
         # config parser
@@ -324,6 +327,7 @@ class SettingsWidget(QWidget):
                 fp.write('# proxy = http://127.0.0.1:4444\n')
         except IOError as e:
             logger.error(str(e))
+        self.settings_changed.emit()
 
     @pyqtSlot()
     def on_ok(self):
