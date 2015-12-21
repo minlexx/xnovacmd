@@ -1,5 +1,6 @@
 import pathlib
 import pickle
+import configparser
 
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant
 from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
@@ -43,6 +44,8 @@ class XNova_MainWindow(QWidget):
         super(XNova_MainWindow, self).__init__(parent, Qt.Window)
         # state vars
         self.config_store_dir = './cache'
+        self.cfg = configparser.ConfigParser()
+        self.cfg.read('config/net.ini', encoding='utf-8')
         self.state = self.STATE_NOT_AUTHED
         self.login_email = ''
         self.cookies_dict = {}
@@ -95,7 +98,10 @@ class XNova_MainWindow(QWidget):
         self.flights_widget = None
         self.overview_widget = None
         self.imperium_widget = None
+        #
+        # settings widget
         self.settings_widget = SettingsWidget(self)
+        self.settings_widget.settings_changed.connect(self.on_settings_changed)
         self.settings_widget.hide()
         #
         # finalize layouts
@@ -106,14 +112,12 @@ class XNova_MainWindow(QWidget):
         self._layout.addWidget(self._statusbar)
         #
         # system tray icon
-        if QSystemTrayIcon.isSystemTrayAvailable():
-            logger.debug('System tray icon is available, showing')
-            self.tray_icon = QSystemTrayIcon(QIcon(':/i/xnova_logo_32.png'), self)
-            self.tray_icon.setToolTip(self.tr('XNova Commander'))
-            self.tray_icon.activated.connect(self.on_tray_icon_activated)
-            self.tray_icon.show()
-        else:
-            self.tray_icon = None
+        self.tray_icon = None
+        show_tray_icon = False
+        if 'tray' in self.cfg:
+            if (self.cfg['tray']['icon_usage'] == 'show') or \
+                    (self.cfg['tray']['icon_usage'] == 'show_min'):
+                self.create_tray_icon()
         #
         # try to restore last window size
         ssz = self.load_cfg_val('main_size')
@@ -147,6 +151,26 @@ class XNova_MainWindow(QWidget):
         # accept the event
         close_event.accept()
 
+    def create_tray_icon(self):
+        if QSystemTrayIcon.isSystemTrayAvailable():
+            logger.debug('System tray icon is available, showing')
+            self.tray_icon = QSystemTrayIcon(QIcon(':/i/xnova_logo_32.png'), self)
+            self.tray_icon.setToolTip(self.tr('XNova Commander'))
+            self.tray_icon.activated.connect(self.on_tray_icon_activated)
+            self.tray_icon.show()
+        else:
+            self.tray_icon = None
+
+    def hide_tray_icon(self):
+        if self.tray_icon is not None:
+            self.tray_icon.hide()
+            self.tray_icon.deleteLater()
+            self.tray_icon = None
+
+    def set_tray_tooltip(self, tip: str):
+        if self.tray_icon is not None:
+            self.tray_icon.setToolTip(tip)
+
     def setStatusMessage(self, msg: str):
         self._statusbar.set_status(msg)
 
@@ -176,6 +200,23 @@ class XNova_MainWindow(QWidget):
         except IOError as ioe:
             pass
         return value
+
+    @pyqtSlot()
+    def on_settings_changed(self):
+        self.cfg.read('config/net.ini', encoding='utf-8')
+        # maybe show/hide tray icon now?
+        show_tray_icon = False
+        if 'tray' in self.cfg:
+            icon_usage = self.cfg['tray']['icon_usage']
+            if (icon_usage == 'show') or (icon_usage == 'show_min'):
+                show_tray_icon = True
+        # show if needs show and hidden, or hide if shown and needs to hide
+        if show_tray_icon and (self.tray_icon is None):
+            logger.debug('settings changed, showing tray icon')
+            self.create_tray_icon()
+        elif (not show_tray_icon) and (self.tray_icon is not None):
+            logger.debug('settings changed, hiding tray icon')
+            self.hide_tray_icon()
 
     def add_tab(self, widget: QWidget, title: str, closeable: bool = True) -> int:
         tab_index = self._tabwidget.addTab(widget, title, closeable)
@@ -369,6 +410,9 @@ class XNova_MainWindow(QWidget):
             self.imperium_widget.update_planets()
         # update statusbar
         self._statusbar.update_online_players_count()
+        # update tray tooltip, add account name
+        self.set_tray_tooltip(self.tr('XNova Commander') + ' - '
+                              + self.world.get_account_info().login)
         # set timer to do every-second world recalculation
         self.world_timer.setInterval(1000)
         self.world_timer.setSingleShot(False)
