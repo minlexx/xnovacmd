@@ -9,7 +9,7 @@ from PyQt5.QtGui import QIcon
 from ui.xnova import xn_logger
 
 
-logger = xn_logger.get(__name__, debug=False)
+logger = xn_logger.get(__name__, debug=True)
 
 
 class Settings_Net(QWidget):
@@ -192,6 +192,18 @@ class Settings_Net(QWidget):
         logger.debug('Saved network config')
 
 
+class Settings_Misc(QWidget):
+    def __init__(self, parent: QWidget):
+        super(Settings_Misc, self).__init__(parent)
+        self._layout = QVBoxLayout()
+        self.setLayout(self._layout)
+        # label
+        self._lbl = QLabel(self.tr('Misc'), self)
+        # finalize layout
+        self._layout.addWidget(self._lbl)
+        self.hide()
+
+
 class SettingsWidget(QWidget):
     def __init__(self, parent: QWidget):
         super(SettingsWidget, self).__init__(parent, Qt.Window)
@@ -211,19 +223,30 @@ class SettingsWidget(QWidget):
         self._sections_list.setGridSize(QSize(64, 64))
         self._sections_list.setFlow(QListView.TopToBottom)
         self._sections_list.setMovement(QListView.Static)  # items cannot be moved by user
+        # network item
         lwi = QListWidgetItem()
         lwi.setText(self.tr('Network'))
         lwi.setTextAlignment(Qt.AlignCenter)
         lwi.setIcon(QIcon(':/i/settings_network_32.png'))
+        lwi.setData(Qt.UserRole, QVariant(0))
         self._sections_list.addItem(lwi)
         lwi.setSelected(True)
+        # misc item
+        lwi = QListWidgetItem()
+        lwi.setText(self.tr('Other'))
+        lwi.setTextAlignment(Qt.AlignCenter)
+        lwi.setIcon(QIcon(':/i/settings_32.png'))
+        lwi.setData(Qt.UserRole, QVariant(1))
+        self._sections_list.addItem(lwi)
+        # connections
         self._sections_list.currentItemChanged.connect(self.on_section_current_item_changed)
-        self._sections_list.itemSelectionChanged.connect(self.on_section_selection_changed)
         self._layout_stacks.addWidget(self._sections_list)
         # stacked widget
         self._stack = QStackedWidget(self)
         self._w_net = Settings_Net(self._stack)
+        self._w_misc = Settings_Misc(self._stack)
         self._stack.addWidget(self._w_net)
+        self._stack.addWidget(self._w_misc)
         self._stack.setCurrentIndex(0)
         self._layout_stacks.addWidget(self._stack)
         # ok cancel buttons
@@ -276,11 +299,5 @@ class SettingsWidget(QWidget):
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def on_section_current_item_changed(self, cur: QListWidgetItem, prev: QListWidgetItem):
-        logger.debug('on_section_current_item_changed')
-        pass
-
-    @pyqtSlot()
-    def on_section_selection_changed(self):
-        logger.debug('on_section_selection_changed')
-        pass
-
+        data = int(cur.data(Qt.UserRole))
+        self._stack.setCurrentIndex(data)
