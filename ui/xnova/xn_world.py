@@ -30,6 +30,7 @@ class XNovaWorld(QThread):
     SIGNAL_QUIT = 0
     SIGNAL_RELOAD_PAGE = 1     # args: page_name
     SIGNAL_RENAME_PLANET = 2   # args: planet_id, new_name
+    SIGNAL_RELOAD_PLANET = 3   # args: planet_id
     # testing signals ... ?
     SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
@@ -571,6 +572,14 @@ class XNovaWorld(QThread):
             self._get_page('imperium', 1, force_download=True)
             self.unlock()
 
+    def on_signal_reload_planet(self):
+        if 'planet_id' in self._signal_kwargs:
+            planet_id = int(self._signal_kwargs['planet_id'])
+            logger.debug('reloading planet #{0}'.format(planet_id))
+            self.lock()
+            self._download_planet(planet_id)
+            self.unlock()
+
     def on_signal_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
             gal_no = self._signal_kwargs['galaxy']
@@ -829,6 +838,8 @@ class XNovaWorld(QThread):
                 self.on_signal_reload_page()
             elif ret == self.SIGNAL_RENAME_PLANET:
                 self.on_signal_rename_planet()
+            elif ret == self.SIGNAL_RELOAD_PLANET:
+                self.on_signal_reload_planet()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
             #
