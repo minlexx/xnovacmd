@@ -41,6 +41,13 @@ class XNovaPageDownload:
                 self.proxy = None
 
     def construct_session(self):
+        #
+        # save cookies before replacing session
+        saved_cookies = None
+        if self.sess is not None:
+            if self.sess.cookies is not None:
+                saved_cookies = self.sess.cookies
+        #
         if self.proxy is not None:
             if self.proxy.startswith('socks5://'):
                 # for SOCKS5 proxy create requesocks session
@@ -54,6 +61,10 @@ class XNovaPageDownload:
             logger.info('Set HTTP/HTTPS proxy to: {0}'.format(self.proxy))
         self.sess.headers.update({'user-agent': self.user_agent})
         self.sess.headers.update({'referer': 'http://{0}/'.format(self.xnova_url)})
+        #
+        # restore saved cookies?
+        if saved_cookies is not None:
+            self.sess.cookies = saved_cookies
 
     def set_useragent(self, ua_str):
         self.user_agent = ua_str
