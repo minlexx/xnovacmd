@@ -183,13 +183,16 @@ class XNovaWorld(QThread):
         Calculates flight remaining time, adjusting time by difference
         between our time and server
         :param fl: flight
-        :return: remaining time in seconds, or None on error
+        :return: remaining time in seconds, or -1 on error
         """
         self.lock()
-        secs_left = fl.remaining_time_secs(self._diff_with_server_time_secs)
+        dsts = self._diff_with_server_time_secs
         self.unlock()
-        if secs_left is None:
-            return None
+        #
+        secs_left = -1
+        if fl.seconds_left != -1:
+            secs_left = fl.seconds_left + dsts
+        #
         return secs_left
 
     def get_current_server_time(self) -> datetime.datetime:
@@ -253,12 +256,12 @@ class XNovaWorld(QThread):
         # iterate
         finished_flights_count = 0
         for fl in self._flights:
-            secs_left = self.get_flight_remaining_time_secs(fl)
-            if secs_left is None:
+            if fl.seconds_left == -1:
                 raise ValueError('Flight seconds left is None: {0}'.format(str(fl)))
-            if secs_left <= 0:
-                logger.debug('==== Flight considered complete, seconds left: {0} ({1})'.format(
-                    secs_left, str(fl)))
+            fl.seconds_left -= 1
+            if fl.seconds_left <= 0:
+                fl.seconds_left = 0
+                logger.debug('==== Flight considered complete: {1}'.format(str(fl)))
                 # logger.debug('==== additional debug info:')
                 # logger.debug('====  - diff with server time: {0}'.format(self._diff_with_server_time_secs))
                 # logger.debug('====  - current time: {0}'.format(datetime.datetime.today()))
@@ -272,7 +275,8 @@ class XNovaWorld(QThread):
                     # item-to-delete from python list will always have index 0?
                     # because we need to delete the first item every time
                     finished_flight = self._flights[0]
-                    del self._flights[0]
+                    # del self._flights[0]
+                    self._flights.remove(finished_flight)
                     # emit signal
                     self.flight_arrived.emit(finished_flight)
                 except IndexError:

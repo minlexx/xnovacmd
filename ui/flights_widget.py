@@ -106,7 +106,7 @@ class FlightsWidget(QWidget):
             if len(flights) > 0:
                 fl = flights[0]
                 secs = self.world.get_flight_remaining_time_secs(fl)
-                if secs is None:  # ignore, this should not happen but possible
+                if secs == -1:  # ignore, this should not happen but possible
                     secs = 0
                 hours = secs // 3600
                 secs -= (hours * 3600)
@@ -176,8 +176,8 @@ class FlightsWidget(QWidget):
 
     def _fl_timer_str(self, fl: XNFlight) -> str:
         seconds_left = self.world.get_flight_remaining_time_secs(fl)
-        if seconds_left is None:
-            raise ValueError('Flight seconds left is None: {0}'.format(str(fl)))
+        if seconds_left == -1:
+            raise ValueError('Flight seconds left == -1: {0}'.format(str(fl)))
         hours_left = seconds_left // 3600
         seconds_left -= (hours_left * 3600)
         minutes_left = seconds_left // 60

@@ -258,6 +258,7 @@ class XNFlight:
         self.dst = XNCoords()
         self.mission = None
         self.direction = ''
+        self.seconds_left = -1
         self.arrive_datetime = datetime.datetime(datetime.MINYEAR, month=1, day=1, hour=0,
                                                  minute=0, second=0, microsecond=0, tzinfo=None)
 
@@ -273,22 +274,8 @@ class XNFlight:
         if self.direction == 'return':
             s += ' return'
         s += (' @ ' + str(self.arrive_datetime))
+        s += ', {0} secs left'.format(self.seconds_left)
         return s
-
-    def remaining_time_secs(self, diff_with_server_time_secs=0) -> int:
-        """
-        Calculates the time flight has until arrival, in seconds
-        :param diff_with_server_time_secs difference between local time and server time,
-               in seconds, added to resulting return value
-        :return None on error (self.arrive_datetime is None), or remaining time in seconds
-        """
-        if self.arrive_datetime is None:
-            return None
-        our_time = datetime.datetime.today()
-        td = self.arrive_datetime - our_time
-        seconds_left = int(td.total_seconds())
-        seconds_left += diff_with_server_time_secs
-        return seconds_left
 
 
 class XNFraction:

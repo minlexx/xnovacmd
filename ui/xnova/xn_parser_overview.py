@@ -114,15 +114,13 @@ class OverviewParser(XNParserBase):
         self._in_losses = False
         self._in_reflink = False
         self._in_flight = False
-        self._in_flight_time = False
-        self._in_flight_time_arrival = False
+        self._in_floten_time = False
         self._in_enemy_message_span = False
         self._data_prev = ''
         self._read_next = ''
         self._num_a_with_tooltip = 0
         self._num_a_with_galaxy = 0
         self._cur_flight = XNFlight()
-        self._cur_flight_arrive_dt = None
         self._cur_flight_src_nametype = ('', 0)
         self._cur_flight_dst_nametype = ('', 0)
         self._in_server_time = False
@@ -147,15 +145,13 @@ class OverviewParser(XNParserBase):
         self._in_losses = False
         self._in_reflink = False
         self._in_flight = False
-        self._in_flight_time = False
-        self._in_flight_time_arrival = False
+        self._in_floten_time = False
         self._in_enemy_message_span = False
         self._data_prev = ''
         self._read_next = ''
         self._num_a_with_tooltip = 0
         self._num_a_with_galaxy = 0
         self._cur_flight = XNFlight()
-        self._cur_flight_arrive_dt = None
         self._cur_flight_src_nametype = ('', 0)
         self._cur_flight_dst_nametype = ('', 0)
         self._in_server_time = False
@@ -237,18 +233,10 @@ class OverviewParser(XNParserBase):
             self._in_flight = True
             self._num_a_with_tooltip = 0
             self._num_a_with_galaxy = 0
-            self._cur_flight = XNFlight()
+            # self._cur_flight = XNFlight()
             self._cur_flight.direction = flight_dir
             self._cur_flight.mission = flight_mission
             return
-        if (tag == 'tr') and (len(attrs) > 0):
-            tr_class = ''
-            for attr_tuple in attrs:
-                if attr_tuple[0] == 'class':
-                    tr_class = attr_tuple[1]
-            if (tr_class == 'flight') or (tr_class == 'return'):
-                # table row with flight info, or building
-                self._in_flight_time = True
         # change flight time detection from "arrival time" in font tag
         # to "time left" in <div id="bxxfs2" class="z">8:59:9</div>
         # which comes just before the font tag
@@ -267,9 +255,28 @@ class OverviewParser(XNParserBase):
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             if (div_class == 'pull-right') and (div_id == 'clock'):
                 self._in_server_time = True
-            # <div id="bxxfs2" class="z">8:59:9</div>
-            if (div_class == 'z') and self._in_flight_time:
-                self._in_flight_time_arrival = True
+
+    def add_flight(self):
+        """
+        Called when finally collected all information about the flight
+        and data structure is ready to be added to parsed flights list
+        :return: None
+        """
+        # validate this is flight:
+        # 1) only having source/destination set
+        if (not self._cur_flight.src.is_empty()) and (not self._cur_flight.dst.is_empty()):
+            # 2) only actually having ships in it
+            if len(self._cur_flight.ships) > 0:
+                self.flights.append(self._cur_flight)
+                logger.debug('+++ Added flight: {0}'.format(self._cur_flight))
+        # Cleanup internal structures
+        self._in_flight = False
+        self._in_floten_time = False
+        self._num_a_with_tooltip = 0
+        self._num_a_with_galaxy = 0
+        self._cur_flight = XNFlight()
+        self._cur_flight_src_nametype = ('', 0)
+        self._cur_flight_dst_nametype = ('', 0)
 
     def handle_endtag(self, tag: str):
         super(OverviewParser, self).handle_endtag(tag)
@@ -278,35 +285,20 @@ class OverviewParser(XNParserBase):
             if self._in_enemy_message_span:
                 self._in_enemy_message_span = False
                 return
-            if self._in_flight:
-                # save flight arrive time
-                self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
-                # validate this is flight
-                if (not self._cur_flight.src.is_empty()) and (not self._cur_flight.dst.is_empty()):
-                    # only having source/destination set
-                    if len(self._cur_flight.ships) > 0:
-                        # only actually having ships in it
-                        self.flights.append(self._cur_flight)
-                        logger.debug('Flight: {0}'.format(self._cur_flight))
-                # logger.debug('handle_endtag(span): ending flight')
-                self._in_flight = False
-                self._num_a_with_tooltip = 0
-                self._num_a_with_galaxy = 0
-                self._cur_flight = None
-                self._cur_flight_arrive_dt = None
-                self._cur_flight_src_nametype = ('', 0)
-                self._cur_flight_dst_nametype = ('', 0)
+            # flight end trigger moved to 'script' end tag handler, see below...
+            # if self._in_flight:
+            #    self._cur_flight.arrive_datetime = self._cur_flight_arrive_dt
+            #    self.add_flight()
             return
-        # ^^ channged flight time detection from font tag to div
-        if (tag == 'div') and self._in_flight_time_arrival and self._in_flight_time:
-            # end processing of <div id="bxxfs2" class="z">8:59:9</div>
-            self._in_flight_time = False
-            self._in_flight_time_arrival = False
         if (tag == 'div') and self._in_server_time:
             self._in_server_time = False
             return
         # if tag == 'html':
         #    logger.info('Total {0} flights.'.format(len(self.flights)))
+        if tag == 'script':
+            if self._in_flight and self._in_floten_time:
+                self.add_flight()
+                return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
         # detect vacation mode
@@ -539,19 +531,6 @@ class OverviewParser(XNParserBase):
             if m:
                 self._cur_flight.mission = 'ownmissile'
             # logger.debug('in_flight data: [{0}]'.format(data))
-        if self._in_flight_time and self._in_flight_time_arrival:
-            # first in was arrival time: <font color="lime">13:59:31</font>
-            # now, we try to parse "time left": <div id="bxxfs2" class="z">8:59:9</div>
-            # or <div id="bxxfs2" class="z">1:3:25:50</div>
-            hour, minute, second = parse_time_left_str(data)
-            if hour + minute + second > 0:
-                # this method is more reliable:
-                time_left = datetime.timedelta(seconds=second, minutes=minute, hours=hour)
-                dt_arrive = self.server_time + time_left
-                self._cur_flight_arrive_dt = dt_arrive
-                # logger.debug('Fleet time left: {0}; calculated arrive datetime: {1}'.format(
-                #    time_left, dt_arrive))
-                return
         if self._in_server_time:
             # <div id="clock" class="pull-right">30-08-2015 12:10:08</div>
             match = re.search(r'(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)', data)
@@ -579,6 +558,22 @@ class OverviewParser(XNParserBase):
             if (a_title == 'Игроков в сети') and (a_style == 'color:green'):
                 self.online_players = safe_int(data)
                 logger.info('Online players = {0}'.format(self.online_players))
+        if tag == 'script':
+            # parse fleet remaining time more precisely
+            # <script>FlotenTime('bxxfs2', 89118);</script>
+            if data.startswith('FlotenTime('):
+                self._in_floten_time = True
+                data_parts = data.split(' ', 2)
+                time_part = data_parts[1]  # "89118);"
+                time_part = time_part[:-2]  # "89118"
+                fleet_time_left_secs = safe_int(time_part)
+                td_time_left = datetime.timedelta(seconds=fleet_time_left_secs)
+                dt_arrive = self.server_time + td_time_left
+                # store
+                self._cur_flight.seconds_left = fleet_time_left_secs
+                self._cur_flight.arrive_datetime = dt_arrive
+                logger.debug('    parsed FlotenTime: secs left: {0}; '
+                             ' arrive datetime: {1}'.format(fleet_time_left_secs, dt_arrive))
         return   # from def handle_data()
 
 # own missile parser
