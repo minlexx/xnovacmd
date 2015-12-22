@@ -717,6 +717,24 @@ class XNovaWorld(QThread):
         return self._get_page_url(page_name, page_url,
                                   self._planet_research_cache_lifetime, force_download)
 
+    def _download_planet(self, planet_id: int, delays_msec: int=None, force_download: bool=False):
+        # planet buildings in progress
+        self._download_planet_buildings(planet_id, force_download)
+        if delays_msec is not None:
+            self.msleep(delays_msec)
+        # planet researches in progress
+        self._download_planet_researches(planet_id, force_download)
+        if delays_msec is not None:
+            self.msleep(delays_msec)
+        # TODO: planet factory researches in progress
+        # planet shipyard/defense builds in progress
+        self._download_planet_shipyard(planet_id, force_download)
+        if delays_msec is not None:
+            self.msleep(delays_msec)
+        self._download_planet_defense(planet_id, force_download)
+        if delays_msec is not None:
+            self.msleep(delays_msec)
+
     def _request_rename_planet(self, planet_id: int, new_name: str):
         post_url = '?set=overview&mode=renameplanet&pl={0}'.format(planet_id)
         post_data = dict()
@@ -761,18 +779,8 @@ class XNovaWorld(QThread):
             # planet image
             self._download_image(pl.pic_url)
             self.msleep(100)  # wait 100 ms
-            # planet buildings in progress
-            self._download_planet_buildings(pl.planet_id, force_download=True)
-            self.msleep(100)  # wait 100 ms
-            # planet researches in progress
-            self._download_planet_researches(pl.planet_id, force_download=True)
-            self.msleep(100)
-            # TODO: planet factory researches in progress
-            # planet shipyard/defense builds in progress
-            self._download_planet_shipyard(pl.planet_id, force_download=True)
-            self.msleep(100)  # wait
-            self._download_planet_defense(pl.planet_id, force_download=True)
-            self.msleep(100)  # wait
+            # all other planet items
+            self._download_planet(pl.planet_id, delays_msec=100, force_download=True)
         self.msleep(100)
         # restore original current planet that was before full world refresh
         # because world refresh changes it by loading every planet
