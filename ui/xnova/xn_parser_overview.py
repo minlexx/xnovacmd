@@ -3,10 +3,10 @@ import re
 import datetime
 
 from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNResourceBundle, XNShipsBundle
-from .xn_parser import XNParserBase, safe_int, get_attribute, parse_time_left_str
+from .xn_parser import XNParserBase, safe_int, get_attribute
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 def _parse_flight_ships(s) -> XNShipsBundle:
@@ -293,8 +293,8 @@ class OverviewParser(XNParserBase):
         if (tag == 'div') and self._in_server_time:
             self._in_server_time = False
             return
-        # if tag == 'html':
-        #    logger.info('Total {0} flights.'.format(len(self.flights)))
+        if tag == 'html':
+            logger.info('Loaded total {0} flights.'.format(len(self.flights)))
         if tag == 'script':
             if self._in_flight and self._in_floten_time:
                 self.add_flight()
@@ -572,8 +572,8 @@ class OverviewParser(XNParserBase):
                 # store
                 self._cur_flight.seconds_left = fleet_time_left_secs
                 self._cur_flight.arrive_datetime = dt_arrive
-                logger.debug('    parsed FlotenTime: secs left: {0}; '
-                             ' arrive datetime: {1}'.format(fleet_time_left_secs, dt_arrive))
+                # logger.debug('    parsed FlotenTime: secs left: {0}; '
+                #             ' arrive datetime: {1}'.format(fleet_time_left_secs, dt_arrive))
         return   # from def handle_data()
 
 # own missile parser
