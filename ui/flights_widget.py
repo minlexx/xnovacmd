@@ -99,8 +99,12 @@ class FlightsWidget(QWidget):
 
     def update_button_fleet_count(self):
         flights = self.world.get_flights()
+        flights_cnt = self.world.get_fleets_count()
+        #
+        fleets_count_str = '{0} / {1}'.format(flights_cnt[0], flights_cnt[1])
+        #
         if self.ui.tw_flights.isVisible():
-            self.ui.btn_show.setText(self.tr('Fleets: {0}').format(len(flights)))
+            self.ui.btn_show.setText(self.tr('Fleets: {0}').format(fleets_count_str))
         else:
             closest_fleet_str = ''
             if len(flights) > 0:
@@ -119,7 +123,7 @@ class FlightsWidget(QWidget):
                     return_str,
                     fl.src, fl.dst, len(fl.ships))
             self.ui.btn_show.setText(self.tr('Fleets: {0}  |||  {1}').format(
-                len(flights), closest_fleet_str))
+                fleets_count_str, closest_fleet_str))
 
     def update_new_messages_count(self):
         nmc = self.world.get_new_messages_count()
