@@ -261,7 +261,7 @@ class XNovaWorld(QThread):
             fl.seconds_left -= 1
             if fl.seconds_left <= 0:
                 fl.seconds_left = 0
-                logger.debug('==== Flight considered complete: {1}'.format(str(fl)))
+                logger.debug('==== Flight considered complete: {0}'.format(str(fl)))
                 # logger.debug('==== additional debug info:')
                 # logger.debug('====  - diff with server time: {0}'.format(self._diff_with_server_time_secs))
                 # logger.debug('====  - current time: {0}'.format(datetime.datetime.today()))
