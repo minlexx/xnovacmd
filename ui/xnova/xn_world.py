@@ -28,10 +28,10 @@ logger = xn_logger.get(__name__, debug=True)
 # created by main window to keep info about world updated
 class XNovaWorld(QThread):
     SIGNAL_QUIT = 0
-    SIGNAL_RELOAD_PAGE = 1
+    SIGNAL_RELOAD_PAGE = 1     # args: page_name
+    SIGNAL_RENAME_PLANET = 2   # args: planet_id, new_name
     # testing signals ... ?
-    SIGNAL_TEST_PARSE_GALAXY = 100
-    SIGNAL_TEST_PARSE_PLANET_BUILDINGS = 101
+    SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
     # signal is emitted to report full world refresh progress
     # str is a comment what is loading now, int is a progress percent [0..100]
@@ -555,7 +555,21 @@ class XNovaWorld(QThread):
         if 'page_name' in self._signal_kwargs:
             page_name = self._signal_kwargs['page_name']
             logger.debug('on_reload_page(): reloading {0}'.format(page_name))
+            self.lock()
             self._get_page(page_name, max_cache_lifetime=1, force_download=True)
+            self.unlock()
+
+    def on_signal_rename_planet(self):
+        if ('planet_id' in self._signal_kwargs) and ('new_name' in self._signal_kwargs):
+            planet_id = int(self._signal_kwargs['planet_id'])
+            new_name = self._signal_kwargs['new_name']
+            # go go go
+            logger.debug('renaming planet #{0} to [{1}]'.format(planet_id, new_name))
+            self.lock()
+            self._request_rename_planet(planet_id, new_name)
+            # force imperium update to read new planet name
+            self._get_page('imperium', 1, force_download=True)
+            self.unlock()
 
     def on_signal_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
@@ -703,6 +717,15 @@ class XNovaWorld(QThread):
         return self._get_page_url(page_name, page_url,
                                   self._planet_research_cache_lifetime, force_download)
 
+    def _request_rename_planet(self, planet_id: int, new_name: str):
+        post_url = '?set=overview&mode=renameplanet&pl={0}'.format(planet_id)
+        post_data = dict()
+        post_data['action'] = 'Сменить название'
+        post_data['newname'] = new_name
+        referer = 'http://{0}/?set=overview&mode=renameplanet'.format(self._page_downloader.xnova_url)
+        self._page_downloader.post(post_url, post_data=post_data, referer=referer)
+        logger.debug('Rename planet to [{0}] complete'.format(new_name))
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -796,10 +819,13 @@ class XNovaWorld(QThread):
                 break
             if ret == self.SIGNAL_RELOAD_PAGE:
                 self.on_signal_reload_page()
+            elif ret == self.SIGNAL_RENAME_PLANET:
+                self.on_signal_rename_planet()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
-            elif ret == self.SIGNAL_TEST_PARSE_PLANET_BUILDINGS:
-                self.on_test_parse_planet_buildings()
+            #
+            # clear signal arguments after handler
+            self._signal_kwargs = dict()
         logger.debug('thread: exiting.')
 
 
