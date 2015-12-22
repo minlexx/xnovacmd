@@ -179,7 +179,10 @@ class Overview_BuildProgressWidget(QWidget):
                         self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
                         self._set_percent_complete(bi)
                         self._set_buildtime(bi)
+                        self.show()
                         return
+            # if we are here, no builds are in progress
+            self.hide()
             return
         elif typ == BPW_TYPE_SHIPYARD:
             self.is_shipyard = True
@@ -336,10 +339,10 @@ class OverviewWidget(QWidget):
             bpw.hide()
         planets = self.world.get_planets()
         for pl in planets:
-            if pl.has_build_in_progress:
-                bpw = self.get_bpw_for_planet(pl.planet_id)
-                bpw.show()
-                bpw.update_from_planet(pl)
+            # buildings
+            bpw = self.get_bpw_for_planet(pl.planet_id)
+            bpw.update_from_planet(pl)
+            # shipyard
             if len(pl.shipyard_progress_items) > 0:
                 bpw = self.get_bpw_for_planet(pl.planet_id, BPW_TYPE_SHIPYARD)
                 bpw.show()

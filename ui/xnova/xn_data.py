@@ -565,7 +565,6 @@ class XNPlanet:
         # planet may have debris_field
         self.debris_field = XNDebrisField(0, 0)
         self.is_current = False  # used by UI to highlight current planet, that's all
-        self.has_build_in_progress = False
 
     def __str__(self):
         if self.coords.target_name == '':
@@ -611,16 +610,8 @@ class XNPlanet:
                 bi.dt_end = ba.dt_end
                 bi.seconds_left = ba.seconds_left
                 bi.remove_link = ba.remove_link
-                self.has_build_in_progress = True
                 return True
         return False
-
-    def check_builds_in_progress(self):
-        self.has_build_in_progress = False  # assume no builds in progress
-        for bi in self.buildings_items:
-            if bi.is_in_progress():
-                self.has_build_in_progress = True
-                return
 
     # TODO: change this from item_name to item_ID when we will load item IDs
     def is_build_in_progress(self, build_name: str):
