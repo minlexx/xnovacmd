@@ -11,6 +11,7 @@ from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuilds
 from ui.xnova.xn_parser_research import ResearchAvailParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
 from ui.xnova.xn_parser_planet_energy import PlanetEnergyParser
+from ui.xnova.xn_parser_fleet import FleetsMaxParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
 
@@ -105,6 +106,13 @@ def main():
     content = cacher.get_page('shipyard_57064')  # can be any overview, research or shipyard page
     pep.parse_page_content(content)
     logger.info('Parsed planet energy status: {0}/{1}'.format(pep.energy_left, pep.energy_total))
+    #
+    # fllets counter
+    fmp = FleetsMaxParser()
+    content = cacher.get_page('fleet')
+    fmp.parse_page_content(content)
+    logger.info('Fleets: {0}/{1}, Expeditions: {2}/{3}'.format(
+        fmp.fleets_cur, fmp.fleets_max, fmp.expeditions_cur, fmp.expeditions_max))
 
 if __name__ == "__main__":
     main()
