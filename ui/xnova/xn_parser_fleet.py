@@ -3,7 +3,7 @@ import re
 from .xn_parser import XNParserBase, safe_int, get_attribute
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 __doc__ = '''
