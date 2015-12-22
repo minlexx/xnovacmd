@@ -228,4 +228,4 @@ class PlanetWidget(QFrame):
 
     @pyqtSlot()
     def on_request_refresh_planet(self):
-        logger.debug('Received request to reload planet {0}'.format(self._planet))
+        self.world.signal(self.world.SIGNAL_RELOAD_PLANET, planet_id=self._planet.planet_id)

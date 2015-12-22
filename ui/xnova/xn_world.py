@@ -577,8 +577,9 @@ class XNovaWorld(QThread):
             planet_id = int(self._signal_kwargs['planet_id'])
             logger.debug('reloading planet #{0}'.format(planet_id))
             self.lock()
-            self._download_planet(planet_id)
+            self._download_planet(planet_id, delays_msec=250, force_download=True)
             self.unlock()
+            logger.debug('reload planet #{0} done'.format(planet_id))
 
     def on_signal_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
