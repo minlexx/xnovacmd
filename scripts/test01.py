@@ -11,15 +11,22 @@ def printer_thread():
     world = XNovaWorld_instance()
     planets = world.get_planets()
 
-    logger.info('Planets:')
-    for planet in planets:
-        logger.info('{0}'.format(str(planet)))
-    logger.info('End planets.')
+    world.script_test01_command = 'running'
 
-    for i in range(5):
+    # logger.info('Planets:')
+    # for planet in planets:
+    #    logger.info('{0}'.format(str(planet)))
+    # logger.info('End planets.')
+
+    while True:
         time.sleep(1)
-        print('   printer: {0}'.format(i))
-    print('End printer')
+        print('   test01 running...')
+        if world.script_test01_command == 'stop':
+            break
+
+    del world.script_test01_command
+
+    print('Ended test01')
 
 
 # start script as a parallel thread
