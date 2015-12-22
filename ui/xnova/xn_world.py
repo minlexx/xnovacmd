@@ -19,6 +19,7 @@ from .xn_parser_planet_energy import PlanetEnergyParser
 from .xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from .xn_parser_research import ResearchAvailParser
 from .xn_parser_techtree import TechtreeParser
+from .xn_parser_fleet import FleetsMaxParser
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
@@ -66,6 +67,7 @@ class XNovaWorld(QThread):
         self._parser_shipyard_progress = ShipyardBuildsInProgressParser()
         self._parser_researches_avail = ResearchAvailParser()
         self._parser_techtree = TechtreeParser()
+        self._parser_fleetmax = FleetsMaxParser()
         # world/user info
         self._server_time = datetime.datetime.today()  # server time at last overview update
         # all we need to calc server time is actually time diff with our time:
@@ -80,6 +82,8 @@ class XNovaWorld(QThread):
         self._techtree = XNTechTree_instance()
         self._new_messages_count = 0
         self._server_online_players = 0
+        self._max_fleets_count = 0
+        self._cur_fleets_count = 0
         # internal need
         self._net_errors_count = 0
         self._mutex = QMutex(QMutex.Recursive)
@@ -233,6 +237,18 @@ class XNovaWorld(QThread):
     def get_online_players(self):
         self.lock()
         ret = self._server_online_players
+        self.unlock()
+        return ret
+
+    def get_fleets_count(self) -> list:
+        """
+        Get current/maximum fleets count
+        :return: list[0] = cur, list[1] = max
+        """
+        ret = [0, 0]
+        self.lock()
+        ret[0] = self._cur_fleets_count
+        ret[1] = self._max_fleets_count
         self.unlock()
         return ret
 
@@ -419,6 +435,11 @@ class XNovaWorld(QThread):
             # store techtree, if there is successful parse of anything
             if len(self._parser_techtree.techtree) > 0:
                 self._techtree.init_techtree(self._parser_techtree.techtree)
+        elif page_name == 'fleet':
+            self._parser_fleetmax.clear()
+            self._parser_fleetmax.parse_page_content(page_content)
+            self._cur_fleets_count = self._parser_fleetmax.fleets_cur
+            self._max_fleets_count = self._parser_fleetmax.fleets_max
         elif page_name.startswith('buildings_'):
             try:
                 m = re.match(r'buildings_(\d+)', page_name)
@@ -583,6 +604,7 @@ class XNovaWorld(QThread):
         urls_dict['overview'] = '?set=overview'
         urls_dict['imperium'] = '?set=imperium'
         urls_dict['techtree'] = '?set=techtree'
+        urls_dict['fleet'] = '?set=fleet'
         sub_url = None
         if page_name in urls_dict:
             return urls_dict[page_name]
@@ -693,14 +715,14 @@ class XNovaWorld(QThread):
         # load all pages that contain useful information
         load_progress_percent = 0
         load_progress_step = 5
-        pages_list = ['techtree', 'overview', 'imperium']
-        pages_maxtime = [3600, 300, 300]  # pages' expiration time in cache
+        pages_list = ['techtree', 'overview', 'imperium', 'fleet']
+        pages_maxtime = [3600, 60, 60, 60]  # pages' expiration time in cache
         for i in range(0, len(pages_list)):
             page_name = pages_list[i]
             page_time = pages_maxtime[i]
             self.world_load_progress.emit(page_name, load_progress_percent)
-            self._get_page(page_name, max_cache_lifetime=page_time, force_download=True)
-            self.msleep(500)  # 500ms delay before requesting next page
+            self._get_page(page_name, max_cache_lifetime=page_time, force_download=False)
+            self.msleep(100)  # delay before requesting next page
             load_progress_percent += load_progress_step
         #
         # additionally request user info page, constructed as:
