@@ -8,8 +8,8 @@ set SOURCES=app.py ^
  ui\login_widget.py ^
  ui\login_widget.ui ^
  ui\main.py ^
- ui\overview.py ^
  ui\overview_accstats.ui ^
+ ui\overview_widget.py ^
  ui\planet_widget.py ^
  ui\settings_widget.py ^
  ui\statusbar.py ^

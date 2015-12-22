@@ -11,7 +11,7 @@ from .statusbar import XNCStatusBar
 from .settings_widget import SettingsWidget
 from .login_widget import LoginWidget
 from .flights_widget import FlightsWidget
-from .overview import OverviewWidget
+from .overview_widget import OverviewWidget
 from .imperium_widget import ImperiumWidget
 from .galaxy_widget import GalaxyWidget
 from .planet_widget import PlanetWidget
