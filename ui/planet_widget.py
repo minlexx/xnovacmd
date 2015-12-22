@@ -39,8 +39,8 @@ class Planet_BasicInfoPanel(QFrame):
         self._vlayout = QVBoxLayout()
         self._hlayout_name_coords = QHBoxLayout()
         self._hlayout_fields = QHBoxLayout()
-        self._hlayout_btn = QHBoxLayout()
         self._hlayout_res = QHBoxLayout()
+        self._hlayout_energy = QHBoxLayout()
         # labels
         self._lbl_img = QLabel(self)
         self._lbl_name = QLabel(self)
@@ -57,6 +57,10 @@ class Planet_BasicInfoPanel(QFrame):
         self._lbl_cur_met.setFont(font)
         self._lbl_cur_cry.setFont(font)
         self._lbl_cur_deit.setFont(font)
+        # energy labels
+        self._lbl_energy = QLabel(self.tr('Energy, charge:'), self)
+        self._lbl_energy_stats = QLabel(self)
+        self._lbl_energy_stats.setFont(font)
         # button
         self._btn_refresh = QPushButton(self.tr('Refresh planet'), self)
         self._btn_refresh.setIcon(QIcon(':/i/reload.png'))
@@ -64,6 +68,7 @@ class Planet_BasicInfoPanel(QFrame):
         # finalize layout
         self._hlayout_name_coords.addWidget(self._lbl_name)
         self._hlayout_name_coords.addWidget(self._lbl_coords)
+        self._hlayout_name_coords.addWidget(self._btn_refresh)
         self._hlayout_name_coords.addStretch()
         self._hlayout_fields.addWidget(self._lbl_fields)
         self._hlayout_fields.addStretch()
@@ -74,12 +79,14 @@ class Planet_BasicInfoPanel(QFrame):
         self._hlayout_res.addWidget(self._lbl_deit)
         self._hlayout_res.addWidget(self._lbl_cur_deit)
         self._hlayout_res.addStretch()
-        self._hlayout_btn.addWidget(self._btn_refresh)
-        self._hlayout_btn.addStretch()
+        self._hlayout_energy.addWidget(self._lbl_energy)
+        self._hlayout_energy.addWidget(self._lbl_energy_stats)
+        self._hlayout_energy.addStretch()
+        #
         self._vlayout.addLayout(self._hlayout_name_coords)
         self._vlayout.addLayout(self._hlayout_fields)
         self._vlayout.addLayout(self._hlayout_res)
-        self._vlayout.addLayout(self._hlayout_btn)
+        self._vlayout.addLayout(self._hlayout_energy)
         self._vlayout.addStretch()
         self._layout.addWidget(self._lbl_img)
         self._layout.addLayout(self._vlayout)
@@ -120,6 +127,11 @@ class Planet_BasicInfoPanel(QFrame):
         self._lbl_cur_met.setText(number_format(int(self._planet.res_current.met)))
         self._lbl_cur_cry.setText(number_format(int(self._planet.res_current.cry)))
         self._lbl_cur_deit.setText(number_format(int(self._planet.res_current.deit)))
+        # energy
+        self._lbl_energy_stats.setText('{0} / {1}    ({2}%)'.format(
+                self._planet.energy.energy_left,
+                self._planet.energy.energy_total,
+                self._planet.energy.charge_percent))
 
     @pyqtSlot(str)
     def on_coords_link_activated(self, link: str):
