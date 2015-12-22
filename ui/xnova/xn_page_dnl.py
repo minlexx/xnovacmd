@@ -99,7 +99,7 @@ class XNovaPageDownload:
         self.error_str = None  # clear error
         # construct url to download
         url = 'http://{0}/{1}'.format(self.xnova_url, url_path)
-        logger.debug('internal: downloading [{0}]...'.format(url))
+        logger.debug('GET [{0}]...'.format(url))
         ret = None
         try:
             r = self.sess.get(url)
@@ -108,9 +108,34 @@ class XNovaPageDownload:
                     ret = r.text
                 else:
                     ret = r.content
-                logger.debug('internal: download [{0}] OK'.format(url))
+                logger.debug('GET [{0}] OK'.format(url))
                 # on successful request, update referer header for the next request
                 self.sess.headers.update({'referer': url})
+            else:
+                logger.error('Unexpected response code: HTTP {0}'.format(r.status_code))
+                self._set_error('HTTP {0}'.format(r.status_code))
+        except requests.exceptions.RequestException as e:
+            logger.error('Exception {0}'.format(type(e)))
+            self._set_error(str(e))
+        except requesocks.exceptions.RequestException as e:
+            logger.error('Requesocks exception {0}'.format(type(e)))
+            self._set_error(str(e))
+        return ret
+
+    def post(self, url_path: str, post_data: dict = None, return_binary=False, referer=None):
+        ret = None
+        url = 'http://{0}/{1}'.format(self.xnova_url, url_path)
+        logger.debug('POST [{0}]...'.format(url))
+        try:
+            if referer is not None:
+                self.sess.headers.update({'referer': referer})
+            r = self.sess.post(url, data=post_data)
+            if r.status_code == requests.codes.ok:
+                if not return_binary:
+                    ret = r.text
+                else:
+                    ret = r.content
+                logger.debug('POST [{0}] OK'.format(url))
             else:
                 logger.error('Unexpected response code: HTTP {0}'.format(r.status_code))
                 self._set_error('HTTP {0}'.format(r.status_code))
