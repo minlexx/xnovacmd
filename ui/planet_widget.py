@@ -1,6 +1,7 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant, QTimer
 from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
-    QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit
+    QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QToolButton, \
+    QMessageBox
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
 from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem
@@ -65,10 +66,24 @@ class Planet_BasicInfoPanel(QFrame):
         self._btn_refresh = QPushButton(self.tr('Refresh planet'), self)
         self._btn_refresh.setIcon(QIcon(':/i/reload.png'))
         self._btn_refresh.clicked.connect(self.on_btn_refresh_clicked)
+        self._btn_tools = QToolButton(self)
+        self._btn_tools.setIcon(QIcon(':/i/tools_32.png'))
+        self._btn_tools.setText(self.tr('Actions...'))
+        self._btn_tools.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self._btn_tools.setPopupMode(QToolButton.InstantPopup)
+        self._actions_menu = QMenu(self)
+        self._action_renameplanet = QAction(self.tr('Rename planet'), self)
+        self._action_leaveplanet = QAction(self.tr('Leave planet'), self)
+        self._actions_menu.addAction(self._action_renameplanet)
+        self._actions_menu.addAction(self._action_leaveplanet)
+        self._btn_tools.setMenu(self._actions_menu)
+        self._action_renameplanet.triggered.connect(self.on_action_renameplanet)
+        self._action_leaveplanet.triggered.connect(self.on_action_leaveplanet)
         # finalize layout
         self._hlayout_name_coords.addWidget(self._lbl_name)
         self._hlayout_name_coords.addWidget(self._lbl_coords)
         self._hlayout_name_coords.addWidget(self._btn_refresh)
+        self._hlayout_name_coords.addWidget(self._btn_tools)
         self._hlayout_name_coords.addStretch()
         self._hlayout_fields.addWidget(self._lbl_fields)
         self._hlayout_fields.addStretch()
@@ -146,6 +161,15 @@ class Planet_BasicInfoPanel(QFrame):
     @pyqtSlot()
     def on_timer(self):
         self._set_resources()
+
+    @pyqtSlot()
+    def on_action_renameplanet(self):
+        logger.debug('rename planet')
+
+    @pyqtSlot()
+    def on_action_leaveplanet(self):
+        QMessageBox.warning(self, self.tr('Not done'),
+                            self.tr('Leaving planet is not done!'))
 
 
 class PlanetWidget(QFrame):
