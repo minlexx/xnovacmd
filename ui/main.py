@@ -409,6 +409,8 @@ class XNova_MainWindow(QWidget):
         # connect signals from world
         self.world.world_load_progress.connect(self.on_world_load_progress)
         self.world.world_load_complete.connect(self.on_world_load_complete)
+        self.world.net_request_started.connect(self.on_net_request_started)
+        self.world.net_request_finished.connect(self.on_net_request_finished)
         self.world.flight_arrived.connect(self.on_flight_arrived)
         self.world.build_complete.connect(self.on_building_complete)
         self.world.loaded_overview.connect(self.on_loaded_overview)
@@ -513,6 +515,14 @@ class XNova_MainWindow(QWidget):
             self.overview_widget.update_builds()
         if self.imperium_widget:
             self.imperium_widget.update_planet_resources()
+
+    @pyqtSlot()
+    def on_net_request_started(self):
+        self._statusbar.set_loading_status(True)
+
+    @pyqtSlot()
+    def on_net_request_finished(self):
+        self._statusbar.set_loading_status(False)
 
     @pyqtSlot(int)
     def on_tray_icon_activated(self, reason):
