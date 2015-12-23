@@ -534,5 +534,4 @@ class ImperiumWidget(QWidget):
 
     @pyqtSlot()
     def on_btn_refresh_imperium(self):
-        logger.debug('refresh imperium clicked')
         self._world.signal(self._world.SIGNAL_RELOAD_PAGE, page_name='imperium')
