@@ -2,7 +2,7 @@ import os
 
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QStatusBar, QPushButton, QProgressBar, QLabel, QAction, QMenu
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QMovie
 
 from .xnova.xn_world import XNovaWorld_instance
 from .xnova import xn_logger
@@ -26,16 +26,30 @@ class XNCStatusBar(QStatusBar):
         self._progressbar.setRange(0, 99)
         # online players counter
         self._lbl_online = QLabel(self.tr('Online') + ': 0', self)
+        # label with loading.gif
+        self._loading_gif = QMovie(':/i/loading.gif')
+        self._lbl_loading = QLabel(self)
+        self._lbl_loading.setMovie(self._loading_gif)
+        self._lbl_loading.hide()
         # testing only
         self._btn_runscript = QPushButton('Run script', self)
         self._btn_runscript.clicked.connect(self.on_run_script)
         self.addPermanentWidget(self._btn_runscript)
         #
+        self.addPermanentWidget(self._lbl_loading)
         self.addPermanentWidget(self._lbl_online)  # should be las right widget
         self.show()
 
     def set_status(self, msg: str, timeout: int=0):
         self.showMessage(msg, timeout)
+
+    def set_loading_status(self, loading: bool):
+        if loading:
+            self._lbl_loading.show()
+            self._loading_gif.start()
+        else:
+            self._loading_gif.stop()
+            self._lbl_loading.hide()
 
     def set_world_load_progress(self, comment: str, progress: int):
         """
