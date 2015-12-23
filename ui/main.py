@@ -1,32 +1,30 @@
+import configparser
 import pathlib
 import pickle
-import configparser
 
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant, QEvent
-from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
-    QScrollArea, QMenu, QAction, QPushButton, QLabel, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QIcon, QCloseEvent, QCursor, QShowEvent, QWindowStateChangeEvent
+from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
+    QScrollArea, QMenu, QAction, QLabel, QVBoxLayout, QHBoxLayout
 
-from .statusbar import XNCStatusBar
-from .settings_widget import SettingsWidget
-from .login_widget import LoginWidget
-from .flights_widget import FlightsWidget
-from .overview_widget import OverviewWidget
-from .imperium_widget import ImperiumWidget
-from .galaxy_widget import GalaxyWidget
-from .planet_widget import PlanetWidget
-
-from .customwidgets.planets_bar_widget import PlanetSidebarWidget
 from .customwidgets.xtabwidget import XTabWidget
-
+from .flights_widget import FlightsWidget
+from .planets_bar_widget import PlanetSidebarWidget
+from .statusbar import XNCStatusBar
+from .galaxy_widget import GalaxyWidget
+from .imperium_widget import ImperiumWidget
+from .login_widget import LoginWidget
+from .overview_widget import OverviewWidget
+from .planet_widget import PlanetWidget
+from .settings_widget import SettingsWidget
 from .widget_utils import install_layout_for_widget, \
     append_trailing_spacer_to_layout, \
     remove_trailing_spacer_from_layout, \
     flight_mission_for_humans
 
+from .xnova import xn_logger
 from .xnova.xn_data import XNCoords, XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xnova.xn_world import XNovaWorld_instance
-from .xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
 
