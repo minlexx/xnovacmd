@@ -89,6 +89,8 @@ class XNovaWorld(QThread):
         self._cur_fleets_count = 0
         # internal need
         self._net_errors_count = 0
+        self._net_errors_list = []
+        self._NET_ERRORS_MAX = 10
         self._mutex = QMutex(QMutex.Recursive)
         self._signal_kwargs = dict()
         # thread identifiers, collected here mainly for debugging purposes
@@ -616,9 +618,14 @@ class XNovaWorld(QThread):
         too many errors happened.
         :return:
         """
+        # increase errors count
         self._net_errors_count += 1
-        logger.error('net error happened, total count: {0}'.format(self._net_errors_count))
-        if self._net_errors_count > 10:
+        # store error text
+        if self._page_downloader.error_str != '':
+            self._net_errors_list.append(self._page_downloader.error_str)
+        logger.error('net error happened: [{0}], total errors count: {1}'.format(
+                self._page_downloader.error_str, self._net_errors_count))
+        if self._net_errors_count > self._NET_ERRORS_MAX:
             raise RuntimeError('Too many network errors: {0}!'.format(self._net_errors_count))
 
     # internal helper, converts page identifier to url path
