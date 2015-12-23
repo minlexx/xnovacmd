@@ -49,6 +49,10 @@ class XNovaWorld(QThread):
     loaded_imperium = pyqtSignal()
     # emitted when full planet was refreshed (but not during world refresh)
     loaded_planet = pyqtSignal(int)   # planet_id
+    # emitted when any network request has started (but not during world refresh)
+    net_request_started = pyqtSignal()
+    # emitted when network request has finished (but not during world refresh)
+    net_request_finished = pyqtSignal()
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -649,39 +653,75 @@ class XNovaWorld(QThread):
             logger.warn('unknown page name requested: {0}'.format(page_name))
         return sub_url
 
-    # for internal needs, get page from server
-    # converts page_name to url and calls self._get_page_url()
-    # page_name is used as key to cache page content
-    # if force_download is True, max_cache_lifetime is ignored
-    # returns page contents, or None on error
-    # (however, its return value is ignored for now)
     def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
+        """
+        Gets page from cache or from server only by page name.
+        Converts page_name to page URL, using _page_name_to_url_path().
+        First tries to get cached page from cache using page_name as key.
+        If there is no cached page there, or it is expired, downloads from network.
+        :param page_name: 'name' used as key in pages cache
+        :param max_cache_lifetime: cache timeout
+        :param force_download:
+        :return: page contents as str, or None on error
+        """
         page_url = self._page_name_to_url_path(page_name)
         if not page_url:
             logger.error('Failed to convert page_name=[{0}] to url!'.format(page_name))
             return None
         return self._get_page_url(page_name, page_url, max_cache_lifetime, force_download)
 
-    # for internal needs, get url from server
-    # first try to get cached page from cache using page_name as key
-    # if there is no page there, or it is expired, download from network
-    # if force_download is True, max_cache_lifetime is ignored
-    # returns page contents, or None on error
-    # (however, its return value is ignored for now)
     def _get_page_url(self, page_name, page_url, max_cache_lifetime=None, force_download=False):
+        """
+        For internal needs, downloads url from server using HTTP GET.
+        First tries to get cached page from cache using page_name as key.
+        If there is no cached page there, or it is expired, downloads from network.
+        If force_download is True, max_cache_lifetime is ignored.
+        (This method's return value is ignored for now)
+        :param page_name: 'name' of page to use as key when stored to cache
+        :param page_url: URL to download in HTTP GET request
+        :param max_cache_lifetime:
+        :param force_download:
+        :return: page contents (str) or None on error
+        """
         page_content = None
         if not force_download:
             # try to get cached page (default)
             page_content = self._page_cache.get_page(page_name, max_cache_lifetime)
         if page_content is None:
+            # signal that we are starting network request
+            if not self._world_is_loading:
+                self.net_request_started.emit()
             # try to download, it not in cache
             page_content = self._page_downloader.download_url_path(page_url)
+            # signal that we have finished network request
+            if not self._world_is_loading:
+                self.net_request_finished.emit()
             if page_content is not None:
                 self._page_cache.set_page(page_name, page_content)  # save in cache
                 self.on_page_downloaded(page_name)  # process downloaded page
             else:
                 # download error
                 self._inc_network_errors()
+        return page_content
+
+    def _post_page_url(self, page_url: str, post_data: dict=None, referer: str=None):
+        """
+        For internal needs, sends a POST request, and handles possible error returns
+        :param page_url: URL to send HTTP POST to
+        :param post_data: dict with post data key-value pairs
+        :param referer: if set, use this as value for HTTP Referer header
+        :return: response content, or None on error
+        """
+        # signal that we are starting network request
+        if not self._world_is_loading:
+            self.net_request_started.emit()
+        page_content = self._page_downloader.post(page_url, post_data=post_data, referer=referer)
+        # signal that we have finished network request
+        if not self._world_is_loading:
+            self.net_request_finished.emit()
+        # handle errors
+        if page_content is None:
+            self._inc_network_errors()
         return page_content
 
     def _download_galaxy_page(self, galaxy_no, sys_no, force_download=False):
@@ -762,7 +802,7 @@ class XNovaWorld(QThread):
         post_data['action'] = 'Сменить название'
         post_data['newname'] = new_name
         referer = 'http://{0}/?set=overview&mode=renameplanet'.format(self._page_downloader.xnova_url)
-        self._page_downloader.post(post_url, post_data=post_data, referer=referer)
+        self._post_page_url(post_url, post_data, referer)
         logger.debug('Rename planet to [{0}] complete'.format(new_name))
 
     # internal, called from thread on first load
