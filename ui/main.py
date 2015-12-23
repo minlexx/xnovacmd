@@ -413,6 +413,7 @@ class XNova_MainWindow(QWidget):
         self.world.build_complete.connect(self.on_building_complete)
         self.world.loaded_overview.connect(self.on_loaded_overview)
         self.world.loaded_imperium.connect(self.on_loaded_imperium)
+        self.world.loaded_planet.connect(self.on_loaded_planet)
         self.world.start()
 
     @pyqtSlot(str, int)
@@ -497,6 +498,10 @@ class XNova_MainWindow(QWidget):
                             tab_page.setPlanet(new_planet)
                     except AttributeError:  # not all pages may have method get_tab_type()
                         pass
+
+    @pyqtSlot(int)
+    def on_loaded_planet(self, planet_id: int):
+        logger.debug('Got signal on_loaded_planet({0})'.format(planet_id))
 
     @pyqtSlot()
     def on_world_timer(self):
