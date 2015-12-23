@@ -53,12 +53,12 @@ class PBWToolTipInfo:
         painter.drawText(b_rect, Qt.AlignCenter, self._text)
 
 
-class PlanetsBarWidget(QFrame):
+class PlanetSidebarWidget(QFrame):
     requestOpenPlanet = pyqtSignal(int)
     requestOpenGalaxy = pyqtSignal(XNCoords)
 
     def __init__(self, parent=None):
-        super(PlanetsBarWidget, self).__init__(parent)
+        super(PlanetSidebarWidget, self).__init__(parent)
         self._planet = XNPlanet()
         self._img = QImage()
         self._img_loaded = False
@@ -70,7 +70,7 @@ class PlanetsBarWidget(QFrame):
         self.init_ui()
 
     def init_ui(self):
-        # logger.debug('PlanetsBarWidget init UI')
+        # logger.debug('PlanetSidebarWidget init UI')
         self.setMinimumSize(88, 88)
         self.setMaximumSize(88, 88)
         self.setFrameShadow(QFrame.Plain)
@@ -177,7 +177,7 @@ class PlanetsBarWidget(QFrame):
         self._tt.draw(painter)
 
     def paintEvent(self, e: QPaintEvent):
-        super(PlanetsBarWidget, self).paintEvent(e)
+        super(PlanetSidebarWidget, self).paintEvent(e)
         painter = QPainter(self)
         self._drawPlanetPic(painter)
         self._drawPlanetTitle(painter)
@@ -185,7 +185,7 @@ class PlanetsBarWidget(QFrame):
         self._drawToolTip(painter)
 
     def mouseMoveEvent(self, event: QMouseEvent):
-        super(PlanetsBarWidget, self).mouseMoveEvent(event)
+        super(PlanetSidebarWidget, self).mouseMoveEvent(event)
         # QMouseEvent::pos() reports the position of the mouse cursor, relative to this widget.
         mx = event.x()
         my = event.y()
@@ -226,10 +226,10 @@ class PlanetsBarWidget(QFrame):
         self.update()
 
     # def enterEvent(self, event):
-    #    super(PlanetsBarWidget, self).enterEvent(event)
+    #    super(PlanetSidebarWidget, self).enterEvent(event)
 
     def leaveEvent(self, event):
-        super(PlanetsBarWidget, self).leaveEvent(event)
+        super(PlanetSidebarWidget, self).leaveEvent(event)
         self._tt.hide()
         self.update()
 
@@ -238,8 +238,10 @@ class PlanetsBarWidget(QFrame):
         if button == Qt.LeftButton:
             if self._mouse_over_planet_name:
                 # logger.debug('planet name click')
+                self.setCursor(Qt.ArrowCursor)  # sometimes cursor is not restored to arrow
                 self.requestOpenPlanet.emit(self._planet.planet_id)
             elif self._mouse_over_planet_coords:
                 # logger.debug('planet coords click')
+                self.setCursor(Qt.ArrowCursor)  # sometimes cursor is not restored to arrow
                 self.requestOpenGalaxy.emit(self._planet.coords)
 

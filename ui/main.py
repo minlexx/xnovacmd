@@ -16,7 +16,7 @@ from .imperium_widget import ImperiumWidget
 from .galaxy_widget import GalaxyWidget
 from .planet_widget import PlanetWidget
 
-from .customwidgets.planets_bar_widget import PlanetsBarWidget
+from .customwidgets.planets_bar_widget import PlanetSidebarWidget
 from .customwidgets.xtabwidget import XTabWidget
 
 from .widget_utils import install_layout_for_widget, \
@@ -281,12 +281,12 @@ class XNova_MainWindow(QWidget):
                 if li is not None:
                     wi = li.widget()
                     if wi is not None:
-                        if isinstance(wi, PlanetsBarWidget):
+                        if isinstance(wi, PlanetSidebarWidget):
                             layout.removeWidget(wi)
                             wi.close()
                             del wi
         for pl in planets:
-            pw = PlanetsBarWidget(self._panel_planets)
+            pw = PlanetSidebarWidget(self._panel_planets)
             pw.setPlanet(pl)
             layout.addWidget(pw)
             pw.show()
@@ -307,7 +307,7 @@ class XNova_MainWindow(QWidget):
                 if li is not None:
                     wi = li.widget()
                     if wi is not None:
-                        if isinstance(wi, PlanetsBarWidget):
+                        if isinstance(wi, PlanetSidebarWidget):
                             wi.update()
 
     def add_tab_for_planet(self, planet: XNPlanet):
