@@ -47,6 +47,8 @@ class XNovaWorld(QThread):
     loaded_overview = pyqtSignal()
     # emitted when imperium was reloaded (but not during world refresh)
     loaded_imperium = pyqtSignal()
+    # emitted when full planet was refreshed (but not during world refresh)
+    loaded_planet = pyqtSignal(int)   # planet_id
 
     def __init__(self, parent=None):
         super(XNovaWorld, self).__init__(parent)
@@ -744,6 +746,8 @@ class XNovaWorld(QThread):
         self._download_planet_defense(planet_id, force_download)
         if delays_msec is not None:
             self.msleep(delays_msec)
+        if not self._world_is_loading:
+            self.loaded_planet.emit(planet_id)
 
     def _request_rename_planet(self, planet_id: int, new_name: str):
         post_url = '?set=overview&mode=renameplanet&pl={0}'.format(planet_id)
