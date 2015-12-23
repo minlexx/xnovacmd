@@ -90,7 +90,7 @@ class XNova_MainWindow(QWidget):
         #
         # create status bar
         self._statusbar = XNCStatusBar(self)
-        self.setStatusMessage(self.tr('Not connected: Log in!'))
+        self.set_status_message(self.tr('Not connected: Log in!'))
         #
         # tab widget pages
         self.login_widget = None
@@ -192,7 +192,7 @@ class XNova_MainWindow(QWidget):
         if self.tray_icon is not None:
             self.tray_icon.setToolTip(tip)
 
-    def setStatusMessage(self, msg: str):
+    def set_status_message(self, msg: str):
         self._statusbar.set_status(msg)
 
     def store_cfg_val(self, category: str, value):
@@ -374,7 +374,7 @@ class XNova_MainWindow(QWidget):
     def on_login_error(self, errstr):
         logger.error('Login error: {0}'.format(errstr))
         self.state = self.STATE_NOT_AUTHED
-        self.setStatusMessage(self.tr('Login error: {0}').format(errstr))
+        self.set_status_message(self.tr('Login error: {0}').format(errstr))
         QMessageBox.critical(self, self.tr('Login error:'), errstr)
 
     @pyqtSlot(str, dict)
@@ -382,7 +382,7 @@ class XNova_MainWindow(QWidget):
         # logger.debug('Login OK, login: {0}, cookies: {1}'.format(login_email, str(cookies_dict)))
         # save login data: email, cookies
         self.state = self.STATE_AUTHED
-        self.setStatusMessage(self.tr('Login OK, loading world'))
+        self.set_status_message(self.tr('Login OK, loading world'))
         self.login_email = login_email
         self.cookies_dict = cookies_dict
         #
@@ -427,7 +427,7 @@ class XNova_MainWindow(QWidget):
         self._tabwidget.enableButtonAdd(True)
         # update statusbar
         self._statusbar.set_world_load_progress('', -1)  # turn off progress display
-        self.setStatusMessage(self.tr('World loaded.'))
+        self.set_status_message(self.tr('World loaded.'))
         # update account info
         if self.overview_widget is not None:
             self.overview_widget.setEnabled(True)
