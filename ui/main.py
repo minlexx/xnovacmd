@@ -284,6 +284,7 @@ class XNova_MainWindow(QWidget):
                         if isinstance(wi, PlanetSidebarWidget):
                             layout.removeWidget(wi)
                             wi.close()
+                            wi.deleteLater()  # fix possible mem leak
                             del wi
         for pl in planets:
             pw = PlanetSidebarWidget(self._panel_planets)
