@@ -19,7 +19,7 @@ class XNovaPageDownload:
     def __init__(self, cookies_dict: dict=None):
         self.xnova_url = 'uni4.xnova.su'
         self.user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
-        self.error_str = None
+        self.error_str = ''
         self.proxy = None
         self.sess = None
         # load config
