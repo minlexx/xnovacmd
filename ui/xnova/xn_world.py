@@ -907,7 +907,7 @@ _singleton_XNovaWorld = None
 
 # Factory
 # Serves as singleton entry-point to get world class instance
-def XNovaWorld_instance():
+def XNovaWorld_instance() -> XNovaWorld:
     global _singleton_XNovaWorld
     if not _singleton_XNovaWorld:
         _singleton_XNovaWorld = XNovaWorld()
