@@ -9,6 +9,7 @@ from ui.xnova.xn_world import XNovaWorld_instance
 from ui.xnova import xn_logger
 
 from ui.customwidgets.collapsible_frame import CollapsibleFrame
+from ui.customwidgets.input_string_dialog import input_string_dialog
 
 from ui.widget_utils import number_format
 
@@ -164,7 +165,13 @@ class Planet_BasicInfoPanel(QFrame):
 
     @pyqtSlot()
     def on_action_renameplanet(self):
-        logger.debug('rename planet')
+        new_name = input_string_dialog(
+                self,
+                self.tr('Rename planet'),
+                self.tr('Enter new planet name:'),
+                self._planet.name)
+        if (new_name is not None) and (new_name != self._planet.name):
+            logger.debug('rename planet to {0}'.format(new_name))
 
     @pyqtSlot()
     def on_action_leaveplanet(self):
