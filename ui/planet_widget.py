@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
 from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem
-from ui.xnova.xn_world import XNovaWorld_instance
+from ui.xnova.xn_world import XNovaWorld_instance, XNovaWorld
 from ui.xnova import xn_logger
 
 from ui.customwidgets.collapsible_frame import CollapsibleFrame
@@ -20,6 +20,7 @@ class Planet_BasicInfoPanel(QFrame):
 
     requestOpenGalaxy = pyqtSignal(XNCoords)
     requestRefreshPlanet = pyqtSignal()
+    requestRenamePlanet = pyqtSignal(int, str)   # planet_id, new_planet_name
 
     def __init__(self, parent: QWidget):
         super(Planet_BasicInfoPanel, self).__init__(parent)
@@ -171,7 +172,7 @@ class Planet_BasicInfoPanel(QFrame):
                 self.tr('Enter new planet name:'),
                 self._planet.name)
         if (new_name is not None) and (new_name != self._planet.name):
-            logger.debug('rename planet to {0}'.format(new_name))
+            self.requestRenamePlanet.emit(self._planet.planet_id, new_name)
 
     @pyqtSlot()
     def on_action_leaveplanet(self):
@@ -203,6 +204,7 @@ class PlanetWidget(QFrame):
         self._bipanel = Planet_BasicInfoPanel(self)
         self._bipanel.requestOpenGalaxy.connect(self.on_request_open_galaxy)
         self._bipanel.requestRefreshPlanet.connect(self.on_request_refresh_planet)
+        self._bipanel.requestRenamePlanet.connect(self.on_request_rename_planet)
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
@@ -236,3 +238,7 @@ class PlanetWidget(QFrame):
     @pyqtSlot()
     def on_request_refresh_planet(self):
         self.world.signal(self.world.SIGNAL_RELOAD_PLANET, planet_id=self._planet.planet_id)
+
+    @pyqtSlot(int, str)
+    def on_request_rename_planet(self, planet_id: int, planet_name: str):
+        self.world.signal(self.world.SIGNAL_RENAME_PLANET, planet_id=planet_id, new_name=planet_name)
