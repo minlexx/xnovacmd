@@ -68,6 +68,9 @@ if __name__ == '__main__':
     # create global application object
     # and keep reference to it to prevent garbage collection
     app = MyApplication(sys.argv)
+    app.setApplicationName('xnovacmd')
+    app.setApplicationVersion('0.1')
+    app.setApplicationDisplayName('XNova Commander')
     app.setup_translation()
     app.create_window()
     xn_logger.handle_unhandled(True)
