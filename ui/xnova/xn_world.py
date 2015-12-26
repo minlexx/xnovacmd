@@ -126,12 +126,19 @@ class XNovaWorld(QThread):
 
     def reload_config(self):
         """
-        Reloads network config in page downloader and creates
-        a new HTTP session, resulting in fact in new connection!
+        Reloads network config in page downloader and if network settings
+        change, creates a new HTTP session, resulting in fact in new connection!
         :return:
         """
+        prev_proxy = self._page_downloader.proxy
         self._page_downloader.read_config()
-        self._page_downloader.construct_session()
+        new_proxy = self._page_downloader.proxy
+        # reconstruct session only if network settings were changed
+        if new_proxy != prev_proxy:
+            logger.debug('reload_config(): net proxy changed, recreating '
+                         'HTTP session ({0} != {1})'.format(prev_proxy, new_proxy))
+            self._page_downloader.construct_session()
+        self._page_downloader.apply_useragent()
 
     def lock(self, timeout_ms=None, raise_on_timeout=False):
         """
