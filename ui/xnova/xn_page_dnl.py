@@ -26,6 +26,7 @@ class XNovaPageDownload:
         self.read_config()
         # construct requests HTTP session
         self.construct_session()
+        self.apply_useragent()
         # setup cookies
         if cookies_dict:
             self.set_cookies_from_dict(cookies_dict)
@@ -59,16 +60,18 @@ class XNovaPageDownload:
         if self.proxy is not None:
             self.sess.proxies = {'http': self.proxy, 'https': self.proxy}
             logger.info('Set HTTP/HTTPS proxy to: {0}'.format(self.proxy))
-        self.sess.headers.update({'user-agent': self.user_agent})
         self.sess.headers.update({'referer': 'http://{0}/'.format(self.xnova_url)})
         #
         # restore saved cookies?
         if saved_cookies is not None:
             self.sess.cookies = saved_cookies
 
+    def apply_useragent(self):
+        self.sess.headers.update({'user-agent': self.user_agent})
+
     def set_useragent(self, ua_str):
         self.user_agent = ua_str
-        self.sess.headers.update({'user-agent': self.user_agent})
+        self.apply_useragent()
 
     def set_cookies_from_dict(self, cookies_dict: dict, do_save=False, json_filename=None):
         self.sess.cookies = requests.cookies.cookiejar_from_dict(cookies_dict)
