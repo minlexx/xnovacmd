@@ -776,16 +776,26 @@ class XNovaWorld(QThread):
         return self._get_page_url(page_name, page_url,
                                   self._planet_research_cache_lifetime, force_download)
 
+    def _download_planet_researches_fleet(self, planet_id: int, force_download=False):
+        # url: http://uni4.xnova.su/?set=buildings&mode=research_fleet&cp=57064&re=0
+        page_url = '?set=buildings&mode=research_fleet&cp={0}&re=0'.format(planet_id)
+        page_name = 'researchfleet_{0}'.format(planet_id)
+        return self._get_page_url(page_name, page_url,
+                                  self._planet_research_cache_lifetime, force_download)
+
     def _download_planet(self, planet_id: int, delays_msec: int=None, force_download: bool=False):
         # planet buildings in progress
         self._download_planet_buildings(planet_id, force_download)
         if delays_msec is not None:
             self.msleep(delays_msec)
-        # planet researches in progress
+        # planet researches and in progress
         self._download_planet_researches(planet_id, force_download)
         if delays_msec is not None:
             self.msleep(delays_msec)
-        # TODO: planet factory researches in progress
+        # planet factory researches and in progress
+        self._download_planet_researches_fleet(planet_id, force_download)
+        if delays_msec is not None:
+            self.msleep(delays_msec)
         # planet shipyard/defense builds in progress
         self._download_planet_shipyard(planet_id, force_download)
         if delays_msec is not None:
