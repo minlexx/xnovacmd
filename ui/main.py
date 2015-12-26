@@ -366,9 +366,7 @@ class XNova_MainWindow(QWidget):
                 return
             # else consider this is planet widget
             planet_id = int(action_ret.data())
-            planet = self.world.get_planet(planet_id)
-            if planet is not None:
-                self.add_tab_for_planet(planet)
+            self.on_request_open_planet_tab(planet_id)
 
     @pyqtSlot(str)
     def on_login_error(self, errstr):
