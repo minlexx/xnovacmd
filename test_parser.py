@@ -95,6 +95,14 @@ def main():
     logger.info('Planet researches available follow:')
     for ra in prap.researches_avail:
         logger.info(str(ra))
+    # planet factory researches
+    content = cacher.get_page('researchfleet_57064')  # Tama
+    prap.clear()
+    prap.server_time = server_time
+    prap.parse_page_content(content)
+    logger.info('Planet factory researches available follow:')
+    for ra in prap.researches_avail:
+        logger.info(str(ra))
     #
     # techtree
     ttp = TechtreeParser()
