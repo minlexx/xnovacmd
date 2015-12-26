@@ -47,6 +47,7 @@ class ImperiumParser(XNParserBase):
             self._planet_prev_build_items[pl.planet_id] = dict()
             self._planet_prev_build_items[pl.planet_id]['bi'] = pl.buildings_items
             self._planet_prev_build_items[pl.planet_id]['ri'] = pl.research_items
+            self._planet_prev_build_items[pl.planet_id]['rfi'] = pl.researchfleet_items
             self._planet_prev_build_items[pl.planet_id]['si'] = pl.shipyard_tems
             self._planet_prev_build_items[pl.planet_id]['di'] = pl.defense_items
             self._planet_prev_build_items[pl.planet_id]['spi'] = pl.shipyard_progress_items
@@ -66,6 +67,7 @@ class ImperiumParser(XNParserBase):
                 if pl.planet_id == planet_id:
                     pl.buildings_items = self._planet_prev_build_items[planet_id]['bi']
                     pl.research_items = self._planet_prev_build_items[planet_id]['ri']
+                    pl.researchfleet_items = self._planet_prev_build_items[planet_id]['rfi']
                     pl.shipyard_tems = self._planet_prev_build_items[planet_id]['si']
                     pl.defense_items = self._planet_prev_build_items[planet_id]['di']
                     pl.shipyard_progress_items = self._planet_prev_build_items[planet_id]['spi']
