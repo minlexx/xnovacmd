@@ -28,6 +28,9 @@ def main():
     p1 = OverviewParser()
     p1.parse_page_content(content)
     server_time = p1.server_time
+    logger.info('Flights follow:')
+    for fl in p1.flights:
+        logger.info(fl)
     #
     # parse user info
     content = cacher.get_page('self_user_info')
@@ -99,6 +102,7 @@ def main():
     content = cacher.get_page('researchfleet_57064')  # Tama
     prap.clear()
     prap.server_time = server_time
+    prap.set_parsing_research_fleet(True)
     prap.parse_page_content(content)
     logger.info('Planet factory researches available follow:')
     for ra in prap.researches_avail:
