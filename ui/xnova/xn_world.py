@@ -400,7 +400,7 @@ class XNovaWorld(QThread):
         # cache has the page inside before the signal was emitted!
         # we can get page content from cache
         page_content = self._page_cache.get_page(page_name)
-        if not page_content:
+        if page_content is None:
             raise ValueError('This should not ever happen!')
         # get current date/time
         dt_now = datetime.datetime.today()
@@ -735,6 +735,7 @@ class XNovaWorld(QThread):
         if not force_download:
             # try to get cached page (default)
             page_content = self._page_cache.get_page(page_name, max_cache_lifetime)
+            logger.debug('... got [{0}] from cache! (lifetime < {1})'.format(page_name, max_cache_lifetime))
         if page_content is None:
             # signal that we are starting network request
             if not self._world_is_loading:
@@ -887,7 +888,7 @@ class XNovaWorld(QThread):
         #  http://uni4.xnova.su/?set=players&id=71995
         #  This need overview parser to parse and fetch account id
         self.world_load_progress.emit('self_user_info', load_progress_percent)
-        self._get_page('self_user_info', 300, force_download=True)
+        self._get_page('self_user_info', max_cache_lifetime=60, force_download=False)
         load_progress_percent += load_progress_step
         #
         # download all planets info
