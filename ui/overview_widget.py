@@ -204,6 +204,15 @@ class Overview_BuildProgressWidget(QWidget):
                     self._set_buildtime(bi)
                     self.show()
                     return
+            # also check researchfleet_items
+            for bi in planet.researchfleet_items:
+                if bi.is_in_progress():
+                    self.building_item = bi
+                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                    self._set_percent_complete(bi)
+                    self._set_buildtime(bi)
+                    self.show()
+                    return
             # if we are here, no researches in progress were found (return is in previuos line)
             self.hide()
         else:
@@ -332,6 +341,7 @@ class OverviewWidget(QWidget):
             logger.error('get_bpw_for_planet(): unknown typre requested: {0}'.format(typ))
 
     def update_builds(self):
+        self.setUpdatesEnabled(False)  # big visual changes may follow, stop screen flicker
         # delete existing build progress widgets (do not do it, just hide)
         for bpw in self.bp_widgets.values():
             bpw.hide()
@@ -352,6 +362,7 @@ class OverviewWidget(QWidget):
             bpw.update_from_planet(pl, BPW_TYPE_RESEARCH)
         # make equal widths (this is not working, why?)
         # self._equalize_builds_widths()
+        self.setUpdatesEnabled(True)
 
     def _equalize_builds_widths(self):
         maxwidth = -1
