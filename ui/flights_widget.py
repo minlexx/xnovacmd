@@ -134,8 +134,9 @@ class FlightsWidget(QWidget):
         self._btn_newmsg.update()
 
     @staticmethod
-    def _get_mis_bgcolor(mis: str, dir_: str) -> QColor:
+    def _get_mis_bgcolor(fl: XNFlight) -> QColor:
         ret = QColor(255, 255, 255)
+        mis = fl.mission
         if mis == 'ownharvest':
             ret = QColor(255, 255, 200)
         elif mis == 'owndeploy':
@@ -154,7 +155,7 @@ class FlightsWidget(QWidget):
             ret = QColor(153, 200, 255)
         elif mis == 'attack':
             ret = QColor(255, 230, 230)
-        if dir_ == 'return':
+        if fl.direction == 'return':
             # darken
             ret.setRed(ret.red() * 0.8)
             ret.setGreen(ret.green() * 0.8)
@@ -162,9 +163,9 @@ class FlightsWidget(QWidget):
         return ret
 
     @staticmethod
-    def _get_mis_fgcolor(mis: str) -> QColor:
+    def _get_mis_fgcolor(fl: XNFlight) -> QColor:
         ret = QColor(0, 0, 0)
-        if mis == 'attack':
+        if fl.mission == 'attack':
             ret = QColor(200, 0, 0)
         return ret
 
@@ -225,8 +226,8 @@ class FlightsWidget(QWidget):
             # self.ui.tw_flights.insertRow(irow)
             self._set_twi(irow, 0, timer_str)
             self._set_twi(irow, 1, mis_str,
-                          self._get_mis_bgcolor(fl.mission, fl.direction),
-                          self._get_mis_fgcolor(fl.mission))
+                          self._get_mis_bgcolor(fl),
+                          self._get_mis_fgcolor(fl))
             self._set_twi(irow, 2, str(fl.src))
             self._set_twi(irow, 3, str(fl.dst))
             self._set_twi(irow, 4, str(fl.ships) + res_str)
