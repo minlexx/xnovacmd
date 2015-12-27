@@ -113,6 +113,10 @@ class ResearchAvailParser(XNParserBase):
                 self._in_div_overContent = False
                 # store build item to list
                 self._cur_item.is_research_item = True  # mark as research
+                if self._parsing_research_fleet:
+                    # remark as research_fleet item
+                    self._cur_item.is_research_item = False
+                    self._cur_item.is_researchfleet_item = True
                 self.researches_avail.append(self._cur_item)
                 # log
                 logger.debug(' -- Planet research avail: (gid={0}) {1} lv {2} build time {3} secs'.format(
