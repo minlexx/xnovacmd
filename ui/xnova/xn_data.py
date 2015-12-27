@@ -259,6 +259,8 @@ class XNFlight:
         self.mission = None
         self.direction = ''
         self.seconds_left = -1
+        self.is_our_fleet = True
+        self.enemy_name = ''
         self.arrive_datetime = datetime.datetime(datetime.MINYEAR, month=1, day=1, hour=0,
                                                  minute=0, second=0, microsecond=0, tzinfo=None)
 
@@ -275,6 +277,8 @@ class XNFlight:
             s += ' return'
         s += (' @ ' + str(self.arrive_datetime))
         s += ', {0} secs left'.format(self.seconds_left)
+        if not self.is_our_fleet:
+            s += ', enemy: {0}'.format(self.enemy_name)
         return s
 
 
