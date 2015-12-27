@@ -42,6 +42,7 @@ class ResearchAvailParser(XNParserBase):
         self._cur_item = XNPlanetBuildingItem()
         self._got_level = False
         self._img_resource = ''
+        self._parsing_research_fleet = False
 
     def set_parsing_research_fleet(self, research_fleet: bool):
         self._parsing_research_fleet = research_fleet
@@ -156,7 +157,6 @@ class ResearchAvailParser(XNParserBase):
                                                 'cmd=search&tech={0}'.format(gid)
                     self._cur_item.remove_link = '?set=buildings&mode=research_fleet&' \
                                                  'cmd=cacncel&tech={0}'.format(gid)
-                # TODO: build_link for research_fleet may other
                 logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
@@ -202,7 +202,5 @@ class ResearchAvailParser(XNParserBase):
                     dt_end = self.server_time + datetime.timedelta(seconds=secs_left)
                     self._cur_item.seconds_left = secs_left
                     self._cur_item.dt_end = dt_end
-                    self._cur_item.remove_link = '?set=buildings&mode=research&cmd=cancel&tech={0}'.\
-                        format(self._cur_item.gid)
                     logger.debug('    in progress, seconds left = {0}, dt_end = {1}, remove_link = [{2}]'.format(
                         secs_left, str(self._cur_item.dt_end), self._cur_item.remove_link))
