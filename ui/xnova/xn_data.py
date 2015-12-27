@@ -264,10 +264,10 @@ class XNFlight:
         self.arrive_datetime = datetime.datetime(datetime.MINYEAR, month=1, day=1, hour=0,
                                                  minute=0, second=0, microsecond=0, tzinfo=None)
 
-    @staticmethod
-    def is_hostile_mission(mission_str):
-        if mission_str in ['attack', 'espionage', 'missile', 'destroy', 'federation']:
-            return True
+    def is_hostile(self):
+        if self.mission in ['attack', 'espionage', 'missile', 'destroy', 'federation']:
+            if not self.is_our_fleet:
+                return True
         return False
 
     def __str__(self):
