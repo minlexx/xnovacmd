@@ -149,6 +149,10 @@ class ResearchAvailParser(XNParserBase):
                 # construct build_link
                 # format: "?set=buildings&mode=research&cmd=search&tech=113"
                 self._cur_item.build_link = '?set=buildings&mode=research&cmd=search&tech={0}'.format(gid)
+                if self._parsing_research_fleet:
+                    # build link is other for research_fleet
+                    self._cur_item.build_link = '?set=buildings&mode=research_fleet&' \
+                                                'cmd=search&tech={0}'.format(gid)
                 # TODO: build_link for research_fleet may other
                 logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
