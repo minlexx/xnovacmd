@@ -96,7 +96,7 @@ class ShipyardShipsAvailParser(XNParserBase):
                 self._in_div_title = False
                 self._in_div_actions = False
                 # store build item to list
-                self._cur_item.is_shipyard_item = True
+                self._cur_item.is_shipyard_item = True  # mark as shipyard item
                 self.ships_avail.append(self._cur_item)
                 # log
                 logger.debug(' -- Planet ship avail: (gid={0}) {1} x {2} build time {3} secs'.format(
@@ -253,7 +253,7 @@ class ShipyardBuildsInProgressParser(XNParserBase):
             # get only first item from this queue
             if len(bnames) > 0:
                 for i in range(len(bnames)):
-                    self._cur_item.is_shipyard_item = True
+                    self._cur_item.is_shipyard_item = True  # mark as shipyard item
                     self._cur_item.name = bnames[i]
                     self._cur_item.gid = XNTechTree_instance().find_gid_by_name(self._cur_item.name)
                     self._cur_item.quantity = bqs[i]  # level as quantity

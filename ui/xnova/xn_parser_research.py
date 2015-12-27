@@ -26,6 +26,7 @@ class ResearchAvailParser(XNParserBase):
         self._in_div_brp = False
         self._got_level = False
         self._img_resource = ''  # met, cry, deit, energy
+        self._parsing_research_fleet = False
         self.clear()
 
     def clear(self):
@@ -39,9 +40,11 @@ class ResearchAvailParser(XNParserBase):
         self._in_div_brp = False
         # current parsing building item
         self._cur_item = XNPlanetBuildingItem()
-        self._cur_item.is_research_item = True
         self._got_level = False
         self._img_resource = ''
+
+    def set_parsing_research_fleet(self, research_fleet: bool):
+        self._parsing_research_fleet = research_fleet
 
     def add_price(self, data: str):
         if self._img_resource == 'met':
@@ -109,6 +112,7 @@ class ResearchAvailParser(XNParserBase):
                 self._in_div_actions = False
                 self._in_div_overContent = False
                 # store build item to list
+                self._cur_item.is_research_item = True  # mark as research
                 self.researches_avail.append(self._cur_item)
                 # log
                 logger.debug(' -- Planet research avail: (gid={0}) {1} lv {2} build time {3} secs'.format(

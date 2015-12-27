@@ -99,6 +99,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                 self._in_div_actions = False
                 self._in_div_overContent = False
                 # store build item to list
+                self._cur_item.is_building_item = True  # mark as building
                 self.builds_avail.append(self._cur_item)
                 # log
                 logger.debug(' -- Planet building avail: (gid={1}) {0} lv {2}, upgrade time {3} secs'.format(
