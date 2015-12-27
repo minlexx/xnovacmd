@@ -705,6 +705,7 @@ class XNovaWorld(QThread):
         Converts page_name to page URL, using _page_name_to_url_path().
         First tries to get cached page from cache using page_name as key.
         If there is no cached page there, or it is expired, downloads from network.
+        Then calls self.on_page_downloaded() to automatically parse requested page.
         :param page_name: 'name' used as key in pages cache
         :param max_cache_lifetime: cache timeout
         :param force_download:
@@ -721,6 +722,7 @@ class XNovaWorld(QThread):
         For internal needs, downloads url from server using HTTP GET.
         First tries to get cached page from cache using page_name as key.
         If there is no cached page there, or it is expired, downloads from network.
+        Then calls self.on_page_downloaded() to automatically parse requested page.
         If force_download is True, max_cache_lifetime is ignored.
         (This method's return value is ignored for now)
         :param page_name: 'name' of page to use as key when stored to cache
@@ -744,10 +746,11 @@ class XNovaWorld(QThread):
                 self.net_request_finished.emit()
             if page_content is not None:
                 self._page_cache.set_page(page_name, page_content)  # save in cache
-                self.on_page_downloaded(page_name)  # process downloaded page
-            else:
-                # download error
+            else:  # download error
                 self._inc_network_errors()
+        # parse page content independently if it was read from cache or by network from server
+        if page_content is not None:
+            self.on_page_downloaded(page_name)  # process downloaded page
         return page_content
 
     def _post_page_url(self, page_url: str, post_data: dict=None, referer: str=None):
