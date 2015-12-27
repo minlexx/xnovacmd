@@ -476,6 +476,14 @@ class OverviewParser(XNParserBase):
             except ValueError:
                 pass
         if self._in_flight:
+            if data == 'Ваш':
+                self._cur_flight.is_our_fleet = True
+            elif data == 'Чужой':
+                self._cur_flight.is_our_fleet = False
+            if not self._cur_flight.is_our_fleet:
+                # in_flight: [игрока ScumWir]
+                if data.startswith('игрока '):
+                    self._cur_flight.enemy_name = data[7:]
             m = re.match(r'^отправленный с планеты (.+)$', data)
             if m:
                 src_name = m.group(1)
@@ -585,3 +593,17 @@ class OverviewParser(XNParserBase):
 # <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" ownattack >[1:34:11]</a>
 # направляется к планете порта <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=19"
 # ownattack >[1:19:3]</a>. Задание: Межпланетная атака</span>
+
+# in_flight: [Ваш]
+# in_flight: [флот]
+# ...
+# in_flight: [Чужой]
+# in_flight: [флот]
+# in_flight: [игрока ScumWir]
+# in_flight: [отправленный с луны Луна]
+# in_flight: [[1:233:9]]
+# [направляется к планете Tama]
+# [[1:34:11]]
+# [. Задание: Атаковать]
+# [FlotenTime('bxxofs13', 4129);]
+# +++ Added flight: attack Луна  (moon) [1:233:9] -> Tama [1:34:11] (LI: 1650)  @ 2015-12-27 12:57:32, 4129 secs left
