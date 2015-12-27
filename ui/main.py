@@ -501,7 +501,11 @@ class XNova_MainWindow(QWidget):
 
     @pyqtSlot(int)
     def on_loaded_planet(self, planet_id: int):
-        logger.debug('Got signal on_loaded_planet({0})'.format(planet_id))
+        logger.debug('Got signal on_loaded_planet({0}), updating overview '
+                     'widget and planets panel'.format(planet_id))
+        if self.overview_widget:
+            self.overview_widget.update_builds()
+        self.update_planets_panel()
 
     @pyqtSlot()
     def on_world_timer(self):
