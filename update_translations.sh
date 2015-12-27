@@ -12,12 +12,12 @@ SOURCES="app.py \
     ui/overview_accstats.ui \
     ui/overview_widget.py \
     ui/planet_widget.py \
+    ui/planets_bar_widget.py \
     ui/settings_widget.py \
     ui/statusbar.py \
     ui/widget_utils.py \
     ui/customwidgets/collapsible_frame.py \
     ui/customwidgets/my_buttons.py \
-    ui/customwidgets/planets_bar_widget.py \
     ui/customwidgets/xtabwidget.py \
     ui/xnova/xn_world.py"
 
