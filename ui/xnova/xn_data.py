@@ -473,8 +473,10 @@ class XNPlanetBuildingItem:
         self.cost_deit = 0
         self.cost_energy = 0
         # item flags
+        self.is_building_item = False
         self.is_shipyard_item = False
         self.is_research_item = False
+        self.is_researchfleet_item = False
 
     def __str__(self):
         end_str = 'None'
