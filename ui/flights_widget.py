@@ -28,6 +28,13 @@ class FlightsWidget(QWidget):
         self._btn_settings = QPushButton(self)
         # world reference
         self.world = XNovaWorld_instance()
+        # columns indexes
+        self.COL_TIME = 0
+        self.COL_MISSION = 1
+        self.COL_FROM = 2
+        self.COL_TO = 3
+        self.COL_PLAYER = 4
+        self.COL_SHIPS_RES = 5
 
     def load_ui(self):
         self.ui = uic.loadUi(self.uifile, self)
@@ -46,17 +53,20 @@ class FlightsWidget(QWidget):
         self._btn_settings.clicked.connect(self.on_btn_settings)
         self.ui.horizontalLayout.addWidget(self._btn_settings, 0)
         # configure table widget
-        self.ui.tw_flights.setColumnCount(5)
+        self.ui.tw_flights.setColumnCount(6)
         self.ui.tw_flights.setRowCount(0)
         # timer | mission | src | dst | ships (res)
         self.ui.tw_flights.setHorizontalHeaderLabels([
-            self.tr('Timer'), self.tr('Mission'), self.tr('From'),
-            self.tr('To'), self.tr('Ships/Res')])
-        self.ui.tw_flights.setColumnWidth(0, 120)
-        self.ui.tw_flights.setColumnWidth(1, 90)
-        self.ui.tw_flights.setColumnWidth(2, 120)
-        self.ui.tw_flights.setColumnWidth(3, 120)
-        self.ui.tw_flights.setColumnWidth(4, 350)  # wider, wider
+            self.tr('Timer'), self.tr('Mission'),
+            self.tr('From'), self.tr('To'),
+            self.tr('Player'),
+            self.tr('Ships/Res')])
+        self.ui.tw_flights.setColumnWidth(self.COL_TIME, 120)
+        self.ui.tw_flights.setColumnWidth(self.COL_MISSION, 90)
+        self.ui.tw_flights.setColumnWidth(self.COL_FROM, 120)
+        self.ui.tw_flights.setColumnWidth(self.COL_TO, 120)
+        self.ui.tw_flights.setColumnWidth(self.COL_PLAYER, 100)
+        self.ui.tw_flights.setColumnWidth(self.COL_SHIPS_RES, 350)  # wider, wider
         self.ui.tw_flights.hide()
         # connections
         self.btn_show.clicked.connect(self.on_showhide_fleets)
@@ -224,13 +234,14 @@ class FlightsWidget(QWidget):
             # insert row
             # timer | mission | src | dst | ships (res)
             # self.ui.tw_flights.insertRow(irow)
-            self._set_twi(irow, 0, timer_str)
-            self._set_twi(irow, 1, mis_str,
+            self._set_twi(irow, self.COL_TIME, timer_str)
+            self._set_twi(irow, self.COL_MISSION, mis_str,
                           self._get_mis_bgcolor(fl),
                           self._get_mis_fgcolor(fl))
-            self._set_twi(irow, 2, str(fl.src))
-            self._set_twi(irow, 3, str(fl.dst))
-            self._set_twi(irow, 4, str(fl.ships) + res_str)
+            self._set_twi(irow, self.COL_FROM, str(fl.src))
+            self._set_twi(irow, self.COL_TO, str(fl.dst))
+            self._set_twi(irow, self.COL_PLAYER, str(fl.enemy_name))
+            self._set_twi(irow, self.COL_SHIPS_RES, str(fl.ships) + res_str)
             # self.ui.tw_flights.setRowHeight(irow, 40)
             irow += 1
         self.ui.tw_flights.setUpdatesEnabled(True)
