@@ -545,6 +545,7 @@ class XNovaWorld(QThread):
                 # go parse
                 self._parser_researches_avail.clear()
                 self._parser_researches_avail.server_time = self._server_time
+                self._parser_researches_avail.set_parsing_research_fleet(False)
                 self._parser_researches_avail.parse_page_content(page_content)
                 # get planet energy info
                 self._parser_planet_energy.clear()
@@ -560,6 +561,33 @@ class XNovaWorld(QThread):
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], '
                                  'expected research_123456'.format(page_name))
+            except ValueError:  # failed to convert to int
+                logger.exception('Failed to convert planet_id to int, '
+                                 'page_name=[{0}]'.format(page_name))
+        elif page_name.startswith('researchfleet_'):
+            try:
+                m = re.match(r'researchfleet_(\d+)', page_name)
+                planet_id = int(m.group(1))
+                planet = self.get_planet(planet_id)
+                # go parse
+                self._parser_researches_avail.clear()
+                self._parser_researches_avail.server_time = self._server_time
+                self._parser_researches_avail.set_parsing_research_fleet(True)
+                self._parser_researches_avail.parse_page_content(page_content)
+                # get planet energy info
+                self._parser_planet_energy.clear()
+                self._parser_planet_energy.parse_page_content(page_content)
+                if planet is not None:
+                    planet.researchfleet_items = self._parser_researches_avail.researches_avail
+                    if len(self._parser_researches_avail.researches_avail) > 0:
+                        logger.info('Planet {0} has {1} fleet researches avail'.format(
+                            planet.name, len(self._parser_researches_avail.researches_avail)))
+                    # save planet energy info
+                    planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+            except AttributeError:  # no match
+                logger.exception('Invalid format for page_name=[{0}], '
+                                 'expected researchfleet_123456'.format(page_name))
             except ValueError:  # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, '
                                  'page_name=[{0}]'.format(page_name))
