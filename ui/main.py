@@ -506,6 +506,14 @@ class XNova_MainWindow(QWidget):
         if self.overview_widget:
             self.overview_widget.update_builds()
         self.update_planets_panel()
+        # update also planet tab, if any
+        planet = self.world.get_planet(planet_id)
+        if planet is not None:
+            tab_idx = self.find_tab_for_planet(planet_id)
+            if tab_idx != -1:
+                tab_widget = self._tabwidget.tabWidget(tab_idx)
+                if isinstance(tab_widget, PlanetWidget):
+                    tab_widget.setPlanet(planet)
 
     @pyqtSlot()
     def on_world_timer(self):
