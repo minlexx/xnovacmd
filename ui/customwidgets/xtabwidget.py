@@ -78,6 +78,7 @@ class XTabWidget(QFrame):
         self._btn_add.setEnabled(enableState)
 
     def setCurrentIndex(self, index: int):
+        self._stack.setCurrentIndex(index)
         self._tabbar.setCurrentIndex(index)
 
     def count(self) -> int:
