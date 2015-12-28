@@ -11,7 +11,7 @@ from ui.xnova import xn_logger
 from ui.customwidgets.collapsible_frame import CollapsibleFrame
 from ui.customwidgets.input_string_dialog import input_string_dialog
 
-from ui.widget_utils import number_format
+from ui.widget_utils import number_format, time_seconds_to_str
 
 logger = xn_logger.get(__name__, debug=True)
 
@@ -185,12 +185,57 @@ class Planet_BuildItemWidget(QFrame):
         super(Planet_BuildItemWidget, self).__init__(parent)
         # data members
         self._bitem = XNPlanetBuildingItem()
+        self._pix = QPixmap()
         # setup frame
         self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShadow(QFrame.Raised)
+        # font
+        font = self.font()
+        font.setWeight(QFont.Bold)
+        # layout
+        self._layout = QHBoxLayout()
+        self._layout_v = QVBoxLayout()
+        self.setLayout(self._layout)
+        # label with building image
+        self._lbl_pix = QLabel(self)
+        # labels for name and level
+        self._layout_nl = QHBoxLayout()
+        self._lbl_name = QLabel(self)
+        self._lbl_name.setFont(font)
+        self._lbl_lvl = QLabel(self)
+        # labels for time
+        self._layout_buildtime = QHBoxLayout()
+        self._lbl_time = QLabel(self.tr('Time:'), self)
+        self._lbl_timestr = QLabel(self)
+        # construct layout
+        # name, level
+        self._layout_nl.addWidget(self._lbl_name)
+        self._layout_nl.addWidget(self._lbl_lvl)
+        self._layout_v.addLayout(self._layout_nl)
+        # build time
+        self._layout_buildtime.addWidget(self._lbl_time)
+        self._layout_buildtime.addWidget(self._lbl_timestr)
+        self._layout_v.addLayout(self._layout_buildtime)
+        #
+        self._layout.addWidget(self._lbl_pix)
+        self._layout.addLayout(self._layout_v)
 
     def set_building_item(self, bitem: XNPlanetBuildingItem):
         self._bitem = bitem
+        # load pixmap
+        pix_fn = 'ui/i/building_{0}.gif'.format(bitem.gid)
+        if not self._pix.load(pix_fn):
+            logger.warn('Failed to load pixmap from: [{0}]'.format(pix_fn))
+        else:
+            self._lbl_pix.setPixmap(self._pix)
+        # name, level
+        self._lbl_name.setText(bitem.name)
+        self._lbl_lvl.setText(str(bitem.level))
+        # time
+        if bitem.seconds_total != -1:
+            self._lbl_timestr.setText(time_seconds_to_str(bitem.seconds_total))
+        else:
+            self._lbl_timestr.setText('-')
 
 
 class Planet_BuildItemsPanel(QFrame):
@@ -216,6 +261,8 @@ class Planet_BuildItemsPanel(QFrame):
         #
         self._lbl = QLabel('ololo', self)
         self._layout.addWidget(self._lbl)
+        # build item widgets
+        self._biws = dict()
 
     def get_type(self) -> str:
         return self._type
@@ -230,11 +277,30 @@ class Planet_BuildItemsPanel(QFrame):
         if typ not in [self.TYPE_BUILDINGS, self.TYPE_SHIPYARD, self.TYPE_RESEARCHES]:
             raise ValueError('Planet_BuildItemsPanel: invalid type: [{0}]!'.format(typ))
         self._type = typ
-        # create widgets...
 
     def set_planet(self, planet: XNPlanet):
         self._planet = planet
-        # update info in widgets...
+        # update info in widgets
+        if self._type == self.TYPE_BUILDINGS:
+            for bitem in self._planet.buildings_items:
+                biw = self.biw_for_gid(bitem.gid)
+                biw.set_building_item(bitem)
+                biw.show()
+
+    def biw_for_gid(self, gid: int) -> Planet_BuildItemWidget:
+        """
+        Gets existing child widget for build item, or creates it
+        :param gid: building id
+        :return: Planet_BuildItemWidget
+        """
+        if gid not in self._biws:
+            biw = Planet_BuildItemWidget(self)
+            biw.hide()
+            self._biws[gid] = biw
+            self._layout.addWidget(biw)
+        else:
+            biw = self._biws[gid]
+        return biw
 
 
 class PlanetWidget(QFrame):
