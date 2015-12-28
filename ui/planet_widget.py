@@ -180,6 +180,63 @@ class Planet_BasicInfoPanel(QFrame):
                             self.tr('Leaving planet is not done!'))
 
 
+class Planet_BuildItemWidget(QFrame):
+    def __init__(self, parent: QWidget):
+        super(Planet_BuildItemWidget, self).__init__(parent)
+        # data members
+        self._bitem = XNPlanetBuildingItem()
+        # setup frame
+        self.setFrameShape(QFrame.StyledPanel)
+        self.setFrameShadow(QFrame.Raised)
+
+    def set_building_item(self, bitem: XNPlanetBuildingItem):
+        self._bitem = bitem
+
+
+class Planet_BuildItemsPanel(QFrame):
+
+    TYPE_BUILDINGS = 'buildings'
+    TYPE_SHIPYARD = 'shipyard'
+    TYPE_RESEARCHES = 'researches'
+
+    def __init__(self, parent: QWidget):
+        super(Planet_BuildItemsPanel, self).__init__(parent)
+        # data members
+        self._type = ''
+        self._planet = XNPlanet()
+        # setup frame
+        # self.setFrameShape(QFrame.StyledPanel)
+        self.setFrameShape(QFrame.Box)
+        self.setFrameShadow(QFrame.Raised)
+        # layout
+        self._layout = QVBoxLayout()
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(3)
+        self.setLayout(self._layout)
+        #
+        self._lbl = QLabel('ololo', self)
+        self._layout.addWidget(self._lbl)
+
+    def get_type(self) -> str:
+        return self._type
+
+    def get_planet(self) -> XNPlanet:
+        return self._planet
+
+    def set_type(self, typ: str):
+        # cannot set type twice
+        if self._type != '':
+            raise ValueError('Planet_BuildItemsPanel: Cannot set type twice!')
+        if typ not in [self.TYPE_BUILDINGS, self.TYPE_SHIPYARD, self.TYPE_RESEARCHES]:
+            raise ValueError('Planet_BuildItemsPanel: invalid type: [{0}]!'.format(typ))
+        self._type = typ
+        # create widgets...
+
+    def set_planet(self, planet: XNPlanet):
+        self._planet = planet
+        # update info in widgets...
+
+
 class PlanetWidget(QFrame):
     """
     Provides view of galaxy/solarsystem contents as table widget
@@ -208,12 +265,21 @@ class PlanetWidget(QFrame):
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
+        self._bip_buildings = Planet_BuildItemsPanel(self._cf_buildings)
+        self._bip_buildings.set_type(Planet_BuildItemsPanel.TYPE_BUILDINGS)
+        self._cf_buildings.addWidget(self._bip_buildings)
         # shipyard
         self._cf_shipyard = CollapsibleFrame(self)
         self._cf_shipyard.setTitle(self.tr('Shipyard'))
+        self._bip_shipyard = Planet_BuildItemsPanel(self._cf_shipyard)
+        self._bip_shipyard.set_type(Planet_BuildItemsPanel.TYPE_SHIPYARD)
+        self._cf_shipyard.addWidget(self._bip_shipyard)
         # research
         self._cf_research = CollapsibleFrame(self)
         self._cf_research.setTitle(self.tr('Research'))
+        self._bip_research = Planet_BuildItemsPanel(self._cf_research)
+        self._bip_research.set_type(Planet_BuildItemsPanel.TYPE_RESEARCHES)
+        self._cf_research.addWidget(self._bip_research)
         # layout finalize
         self._layout.addWidget(self._bipanel)
         self._layout.addWidget(self._cf_buildings)
@@ -227,6 +293,9 @@ class PlanetWidget(QFrame):
     def setPlanet(self, planet: XNPlanet):
         self._planet = planet
         self._bipanel.setup_from_planet(self._planet)
+        self._bip_buildings.set_planet(planet)
+        self._bip_shipyard.set_planet(planet)
+        self._bip_research.set_planet(planet)
 
     def planet(self) -> XNPlanet:
         return self._planet
