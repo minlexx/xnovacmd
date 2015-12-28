@@ -1,10 +1,10 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant, QTimer
 from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
     QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QToolButton, \
-    QMessageBox
+    QMessageBox, QGridLayout
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
-from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem
+from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem, XNResourceBundle
 from ui.xnova.xn_world import XNovaWorld_instance, XNovaWorld
 from ui.xnova import xn_logger
 
@@ -207,27 +207,44 @@ class Planet_BuildItemWidget(QFrame):
         self._layout_buildtime = QHBoxLayout()
         self._lbl_time = QLabel(self.tr('Time:'), self)
         self._lbl_timestr = QLabel(self)
+        # labels for price
+        self._layout_price = QHBoxLayout()
+        self._lbl_price = QLabel(self.tr('Price:'), self)
+        self._lbl_price_met = QLabel()
+        self._lbl_price_cry = QLabel()
+        self._lbl_price_deit = QLabel()
+        self._lbl_price_energy = QLabel()
         # construct layout
         # name, level
         self._layout_nl.addWidget(self._lbl_name)
         self._layout_nl.addWidget(self._lbl_lvl)
+        self._layout_nl.addStretch()
         self._layout_v.addLayout(self._layout_nl)
         # build time
         self._layout_buildtime.addWidget(self._lbl_time)
         self._layout_buildtime.addWidget(self._lbl_timestr)
+        self._layout_buildtime.addStretch()
         self._layout_v.addLayout(self._layout_buildtime)
+        # price
+        self._layout_price.addWidget(self._lbl_price)
+        self._layout_price.addWidget(self._lbl_price_met)
+        self._layout_price.addWidget(self._lbl_price_cry)
+        self._layout_price.addWidget(self._lbl_price_deit)
+        self._layout_price.addWidget(self._lbl_price_energy)
+        self._layout_price.addStretch()
+        self._layout_v.addLayout(self._layout_price)
         #
         self._layout.addWidget(self._lbl_pix)
         self._layout.addLayout(self._layout_v)
 
-    def set_building_item(self, bitem: XNPlanetBuildingItem):
+    def set_building_item(self, bitem: XNPlanetBuildingItem, res_cur: XNResourceBundle, energy_cur: int):
         self._bitem = bitem
         # load pixmap
         pix_fn = 'ui/i/building_{0}.gif'.format(bitem.gid)
         if not self._pix.load(pix_fn):
             logger.warn('Failed to load pixmap from: [{0}]'.format(pix_fn))
         else:
-            self._lbl_pix.setPixmap(self._pix)
+            self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
         # name, level
         self._lbl_name.setText(bitem.name)
         self._lbl_lvl.setText(str(bitem.level))
@@ -236,6 +253,34 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_timestr.setText(time_seconds_to_str(bitem.seconds_total))
         else:
             self._lbl_timestr.setText('-')
+        # price met
+        setstr = ''
+        if bitem.cost_met > 0:
+            setstr = number_format(bitem.cost_met) + ' ' + self.tr('met')
+            if res_cur.met < bitem.cost_met:
+                setstr += ' (-{0})'.format(number_format(bitem.cost_met - res_cur.met))
+        self._lbl_price_met.setText(setstr)
+        # price cry
+        setstr = ''
+        if bitem.cost_cry > 0:
+            setstr = number_format(bitem.cost_cry) + ' ' + self.tr('cry')
+            if res_cur.cry < bitem.cost_cry:
+                setstr += ' (-{0})'.format(number_format(bitem.cost_cry - res_cur.cry))
+        self._lbl_price_cry.setText(setstr)
+        # price deit
+        setstr = ''
+        if bitem.cost_deit > 0:
+            setstr = number_format(bitem.cost_deit) + ' ' + self.tr('deit')
+            if res_cur.deit < bitem.cost_deit:
+                setstr += ' (-{0})'.format(number_format(bitem.cost_deit - res_cur.deit))
+        self._lbl_price_deit.setText(setstr)
+        # price energy
+        setstr = ''
+        if bitem.cost_energy > 0:
+            setstr = number_format(bitem.cost_energy) + ' ' + self.tr('energy')
+            if energy_cur < bitem.cost_energy:
+                setstr += ' (-{0})'.format(number_format(bitem.cost_energy - energy_cur))
+        self._lbl_price_energy.setText(setstr)
 
 
 class Planet_BuildItemsPanel(QFrame):
@@ -251,16 +296,18 @@ class Planet_BuildItemsPanel(QFrame):
         self._planet = XNPlanet()
         # setup frame
         # self.setFrameShape(QFrame.StyledPanel)
-        self.setFrameShape(QFrame.Box)
+        self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
         # layout
-        self._layout = QVBoxLayout()
+        self._layout = QGridLayout()
+        self._layout_lastcol = 0
+        self._layout_lastrow = 0
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(3)
         self.setLayout(self._layout)
         #
-        self._lbl = QLabel('ololo', self)
-        self._layout.addWidget(self._lbl)
+        # self._lbl = QLabel('ololo', self)
+        # self._layout.addWidget(self._lbl)
         # build item widgets
         self._biws = dict()
 
@@ -284,7 +331,7 @@ class Planet_BuildItemsPanel(QFrame):
         if self._type == self.TYPE_BUILDINGS:
             for bitem in self._planet.buildings_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_left)
                 biw.show()
 
     def biw_for_gid(self, gid: int) -> Planet_BuildItemWidget:
@@ -297,7 +344,11 @@ class Planet_BuildItemsPanel(QFrame):
             biw = Planet_BuildItemWidget(self)
             biw.hide()
             self._biws[gid] = biw
-            self._layout.addWidget(biw)
+            self._layout.addWidget(biw, self._layout_lastrow, self._layout_lastcol)
+            self._layout_lastcol += 1
+            if self._layout_lastcol >= 5:
+                self._layout_lastcol = 0
+                self._layout_lastrow += 1
         else:
             biw = self._biws[gid]
         return biw
