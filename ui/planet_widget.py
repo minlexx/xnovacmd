@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant, QTimer
 from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
     QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QToolButton, \
-    QMessageBox, QGridLayout
+    QMessageBox, QGridLayout, QScrollArea, QLayout, QSizePolicy
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
 from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem, XNResourceBundle
@@ -186,6 +186,10 @@ class Planet_BuildItemWidget(QFrame):
         # data members
         self._bitem = XNPlanetBuildingItem()
         self._pix = QPixmap()
+        self._pix_met = QPixmap(':/i/s_metall.png')
+        self._pix_cry = QPixmap(':/i/s_kristall.png')
+        self._pix_deit = QPixmap(':/i/s_deuterium.png')
+        self._pix_energy = QPixmap(':/i/s_energy.png')
         # setup frame
         self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShadow(QFrame.Raised)
@@ -208,12 +212,27 @@ class Planet_BuildItemWidget(QFrame):
         self._lbl_time = QLabel(self.tr('Time:'), self)
         self._lbl_timestr = QLabel(self)
         # labels for price
-        self._layout_price = QHBoxLayout()
-        self._lbl_price = QLabel(self.tr('Price:'), self)
+        self._layout_price1 = QHBoxLayout()
+        self._layout_price2 = QHBoxLayout()
+        self._layout_price3 = QHBoxLayout()
+        self._layout_price4 = QHBoxLayout()
+        self._lbl_price_met_ico = QLabel(self)
+        self._lbl_price_met_ico.setPixmap(self._pix_met)
         self._lbl_price_met = QLabel()
+        self._lbl_price_cry_ico = QLabel()
+        self._lbl_price_cry_ico.setPixmap(self._pix_cry)
         self._lbl_price_cry = QLabel()
+        self._lbl_price_deit_ico = QLabel()
+        self._lbl_price_deit_ico.setPixmap(self._pix_deit)
         self._lbl_price_deit = QLabel()
+        self._lbl_price_energy_ico = QLabel()
+        self._lbl_price_energy_ico.setPixmap(self._pix_energy)
         self._lbl_price_energy = QLabel()
+        # buttons
+        self._layout_buttons = QHBoxLayout()
+        self._btn_upgrade = QPushButton(self.tr('Upgrade'), self)
+        self._btn_upgrade.setIcon(QIcon(':/i/build.png'))
+        self._btn_upgrade.setMaximumHeight(25)
         # construct layout
         # name, level
         self._layout_nl.addWidget(self._lbl_name)
@@ -225,14 +244,30 @@ class Planet_BuildItemWidget(QFrame):
         self._layout_buildtime.addWidget(self._lbl_timestr)
         self._layout_buildtime.addStretch()
         self._layout_v.addLayout(self._layout_buildtime)
-        # price
-        self._layout_price.addWidget(self._lbl_price)
-        self._layout_price.addWidget(self._lbl_price_met)
-        self._layout_price.addWidget(self._lbl_price_cry)
-        self._layout_price.addWidget(self._lbl_price_deit)
-        self._layout_price.addWidget(self._lbl_price_energy)
-        self._layout_price.addStretch()
-        self._layout_v.addLayout(self._layout_price)
+        # price met
+        self._layout_price1.addWidget(self._lbl_price_met_ico)
+        self._layout_price1.addWidget(self._lbl_price_met)
+        self._layout_price1.addStretch()
+        # price cry
+        self._layout_price2.addWidget(self._lbl_price_cry_ico)
+        self._layout_price2.addWidget(self._lbl_price_cry)
+        self._layout_price2.addStretch()
+        # price deit
+        self._layout_price3.addWidget(self._lbl_price_deit_ico)
+        self._layout_price3.addWidget(self._lbl_price_deit)
+        self._layout_price3.addStretch()
+        # price energy
+        self._layout_price4.addWidget(self._lbl_price_energy_ico)
+        self._layout_price4.addWidget(self._lbl_price_energy)
+        self._layout_price4.addStretch()
+        self._layout_v.addLayout(self._layout_price1)
+        self._layout_v.addLayout(self._layout_price2)
+        self._layout_v.addLayout(self._layout_price3)
+        self._layout_v.addLayout(self._layout_price4)
+        # buttons
+        self._layout_buttons.addWidget(self._btn_upgrade)
+        self._layout_buttons.addStretch()
+        self._layout_v.addLayout(self._layout_buttons)
         #
         self._layout.addWidget(self._lbl_pix)
         self._layout.addLayout(self._layout_v)
@@ -244,7 +279,8 @@ class Planet_BuildItemWidget(QFrame):
         if not self._pix.load(pix_fn):
             logger.warn('Failed to load pixmap from: [{0}]'.format(pix_fn))
         else:
-            self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
+            # self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
+            self._lbl_pix.setPixmap(self._pix)
         # name, level
         self._lbl_name.setText(bitem.name)
         self._lbl_lvl.setText(str(bitem.level))
@@ -253,34 +289,78 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_timestr.setText(time_seconds_to_str(bitem.seconds_total))
         else:
             self._lbl_timestr.setText('-')
+        # colors
+        color_enough = '#008800'
+        color_notenough = '#AA0000'
+        enough_met = True
+        enough_cry = True
+        enough_deit = True
+        enough_energy = True
         # price met
         setstr = ''
         if bitem.cost_met > 0:
-            setstr = number_format(bitem.cost_met) + ' ' + self.tr('met')
+            setstr = number_format(bitem.cost_met)
+            color = color_enough
             if res_cur.met < bitem.cost_met:
-                setstr += ' (-{0})'.format(number_format(bitem.cost_met - res_cur.met))
-        self._lbl_price_met.setText(setstr)
+                setstr += ' (-{0})'.format(number_format(int(bitem.cost_met - res_cur.met)))
+                color = color_notenough
+                enough_met = False
+            self._lbl_price_met.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_met_ico.show()
+            self._lbl_price_met.show()
+        else:
+            self._lbl_price_met_ico.hide()
+            self._lbl_price_met.hide()
         # price cry
         setstr = ''
         if bitem.cost_cry > 0:
-            setstr = number_format(bitem.cost_cry) + ' ' + self.tr('cry')
+            setstr = number_format(bitem.cost_cry)
+            color = color_enough
             if res_cur.cry < bitem.cost_cry:
-                setstr += ' (-{0})'.format(number_format(bitem.cost_cry - res_cur.cry))
-        self._lbl_price_cry.setText(setstr)
+                setstr += ' (-{0})'.format(number_format(int(bitem.cost_cry - res_cur.cry)))
+                color = color_notenough
+                enough_cry = False
+            self._lbl_price_cry.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_cry_ico.show()
+            self._lbl_price_cry.show()
+        else:
+            self._lbl_price_cry_ico.hide()
+            self._lbl_price_cry.hide()
         # price deit
         setstr = ''
         if bitem.cost_deit > 0:
-            setstr = number_format(bitem.cost_deit) + ' ' + self.tr('deit')
+            setstr = number_format(bitem.cost_deit)
+            color = color_enough
+            enough_deit = False
             if res_cur.deit < bitem.cost_deit:
-                setstr += ' (-{0})'.format(number_format(bitem.cost_deit - res_cur.deit))
-        self._lbl_price_deit.setText(setstr)
+                setstr += ' (-{0})'.format(number_format(int(bitem.cost_deit - res_cur.deit)))
+                color = color_notenough
+            self._lbl_price_deit.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_deit_ico.show()
+            self._lbl_price_deit.show()
+        else:
+            self._lbl_price_deit_ico.hide()
+            self._lbl_price_deit.hide()
         # price energy
         setstr = ''
         if bitem.cost_energy > 0:
-            setstr = number_format(bitem.cost_energy) + ' ' + self.tr('energy')
+            setstr = number_format(bitem.cost_energy)
+            color = color_enough
             if energy_cur < bitem.cost_energy:
-                setstr += ' (-{0})'.format(number_format(bitem.cost_energy - energy_cur))
-        self._lbl_price_energy.setText(setstr)
+                setstr += ' (-{0})'.format(number_format(int(bitem.cost_energy - energy_cur)))
+                color = color_notenough
+                enough_energy = False
+            self._lbl_price_energy.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_energy_ico.show()
+            self._lbl_price_energy.show()
+        else:
+            self._lbl_price_energy_ico.hide()
+            self._lbl_price_energy.hide()
+        # enable or disable buttons
+        if enough_met and enough_cry and enough_deit and enough_energy:
+            self._btn_upgrade.setEnabled(True)
+        else:
+            self._btn_upgrade.setEnabled(False)
 
 
 class Planet_BuildItemsPanel(QFrame):
@@ -304,12 +384,14 @@ class Planet_BuildItemsPanel(QFrame):
         self._layout_lastrow = 0
         self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.setSpacing(3)
+        self._layout.setSizeConstraint(QLayout.SetMinimumSize)
         self.setLayout(self._layout)
         #
         # self._lbl = QLabel('ololo', self)
         # self._layout.addWidget(self._lbl)
         # build item widgets
         self._biws = dict()
+        self.MAX_COLS = 3
 
     def get_type(self) -> str:
         return self._type
@@ -346,7 +428,7 @@ class Planet_BuildItemsPanel(QFrame):
             self._biws[gid] = biw
             self._layout.addWidget(biw, self._layout_lastrow, self._layout_lastcol)
             self._layout_lastcol += 1
-            if self._layout_lastcol >= 5:
+            if self._layout_lastcol > (self.MAX_COLS -1):
                 self._layout_lastcol = 0
                 self._layout_lastrow += 1
         else:
@@ -382,9 +464,14 @@ class PlanetWidget(QFrame):
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
-        self._bip_buildings = Planet_BuildItemsPanel(self._cf_buildings)
+        self._sa_buildings = QScrollArea(self._cf_buildings)
+        self._bip_buildings = Planet_BuildItemsPanel(self._sa_buildings)
         self._bip_buildings.set_type(Planet_BuildItemsPanel.TYPE_BUILDINGS)
-        self._cf_buildings.addWidget(self._bip_buildings)
+        self._bip_buildings.show()
+        self._sa_buildings.setWidget(self._bip_buildings)
+        # self._cf_buildings.addWidget(self._bip_buildings)
+        self._cf_buildings.addWidget(self._sa_buildings)
+        self._cf_buildings.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         # shipyard
         self._cf_shipyard = CollapsibleFrame(self)
         self._cf_shipyard.setTitle(self.tr('Shipyard'))
