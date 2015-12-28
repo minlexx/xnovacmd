@@ -19,5 +19,6 @@
         <file alias="galaxy_32.png">i/galaxy_32.png</file>
         <file alias="planet_32.png">i/planet_32.png</file>
         <file alias="tools_32.png">i/tools_32.png</file>
+        <file alias="build.png">i/build.png</file>
     </qresource>
 </RCC>
