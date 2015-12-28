@@ -102,3 +102,22 @@ def number_format(num: int) -> str:
     if num < 0:
         s = '-' + s
     return s
+
+
+def time_seconds_to_str(secs: int) -> str:
+    days = secs // 84600
+    secs -= days * 84600
+    hours = secs // 3600
+    secs -= hours * 3600
+    mins = secs // 60
+    secs -= mins * 60
+    ret = ''
+    if days > 0:
+        ret += '{0} {1} '.format(str(days), QCoreApplication.translate('time_seconds_to_str', 'd.'))
+    if hours > 0:
+        ret += '{0} {1} '.format(str(hours), QCoreApplication.translate('time_seconds_to_str', 'h.'))
+    if mins > 0:
+        ret += '{0} {1} '.format(str(mins), QCoreApplication.translate('time_seconds_to_str', 'min'))
+    if secs > 0:
+        ret += '{0} {1}'.format(str(secs), QCoreApplication.translate('time_seconds_to_str', 'sec'))
+    return ret
