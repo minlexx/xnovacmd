@@ -694,7 +694,7 @@ class XNova_MainWindow(QWidget):
         pl1.fields_busy = 90
         pl1.fields_total = 167
         pl1.is_current = True
-        pl1.res_current.met = 100000
+        pl1.res_current.met = 10000000
         pl1.res_current.cry = 50000
         pl1.res_current.deit = 25000
         pl1.res_per_hour.met = 60000
