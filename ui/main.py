@@ -387,6 +387,7 @@ class XNova_MainWindow(QWidget):
         # destroy login widget and remove its tab
         self.remove_tab(0)
         self.login_widget.close()
+        self.login_widget.deleteLater()
         self.login_widget = None
         #
         # create overview widget and add it as first tab
@@ -693,6 +694,15 @@ class XNova_MainWindow(QWidget):
         pl1.fields_busy = 90
         pl1.fields_total = 167
         pl1.is_current = True
+        pl1.res_current.met = 100000
+        pl1.res_current.cry = 50000
+        pl1.res_current.deit = 25000
+        pl1.res_per_hour.met = 60000
+        pl1.res_per_hour.cry = 30000
+        pl1.res_per_hour.deit = 15000
+        pl1.energy.energy_left = 10
+        pl1.energy.energy_total = 1962
+        pl1.energy.charge_percent = 92
         # planet building item
         bitem = XNPlanetBuildingItem()
         bitem.gid = 1
