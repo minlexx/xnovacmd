@@ -144,7 +144,7 @@ class FlightsWidget(QWidget):
         self._btn_newmsg.update()
 
     @staticmethod
-    def _get_mis_bgcolor(fl: XNFlight) -> QColor:
+    def _get_flight_bgcolor(fl: XNFlight) -> QColor:
         ret = QColor(255, 255, 255)
         mis = fl.mission
         if mis == 'ownharvest':
@@ -166,14 +166,14 @@ class FlightsWidget(QWidget):
         elif mis == 'attack':
             ret = QColor(255, 230, 230)
         if fl.direction == 'return':
-            # darken
+            # darken -20%
             ret.setRed(ret.red() * 0.8)
             ret.setGreen(ret.green() * 0.8)
             ret.setBlue(ret.blue() * 0.8)
         return ret
 
     @staticmethod
-    def _get_mis_fgcolor(fl: XNFlight) -> QColor:
+    def _get_flight_fgcolor(fl: XNFlight) -> QColor:
         ret = QColor(0, 0, 0)
         if fl.mission == 'attack':
             ret = QColor(200, 0, 0)
@@ -236,8 +236,8 @@ class FlightsWidget(QWidget):
             # self.ui.tw_flights.insertRow(irow)
             self._set_twi(irow, self.COL_TIME, timer_str)
             self._set_twi(irow, self.COL_MISSION, mis_str,
-                          self._get_mis_bgcolor(fl),
-                          self._get_mis_fgcolor(fl))
+                          self._get_flight_bgcolor(fl),
+                          self._get_flight_fgcolor(fl))
             self._set_twi(irow, self.COL_FROM, str(fl.src))
             self._set_twi(irow, self.COL_TO, str(fl.dst))
             self._set_twi(irow, self.COL_PLAYER, str(fl.enemy_name))
