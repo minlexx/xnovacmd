@@ -20,5 +20,9 @@
         <file alias="planet_32.png">i/planet_32.png</file>
         <file alias="tools_32.png">i/tools_32.png</file>
         <file alias="build.png">i/build.png</file>
+        <file alias="s_metall.png">i/s_metall.png</file>
+        <file alias="s_kristall.png">i/s_kristall.png</file>
+        <file alias="s_deuterium.png">i/s_deuterium.png</file>
+        <file alias="s_energy.png">i/s_energy.png</file>
     </qresource>
 </RCC>
