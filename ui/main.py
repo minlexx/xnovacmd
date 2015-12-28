@@ -693,5 +693,29 @@ class XNova_MainWindow(QWidget):
         pl1.fields_busy = 90
         pl1.fields_total = 167
         pl1.is_current = True
+        # planet building item
+        bitem = XNPlanetBuildingItem()
+        bitem.gid = 1
+        bitem.name = 'Рудник металла'
+        bitem.level = 29
+        bitem.remove_link = ''
+        bitem.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem.gid)
+        bitem.seconds_total = 23746
+        bitem.cost_met = 7670042
+        bitem.cost_cry = 1917510
+        bitem.is_building_item = True
+        # second bitem
+        bitem2 = XNPlanetBuildingItem()
+        bitem2.gid = 2
+        bitem2.name = 'Рудник кристалла'
+        bitem2.level = 26
+        bitem2.remove_link = ''
+        bitem2.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem2.gid)
+        bitem2.seconds_total = 13746
+        bitem2.cost_met = 9735556
+        bitem2.cost_cry = 4667778
+        bitem2.is_building_item = True
+        # add bitems
+        pl1.buildings_items = [bitem, bitem2]
         # add
         self.add_tab_for_planet(pl1)
