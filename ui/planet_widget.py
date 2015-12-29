@@ -484,12 +484,15 @@ class PlanetWidget(QFrame):
         self._bpw_buildings = BuildProgressWidget(self)
         self._bpw_buildings.hide()
         self._bpw_buildings.hide_planet_name()
+        self._bpw_buildings.layout().setContentsMargins(5, 2, 5, 2)
         self._bpw_shipyard = BuildProgressWidget(self)
         self._bpw_shipyard.hide()
         self._bpw_shipyard.hide_planet_name()
+        self._bpw_shipyard.layout().setContentsMargins(5, 2, 5, 2)
         self._bpw_research = BuildProgressWidget(self)
         self._bpw_research.hide()
         self._bpw_research.hide_planet_name()
+        self._bpw_research.layout().setContentsMargins(5, 2, 5, 2)
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
@@ -533,6 +536,9 @@ class PlanetWidget(QFrame):
         self._cf_shipyard.collapsed.connect(self.on_frame_shipyard_collapsed)
         self._cf_research.expanded.connect(self.on_frame_research_expanded)
         self._cf_research.collapsed.connect(self.on_frame_research_collapsed)
+        #
+        self._bpw_buildings.requestCancelBuild.connect(self.on_request_cancel_build)
+        self._bpw_research.requestCancelBuild.connect(self.on_request_cancel_build)
         #
         # create timer
         self._timer = QTimer(self)
@@ -583,6 +589,16 @@ class PlanetWidget(QFrame):
     @pyqtSlot(int, str)
     def on_request_rename_planet(self, planet_id: int, planet_name: str):
         self.world.signal(self.world.SIGNAL_RENAME_PLANET, planet_id=planet_id, new_name=planet_name)
+
+    @pyqtSlot(XNPlanetBuildingItem)
+    def on_request_cancel_build(self, bitem: XNPlanetBuildingItem):
+        if bitem is None:
+            return
+        if (bitem.remove_link is None) or (bitem.remove_link == ''):
+            return
+        logger.debug('Request to cancel bitem: {0}'.format(str(bitem)))
+        # TODO: handle request to cancel build item!
+        pass
 
     @pyqtSlot()
     def on_frame_buildings_collapsed(self):
