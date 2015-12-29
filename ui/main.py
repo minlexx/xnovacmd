@@ -359,7 +359,7 @@ class XNova_MainWindow(QWidget):
             menu.addAction(action)
         action_ret = menu.exec(pos)
         if action_ret is not None:
-            logger.debug('selected action data = {0}'.format(str(action_ret.data())))
+            # logger.debug('selected action data = {0}'.format(str(action_ret.data())))
             if action_ret == galaxy_action:
                 logger.debug('action_ret == galaxy_action')
                 self.add_tab_for_galaxy()
