@@ -65,11 +65,13 @@ class CollapsibleFrame(QFrame):
         self._button.setArrowType(Qt.DownArrow)
         self._panel.setVisible(True)
         self._is_collapsed = False
+        self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 
     def collapse(self):
         self._panel.setVisible(False)
         self._button.setArrowType(Qt.RightArrow)
         self._is_collapsed = True
+        self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
 
     @pyqtSlot()
     def on_button_click(self):
