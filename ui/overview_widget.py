@@ -1,21 +1,18 @@
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, pyqtSlot, QRect
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, \
-    QHBoxLayout, QGroupBox, QLabel, QProgressBar
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, QHBoxLayout
+from PyQt5.QtGui import QIcon
 
-from .xnova.xn_data import fraction_from_name, XNAccountInfo, XNPlanet, XNPlanetBuildingItem
-from .xnova.xn_world import XNovaWorld_instance
-from .xnova import xn_logger
+from ui.xnova.xn_data import fraction_from_name, XNAccountInfo
+from ui.xnova.xn_world import XNovaWorld_instance
+from ui.xnova import xn_logger
 
-from .customwidgets.collapsible_frame import CollapsibleFrame
-from .widget_utils import number_format
+from ui.customwidgets.collapsible_frame import CollapsibleFrame
+from ui.customwidgets.build_progress_widget import BuildProgressWidget
+from ui.widget_utils import number_format
+
 
 logger = xn_logger.get(__name__, debug=True)
-
-
-BPW_TYPE_SHIPYARD = 'shipyard'
-BPW_TYPE_RESEARCH = 'research'
 
 
 class  Overview_AccStatsWidget(QWidget):
@@ -78,180 +75,6 @@ class  Overview_AccStatsWidget(QWidget):
             self.ui.tw_accStats.setItem(9, 1, twi)
 
 
-class Overview_BuildProgressWidget(QWidget):
-    def __init__(self, parent=None):
-        super(Overview_BuildProgressWidget, self).__init__(parent)
-        self.planet = None
-        self.building_item = None
-        self.is_shipyard = False
-        self.is_research = False
-        self.load_ui()
-
-    def __str__(self) -> str:
-        ret = ''
-        if self.planet is not None:
-            ret += self.planet.name + ' '
-        if self.building_item is not None:
-            ret += self.building_item.name
-            if self.is_shipyard:
-                ret += ' (shipyard)'
-            if self.is_research:
-                ret += ' (research)'
-        return ret
-
-    def load_ui(self):
-        self._layout = QHBoxLayout()
-        self._layout.setContentsMargins(1, 1, 1, 1)
-        self._layout.setSpacing(1)
-        self.setLayout(self._layout)
-        # label - planet name (0)
-        self._lbl_planetName = QLabel(self)
-        self._lbl_planetName.setText('')
-        font = self._lbl_planetName.font()
-        font.setWeight(QFont.Bold)  # fix label font weight to bold
-        self._lbl_planetName.setFont(font)
-        self._lbl_planetName.setMinimumWidth(120)
-        self._layout.addWidget(self._lbl_planetName)
-        # label - planet coords (1)
-        self._lbl_planetCoords = QLabel(self)
-        self._lbl_planetCoords.setText(' [0:0:0] ')
-        self._lbl_planetCoords.setMinimumWidth(70)
-        self._layout.addWidget(self._lbl_planetCoords)
-        # label - building name (and lvl) (2)
-        self._lbl_buildName = QLabel(self)
-        self._lbl_buildName.setText('')
-        self._lbl_buildName.setMinimumWidth(220)
-        self._layout.addWidget(self._lbl_buildName)
-        # label - build time left (3)
-        self._lbl_buildTime = QLabel(self)
-        self._lbl_buildTime.setText('')
-        self._lbl_buildTime.setMinimumWidth(70)
-        self._layout.addWidget(self._lbl_buildTime)
-        # progress bar (4)
-        self._pb = QProgressBar(self)
-        self._pb.setRange(0, 99)
-        self._pb.setValue(0)
-        self._layout.addWidget(self._pb)
-        # button cancel (5)
-        self._btn_cancel = QPushButton(self)
-        self._btn_cancel.setText('')
-        self._btn_cancel.setIcon(QIcon(':i/cancel.png'))
-        self._layout.addWidget(self._btn_cancel)
-        self._btn_cancel.clicked.connect(self.on_btn_cancel)
-
-    def hide(self):
-        super(Overview_BuildProgressWidget, self).hide()
-        self.planet = None
-        self.building_item = None
-        self.is_shipyard = False
-        self.is_research = False
-
-    def _set_percent_complete(self, bi: XNPlanetBuildingItem):
-        secs_passed = bi.seconds_total - bi.seconds_left
-        percent_complete = (100 * secs_passed) // bi.seconds_total
-        self._pb.setValue(percent_complete)
-
-    def _set_buildtime(self, bi: XNPlanetBuildingItem):
-        # calc and set time left
-        secs_left = bi.seconds_left
-        hours_left = secs_left // 3600
-        secs_left -= hours_left * 3600
-        mins_left = secs_left // 60
-        secs_left -= mins_left * 60
-        bl_str = '({0:02}:{1:02}:{2:02})'.format(hours_left, mins_left, secs_left)
-        self._lbl_buildTime.setText(bl_str)
-
-    def update_from_planet(self, planet: XNPlanet, typ: str = ''):
-        self.planet = planet
-        self.building_item = None
-        self.is_shipyard = False
-        self.is_research = False
-        # config UI
-        self._lbl_planetName.setText(planet.name)
-        self._lbl_planetCoords.setText(' [{0}:{1}:{2}] '.format(
-            planet.coords.galaxy, planet.coords.system, planet.coords.position))
-        if typ == '':
-            # set from normal building
-            if len(planet.buildings_items) > 0:
-                for bi in planet.buildings_items:
-                    if bi.is_in_progress():
-                        self.building_item = bi
-                        self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
-                        self._set_percent_complete(bi)
-                        self._set_buildtime(bi)
-                        self.show()
-                        return
-            # if we are here, no builds are in progress
-            self.hide()
-            return
-        elif typ == BPW_TYPE_SHIPYARD:
-            self.is_shipyard = True
-            self._btn_cancel.setEnabled(False)  # cannot cancel shipyard jobs
-            # set from shipyard item
-            for bi in planet.shipyard_progress_items:
-                self.building_item = bi
-                self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
-                self._set_percent_complete(bi)
-                self._set_buildtime(bi)
-                return
-        elif typ == BPW_TYPE_RESEARCH:
-            self.is_research = True
-            for bi in planet.research_items:
-                if bi.is_in_progress():
-                    self.building_item = bi
-                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
-                    self._set_percent_complete(bi)
-                    self._set_buildtime(bi)
-                    self.show()
-                    return
-            # also check researchfleet_items
-            for bi in planet.researchfleet_items:
-                if bi.is_in_progress():
-                    self.building_item = bi
-                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
-                    self._set_percent_complete(bi)
-                    self._set_buildtime(bi)
-                    self.show()
-                    return
-            # if we are here, no researches in progress were found (return is in previuos line)
-            self.hide()
-        else:
-            logger.error('update_from_planet(): unknown type: {0}'.format(typ))
-
-    def get_els_widths(self):
-        # that is incorrect, we should probably not use widgets widths
-        # but instead use layout items geometries
-        #plname_w = self._lbl_planetName.width()
-        #plcoords_w = self._lbl_planetCoords.width()
-        #bname_w = self._lbl_buildName.width()
-        #btime_w = self._lbl_buildTime.width()
-        # this works the same way :(
-        plname_w = self._layout.itemAt(0).geometry().width()
-        plcoords_w = self._layout.itemAt(1).geometry().width()
-        bname_w = self._layout.itemAt(2).geometry().width()
-        btime_w = self._layout.itemAt(3).geometry().width()
-        # total width
-        ret_w = plname_w + plcoords_w + bname_w + btime_w
-        logger.debug('w {0}+{1}+{2}+{3}={4}'.format(plname_w, plcoords_w, bname_w, btime_w, ret_w))
-        return  ret_w
-
-    def make_as_wide_as(self, maxwidth: int):
-        my_w = self.get_els_widths()
-        if my_w >= maxwidth:
-            return
-        width_not_enough = maxwidth - my_w
-        btime_w = self._lbl_buildTime.width()
-        self._lbl_buildTime.setMinimumWidth(btime_w + width_not_enough)
-
-    @pyqtSlot()
-    def on_btn_cancel(self):
-        remove_link = None
-        if self.building_item is not None:
-            remove_link = self.building_item.remove_link
-        logger.debug('Overview_BuildProgressWidget: cancel clicked, remove_link = [{0}]'.\
-                     format(remove_link))
-
-
 # Manages "Overview" tab widget
 class OverviewWidget(QWidget):
     def __init__(self, parent=None):
@@ -309,30 +132,30 @@ class OverviewWidget(QWidget):
         if self._aswidget is not None:
             self._aswidget.update_account_info(a)
 
-    def get_bpw_for_planet(self, planet_id: int, typ: str='') -> Overview_BuildProgressWidget:
+    def get_bpw_for_planet(self, planet_id: int, typ: str='') -> BuildProgressWidget:
         if typ == '':
             if planet_id in self.bp_widgets:
                 return self.bp_widgets[planet_id]
             # create BPW for planet
-            bpw = Overview_BuildProgressWidget(self)
+            bpw = BuildProgressWidget(self)
             self._gb_builds.addWidget(bpw)
             self.bp_widgets[planet_id] = bpw
             bpw.hide()
             return bpw
-        elif typ == BPW_TYPE_SHIPYARD:
+        elif typ == BuildProgressWidget.BPW_TYPE_SHIPYARD:
             if planet_id in self.bp_widgets_sy:
                 return self.bp_widgets_sy[planet_id]
             # create BPW for planet shipyard
-            bpw = Overview_BuildProgressWidget(self)
+            bpw = BuildProgressWidget(self)
             self._gb_shipyard.addWidget(bpw)
             self.bp_widgets_sy[planet_id] = bpw
             bpw.hide()
             return bpw
-        elif typ == BPW_TYPE_RESEARCH:
+        elif typ == BuildProgressWidget.BPW_TYPE_RESEARCH:
             if planet_id in self.bp_widgets_res:
                 return self.bp_widgets_res[planet_id]
             # create BPW for planet shipyard
-            bpw = Overview_BuildProgressWidget(self)
+            bpw = BuildProgressWidget(self)
             self._gb_research.addWidget(bpw)
             self.bp_widgets_res[planet_id] = bpw
             bpw.hide()
@@ -354,12 +177,12 @@ class OverviewWidget(QWidget):
             bpw.update_from_planet(pl)
             # shipyard
             if len(pl.shipyard_progress_items) > 0:
-                bpw = self.get_bpw_for_planet(pl.planet_id, BPW_TYPE_SHIPYARD)
+                bpw = self.get_bpw_for_planet(pl.planet_id, BuildProgressWidget.BPW_TYPE_SHIPYARD)
                 bpw.show()
-                bpw.update_from_planet(pl, BPW_TYPE_SHIPYARD)
+                bpw.update_from_planet(pl, BuildProgressWidget.BPW_TYPE_SHIPYARD)
             # researches
-            bpw = self.get_bpw_for_planet(pl.planet_id, BPW_TYPE_RESEARCH)
-            bpw.update_from_planet(pl, BPW_TYPE_RESEARCH)
+            bpw = self.get_bpw_for_planet(pl.planet_id, BuildProgressWidget.BPW_TYPE_RESEARCH)
+            bpw.update_from_planet(pl, BuildProgressWidget.BPW_TYPE_RESEARCH)
         # make equal widths (this is not working, why?)
         # self._equalize_builds_widths()
         self.setUpdatesEnabled(True)
