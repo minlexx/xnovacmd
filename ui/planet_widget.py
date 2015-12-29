@@ -173,6 +173,9 @@ class Planet_BasicInfoPanel(QFrame):
 
 
 class Planet_BuildItemWidget(QFrame):
+
+    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)  # bitem, optional quantity for shipyard
+
     def __init__(self, parent: QWidget):
         super(Planet_BuildItemWidget, self).__init__(parent)
         # data members
@@ -225,6 +228,7 @@ class Planet_BuildItemWidget(QFrame):
         self._btn_upgrade = QPushButton(self.tr('Upgrade'), self)
         self._btn_upgrade.setIcon(QIcon(':/i/build.png'))
         self._btn_upgrade.setMaximumHeight(25)
+        self._btn_upgrade.clicked.connect(self.on_upgrade_clicked)
         # construct layout
         # name, level
         self._layout_nl.addWidget(self._lbl_name)
@@ -363,12 +367,18 @@ class Planet_BuildItemWidget(QFrame):
         elif self._bitem.is_research_item or self._bitem.is_researchfleet_item:
             self._btn_upgrade.setText(self.tr('Research'))
 
+    @pyqtSlot()
+    def on_upgrade_clicked(self):
+        self.requestBuildItem.emit(self._bitem, 0)
+
 
 class Planet_BuildItemsPanel(QFrame):
 
     TYPE_BUILDINGS = 'buildings'
     TYPE_SHIPYARD = 'shipyard'
     TYPE_RESEARCHES = 'researches'
+
+    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)  # bitem, optional quantity (for shipyard)
 
     def __init__(self, parent: QWidget):
         super(Planet_BuildItemsPanel, self).__init__(parent)
@@ -444,6 +454,7 @@ class Planet_BuildItemsPanel(QFrame):
         if gid not in self._biws:
             biw = Planet_BuildItemWidget(self)
             biw.hide()
+            biw.requestBuildItem.connect(self.on_request_build_item)
             self._biws[gid] = biw
             self._layout.addWidget(biw, self._layout_lastrow, self._layout_lastcol)
             self._layout_lastcol += 1
@@ -453,6 +464,10 @@ class Planet_BuildItemsPanel(QFrame):
         else:
             biw = self._biws[gid]
         return biw
+
+    @pyqtSlot(XNPlanetBuildingItem, int)
+    def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
+        self.requestBuildItem.emit(bitem, quantity)
 
 
 class PlanetWidget(QFrame):
@@ -540,6 +555,10 @@ class PlanetWidget(QFrame):
         self._bpw_buildings.requestCancelBuild.connect(self.on_request_cancel_build)
         self._bpw_research.requestCancelBuild.connect(self.on_request_cancel_build)
         #
+        self._bip_buildings.requestBuildItem.connect(self.on_request_build_item)
+        self._bip_shipyard.requestBuildItem.connect(self.on_request_build_item)
+        self._bip_research.requestBuildItem.connect(self.on_request_build_item)
+        #
         # create timer
         self._timer = QTimer(self)
         self._timer.timeout.connect(self.on_timer)
@@ -598,7 +617,11 @@ class PlanetWidget(QFrame):
             return
         logger.debug('Request to cancel bitem: {0}'.format(str(bitem)))
         # TODO: handle request to cancel build item!
-        pass
+
+    @pyqtSlot(XNPlanetBuildingItem, int)
+    def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
+        logger.debug('Request to build: {0}'.format(str(bitem)))
+        # TODO: handle request to build item!
 
     @pyqtSlot()
     def on_frame_buildings_collapsed(self):
