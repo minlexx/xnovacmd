@@ -10,8 +10,10 @@ from ui.xnova import xn_logger
 
 from ui.customwidgets.collapsible_frame import CollapsibleFrame
 from ui.customwidgets.input_string_dialog import input_string_dialog
+from ui.customwidgets.build_progress_widget import BuildProgressWidget
 
 from ui.widget_utils import number_format, time_seconds_to_str
+
 
 logger = xn_logger.get(__name__, debug=True)
 
@@ -108,10 +110,6 @@ class Planet_BasicInfoPanel(QFrame):
         self._layout.addWidget(self._lbl_img)
         self._layout.addLayout(self._vlayout)
         self._layout.addStretch()
-        #
-        # setup timer
-        self._timer = QTimer(self)
-        self._timer.timeout.connect(self.on_timer)
 
     def setup_from_planet(self, planet: XNPlanet):
         # store references
@@ -135,14 +133,9 @@ class Planet_BasicInfoPanel(QFrame):
                                                            planet.fields_total,
                                                            fields_left_str))
         # resources
-        self._set_resources()
-        # restart timer
-        self._timer.stop()
-        self._timer.setInterval(1000)
-        self._timer.setSingleShot(False)
-        self._timer.start()
+        self.update_resources()
 
-    def _set_resources(self):
+    def update_resources(self):
         # update planet resources
         self._lbl_cur_met.setText(number_format(int(self._planet.res_current.met)))
         self._lbl_cur_cry.setText(number_format(int(self._planet.res_current.cry)))
@@ -162,10 +155,6 @@ class Planet_BasicInfoPanel(QFrame):
     @pyqtSlot()
     def on_btn_refresh_clicked(self):
         self.requestRefreshPlanet.emit()
-
-    @pyqtSlot()
-    def on_timer(self):
-        self._set_resources()
 
     @pyqtSlot()
     def on_action_renameplanet(self):
@@ -491,6 +480,16 @@ class PlanetWidget(QFrame):
         self._bipanel.requestOpenGalaxy.connect(self.on_request_open_galaxy)
         self._bipanel.requestRefreshPlanet.connect(self.on_request_refresh_planet)
         self._bipanel.requestRenamePlanet.connect(self.on_request_rename_planet)
+        # build progress widgets
+        self._bpw_buildings = BuildProgressWidget(self)
+        self._bpw_buildings.hide()
+        self._bpw_buildings.hide_planet_name()
+        self._bpw_shipyard = BuildProgressWidget(self)
+        self._bpw_shipyard.hide()
+        self._bpw_shipyard.hide_planet_name()
+        self._bpw_research = BuildProgressWidget(self)
+        self._bpw_research.hide()
+        self._bpw_research.hide_planet_name()
         # buildings
         self._cf_buildings = CollapsibleFrame(self)
         self._cf_buildings.setTitle(self.tr('Buildings'))
@@ -518,6 +517,9 @@ class PlanetWidget(QFrame):
         self._cf_research.addWidget(self._sa_research)
         # layout finalize
         self._layout.addWidget(self._bipanel)
+        self._layout.addWidget(self._bpw_buildings)
+        self._layout.addWidget(self._bpw_shipyard)
+        self._layout.addWidget(self._bpw_research)
         self._layout.addWidget(self._cf_buildings)
         self._layout.addWidget(self._cf_shipyard)
         self._layout.addWidget(self._cf_research)
@@ -531,19 +533,44 @@ class PlanetWidget(QFrame):
         self._cf_shipyard.collapsed.connect(self.on_frame_shipyard_collapsed)
         self._cf_research.expanded.connect(self.on_frame_research_expanded)
         self._cf_research.collapsed.connect(self.on_frame_research_collapsed)
+        #
+        # create timer
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self.on_timer)
 
     def get_tab_type(self) -> str:
         return 'planet'
 
     def setPlanet(self, planet: XNPlanet):
         self._planet = planet
+        # setup basic info panel
         self._bipanel.setup_from_planet(self._planet)
+        # setup build progress widgets
+        self._bpw_buildings.update_from_planet(planet, typ='')
+        self._bpw_shipyard.update_from_planet(planet, typ=BuildProgressWidget.BPW_TYPE_SHIPYARD)
+        self._bpw_research.update_from_planet(planet, typ=BuildProgressWidget.BPW_TYPE_RESEARCH)
+        # setup build items panels (in collapsible frames)
         self._bip_buildings.set_planet(planet)
         self._bip_shipyard.set_planet(planet)
         self._bip_research.set_planet(planet)
+        #
+        # start/restart timer
+        self._timer.stop()
+        self._timer.setInterval(1000)
+        self._timer.setSingleShot(False)
+        self._timer.start()
 
     def planet(self) -> XNPlanet:
         return self._planet
+
+    @pyqtSlot()
+    def on_timer(self):
+        # update basic info panel - refresh resources
+        self._bipanel.update_resources()
+        # update build progress widgets - tick builds
+        self._bpw_buildings.update_from_planet(self._planet)
+        self._bpw_shipyard.update_from_planet(self._planet, BuildProgressWidget.BPW_TYPE_SHIPYARD)
+        self._bpw_research.update_from_planet(self._planet, BuildProgressWidget.BPW_TYPE_RESEARCH)
 
     @pyqtSlot(XNCoords)
     def on_request_open_galaxy(self, coords: XNCoords):
