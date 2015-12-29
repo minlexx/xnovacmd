@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt, QVariant, QTimer
 from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
     QPushButton, QLabel, QVBoxLayout, QHBoxLayout, QLineEdit, QToolButton, \
-    QMessageBox, QGridLayout, QScrollArea, QLayout, QSizePolicy
+    QMessageBox, QGridLayout, QScrollArea, QLayout
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
 from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem, XNResourceBundle
@@ -279,8 +279,8 @@ class Planet_BuildItemWidget(QFrame):
         if not self._pix.load(pix_fn):
             logger.warn('Failed to load pixmap from: [{0}]'.format(pix_fn))
         else:
-            # self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
-            self._lbl_pix.setPixmap(self._pix)
+            self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
+            # self._lbl_pix.setPixmap(self._pix)
         # name, level
         self._lbl_name.setText(bitem.name)
         self._lbl_lvl.setText(str(bitem.level))
@@ -375,7 +375,6 @@ class Planet_BuildItemsPanel(QFrame):
         self._type = ''
         self._planet = XNPlanet()
         # setup frame
-        # self.setFrameShape(QFrame.StyledPanel)
         self.setFrameShape(QFrame.NoFrame)
         self.setFrameShadow(QFrame.Raised)
         # layout
@@ -387,10 +386,9 @@ class Planet_BuildItemsPanel(QFrame):
         self._layout.setSizeConstraint(QLayout.SetMinimumSize)
         self.setLayout(self._layout)
         #
-        # self._lbl = QLabel('ololo', self)
-        # self._layout.addWidget(self._lbl)
         # build item widgets
         self._biws = dict()
+        # "constants"
         self.MAX_COLS = 3
 
     def get_type(self) -> str:
@@ -413,7 +411,21 @@ class Planet_BuildItemsPanel(QFrame):
         if self._type == self.TYPE_BUILDINGS:
             for bitem in self._planet.buildings_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_left)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.show()
+        elif self._type == self.TYPE_SHIPYARD:
+            for bitem in self._planet.shipyard_tems:
+                biw = self.biw_for_gid(bitem.gid)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.show()
+        elif self._type == self.TYPE_RESEARCHES:
+            for bitem in self._planet.research_items:
+                biw = self.biw_for_gid(bitem.gid)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.show()
+            for bitem in self._planet.researchfleet_items:
+                biw = self.biw_for_gid(bitem.gid)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
                 biw.show()
 
     def biw_for_gid(self, gid: int) -> Planet_BuildItemWidget:
@@ -469,27 +481,38 @@ class PlanetWidget(QFrame):
         self._bip_buildings.set_type(Planet_BuildItemsPanel.TYPE_BUILDINGS)
         self._bip_buildings.show()
         self._sa_buildings.setWidget(self._bip_buildings)
-        # self._cf_buildings.addWidget(self._bip_buildings)
         self._cf_buildings.addWidget(self._sa_buildings)
-        self._cf_buildings.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         # shipyard
         self._cf_shipyard = CollapsibleFrame(self)
         self._cf_shipyard.setTitle(self.tr('Shipyard'))
+        self._sa_shipyard = QScrollArea(self._cf_shipyard)
         self._bip_shipyard = Planet_BuildItemsPanel(self._cf_shipyard)
         self._bip_shipyard.set_type(Planet_BuildItemsPanel.TYPE_SHIPYARD)
-        self._cf_shipyard.addWidget(self._bip_shipyard)
+        self._sa_shipyard.setWidget(self._bip_shipyard)
+        self._cf_shipyard.addWidget(self._sa_shipyard)
         # research
         self._cf_research = CollapsibleFrame(self)
         self._cf_research.setTitle(self.tr('Research'))
+        self._sa_research = QScrollArea(self._cf_research)
         self._bip_research = Planet_BuildItemsPanel(self._cf_research)
         self._bip_research.set_type(Planet_BuildItemsPanel.TYPE_RESEARCHES)
-        self._cf_research.addWidget(self._bip_research)
+        self._sa_research.setWidget(self._bip_research)
+        self._cf_research.addWidget(self._sa_research)
         # layout finalize
         self._layout.addWidget(self._bipanel)
         self._layout.addWidget(self._cf_buildings)
         self._layout.addWidget(self._cf_shipyard)
         self._layout.addWidget(self._cf_research)
-        self._layout.addStretch()
+        # expand buildings frame by default
+        self._cf_buildings.expand()
+        #
+        # connect signals
+        self._cf_buildings.expanded.connect(self.on_frame_buildings_expanded)
+        self._cf_buildings.collapsed.connect(self.on_frame_buildings_collapsed)
+        self._cf_shipyard.expanded.connect(self.on_frame_shipyard_expanded)
+        self._cf_shipyard.collapsed.connect(self.on_frame_shipyard_collapsed)
+        self._cf_research.expanded.connect(self.on_frame_research_expanded)
+        self._cf_research.collapsed.connect(self.on_frame_research_collapsed)
 
     def get_tab_type(self) -> str:
         return 'planet'
@@ -515,3 +538,33 @@ class PlanetWidget(QFrame):
     @pyqtSlot(int, str)
     def on_request_rename_planet(self, planet_id: int, planet_name: str):
         self.world.signal(self.world.SIGNAL_RENAME_PLANET, planet_id=planet_id, new_name=planet_name)
+
+    @pyqtSlot()
+    def on_frame_buildings_collapsed(self):
+        pass
+
+    @pyqtSlot()
+    def on_frame_buildings_expanded(self):
+        # collapse other frames
+        self._cf_shipyard.collapse()
+        self._cf_research.collapse()
+
+    @pyqtSlot()
+    def on_frame_shipyard_collapsed(self):
+        pass
+
+    @pyqtSlot()
+    def on_frame_shipyard_expanded(self):
+        # collapse other frames
+        self._cf_buildings.collapse()
+        self._cf_research.collapse()
+
+    @pyqtSlot()
+    def on_frame_research_collapsed(self):
+        pass
+
+    @pyqtSlot()
+    def on_frame_research_expanded(self):
+        # collapse other frames
+        self._cf_buildings.collapse()
+        self._cf_shipyard.collapse()
