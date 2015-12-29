@@ -535,7 +535,7 @@ class XNovaWorld(QThread):
                 self._parser_planet_energy.parse_page_content(page_content)
                 if planet is not None:
                     # shipyard parser ships_avail can also parse planet defenses avail
-                    planet.defense_tems = self._parser_shipyard_ships_avail.ships_avail
+                    planet.defense_items = self._parser_shipyard_ships_avail.ships_avail
                     # even in defense page, ships build queue is the same as in shipyard page
                     planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_progress_items
                     if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
