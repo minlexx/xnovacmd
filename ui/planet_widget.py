@@ -129,8 +129,11 @@ class Planet_BasicInfoPanel(QFrame):
         # planet name, corods, fields
         self._lbl_name.setText(planet.name)
         self._lbl_coords.setText('<a href="{0}">{0}</a>'.format(planet.coords.coords_str()))
+        fields_left_str = '{0}: {1}'.format(self.tr('left'), planet.fields_total - planet.fields_busy)
         self._lbl_fields.setText(self.tr('Fields:') +
-                                 ' {0} / {1}'.format(planet.fields_busy, planet.fields_total))
+                                 ' {0} / {1} ({2})'.format(planet.fields_busy,
+                                                           planet.fields_total,
+                                                           fields_left_str))
         # resources
         self._set_resources()
         # restart timer
