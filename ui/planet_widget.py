@@ -286,7 +286,11 @@ class Planet_BuildItemWidget(QFrame):
             # self._lbl_pix.setPixmap(self._pix)
         # name, level
         self._lbl_name.setText(bitem.name)
-        self._lbl_lvl.setText(str(bitem.level))
+        if self._bitem.is_shipyard_item:
+            # shipyard items use quantity instead of level
+            self._lbl_lvl.setText(str(bitem.quantity))
+        else:
+            self._lbl_lvl.setText(str(bitem.level))
         # time
         if bitem.seconds_total != -1:
             self._lbl_timestr.setText(time_seconds_to_str(bitem.seconds_total))
@@ -364,6 +368,11 @@ class Planet_BuildItemWidget(QFrame):
             self._btn_upgrade.setEnabled(True)
         else:
             self._btn_upgrade.setEnabled(False)
+        # set button text
+        if self._bitem.is_shipyard_item:
+            self._btn_upgrade.setText(self.tr('Build'))
+        elif self._bitem.is_research_item or self._bitem.is_researchfleet_item:
+            self._btn_upgrade.setText(self.tr('Research'))
 
 
 class Planet_BuildItemsPanel(QFrame):
@@ -421,11 +430,17 @@ class Planet_BuildItemsPanel(QFrame):
                 biw = self.biw_for_gid(bitem.gid)
                 biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
                 biw.show()
+            # also defense items
+            for bitem in self._planet.defense_items:
+                biw = self.biw_for_gid(bitem.gid)
+                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.show()
         elif self._type == self.TYPE_RESEARCHES:
             for bitem in self._planet.research_items:
                 biw = self.biw_for_gid(bitem.gid)
                 biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
                 biw.show()
+            # also research_fleet items
             for bitem in self._planet.researchfleet_items:
                 biw = self.biw_for_gid(bitem.gid)
                 biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
