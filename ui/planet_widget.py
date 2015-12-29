@@ -272,7 +272,7 @@ class Planet_BuildItemWidget(QFrame):
         self._layout_buttons.addStretch()
         self._layout_v.addLayout(self._layout_buttons)
         #
-        self._layout.addWidget(self._lbl_pix)
+        self._layout.addWidget(self._lbl_pix, 0, Qt.AlignTop | Qt.AlignHCenter)
         self._layout.addLayout(self._layout_v)
 
     def set_building_item(self, bitem: XNPlanetBuildingItem, res_cur: XNResourceBundle, energy_cur: int):
@@ -282,7 +282,7 @@ class Planet_BuildItemWidget(QFrame):
         if not self._pix.load(pix_fn):
             logger.warn('Failed to load pixmap from: [{0}]'.format(pix_fn))
         else:
-            self._lbl_pix.setPixmap(self._pix.scaled(64, 64))
+            self._lbl_pix.setPixmap(self._pix.scaled(80, 80))
             # self._lbl_pix.setPixmap(self._pix)
         # name, level
         self._lbl_name.setText(bitem.name)
