@@ -692,8 +692,10 @@ class PlanetWidget(QFrame):
     def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
         if bitem is None:
             return
-        logger.debug('Request to build: {0}'.format(str(bitem)))
-        # TODO: handle request to build item!
+        self.world.signal(XNovaWorld.SIGNAL_BUILD_ITEM,
+                          planet_id=self._planet.planet_id,
+                          bitem=bitem,
+                          quantity=quantity)
 
     @pyqtSlot(XNPlanetBuildingItem)
     def on_request_downgrade_item(self, bitem: XNPlanetBuildingItem):
