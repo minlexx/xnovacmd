@@ -513,9 +513,12 @@ class XNovaWorld(QThread):
                     if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
                         logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
                             planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
-                    # save planet energy info
-                    planet.energy.energy_left = self._parser_planet_energy.energy_left
-                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet energy info, but do not overwrite with zeros
+                    # if there is no shipyard @ planet, no energy info will be on the page =(
+                    if self._parser_planet_energy.energy_left > 0:
+                        planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    if self._parser_planet_energy.energy_total > 0:
+                        planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
@@ -542,9 +545,12 @@ class XNovaWorld(QThread):
                     if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
                         logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
                             planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
-                    # save planet energy info
-                    planet.energy.energy_left = self._parser_planet_energy.energy_left
-                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet energy info, but do not overwrite with zeros
+                    # if there is no shipyard @ planet, no energy info will be on the page =(
+                    if self._parser_planet_energy.energy_left > 0:
+                        planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    if self._parser_planet_energy.energy_total > 0:
+                        planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected defense_123456'.format(page_name))
             except ValueError:  # failed to convert to int
@@ -567,9 +573,12 @@ class XNovaWorld(QThread):
                     if len(self._parser_researches_avail.researches_avail) > 0:
                         logger.info('Planet {0} has {1} researches avail'.format(
                             planet.name, len(self._parser_researches_avail.researches_avail)))
-                    # save planet energy info
-                    planet.energy.energy_left = self._parser_planet_energy.energy_left
-                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet energy info, but do not overwrite with zeros
+                    # if there is no lab @ planet, no energy info will be on the page =(
+                    if self._parser_planet_energy.energy_left > 0:
+                        planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    if self._parser_planet_energy.energy_total > 0:
+                        planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], '
                                  'expected research_123456'.format(page_name))
@@ -594,9 +603,12 @@ class XNovaWorld(QThread):
                     if len(self._parser_researches_avail.researches_avail) > 0:
                         logger.info('Planet {0} has {1} fleet researches avail'.format(
                             planet.name, len(self._parser_researches_avail.researches_avail)))
-                    # save planet energy info
-                    planet.energy.energy_left = self._parser_planet_energy.energy_left
-                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet energy info, but do not overwrite with zeros
+                    # if there is no lab @ planet, no energy info will be on the page =(
+                    if self._parser_planet_energy.energy_left > 0:
+                        planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    if self._parser_planet_energy.energy_total > 0:
+                        planet.energy.energy_total = self._parser_planet_energy.energy_total
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], '
                                  'expected researchfleet_123456'.format(page_name))
