@@ -236,6 +236,7 @@ class Planet_BuildItemWidget(QFrame):
         self._btn_downgrade.setIcon(QIcon(':/i/arrow_down_red_16.png'))
         self._btn_downgrade.setMaximumHeight(25)
         self._btn_downgrade.clicked.connect(self.on_downgrade_clicked)
+        self._btn_downgrade.setToolTip(self.tr('Dismantle'))
         self._btn_downgrade.hide()
         # line edit for quantity for shipyard items, hidden by default
         self._lineedit_quantity = QLineEdit(self)
@@ -384,6 +385,31 @@ class Planet_BuildItemWidget(QFrame):
         # set button text
         if self._bitem.is_shipyard_item:
             self._btn_upgrade.setText(self.tr('Build'))
+            # calculate maximum available to build
+            counts = [0, 0, 0, 0]
+            # check metal cost
+            if self._bitem.cost_met > 0:
+                counts[0] = int(res_cur.met // self._bitem.cost_met)
+            # check crystal cost
+            if self._bitem.cost_cry > 0:
+                counts[1] = int(res_cur.cry // self._bitem.cost_cry)
+            # check deit cost
+            if self._bitem.cost_deit > 0:
+                counts[2] = int(res_cur.deit // self._bitem.cost_deit)
+            # check energy
+            if self._bitem.cost_energy > 0:
+                counts[3] = int(energy_cur // self._bitem.cost_energy)
+            maxb = 0
+            for cnt in counts:  # find first count which is > 0
+                if cnt > 0:
+                    maxb = cnt
+                    break
+            for cnt in counts:  # find minimum count among counts, which is > 0
+                if cnt > 0:
+                    if cnt < maxb:
+                        maxb = cnt
+            # set tip
+            self._lineedit_quantity.setPlaceholderText(str(maxb))
         elif self._bitem.is_research_item or self._bitem.is_researchfleet_item:
             self._btn_upgrade.setText(self.tr('Research'))
         # show/hide additional buttons
