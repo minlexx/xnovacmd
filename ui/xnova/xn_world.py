@@ -31,6 +31,7 @@ class XNovaWorld(QThread):
     SIGNAL_RELOAD_PAGE = 1     # args: page_name
     SIGNAL_RENAME_PLANET = 2   # args: planet_id, new_name
     SIGNAL_RELOAD_PLANET = 3   # args: planet_id
+    SIGNAL_BUILD_ITEM = 4      # args: bitem: XNPlanetBuildingItem, quantity, planet_id
     # testing signals ... ?
     SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
@@ -649,6 +650,16 @@ class XNovaWorld(QThread):
                     gp.unscramble_galaxy_script()
                     logger.debug(gp.galaxy_rows)
 
+    def on_signal_build_item(self):
+        if ('bitem' in self._signal_kwargs) and ('planet_id' in self._signal_kwargs) \
+                and ('quantity' in self._signal_kwargs):
+            bitem = self._signal_kwargs['bitem']
+            planet_id = int(self._signal_kwargs['planet_id'])
+            quantity = int(self._signal_kwargs['quantity'])
+            self.lock()
+            self._request_build_item(planet_id, bitem, quantity)
+            self.unlock()
+
     def _internal_set_current_planet(self):
         """
         Just updates internal planets array with information
@@ -750,7 +761,7 @@ class XNovaWorld(QThread):
             else:  # download error
                 self._inc_network_errors()
         # parse page content independently if it was read from cache or by network from server
-        if page_content is not None:
+        if (page_content is not None) and (page_name is not None):
             self.on_page_downloaded(page_name)  # process downloaded page
         return page_content
 
@@ -865,6 +876,27 @@ class XNovaWorld(QThread):
         self._post_page_url(post_url, post_data, referer)
         logger.debug('Rename planet to [{0}] complete'.format(new_name))
 
+    def _request_build_item(self, planet_id: int, bitem: XNPlanetBuildingItem, quantity: int):
+        logger.debug('Request to build: {0} x {1} on planet {2}, build_link = [{3}]'.format(
+                bitem.name, quantity, planet_id, bitem.build_link))
+        if bitem.is_building_item or bitem.is_research_item or bitem.is_researchfleet_item:
+            if bitem.build_link is None or (bitem.build_link == ''):
+                logger.warn('bitem build_link is empty, cannot build!')
+                return
+            # construct page name
+            # successful request to build item redirects to buildings page
+            page_name = None
+            if bitem.is_building_item:
+                page_name = 'buildings_{0}'.format(planet_id)
+            elif bitem.is_research_item:
+                page_name = 'research_{0}'.format(planet_id)
+            elif bitem.is_researchfleet_item:
+                page_name = 'researchfleet_{0}'.format(planet_id)
+            # send request
+            self._get_page_url(page_name, bitem.build_link, max_cache_lifetime=0, force_download=True)
+        elif bitem.is_shipyard_item:
+            logger.warn('Cannot build shipyard items for now!')
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -952,6 +984,8 @@ class XNovaWorld(QThread):
                 self.on_signal_rename_planet()
             elif ret == self.SIGNAL_RELOAD_PLANET:
                 self.on_signal_reload_planet()
+            elif ret == self.SIGNAL_BUILD_ITEM:
+                self.on_signal_build_item()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
             #
