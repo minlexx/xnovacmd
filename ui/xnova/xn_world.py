@@ -32,6 +32,7 @@ class XNovaWorld(QThread):
     SIGNAL_RENAME_PLANET = 2   # args: planet_id, new_name
     SIGNAL_RELOAD_PLANET = 3   # args: planet_id
     SIGNAL_BUILD_ITEM = 4      # args: bitem: XNPlanetBuildingItem, quantity, planet_id
+    SIGNAL_BUILD_CANCEL = 5    # args: bitem: XNPlanetBuildingItem, planet_id
     # testing signals ... ?
     SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
@@ -672,6 +673,14 @@ class XNovaWorld(QThread):
             self._request_build_item(planet_id, bitem, quantity)
             self.unlock()
 
+    def on_signal_build_cancel(self):
+        if ('bitem' in self._signal_kwargs) and ('planet_id' in self._signal_kwargs):
+            bitem = self._signal_kwargs['bitem']
+            planet_id = int(self._signal_kwargs['planet_id'])
+            self.lock()
+            self._request_build_cacnel(planet_id, bitem)
+            self.unlock()
+
     def _internal_set_current_planet(self):
         """
         Just updates internal planets array with information
@@ -909,6 +918,24 @@ class XNovaWorld(QThread):
         elif bitem.is_shipyard_item:
             logger.warn('Cannot build shipyard items for now!')
 
+    def _request_build_cancel(self, planet_id: int, bitem: XNPlanetBuildingItem):
+        logger.debug('Request to cancel build: {0} on planet {1}, remove_link = [{2}]'.format(
+                bitem.name, planet_id, bitem.remove_link))
+        if bitem.is_building_item or bitem.is_research_item or bitem.is_researchfleet_item:
+            # construct page name
+            # successful request to cancel build item redirects to buildings page
+            page_name = None
+            if bitem.is_building_item:
+                page_name = 'buildings_{0}'.format(planet_id)
+            elif bitem.is_research_item:
+                page_name = 'research_{0}'.format(planet_id)
+            elif bitem.is_researchfleet_item:
+                page_name = 'researchfleet_{0}'.format(planet_id)
+            # send request
+            self._get_page_url(page_name, bitem.remove_link, max_cache_lifetime=0, force_download=True)
+        else:
+            logger.warn('Cannot cancel shipyard item: {0}'.format(bitem))
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -998,6 +1025,8 @@ class XNovaWorld(QThread):
                 self.on_signal_reload_planet()
             elif ret == self.SIGNAL_BUILD_ITEM:
                 self.on_signal_build_item()
+            elif ret == self.SIGNAL_BUILD_CANCEL:
+                self.on_signal_build_cancel()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
             #
