@@ -704,9 +704,15 @@ class PlanetWidget(QFrame):
         if not bitem.is_building_item:
             logger.warn('Cannot dismantle item that is not building: {0}'.format(bitem))
             return
-        self.world.signal(XNovaWorld.SIGNAL_BUILD_DISMANTLE,
-                          planet_id=self._planet.planet_id,
-                          bitem=bitem)
+        btn = QMessageBox.question(self,
+                self.tr('Downgrade building'),
+                self.tr('Are you sure you want to downgrade this building?') + '\n' +
+                        '{0} {1} {2}'.format(bitem.name, self.tr('lv.'), bitem.level),
+                QMessageBox.Yes | QMessageBox.No)
+        if btn == QMessageBox.Yes:
+            self.world.signal(XNovaWorld.SIGNAL_BUILD_DISMANTLE,
+                              planet_id=self._planet.planet_id,
+                              bitem=bitem)
 
     @pyqtSlot()
     def on_frame_buildings_collapsed(self):
