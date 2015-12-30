@@ -59,7 +59,7 @@ def main():
     # planet buildings
     pbp = PlanetBuildingsProgressParser()
     pba = PlanetBuildingsAvailParser()
-    content = cacher.get_page('buildings_57862')  # Geminate
+    content = cacher.get_page('buildings_57064')  # Tama
     pba.parse_page_content(content)
     pbp.parse_page_content(content)
     logger.info('Planet buildings follow:')
