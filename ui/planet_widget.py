@@ -704,8 +704,9 @@ class PlanetWidget(QFrame):
         if not bitem.is_building_item:
             logger.warn('Cannot dismantle item that is not building: {0}'.format(bitem))
             return
-        logger.debug('Request to dismantle: {0}'.format(str(bitem)))
-        # TODO: handle request to dismantle building!
+        self.world.signal(XNovaWorld.SIGNAL_BUILD_DISMANTLE,
+                          planet_id=self._planet.planet_id,
+                          bitem=bitem)
 
     @pyqtSlot()
     def on_frame_buildings_collapsed(self):
