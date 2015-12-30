@@ -685,8 +685,9 @@ class PlanetWidget(QFrame):
             return
         if (bitem.remove_link is None) or (bitem.remove_link == ''):
             return
-        logger.debug('Request to cancel bitem: {0}'.format(str(bitem)))
-        # TODO: handle request to cancel build item!
+        self.world.signal(XNovaWorld.SIGNAL_BUILD_CANCEL,
+                          planet_id=self._planet.planet_id,
+                          bitem=bitem)
 
     @pyqtSlot(XNPlanetBuildingItem, int)
     def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
