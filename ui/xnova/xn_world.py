@@ -28,11 +28,12 @@ logger = xn_logger.get(__name__, debug=True)
 # created by main window to keep info about world updated
 class XNovaWorld(QThread):
     SIGNAL_QUIT = 0
-    SIGNAL_RELOAD_PAGE = 1     # args: page_name
-    SIGNAL_RENAME_PLANET = 2   # args: planet_id, new_name
-    SIGNAL_RELOAD_PLANET = 3   # args: planet_id
-    SIGNAL_BUILD_ITEM = 4      # args: bitem: XNPlanetBuildingItem, quantity, planet_id
-    SIGNAL_BUILD_CANCEL = 5    # args: bitem: XNPlanetBuildingItem, planet_id
+    SIGNAL_RELOAD_PAGE = 1      # args: page_name
+    SIGNAL_RENAME_PLANET = 2    # args: planet_id, new_name
+    SIGNAL_RELOAD_PLANET = 3    # args: planet_id
+    SIGNAL_BUILD_ITEM = 4       # args: bitem: XNPlanetBuildingItem, quantity, planet_id
+    SIGNAL_BUILD_CANCEL = 5     # args: bitem: XNPlanetBuildingItem, planet_id
+    SIGNAL_BUILD_DISMANTLE = 6  # args: bitem: XNPlanetBuildingItem, planet_id
     # testing signals ... ?
     SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
@@ -681,6 +682,14 @@ class XNovaWorld(QThread):
             self._request_build_cancel(planet_id, bitem)
             self.unlock()
 
+    def on_signal_build_dismantle(self):
+        if ('bitem' in self._signal_kwargs) and ('planet_id' in self._signal_kwargs):
+            bitem = self._signal_kwargs['bitem']
+            planet_id = int(self._signal_kwargs['planet_id'])
+            self.lock()
+            self._request_build_dismantle(planet_id, bitem)
+            self.unlock()
+
     def _internal_set_current_planet(self):
         """
         Just updates internal planets array with information
@@ -958,6 +967,24 @@ class XNovaWorld(QThread):
         else:
             logger.warn('Cannot cancel shipyard item: {0}'.format(bitem))
 
+    def _request_build_dismantle(self, planet_id: int, bitem: XNPlanetBuildingItem):
+        logger.debug('Request to downgrade building: {0} on planet {1}, dismantle_link = [{2}]'.format(
+                bitem.name, planet_id, bitem.dismantle_link))
+        if bitem.is_building_item:
+            if bitem.dismantle_link is None or (bitem.dismantle_link == ''):
+                logger.warn('bitem dismantle_link is empty, cannot dismantle build!')
+                return
+            # construct page name and referer
+            # successful request to cancel build item redirects to buildings page
+            page_name = 'buildings_{0}'.format(planet_id)
+            referer = '?set=buildings'
+            # send request
+            self._get_page_url(page_name, bitem.dismantle_link,
+                               max_cache_lifetime=0, force_download=True,
+                               referer=referer)
+        else:
+            logger.warn('Can only dismantle buildings items! bitem={0}'.format(bitem))
+
     # internal, called from thread on first load
     def _full_refresh(self):
         logger.info('thread: starting full world update')
@@ -1049,6 +1076,8 @@ class XNovaWorld(QThread):
                 self.on_signal_build_item()
             elif ret == self.SIGNAL_BUILD_CANCEL:
                 self.on_signal_build_cancel()
+            elif ret == self.SIGNAL_BUILD_DISMANTLE:
+                self.on_signal_build_dismantle()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
             #
