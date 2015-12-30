@@ -690,11 +690,18 @@ class PlanetWidget(QFrame):
 
     @pyqtSlot(XNPlanetBuildingItem, int)
     def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
+        if bitem is None:
+            return
         logger.debug('Request to build: {0}'.format(str(bitem)))
         # TODO: handle request to build item!
 
     @pyqtSlot(XNPlanetBuildingItem)
     def on_request_downgrade_item(self, bitem: XNPlanetBuildingItem):
+        if bitem is None:
+            return
+        if not bitem.is_building_item:
+            logger.warn('Cannot dismantle item that is not building: {0}'.format(bitem))
+            return
         logger.debug('Request to dismantle: {0}'.format(str(bitem)))
         # TODO: handle request to dismantle building!
 
