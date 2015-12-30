@@ -471,6 +471,7 @@ class XNPlanetBuildingItem:
         self.seconds_total = -1  # total seconds to build this item (-1 if building is not available)
         self.remove_link = None  # url to delete building from queue
         self.build_link = None   # url to start building, (does not exist for defense/ships)
+        self.dismantle_link = None  # url to downgrade 1 level of building, only for buildings
         # building price (for 1 item)
         self.cost_met = 0
         self.cost_cry = 0
