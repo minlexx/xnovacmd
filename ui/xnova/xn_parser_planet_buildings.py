@@ -156,7 +156,7 @@ class PlanetBuildingsAvailParser(XNParserBase):
                     self.add_price(data)
                 # have enough resources to build
                 if 'resYes' in span_classes:
-                    if data != 'Построить':
+                    if (data != 'Построить') and (data != 'Улучшить'):
                         # logger.debug('    span resYes in div overContent: {0}'.format(data))
                         self.add_price(data)
         if tag == 'br':
