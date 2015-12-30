@@ -24,5 +24,6 @@
         <file alias="s_kristall.png">i/s_kristall.png</file>
         <file alias="s_deuterium.png">i/s_deuterium.png</file>
         <file alias="s_energy.png">i/s_energy.png</file>
+        <file alias="arrow_down_red_16.png">i/arrow_down_red_16.png</file>
     </qresource>
 </RCC>
