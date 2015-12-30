@@ -67,11 +67,20 @@ class PlanetEnergyParser(XNParserBase):
         if tag == 'span':
             if self._in_eleft:
                 self.energy_left = safe_int(data)
+                logger.debug('Got energy left: {0}'.format(self.energy_left))
             return
         if tag == 'font':
             if self._in_etot:
                 self.energy_total = safe_int(data)
+                logger.debug('Got energy total: {0}'.format(self.energy_total))
             return
+        if tag == 'div':
+            div_title = get_attribute(attrs, 'title')
+            if div_title == 'Энергетический баланс':
+                if data == '0':
+                    self.energy_left = 0
+                    logger.debug('Got energy left = 0 from div (no span)')
 
 # <div title="Энергетический баланс"><span class="positive">5</span></div>
+# <div title="Энергетический баланс">0</div>
 # <span title="Выработка энергии" class="hidden-xs"><font color="#00ff00">12.515</font></span>
