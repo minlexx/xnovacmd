@@ -678,7 +678,7 @@ class XNovaWorld(QThread):
             bitem = self._signal_kwargs['bitem']
             planet_id = int(self._signal_kwargs['planet_id'])
             self.lock()
-            self._request_build_cacnel(planet_id, bitem)
+            self._request_build_cancel(planet_id, bitem)
             self.unlock()
 
     def _internal_set_current_planet(self):
