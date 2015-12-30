@@ -749,7 +749,10 @@ class XNovaWorld(QThread):
             return None
         return self._get_page_url(page_name, page_url, max_cache_lifetime, force_download)
 
-    def _get_page_url(self, page_name, page_url, max_cache_lifetime=None, force_download=False):
+    def _get_page_url(self, page_name, page_url,
+                      max_cache_lifetime=None,
+                      force_download=False,
+                      referer=None):
         """
         For internal needs, downloads url from server using HTTP GET.
         First tries to get cached page from cache using page_name as key.
@@ -761,6 +764,7 @@ class XNovaWorld(QThread):
         :param page_url: URL to download in HTTP GET request
         :param max_cache_lifetime:
         :param force_download:
+        :param referer: set this to str value to force Referer header before request
         :return: page contents (str) or None on error
         """
         page_content = None
@@ -772,6 +776,9 @@ class XNovaWorld(QThread):
             # signal that we are starting network request
             if not self._world_is_loading:
                 self.net_request_started.emit()
+            # set referer, if set
+            if referer is not None:
+                self._page_downloader.set_referer(referer)
             # try to download, it not in cache
             page_content = self._page_downloader.download_url_path(page_url)
             # signal that we have finished network request
@@ -904,17 +911,23 @@ class XNovaWorld(QThread):
             if bitem.build_link is None or (bitem.build_link == ''):
                 logger.warn('bitem build_link is empty, cannot build!')
                 return
-            # construct page name
+            # construct page name and referer
             # successful request to build item redirects to buildings page
             page_name = None
+            referer = ''
             if bitem.is_building_item:
                 page_name = 'buildings_{0}'.format(planet_id)
+                referer = '?set=buildings'
             elif bitem.is_research_item:
                 page_name = 'research_{0}'.format(planet_id)
+                referer = '?set=buildings&mode=research'
             elif bitem.is_researchfleet_item:
+                referer = '?set=buildings&mode=research_fleet'
                 page_name = 'researchfleet_{0}'.format(planet_id)
             # send request
-            self._get_page_url(page_name, bitem.build_link, max_cache_lifetime=0, force_download=True)
+            self._get_page_url(page_name, bitem.build_link,
+                               max_cache_lifetime=0, force_download=True,
+                               referer=referer)
         elif bitem.is_shipyard_item:
             logger.warn('Cannot build shipyard items for now!')
 
@@ -925,17 +938,23 @@ class XNovaWorld(QThread):
             if bitem.remove_link is None or (bitem.remove_link == ''):
                 logger.warn('bitem remove_link is empty, cannot cancel build!')
                 return
-            # construct page name
+            # construct page name and referer
             # successful request to cancel build item redirects to buildings page
             page_name = None
+            referer = ''
             if bitem.is_building_item:
                 page_name = 'buildings_{0}'.format(planet_id)
+                referer = '?set=buildings'
             elif bitem.is_research_item:
                 page_name = 'research_{0}'.format(planet_id)
+                referer = '?set=buildings&mode=research'
             elif bitem.is_researchfleet_item:
                 page_name = 'researchfleet_{0}'.format(planet_id)
+                referer = '?set=buildings&mode=research_fleet'
             # send request
-            self._get_page_url(page_name, bitem.remove_link, max_cache_lifetime=0, force_download=True)
+            self._get_page_url(page_name, bitem.remove_link,
+                               max_cache_lifetime=0, force_download=True,
+                               referer=referer)
         else:
             logger.warn('Cannot cancel shipyard item: {0}'.format(bitem))
 
