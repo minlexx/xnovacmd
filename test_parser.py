@@ -115,7 +115,7 @@ def main():
     #
     # planet energy parser test
     pep = PlanetEnergyParser()
-    content = cacher.get_page('shipyard_57064')  # can be any overview, research or shipyard page
+    content = cacher.get_page('buildings_82160')  # can be any overview, research or shipyard page
     pep.parse_page_content(content)
     logger.info('Parsed planet energy status: {0}/{1}'.format(pep.energy_left, pep.energy_total))
     #
