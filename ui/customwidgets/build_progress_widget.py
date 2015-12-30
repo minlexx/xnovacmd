@@ -16,6 +16,7 @@ class BuildProgressWidget(QFrame):
     BPW_TYPE_RESEARCH = 'research'
 
     requestCancelBuild = pyqtSignal(XNPlanetBuildingItem)
+    requestCancelBuildWithPlanet = pyqtSignal(XNPlanetBuildingItem, int)
 
     def __init__(self, parent=None):
         super(BuildProgressWidget, self).__init__(parent)
@@ -156,3 +157,4 @@ class BuildProgressWidget(QFrame):
             if (self._bitem.remove_link is not None) and (self._bitem.remove_link != ''):
                 logger.debug('cancel clicked, remove_link = [{0}]'.format(self._bitem.remove_link))
                 self.requestCancelBuild.emit(self._bitem)
+                self.requestCancelBuildWithPlanet.emit(self._bitem, self._planet.planet_id)
