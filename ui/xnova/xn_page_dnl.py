@@ -107,6 +107,10 @@ class XNovaPageDownload:
     def _set_error(self, errstr):
         self.error_str = errstr
 
+    def set_referer(self, url: str):
+        if self.sess is not None:
+            self.sess.headers.update({'referer': url})
+
     # real downloader function
     # returns None on failure, string or binary data on success
     def download_url_path(self, url_path: str, return_binary=False):
