@@ -156,7 +156,7 @@ class ResearchAvailParser(XNParserBase):
                     self._cur_item.build_link = '?set=buildings&mode=research_fleet&' \
                                                 'cmd=search&tech={0}'.format(gid)
                     self._cur_item.remove_link = '?set=buildings&mode=research_fleet&' \
-                                                 'cmd=cacncel&tech={0}'.format(gid)
+                                                 'cmd=cancel&tech={0}'.format(gid)
                 logger.debug('    title: [{0}] gid=[{1}]'.format(data, gid))
         if tag == 'span':
             span_classes = get_tag_classes(attrs)
