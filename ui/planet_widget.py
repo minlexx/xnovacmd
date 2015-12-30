@@ -175,6 +175,7 @@ class Planet_BasicInfoPanel(QFrame):
 class Planet_BuildItemWidget(QFrame):
 
     requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)  # bitem, optional quantity for shipyard
+    requestDowngradeItem = pyqtSignal(XNPlanetBuildingItem)   # downgrade a building
 
     def __init__(self, parent: QWidget):
         super(Planet_BuildItemWidget, self).__init__(parent)
@@ -224,11 +225,22 @@ class Planet_BuildItemWidget(QFrame):
         self._lbl_price_energy_ico.setPixmap(self._pix_energy)
         self._lbl_price_energy = QLabel()
         # buttons
+        # upgrade
         self._layout_buttons = QHBoxLayout()
         self._btn_upgrade = QPushButton(self.tr('Upgrade'), self)
         self._btn_upgrade.setIcon(QIcon(':/i/build.png'))
         self._btn_upgrade.setMaximumHeight(25)
         self._btn_upgrade.clicked.connect(self.on_upgrade_clicked)
+        # downgrade, hidden by default
+        self._btn_downgrade = QPushButton('', self)
+        self._btn_downgrade.setIcon(QIcon(':/i/arrow_down_red_16.png'))
+        self._btn_downgrade.setMaximumHeight(25)
+        self._btn_downgrade.clicked.connect(self.on_downgrade_clicked)
+        self._btn_downgrade.hide()
+        # line edit for quantity for shipyard items, hidden by default
+        self._lineedit_quantity = QLineEdit(self)
+        self._lineedit_quantity.setMaximumWidth(50)
+        self._lineedit_quantity.hide()
         # construct layout
         # name, level
         self._layout_nl.addWidget(self._lbl_name)
@@ -262,6 +274,8 @@ class Planet_BuildItemWidget(QFrame):
         self._layout_v.addLayout(self._layout_price4)
         # buttons
         self._layout_buttons.addWidget(self._btn_upgrade)
+        self._layout_buttons.addWidget(self._btn_downgrade)
+        self._layout_buttons.addWidget(self._lineedit_quantity)
         self._layout_buttons.addStretch()
         self._layout_v.addLayout(self._layout_buttons)
         #
@@ -356,20 +370,43 @@ class Planet_BuildItemWidget(QFrame):
         else:
             self._lbl_price_energy_ico.hide()
             self._lbl_price_energy.hide()
+        #
         # enable or disable buttons
         if enough_met and enough_cry and enough_deit and enough_energy:
             self._btn_upgrade.setEnabled(True)
         else:
             self._btn_upgrade.setEnabled(False)
+        if self._bitem.is_building_item:
+            if self._bitem.level > 0:
+                self._btn_downgrade.setEnabled(True)
+            else:  # nothing to downgrade
+                self._btn_downgrade.setEnabled(False)
         # set button text
         if self._bitem.is_shipyard_item:
             self._btn_upgrade.setText(self.tr('Build'))
         elif self._bitem.is_research_item or self._bitem.is_researchfleet_item:
             self._btn_upgrade.setText(self.tr('Research'))
+        # show/hide additional buttons
+        if self._bitem.is_building_item:
+            self._btn_upgrade.show()
+            self._btn_downgrade.show()
+            self._lineedit_quantity.hide()
+        elif self._bitem.is_shipyard_item:
+            self._btn_upgrade.show()
+            self._btn_downgrade.hide()
+            self._lineedit_quantity.show()
+        elif self._bitem.is_research_item or self._bitem.is_researchfleet_item:
+            self._btn_upgrade.show()
+            self._btn_downgrade.hide()
+            self._lineedit_quantity.hide()
 
     @pyqtSlot()
     def on_upgrade_clicked(self):
         self.requestBuildItem.emit(self._bitem, 0)
+
+    @pyqtSlot()
+    def on_downgrade_clicked(self):
+        self.requestDowngradeItem.emit(self._bitem)
 
 
 class Planet_BuildItemsPanel(QFrame):
