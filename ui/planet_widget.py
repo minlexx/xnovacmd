@@ -312,7 +312,6 @@ class Planet_BuildItemWidget(QFrame):
         enough_deit = True
         enough_energy = True
         # price met
-        setstr = ''
         if bitem.cost_met > 0:
             setstr = number_format(bitem.cost_met)
             color = color_enough
@@ -327,7 +326,6 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_price_met_ico.hide()
             self._lbl_price_met.hide()
         # price cry
-        setstr = ''
         if bitem.cost_cry > 0:
             setstr = number_format(bitem.cost_cry)
             color = color_enough
@@ -342,14 +340,13 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_price_cry_ico.hide()
             self._lbl_price_cry.hide()
         # price deit
-        setstr = ''
         if bitem.cost_deit > 0:
             setstr = number_format(bitem.cost_deit)
             color = color_enough
-            enough_deit = False
             if res_cur.deit < bitem.cost_deit:
                 setstr += ' (-{0})'.format(number_format(int(bitem.cost_deit - res_cur.deit)))
                 color = color_notenough
+                enough_deit = False
             self._lbl_price_deit.setText('<font color="{0}">{1}</font>'.format(color, setstr))
             self._lbl_price_deit_ico.show()
             self._lbl_price_deit.show()
@@ -357,7 +354,6 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_price_deit_ico.hide()
             self._lbl_price_deit.hide()
         # price energy
-        setstr = ''
         if bitem.cost_energy > 0:
             setstr = number_format(bitem.cost_energy)
             color = color_enough
@@ -373,10 +369,13 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_price_energy.hide()
         #
         # enable or disable buttons
-        if enough_met and enough_cry and enough_deit and enough_energy:
+        if enough_met and enough_cry and enough_deit and enough_energy and (self._bitem.seconds_total > 0):
             self._btn_upgrade.setEnabled(True)
         else:
             self._btn_upgrade.setEnabled(False)
+            # logger.debug('Disabling build {0}: {1} {2} {3} {4} {5}'.format(
+            #        self._bitem.name, enough_met, enough_cry, enough_deit,
+            #        enough_energy, self._bitem.seconds_total))
         if self._bitem.is_building_item:
             if self._bitem.level > 0:
                 self._btn_downgrade.setEnabled(True)
