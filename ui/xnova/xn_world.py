@@ -922,6 +922,9 @@ class XNovaWorld(QThread):
         logger.debug('Request to cancel build: {0} on planet {1}, remove_link = [{2}]'.format(
                 bitem.name, planet_id, bitem.remove_link))
         if bitem.is_building_item or bitem.is_research_item or bitem.is_researchfleet_item:
+            if bitem.remove_link is None or (bitem.remove_link == ''):
+                logger.warn('bitem remove_link is empty, cannot cancel build!')
+                return
             # construct page name
             # successful request to cancel build item redirects to buildings page
             page_name = None
