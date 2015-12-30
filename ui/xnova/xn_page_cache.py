@@ -65,6 +65,8 @@ class XNovaPageCache:
 
     # save page into cache
     def set_page(self, page_name, contents):
+        if page_name is None:
+            return
         self._pages[page_name] = contents
         self._mtimes[page_name] = int(time.time())  # also update modified time!
         try:
@@ -93,6 +95,8 @@ class XNovaPageCache:
     # and only if get() returns None, it will be
     # downloaded over network
     def get_page(self, page_name, max_cache_secs=None):
+        if page_name is None:
+            return None
         if len(page_name) < 1:
             return None
         if page_name in self._pages:
