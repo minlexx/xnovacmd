@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QPushButton, QVBoxLayout, QHBoxLayout
 from PyQt5.QtGui import QIcon
 
-from ui.xnova.xn_data import fraction_from_name, XNAccountInfo
+from ui.xnova.xn_data import fraction_from_name, XNAccountInfo, XNPlanetBuildingItem
 from ui.xnova.xn_world import XNovaWorld_instance
 from ui.xnova import xn_logger
 
@@ -138,6 +138,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets[planet_id]
             # create BPW for planet
             bpw = BuildProgressWidget(self)
+            bpw.requestCancelBuildWithPlanet.connect(self.on_request_build_cancel_with_planet)
             self._gb_builds.addWidget(bpw)
             self.bp_widgets[planet_id] = bpw
             bpw.hide()
@@ -147,6 +148,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets_sy[planet_id]
             # create BPW for planet shipyard
             bpw = BuildProgressWidget(self)
+            bpw.requestCancelBuildWithPlanet.connect(self.on_request_build_cancel_with_planet)
             self._gb_shipyard.addWidget(bpw)
             self.bp_widgets_sy[planet_id] = bpw
             bpw.hide()
@@ -156,6 +158,7 @@ class OverviewWidget(QWidget):
                 return self.bp_widgets_res[planet_id]
             # create BPW for planet shipyard
             bpw = BuildProgressWidget(self)
+            bpw.requestCancelBuildWithPlanet.connect(self.on_request_build_cancel_with_planet)
             self._gb_research.addWidget(bpw)
             self.bp_widgets_res[planet_id] = bpw
             bpw.hide()
@@ -200,3 +203,9 @@ class OverviewWidget(QWidget):
     @pyqtSlot()
     def on_btn_refresh_overview(self):
         self.world.signal(self.world.SIGNAL_RELOAD_PAGE, page_name='overview')
+
+    @pyqtSlot(XNPlanetBuildingItem, int)
+    def on_request_build_cancel_with_planet(self, bitem: XNPlanetBuildingItem, planet_id: int):
+        self.world.signal(self.world.SIGNAL_BUILD_CANCEL,
+                          planet_id=planet_id,
+                          bitem=bitem)
