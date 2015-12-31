@@ -696,10 +696,13 @@ class XNova_MainWindow(QWidget):
         pl1.is_current = True
         pl1.res_current.met = 10000000
         pl1.res_current.cry = 50000
-        pl1.res_current.deit = 25000
+        pl1.res_current.deit = 250000000  # 250 mil
         pl1.res_per_hour.met = 60000
         pl1.res_per_hour.cry = 30000
         pl1.res_per_hour.deit = 15000
+        pl1.res_max_silos.met = 6000000
+        pl1.res_max_silos.cry = 3000000
+        pl1.res_max_silos.deit = 1000000
         pl1.energy.energy_left = 10
         pl1.energy.energy_total = 1962
         pl1.energy.charge_percent = 92
