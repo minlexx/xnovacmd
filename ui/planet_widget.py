@@ -507,7 +507,24 @@ class Planet_BuildItemWidget(QFrame):
 
     @pyqtSlot()
     def on_upgrade_clicked(self):
-        self.requestBuildItem.emit(self._bitem, 0)
+        if not self._bitem.is_shipyard_item:
+            # all buildings and researches, quantity is ignored (send 1)
+            self.requestBuildItem.emit(self._bitem, 1)
+        else:
+            # shipyard build item case, read also quantity
+            qtext = self._lineedit_quantity.text()
+            qint = -1
+            try:
+                qint = int(qtext)
+            except ValueError:
+                pass
+            if qint < 1:  # invalid format
+                QMessageBox.warning(self,
+                                    self.tr('Invalid format!'),
+                                    self.tr('Please input positive integer value!'))
+                return
+            # emit with qint as quantity
+            self.requestBuildItem.emit(self._bitem, qint)
 
     @pyqtSlot()
     def on_downgrade_clicked(self):
