@@ -965,32 +965,32 @@ Res: {0}</source>
 <context>
     <name>PlanetWidget</name>
     <message>
-        <location filename="planet_widget.py" line="583"/>
+        <location filename="planet_widget.py" line="663"/>
         <source>Buildings</source>
         <translation>Постройки</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="592"/>
+        <location filename="planet_widget.py" line="672"/>
         <source>Shipyard</source>
         <translation>Верфь</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="600"/>
+        <location filename="planet_widget.py" line="680"/>
         <source>Research</source>
         <translation>Исследования</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="709"/>
+        <location filename="planet_widget.py" line="789"/>
         <source>Downgrade building</source>
         <translation>Снос здания</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="709"/>
+        <location filename="planet_widget.py" line="789"/>
         <source>Are you sure you want to downgrade this building?</source>
         <translation>Вы уверены, что хотите снести это здание?</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="709"/>
+        <location filename="planet_widget.py" line="789"/>
         <source>lv.</source>
         <translation>ур.</translation>
     </message>
@@ -998,95 +998,105 @@ Res: {0}</source>
 <context>
     <name>Planet_BasicInfoPanel</name>
     <message>
-        <location filename="planet_widget.py" line="71"/>
+        <location filename="planet_widget.py" line="97"/>
         <source>Refresh planet</source>
         <translation>Обновить планету</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="132"/>
+        <location filename="planet_widget.py" line="191"/>
         <source>Fields:</source>
         <translation>Поля:</translation>
     </message>
     <message>
         <location filename="planet_widget.py" line="57"/>
         <source>Metal:</source>
-        <translation>Металл:</translation>
+        <translation type="obsolete">Металл:</translation>
     </message>
     <message>
         <location filename="planet_widget.py" line="58"/>
         <source>Crystal:</source>
-        <translation>Кристалл:</translation>
+        <translation type="obsolete">Кристалл:</translation>
     </message>
     <message>
         <location filename="planet_widget.py" line="59"/>
         <source>Deiterium:</source>
-        <translation>Дейтерий:</translation>
+        <translation type="obsolete">Дейтерий:</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="67"/>
+        <location filename="planet_widget.py" line="91"/>
         <source>Energy, charge:</source>
         <translation>Энергия, заряд:</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="76"/>
+        <location filename="planet_widget.py" line="103"/>
         <source>Actions...</source>
         <translation>Действия...</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="162"/>
+        <location filename="planet_widget.py" line="242"/>
         <source>Rename planet</source>
         <translation>Переименовать планету</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="81"/>
+        <location filename="planet_widget.py" line="109"/>
         <source>Leave planet</source>
         <translation>Покинуть планету</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="172"/>
+        <location filename="planet_widget.py" line="252"/>
         <source>Not done</source>
         <translation>Не реализовано</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="172"/>
+        <location filename="planet_widget.py" line="252"/>
         <source>Leaving planet is not done!</source>
         <translation>Возможность покинуть планету не реализована!</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="162"/>
+        <location filename="planet_widget.py" line="242"/>
         <source>Enter new planet name:</source>
         <translation>Введите новое название планеты:</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="131"/>
+        <location filename="planet_widget.py" line="190"/>
         <source>left</source>
         <translation>осталось</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="63"/>
+        <source>Resources:</source>
+        <translation>Ресурсы:</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="77"/>
+        <source>Capacity:</source>
+        <translation>Вместимость:</translation>
     </message>
 </context>
 <context>
     <name>Planet_BuildItemWidget</name>
     <message>
-        <location filename="planet_widget.py" line="209"/>
+        <location filename="planet_widget.py" line="289"/>
         <source>Time:</source>
         <translation>Время:</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="231"/>
+        <location filename="planet_widget.py" line="311"/>
         <source>Upgrade</source>
         <translation>Построить</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="240"/>
+        <location filename="planet_widget.py" line="320"/>
         <source>Dismantle</source>
         <translation>Снести</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="387"/>
+        <location filename="planet_widget.py" line="467"/>
         <source>Build</source>
         <translation>Построить</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="414"/>
+        <location filename="planet_widget.py" line="494"/>
         <source>Research</source>
         <translation>Исследовать</translation>
     </message>
@@ -1259,7 +1269,7 @@ Res: {0}</source>
 <context>
     <name>XNovaWorld</name>
     <message>
-        <location filename="xn_world.py" line="1021"/>
+        <location filename="xn_world.py" line="1061"/>
         <source>Planet</source>
         <translation>Планета</translation>
     </message>
