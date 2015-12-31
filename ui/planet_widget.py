@@ -523,6 +523,8 @@ class Planet_BuildItemWidget(QFrame):
                                     self.tr('Invalid format!'),
                                     self.tr('Please input positive integer value!'))
                 return
+            # clear lineedit text
+            self._lineedit_quantity.setText('')
             # emit with qint as quantity
             self.requestBuildItem.emit(self._bitem, qint)
 
