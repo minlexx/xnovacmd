@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import re
 from .xn_parser import XNParserBase, safe_int, get_attribute
+from .xn_data import XNResourceBundle
 from . import xn_logger
 
 logger = xn_logger.get(__name__, debug=False)
@@ -20,6 +22,9 @@ class PlanetEnergyResParser(XNParserBase):
         # public
         self.energy_left = 0
         self.energy_total = 0
+        self.res_current = XNResourceBundle()
+        self.res_max_silos = XNResourceBundle()
+        self.res_per_hour = XNResourceBundle()
         # internals
         self._in_eleft = False
         self._in_etot = False
@@ -28,6 +33,9 @@ class PlanetEnergyResParser(XNParserBase):
     def clear(self):
         self.energy_left = 0
         self.energy_total = 0
+        self.res_current = XNResourceBundle()
+        self.res_max_silos = XNResourceBundle()
+        self.res_per_hour = XNResourceBundle()
         # clear internals
         self._in_eleft = False
         self._in_etot = False
@@ -80,7 +88,51 @@ class PlanetEnergyResParser(XNParserBase):
                 if data == '0':
                     self.energy_left = 0
                     logger.debug('Got energy left = 0 from div (no span)')
+        if tag == 'script':
+            script_type = get_attribute(attrs, 'type')
+            if script_type is None:
+                return
+            if script_type == 'text/javascript':
+                # var ress = new Array(5827, 14614, 4049);
+                # var max = new Array(180000,180000,180000);
+                # var production = new Array(0.95805555555556, 0.44055555555556, 0.010277777777778);
+                if data.startswith('var ress = new Array('):
+                    # logger.debug('[{0}]'.format(data))
+                    m = re.search(r'var ress = new Array\((\d+), (\d+), (\d+)\);', data)
+                    if m is not None:
+                        self.res_current.met = safe_int(m.group(1))
+                        self.res_current.cry = safe_int(m.group(2))
+                        self.res_current.deit = safe_int(m.group(3))
+                        logger.debug('Got planet res_current: {0}'.format(str(self.res_current)))
+                    m = re.search(r'var max = new Array\((\d+),(\d+),(\d+)\);', data)
+                    if m is not None:
+                        self.res_max_silos.met = safe_int(m.group(1))
+                        self.res_max_silos.cry = safe_int(m.group(2))
+                        self.res_max_silos.deit = safe_int(m.group(3))
+                        logger.debug('Got planet res_max: {0}'.format(str(self.res_max_silos)))
+                    m = re.search(r'var production = new Array\(([\d\.]+), ([\d\.]+), ([\d\.]+)\);', data)
+                    if m is not None:
+                        try:
+                            met_per_second = float(m.group(1))
+                            cry_per_second = float(m.group(2))
+                            deit_per_second = float(m.group(3))
+                            self.res_per_hour.met = int(met_per_second * 3600)
+                            self.res_per_hour.cry = int(cry_per_second * 3600)
+                            self.res_per_hour.deit = int(deit_per_second * 3600)
+                            logger.debug('Got planet res per hour: {0}'.format(str(self.res_per_hour)))
+                        except ValueError as e:
+                            logger.warn('Failed to convert to float some of: {0}, {1}, {2}'.format(
+                                m.group(1), m.group(2), m.group(3)))
+
 
 # <div title="Энергетический баланс"><span class="positive">5</span></div>
 # <div title="Энергетический баланс">0</div>
 # <span title="Выработка энергии" class="hidden-xs"><font color="#00ff00">12.515</font></span>
+
+# <script type="text/javascript">
+#   var ress = new Array(2265601, 4207911, 426557);
+#   var max = new Array(11062500,11062500,6937500);
+#   var production = new Array(14.3925, 7.2386111111111, 2.4711111111111);
+#   timeouts['res_count'] = window.setInterval(XNova.updateResources, 1000);
+#   var serverTime = 1451535635000 - Djs + (timezone + 6) * 1800000;
+# </script>
