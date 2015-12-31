@@ -478,7 +478,7 @@ class XNovaWorld(QThread):
                 # get buildings in progress on the same page
                 self._parser_planet_buildings_progress.clear()
                 self._parser_planet_buildings_progress.parse_page_content(page_content)
-                # get planet energy info
+                # get planet energy info, res cur/max/prod
                 self._parser_planet_energy.clear()
                 self._parser_planet_energy.parse_page_content(page_content)
                 if planet is not None:
@@ -488,9 +488,18 @@ class XNovaWorld(QThread):
                         for bip in self._parser_planet_buildings_progress.builds_in_progress:
                             planet.add_build_in_progress(bip)
                         logger.debug('Buildings queue for planet {0}: added {1}'.format(planet.name, num_added))
-                    # save planet energy info
-                    planet.energy.energy_left = self._parser_planet_energy.energy_left
-                    planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet energy info, do not overwite with zeros
+                    if self._parser_planet_energy.energy_left > 0:
+                        planet.energy.energy_left = self._parser_planet_energy.energy_left
+                    if self._parser_planet_energy.energy_total > 0:
+                        planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet resource info
+                    if len(self._parser_planet_energy.res_current) > 0:
+                        planet.res_current = self._parser_planet_energy.res_current
+                    if len(self._parser_planet_energy.res_max_silos) > 0:
+                        planet.res_max_silos = self._parser_planet_energy.res_max_silos
+                    if len(self._parser_planet_energy.res_per_hour) > 0:
+                        planet.res_per_hour = self._parser_planet_energy.res_per_hour
             except ValueError:  # failed to convert to int
                 logger.exception('Failed to convert planet_id to int, page_name=[{0}]'.format(page_name))
             except AttributeError:  # no match
@@ -521,6 +530,13 @@ class XNovaWorld(QThread):
                         planet.energy.energy_left = self._parser_planet_energy.energy_left
                     if self._parser_planet_energy.energy_total > 0:
                         planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet resource info
+                    if len(self._parser_planet_energy.res_current) > 0:
+                        planet.res_current = self._parser_planet_energy.res_current
+                    if len(self._parser_planet_energy.res_max_silos) > 0:
+                        planet.res_max_silos = self._parser_planet_energy.res_max_silos
+                    if len(self._parser_planet_energy.res_per_hour) > 0:
+                        planet.res_per_hour = self._parser_planet_energy.res_per_hour
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected shipyard_123456'.format(page_name))
             except ValueError:  # failed to convert to int
@@ -553,6 +569,13 @@ class XNovaWorld(QThread):
                         planet.energy.energy_left = self._parser_planet_energy.energy_left
                     if self._parser_planet_energy.energy_total > 0:
                         planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet resource info
+                    if len(self._parser_planet_energy.res_current) > 0:
+                        planet.res_current = self._parser_planet_energy.res_current
+                    if len(self._parser_planet_energy.res_max_silos) > 0:
+                        planet.res_max_silos = self._parser_planet_energy.res_max_silos
+                    if len(self._parser_planet_energy.res_per_hour) > 0:
+                        planet.res_per_hour = self._parser_planet_energy.res_per_hour
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], expected defense_123456'.format(page_name))
             except ValueError:  # failed to convert to int
@@ -581,6 +604,13 @@ class XNovaWorld(QThread):
                         planet.energy.energy_left = self._parser_planet_energy.energy_left
                     if self._parser_planet_energy.energy_total > 0:
                         planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet resource info
+                    if len(self._parser_planet_energy.res_current) > 0:
+                        planet.res_current = self._parser_planet_energy.res_current
+                    if len(self._parser_planet_energy.res_max_silos) > 0:
+                        planet.res_max_silos = self._parser_planet_energy.res_max_silos
+                    if len(self._parser_planet_energy.res_per_hour) > 0:
+                        planet.res_per_hour = self._parser_planet_energy.res_per_hour
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], '
                                  'expected research_123456'.format(page_name))
@@ -611,6 +641,13 @@ class XNovaWorld(QThread):
                         planet.energy.energy_left = self._parser_planet_energy.energy_left
                     if self._parser_planet_energy.energy_total > 0:
                         planet.energy.energy_total = self._parser_planet_energy.energy_total
+                    # save planet resource info
+                    if len(self._parser_planet_energy.res_current) > 0:
+                        planet.res_current = self._parser_planet_energy.res_current
+                    if len(self._parser_planet_energy.res_max_silos) > 0:
+                        planet.res_max_silos = self._parser_planet_energy.res_max_silos
+                    if len(self._parser_planet_energy.res_per_hour) > 0:
+                        planet.res_per_hour = self._parser_planet_energy.res_per_hour
             except AttributeError:  # no match
                 logger.exception('Invalid format for page_name=[{0}], '
                                  'expected researchfleet_123456'.format(page_name))
