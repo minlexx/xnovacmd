@@ -522,7 +522,7 @@ class XNovaWorld(QThread):
                     planet.shipyard_tems = self._parser_shipyard_ships_avail.ships_avail
                     planet.shipyard_progress_items = self._parser_shipyard_progress.shipyard_progress_items
                     if len(self._parser_shipyard_progress.shipyard_progress_items) > 0:
-                        logger.debug('planet [{0}] has {0} items in shipyard queue'.format(
+                        logger.debug('planet [{0}] has {1} items in shipyard queue'.format(
                             planet.name, len(self._parser_shipyard_progress.shipyard_progress_items)))
                     # save planet energy info, but do not overwrite with zeros
                     # if there is no shipyard @ planet, no energy info will be on the page =(
