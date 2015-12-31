@@ -36,6 +36,11 @@ class Planet_BasicInfoPanel(QFrame):
         # bold font
         font = self.font()
         font.setWeight(QFont.Bold)
+        # resource pictures
+        self._pix_met = QPixmap(':/i/s_metall.png')
+        self._pix_cry = QPixmap(':/i/s_kristall.png')
+        self._pix_deit = QPixmap(':/i/s_deuterium.png')
+        self._pix_energy = QPixmap(':/i/s_energy.png')
         # layout
         self._layout = QHBoxLayout()
         self._layout.setContentsMargins(5, 5, 5, 5)
@@ -45,6 +50,7 @@ class Planet_BasicInfoPanel(QFrame):
         self._hlayout_name_coords = QHBoxLayout()
         self._hlayout_fields = QHBoxLayout()
         self._hlayout_res = QHBoxLayout()
+        self._hlayout_resmax = QHBoxLayout()
         self._hlayout_energy = QHBoxLayout()
         # labels
         self._lbl_img = QLabel(self)
@@ -53,28 +59,50 @@ class Planet_BasicInfoPanel(QFrame):
         self._lbl_coords.linkActivated.connect(self.on_coords_link_activated)
         self._lbl_fields = QLabel()
         # resource labels
-        self._lbl_metal = QLabel(self.tr('Metal:'), self)
-        self._lbl_crystal = QLabel(self.tr('Crystal:'), self)
-        self._lbl_deit = QLabel(self.tr('Deiterium:'), self)
+        self._lbl_res_on_planet = QLabel(self.tr('Resources:'), self)
+        self._lbl_metal = QLabel(self)
+        self._lbl_crystal = QLabel(self)
+        self._lbl_deit = QLabel(self)
         self._lbl_cur_met = QLabel(self)
         self._lbl_cur_cry = QLabel(self)
         self._lbl_cur_deit = QLabel(self)
         self._lbl_cur_met.setFont(font)
         self._lbl_cur_cry.setFont(font)
         self._lbl_cur_deit.setFont(font)
+        self._lbl_metal.setPixmap(self._pix_met)
+        self._lbl_crystal.setPixmap(self._pix_cry)
+        self._lbl_deit.setPixmap(self._pix_deit)
+        # resource max
+        self._lbl_res_max = QLabel(self.tr('Capacity:'), self)
+        self._lbl_metal2 = QLabel(self)
+        self._lbl_crystal2 = QLabel(self)
+        self._lbl_deit2 = QLabel(self)
+        self._lbl_max_met = QLabel(self)
+        self._lbl_max_cry = QLabel(self)
+        self._lbl_max_deit = QLabel(self)
+        self._lbl_max_met.setFont(font)
+        self._lbl_max_cry.setFont(font)
+        self._lbl_max_deit.setFont(font)
+        self._lbl_metal2.setPixmap(self._pix_met)
+        self._lbl_crystal2.setPixmap(self._pix_cry)
+        self._lbl_deit2.setPixmap(self._pix_deit)
         # energy labels
         self._lbl_energy = QLabel(self.tr('Energy, charge:'), self)
+        self._lbl_energy_pix = QLabel(self)
+        self._lbl_energy_pix.setPixmap(self._pix_energy)
         self._lbl_energy_stats = QLabel(self)
         self._lbl_energy_stats.setFont(font)
         # button
         self._btn_refresh = QPushButton(self.tr('Refresh planet'), self)
         self._btn_refresh.setIcon(QIcon(':/i/reload.png'))
         self._btn_refresh.clicked.connect(self.on_btn_refresh_clicked)
+        self._btn_refresh.setMinimumHeight(25)
         self._btn_tools = QToolButton(self)
         self._btn_tools.setIcon(QIcon(':/i/tools_32.png'))
         self._btn_tools.setText(self.tr('Actions...'))
         self._btn_tools.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
         self._btn_tools.setPopupMode(QToolButton.InstantPopup)
+        self._btn_tools.setMinimumHeight(25)
         self._actions_menu = QMenu(self)
         self._action_renameplanet = QAction(self.tr('Rename planet'), self)
         self._action_leaveplanet = QAction(self.tr('Leave planet'), self)
@@ -89,8 +117,11 @@ class Planet_BasicInfoPanel(QFrame):
         self._hlayout_name_coords.addWidget(self._btn_refresh)
         self._hlayout_name_coords.addWidget(self._btn_tools)
         self._hlayout_name_coords.addStretch()
+        #
         self._hlayout_fields.addWidget(self._lbl_fields)
         self._hlayout_fields.addStretch()
+        #
+        self._hlayout_res.addWidget(self._lbl_res_on_planet)
         self._hlayout_res.addWidget(self._lbl_metal)
         self._hlayout_res.addWidget(self._lbl_cur_met)
         self._hlayout_res.addWidget(self._lbl_crystal)
@@ -98,16 +129,41 @@ class Planet_BasicInfoPanel(QFrame):
         self._hlayout_res.addWidget(self._lbl_deit)
         self._hlayout_res.addWidget(self._lbl_cur_deit)
         self._hlayout_res.addStretch()
+        #
+        self._hlayout_resmax.addWidget(self._lbl_res_max)
+        self._hlayout_resmax.addWidget(self._lbl_metal2)
+        self._hlayout_resmax.addWidget(self._lbl_max_met)
+        self._hlayout_resmax.addWidget(self._lbl_crystal2)
+        self._hlayout_resmax.addWidget(self._lbl_max_cry)
+        self._hlayout_resmax.addWidget(self._lbl_deit2)
+        self._hlayout_resmax.addWidget(self._lbl_max_deit)
+        self._hlayout_resmax.addStretch()
+        # minimum widths for res labels
+        lbl_width = 100
+        res_width = 120
+        self._lbl_res_on_planet.setMinimumWidth(lbl_width)
+        self._lbl_res_max.setMinimumWidth(lbl_width)
+        self._lbl_energy.setMinimumWidth(lbl_width)
+        self._lbl_cur_met.setMinimumWidth(res_width)
+        self._lbl_cur_cry.setMinimumWidth(res_width)
+        self._lbl_cur_deit.setMinimumWidth(res_width)
+        self._lbl_max_met.setMinimumWidth(res_width)
+        self._lbl_max_cry.setMinimumWidth(res_width)
+        self._lbl_max_deit.setMinimumWidth(res_width)
+        #
         self._hlayout_energy.addWidget(self._lbl_energy)
+        self._hlayout_energy.addWidget(self._lbl_energy_pix)
         self._hlayout_energy.addWidget(self._lbl_energy_stats)
         self._hlayout_energy.addStretch()
         #
         self._vlayout.addLayout(self._hlayout_name_coords)
         self._vlayout.addLayout(self._hlayout_fields)
         self._vlayout.addLayout(self._hlayout_res)
+        self._vlayout.addLayout(self._hlayout_resmax)
         self._vlayout.addLayout(self._hlayout_energy)
         self._vlayout.addStretch()
-        self._layout.addWidget(self._lbl_img)
+        #
+        self._layout.addWidget(self._lbl_img, 0, Qt.AlignTop | Qt.AlignHCenter)
         self._layout.addLayout(self._vlayout)
         self._layout.addStretch()
 
@@ -123,7 +179,10 @@ class Planet_BasicInfoPanel(QFrame):
         margins = self._layout.contentsMargins()
         top_margin = margins.top()
         bottom_margin = margins.bottom()
-        self.setMaximumHeight(self._pixmap.height() + top_margin + bottom_margin)
+        max_height = self._pixmap.height() + top_margin + bottom_margin
+        if max_height < 130:
+            max_height = 130
+        self.setMaximumHeight(max_height)
         # planet name, corods, fields
         self._lbl_name.setText(planet.name)
         self._lbl_coords.setText('<a href="{0}">{0}</a>'.format(planet.coords.coords_str()))
@@ -137,9 +196,30 @@ class Planet_BasicInfoPanel(QFrame):
 
     def update_resources(self):
         # update planet resources
-        self._lbl_cur_met.setText(number_format(int(self._planet.res_current.met)))
-        self._lbl_cur_cry.setText(number_format(int(self._planet.res_current.cry)))
-        self._lbl_cur_deit.setText(number_format(int(self._planet.res_current.deit)))
+        color_enough = '#008800'
+        color_exceed = '#AA0000'
+        # cur metal
+        color = color_enough
+        if self._planet.res_current.met > self._planet.res_max_silos.met:
+            color = color_exceed
+        self._lbl_cur_met.setText('<font color="{0}">{1}</font>'.format(
+                color, number_format(int(self._planet.res_current.met))))
+        # cur crystal
+        color = color_enough
+        if self._planet.res_current.cry > self._planet.res_max_silos.cry:
+            color = color_exceed
+        self._lbl_cur_cry.setText('<font color="{0}">{1}</font>'.format(
+                color, number_format(int(self._planet.res_current.cry))))
+        # cur deit
+        color = color_enough
+        if self._planet.res_current.deit > self._planet.res_max_silos.deit:
+            color = color_exceed
+        self._lbl_cur_deit.setText('<font color="{0}">{1}</font>'.format(
+                color, number_format(int(self._planet.res_current.deit))))
+        # update res max
+        self._lbl_max_met.setText(number_format(int(self._planet.res_max_silos.met)))
+        self._lbl_max_cry.setText(number_format(int(self._planet.res_max_silos.cry)))
+        self._lbl_max_deit.setText(number_format(int(self._planet.res_max_silos.deit)))
         # energy
         self._lbl_energy_stats.setText('{0} / {1}    ({2}%)'.format(
                 self._planet.energy.energy_left,
