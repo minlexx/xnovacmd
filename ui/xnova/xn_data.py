@@ -553,9 +553,9 @@ class XNPlanet:
         self.fields_busy = 0
         self.fields_total = 0
         self.res_current = XNResourceBundle(0, 0, 0)
-        self.res_max_silos = XNResourceBundle(0, 0, 0)
+        self.res_max_silos = XNResourceBundle(0, 0, 0)  # cannot be parsed in imperium
         self.res_per_hour = XNResourceBundle(0, 0, 0)
-        self.energy = XNPlanetEnergyInfo()  # partially filled from buildings parser
+        self.energy = XNPlanetEnergyInfo()  # partially filled from buildings parser, cannot be parsed in imperium
         self.prod_powers = XNPlanetProductionPowers()
         self.ships = XNShipsBundle()
         self.buildings = XNBuildingsBundle()
