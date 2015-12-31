@@ -965,32 +965,32 @@ Res: {0}</source>
 <context>
     <name>PlanetWidget</name>
     <message>
-        <location filename="planet_widget.py" line="663"/>
+        <location filename="planet_widget.py" line="680"/>
         <source>Buildings</source>
         <translation>Постройки</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="672"/>
+        <location filename="planet_widget.py" line="689"/>
         <source>Shipyard</source>
         <translation>Верфь</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="680"/>
+        <location filename="planet_widget.py" line="697"/>
         <source>Research</source>
         <translation>Исследования</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="789"/>
+        <location filename="planet_widget.py" line="806"/>
         <source>Downgrade building</source>
         <translation>Снос здания</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="789"/>
+        <location filename="planet_widget.py" line="806"/>
         <source>Are you sure you want to downgrade this building?</source>
         <translation>Вы уверены, что хотите снести это здание?</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="789"/>
+        <location filename="planet_widget.py" line="806"/>
         <source>lv.</source>
         <translation>ур.</translation>
     </message>
@@ -1099,6 +1099,16 @@ Res: {0}</source>
         <location filename="planet_widget.py" line="494"/>
         <source>Research</source>
         <translation>Исследовать</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="523"/>
+        <source>Invalid format!</source>
+        <translation>Неверный формат!</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="523"/>
+        <source>Please input positive integer value!</source>
+        <translation>Пожалуйста введите положительное целое число!</translation>
     </message>
 </context>
 <context>
@@ -1269,7 +1279,7 @@ Res: {0}</source>
 <context>
     <name>XNovaWorld</name>
     <message>
-        <location filename="xn_world.py" line="1061"/>
+        <location filename="xn_world.py" line="1064"/>
         <source>Planet</source>
         <translation>Планета</translation>
     </message>
