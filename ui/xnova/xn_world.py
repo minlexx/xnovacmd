@@ -1053,7 +1053,10 @@ class XNovaWorld(QThread):
         #
         # download all planets info
         load_progress_left = 100 - load_progress_percent
-        load_progress_step = load_progress_left // len(self._planets)
+        if len(self._planets) > 0:
+            load_progress_step = load_progress_left // len(self._planets)
+        else:
+            load_progress_step = 1
         for pl in self._planets:
             self.world_load_progress.emit(self.tr('Planet') + ' ' + pl.name, load_progress_percent)
             load_progress_percent += load_progress_step
