@@ -953,8 +953,8 @@ class XNovaWorld(QThread):
         logger.debug('Rename planet to [{0}] complete'.format(new_name))
 
     def _request_build_item(self, planet_id: int, bitem: XNPlanetBuildingItem, quantity: int):
-        logger.debug('Request to build: {0} x {1} on planet {2}, build_link = [{3}]'.format(
-                bitem.name, quantity, planet_id, bitem.build_link))
+        logger.debug('Request to build: {0} lv {1} x {2} on planet {3}, build_link = [{4}]'.format(
+                bitem.name, bitem.level+1, quantity, planet_id, bitem.build_link))
         if bitem.is_building_item or bitem.is_research_item or bitem.is_researchfleet_item:
             if bitem.build_link is None or (bitem.build_link == ''):
                 logger.warn('bitem build_link is empty, cannot build!')
@@ -977,6 +977,7 @@ class XNovaWorld(QThread):
                                max_cache_lifetime=0, force_download=True,
                                referer=referer)
         elif bitem.is_shipyard_item:
+            # TODO: support building ships/defense!
             logger.warn('Cannot build shipyard items for now!')
 
     def _request_build_cancel(self, planet_id: int, bitem: XNPlanetBuildingItem):
