@@ -817,7 +817,9 @@ class XNovaWorld(QThread):
         if not force_download:
             # try to get cached page (default)
             page_content = self._page_cache.get_page(page_name, max_cache_lifetime)
-            logger.debug('... got [{0}] from cache! (lifetime < {1})'.format(page_name, max_cache_lifetime))
+            if page_content is not None:
+                logger.debug('... got page "{0}" from cache! (lifetime < {1})'.format(
+                        page_name, max_cache_lifetime))
         if page_content is None:
             # signal that we are starting network request
             if not self._world_is_loading:
