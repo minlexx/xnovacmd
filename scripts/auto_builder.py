@@ -28,6 +28,7 @@ def printer_thread():
     METAL_SILO = 22
     CRYSTAL_SILO = 23
     DEIT_SILO = 24
+    LAB = 31
 
     buildings_queue = list()  # gid, level
     #
@@ -41,6 +42,8 @@ def printer_thread():
     #
     buildings_queue.append([SHIPYARD, 1])
     buildings_queue.append([SHIPYARD, 2])
+    buildings_queue.append([LAB, 1])
+    buildings_queue.append([LAB, 2])
     #
     for i in range(5): # base mining plants to level 10
         buildings_queue.append([SOLAR_STATION, i+6])
@@ -50,6 +53,18 @@ def printer_thread():
     buildings_queue.append([METAL_SILO, 1])
     buildings_queue.append([CRYSTAL_SILO, 1])
     buildings_queue.append([DEIT_SILO, 1])
+    #
+    # add deuterium @ level 11
+    buildings_queue.append([SOLAR_STATION, 11])
+    buildings_queue.append([DEIT_FACTORY, 1])
+    buildings_queue.append([METAL_FACTORY, 11])
+    # 12
+    buildings_queue.append([SOLAR_STATION, 12])
+    buildings_queue.append([METAL_FACTORY, 12])
+    buildings_queue.append([DEIT_FACTORY, 2])
+    buildings_queue.append([CRYSTAL_FACTORY, 11])
+    # 13
+    buildings_queue.append([SOLAR_STATION, 13])
 
     while True:
         time.sleep(1)
@@ -96,10 +111,13 @@ def printer_thread():
                             break
                 if not is_present:
                     break
+                gid = 0
+                level = 0
+                bitem = XNPlanetBuildingItem()
 
             # maybe we are at the end of queue?
-            if (gid == 0) and (level == 0):
-                logger.info('Seemd we have build all!')
+            if (gid == 0) or (level == 0) or (bitem.build_link is None):
+                logger.info('Seems we have built all the queue!')
                 break
 
             logger.info('Next building in a queue: {0} lv {1}'.format(bitem.name, level))
