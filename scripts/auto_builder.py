@@ -1,7 +1,7 @@
 from threading import Thread
 
 
-def printer_thread():
+def auto_builder_thread():
     import time
 
     from ui.xnova.xn_data import XNPlanet, XNPlanetBuildingItem
@@ -16,7 +16,7 @@ def printer_thread():
     logger.info('Started.')
 
     my_planet_id = 82160
-    WORK_INTERVAL = 20  # seconds
+    WORK_INTERVAL = 60  # seconds
     last_work_time = time.time() - WORK_INTERVAL
 
     METAL_FACTORY = 1
@@ -147,6 +147,6 @@ def printer_thread():
 
 
 # start script as a parallel thread
-thr = Thread(target=printer_thread, name='Printer_thread')
+thr = Thread(target=auto_builder_thread, name='auto_builder_thread')
 thr.daemon = False
 thr.start()
