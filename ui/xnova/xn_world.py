@@ -977,8 +977,22 @@ class XNovaWorld(QThread):
                                max_cache_lifetime=0, force_download=True,
                                referer=referer)
         elif bitem.is_shipyard_item:
-            # TODO: support building ships/defense!
-            logger.warn('Cannot build shipyard items for now!')
+            logger.debug('Build shipyard item {0} x {1}, gid={2}'.format(
+                    bitem.name, bitem.quantity, bitem.gid))
+            if bitem.gid <= 0:
+                logger.warn('Invalid bitem gid: {0}! Skippping!'.format(bitem.gid))
+                return
+            if quantity <= 0:
+                logger.warn('Invalid quantity: {0}! Skippping!'.format(quantity))
+                return
+            post_url = '?set=buildings&mode=fleet'
+            post_data = dict()
+            param_name = 'fmenge[{0}]'.format(bitem.gid)
+            post_data[param_name] = quantity
+            referer = 'http://{0}/?set=buildings&mode=fleet'.format(self._page_downloader.xnova_url)
+            self._post_page_url(post_url, post_data, referer)
+            # automatically download planet shipyard after this
+            self._download_planet_shipyard(planet_id, force_download=True)
 
     def _request_build_cancel(self, planet_id: int, bitem: XNPlanetBuildingItem):
         logger.debug('Request to cancel build: {0} on planet {1}, remove_link = [{2}]'.format(
