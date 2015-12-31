@@ -127,7 +127,10 @@ class BuildProgressWidget(QFrame):
                 self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
                 self._set_percent_complete(bi)
                 self._set_buildtime(bi)
+                self.show()
                 return
+            # if we are here, no shipyard builds are in progress
+            self.hide()
         elif typ == self.BPW_TYPE_RESEARCH:
             for bi in planet.research_items:
                 if bi.is_in_progress():
