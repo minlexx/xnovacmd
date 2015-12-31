@@ -10,7 +10,7 @@ from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsProgressParser, P
 from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from ui.xnova.xn_parser_research import ResearchAvailParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
-from ui.xnova.xn_parser_planet_energy import PlanetEnergyParser
+from ui.xnova.xn_parser_planet_energy import PlanetEnergyResParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
 
 from ui.xnova.xn_logger import get as xn_logger_get
@@ -114,7 +114,7 @@ def main():
     ttp.parse_page_content(content)
     #
     # planet energy parser test
-    pep = PlanetEnergyParser()
+    pep = PlanetEnergyResParser()
     content = cacher.get_page('buildings_82160')  # can be any overview, research or shipyard page
     pep.parse_page_content(content)
     logger.info('Parsed planet energy status: {0}/{1}'.format(pep.energy_left, pep.energy_total))

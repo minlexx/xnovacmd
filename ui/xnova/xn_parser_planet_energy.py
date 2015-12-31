@@ -14,9 +14,9 @@ planet's current resources and energy info at the top:
 '''
 
 
-class PlanetEnergyParser(XNParserBase):
+class PlanetEnergyResParser(XNParserBase):
     def __init__(self):
-        super(PlanetEnergyParser, self).__init__()
+        super(PlanetEnergyResParser, self).__init__()
         # public
         self.energy_left = 0
         self.energy_total = 0
@@ -33,7 +33,7 @@ class PlanetEnergyParser(XNParserBase):
         self._in_etot = False
 
     def handle_starttag(self, tag: str, attrs: list):
-        super(PlanetEnergyParser, self).handle_starttag(tag, attrs)
+        super(PlanetEnergyResParser, self).handle_starttag(tag, attrs)
         if tag == 'div':
             div_title = get_attribute(attrs, 'title')
             if div_title is None:
@@ -50,7 +50,7 @@ class PlanetEnergyParser(XNParserBase):
             return
 
     def handle_endtag(self, tag: str):
-        super(PlanetEnergyParser, self).handle_endtag(tag)
+        super(PlanetEnergyResParser, self).handle_endtag(tag)
         if tag == 'div':
             if self._in_eleft:
                 self._in_eleft = False
@@ -61,7 +61,7 @@ class PlanetEnergyParser(XNParserBase):
             return
 
     def handle_data2(self, data: str, tag: str, attrs: list):
-        super(PlanetEnergyParser, self).handle_data2(data, tag, attrs)
+        super(PlanetEnergyResParser, self).handle_data2(data, tag, attrs)
         # if self._in_div_viewport_buildings:
         #    logger.debug('  handle_data2(tag={0}, data={1}, attrs={2})'.format(tag, data, attrs))
         if tag == 'span':

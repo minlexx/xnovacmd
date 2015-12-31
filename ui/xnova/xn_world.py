@@ -15,7 +15,7 @@ from .xn_parser_curplanet import CurPlanetParser
 from .xn_parser_imperium import ImperiumParser
 from .xn_parser_galaxy import GalaxyParser
 from .xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
-from .xn_parser_planet_energy import PlanetEnergyParser
+from .xn_parser_planet_energy import PlanetEnergyResParser
 from .xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 from .xn_parser_research import ResearchAvailParser
 from .xn_parser_techtree import TechtreeParser
@@ -72,7 +72,7 @@ class XNovaWorld(QThread):
         self._parser_imperium = ImperiumParser()
         self._parser_planet_buildings_avail = PlanetBuildingsAvailParser()
         self._parser_planet_buildings_progress = PlanetBuildingsProgressParser()
-        self._parser_planet_energy = PlanetEnergyParser()
+        self._parser_planet_energy = PlanetEnergyResParser()
         self._parser_shipyard_ships_avail = ShipyardShipsAvailParser()
         self._parser_shipyard_progress = ShipyardBuildsInProgressParser()
         self._parser_researches_avail = ResearchAvailParser()
