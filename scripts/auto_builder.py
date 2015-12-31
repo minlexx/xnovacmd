@@ -67,6 +67,11 @@ def auto_builder_thread():
     buildings_queue.append([SOLAR_STATION, 13])
     buildings_queue.append([METAL_FACTORY, 13])
     buildings_queue.append([DEIT_FACTORY, 3])
+    buildings_queue.append([DEIT_FACTORY, 4])
+    buildings_queue.append([DEIT_FACTORY, 5])
+    # 14
+    buildings_queue.append([SOLAR_STATION, 14])
+    buildings_queue.append([METAL_FACTORY, 14])
 
     while True:
         time.sleep(1)
