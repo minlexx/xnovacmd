@@ -22,7 +22,7 @@ class XNovaPageCache:
         self.save_load_encoding = locale.getpreferredencoding()
         logger.info('Locale preferred encoding: {0}'.format(self.save_load_encoding))
 
-    # scan ./cache directory and load all files into memory
+    # scan ./cache/page directory and load all files into memory
     def load_from_disk_cache(self, clean=True):
         if clean:
             self._pages = {}
@@ -41,14 +41,12 @@ class XNovaPageCache:
                     # get file last modification time
                     stt = subitem.stat()
                     mtime = int(stt.st_mtime)
-                    if subitem.name != 'login.dat':
-                        # skip login.dat
-                        with subitem.open(mode='rt', encoding=self.save_load_encoding) as f:
-                            fname = subitem.name
-                            contents = f.read()
-                            self._pages[fname] = contents  # save file contents
-                            self._mtimes[fname] = mtime  # save also modification time
-                            num_loaded += 1
+                    with subitem.open(mode='rt', encoding=self.save_load_encoding) as f:
+                        fname = subitem.name
+                        contents = f.read()
+                        self._pages[fname] = contents  # save file contents
+                        self._mtimes[fname] = mtime  # save also modification time
+                        num_loaded += 1
                 except IOError as ioe:
                     pass
                 except UnicodeDecodeError as ude:
@@ -110,5 +108,5 @@ class XNovaPageCache:
             tm_diff = tm_now - tm_cache
             if tm_diff <= max_cache_secs:
                 return self._pages[page_name]
-            logger.debug('cache considered invalid for [{0}]: {1}s > {2}s'.format(page_name, tm_diff, max_cache_secs))
+            logger.info('cache considered invalid for [{0}]: {1}s > {2}s'.format(page_name, tm_diff, max_cache_secs))
         return None
