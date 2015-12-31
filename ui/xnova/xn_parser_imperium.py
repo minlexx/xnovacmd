@@ -23,6 +23,7 @@ class ImperiumParser(XNParserBase):
         # used to store planet energy_total, since we cannot
         # parse it from imperium pagem and overwriting it with zeroes
         self._planet_energy_totals = dict()
+        self._planet_prev_res_max = dict()
         self._planet_prev_build_items = dict()
 
     def clear(self):
@@ -33,6 +34,7 @@ class ImperiumParser(XNParserBase):
         self._counter = 0
         # store state that will be otherwise cleared by imperium update
         self._planet_energy_totals = dict()
+        self._planet_prev_res_max = dict()
         self._planet_prev_build_items = dict()
         self.save_previous_info()
         # somewhat output data
@@ -44,6 +46,7 @@ class ImperiumParser(XNParserBase):
         logger.debug('saving prev. info about {0} planets...'.format(len(self.planets)))
         for pl in self.planets:
             self._planet_energy_totals[pl.planet_id] = pl.energy.energy_total
+            self._planet_prev_res_max[pl.planet_id] = pl.res_max_silos
             self._planet_prev_build_items[pl.planet_id] = dict()
             self._planet_prev_build_items[pl.planet_id]['bi'] = pl.buildings_items
             self._planet_prev_build_items[pl.planet_id]['ri'] = pl.research_items
@@ -54,11 +57,12 @@ class ImperiumParser(XNParserBase):
 
     def restore_previous_info(self):
         logger.debug('restoring prev. energy for {0} planets...'.format(len(self._planet_energy_totals)))
-        # restore planets energy totals
+        # restore planets energy totals, res max silos
         for planet_id in self._planet_energy_totals.keys():
             for pl in self.planets:
                 if pl.planet_id == planet_id:
                     pl.energy.energy_total = self._planet_energy_totals[planet_id]
+                    pl.res_max_silos = self._planet_prev_res_max[pl.planet_id]
                     break
         # restore planet buildings items
         logger.debug('restoring prev. build items for {0} planets...'.format(len(self._planet_prev_build_items)))
