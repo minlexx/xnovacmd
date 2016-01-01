@@ -104,6 +104,7 @@ class OverviewParser(XNParserBase):
         self.new_messages_count = 0
         self.online_players = 0
         self.in_RO = False  # vacation mode
+        self.bonus_url = None
         # internals
         self._in_player_data = False
         self._in_prom_level = False
@@ -135,6 +136,7 @@ class OverviewParser(XNParserBase):
         self.new_messages_count = 0
         self.online_players = 0
         self.in_RO = False  # vacation mode
+        self.bonus_url = None
         # internals
         self._in_player_data = False
         self._in_prom_level = False
@@ -558,14 +560,19 @@ class OverviewParser(XNParserBase):
                 if b_id == 'new_messages':
                     self.new_messages_count = safe_int(data)
                     logger.info('new messages: {0}'.format(self.new_messages_count))
-        # find current online players count
         if tag == 'a':
+            # find current online players count
             # <a onclick="" title="Игроков в сети" style="color:green">35</a>
             a_style = get_attribute(attrs, 'style')
             a_title = get_attribute(attrs, 'title')
+            a_href = get_attribute(attrs, 'href')
             if (a_title == 'Игроков в сети') and (a_style == 'color:green'):
                 self.online_players = safe_int(data)
                 logger.info('Online players = {0}'.format(self.online_players))
+            if (a_href is not None) and (a_href == '?set=overview&mode=bonus'):
+                if data == 'ПОЛУЧИТЬ БОНУС':
+                    self.bonus_url = '?set=overview&mode=bonus'
+                    logger.info('!!! Bonus available !!! {0}'.format(self.bonus_url))
         if tag == 'script':
             # parse fleet remaining time more precisely
             # <script>FlotenTime('bxxfs2', 89118);</script>
