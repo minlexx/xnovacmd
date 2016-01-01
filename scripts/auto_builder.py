@@ -80,6 +80,11 @@ def auto_builder_thread():
     # grow silos
     buildings_queue.append([METAL_SILO, 2])
     buildings_queue.append([CRYSTAL_SILO, 2])
+    # 16
+    buildings_queue.append([SOLAR_STATION, 16])
+    buildings_queue.append([METAL_FACTORY, 16])
+    buildings_queue.append([CRYSTAL_FACTORY, 13])
+    buildings_queue.append([DEIT_FACTORY, 7])
 
     while True:
         time.sleep(1)
