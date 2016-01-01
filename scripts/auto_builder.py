@@ -110,7 +110,7 @@ def auto_builder_thread():
                     break
             if build_in_progress:
                 logger.info('{0} has still build in progress {1} lv {2}'.format(
-                        planet.name, bitem.name, bitem.level))
+                        planet.name, bitem.name, bitem.level+1))
                 continue
 
             # no builds in progress, we can continue
