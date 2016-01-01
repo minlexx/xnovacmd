@@ -34,6 +34,7 @@ class XNovaWorld(QThread):
     SIGNAL_BUILD_ITEM = 4       # args: bitem: XNPlanetBuildingItem, quantity, planet_id
     SIGNAL_BUILD_CANCEL = 5     # args: bitem: XNPlanetBuildingItem, planet_id
     SIGNAL_BUILD_DISMANTLE = 6  # args: bitem: XNPlanetBuildingItem, planet_id
+    SIGNAL_GET_URL = 7          # args: url, referer: optional
     # testing signals ... ?
     SIGNAL_TEST_PARSE_GALAXY = 100   # args: galaxy, system
 
@@ -91,6 +92,7 @@ class XNovaWorld(QThread):
         self._planets = []  # list of XNPlanet
         self._techtree = XNTechTree_instance()
         self._new_messages_count = 0
+        self._get_bonus_url = None
         self._server_online_players = 0
         self._max_fleets_count = 0
         self._cur_fleets_count = 0
@@ -271,6 +273,18 @@ class XNovaWorld(QThread):
         self.unlock()
         return ret
 
+    def get_bonus_url(self) -> str:
+        ret = ''
+        if self.lock(0):
+            ret = self._get_bonus_url
+            self.unlock()
+        return ret
+
+    def clear_bonus_url(self):
+        self.lock()
+        self._get_bonus_url = None
+        self.unlock()
+
     ################################################################################
     # this should re-calculate all user's object statuses
     # like fleets in flight, buildings in construction,
@@ -422,6 +436,7 @@ class XNovaWorld(QThread):
             self._new_messages_count = self._parser_overview.new_messages_count
             self._vacation_mode = self._parser_overview.in_RO
             self._server_online_players = self._parser_overview.online_players
+            self._get_bonus_url = self._parser_overview.bonus_url
             # run also cur planet parser on the same content
             self._parser_curplanet.parse_page_content(page_content)
             self._cur_planet_id = self._parser_curplanet.cur_planet_id
@@ -687,6 +702,19 @@ class XNovaWorld(QThread):
             self.unlock()
             logger.debug('reload planet #{0} done'.format(planet_id))
 
+    def on_signal_get_url(self):
+        if 'url' in self._signal_kwargs:
+            url = self._signal_kwargs['url']
+            referer = None
+            if 'referer' in self._signal_kwargs:
+                referer = self._signal_kwargs['referer']
+            logger.debug('Got signal to load url: [{0}], referer=[{1}]'.format(
+                url, referer))
+            self.lock()
+            self._get_page_url(None, url, max_cache_lifetime=0,
+                               force_download=True, referer=referer)
+            self.unlock()
+
     def on_signal_test_parse_galaxy(self):
         if ('galaxy' in self._signal_kwargs) and ('system' in self._signal_kwargs):
             gal_no = self._signal_kwargs['galaxy']
@@ -832,9 +860,10 @@ class XNovaWorld(QThread):
             # signal that we have finished network request
             if not self._world_is_loading:
                 self.net_request_finished.emit()
-            if page_content is not None:
-                self._page_cache.set_page(page_name, page_content)  # save in cache
-            else:  # download error
+            # save in cache
+            if (page_content is not None) and (page_name is not None):
+                self._page_cache.set_page(page_name, page_content)
+            else:  # download error happened
                 self._inc_network_errors()
         # parse page content independently if it was read from cache or by network from server
         if (page_content is not None) and (page_name is not None):
@@ -1135,6 +1164,8 @@ class XNovaWorld(QThread):
                 self.on_signal_build_cancel()
             elif ret == self.SIGNAL_BUILD_DISMANTLE:
                 self.on_signal_build_dismantle()
+            elif ret == self.SIGNAL_GET_URL:
+                self.on_signal_get_url()
             elif ret == self.SIGNAL_TEST_PARSE_GALAXY:
                 self.on_signal_test_parse_galaxy()
             #
