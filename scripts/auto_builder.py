@@ -90,8 +90,15 @@ def auto_builder_thread():
             planet = world.get_planet(my_planet_id)
             if planet is None:
                 continue
+            # logger.debug('got my planet: {0}'.format(planet))
 
-            logger.debug('got my planet: {0}'.format(planet))
+            bonus_url = world.get_bonus_url()
+            if bonus_url is not None:
+                logger.info('Detected that bonus is available, get it!')
+                world.signal(world.SIGNAL_GET_URL, url=bonus_url, referer='?set=overview')
+                time.sleep(5)
+                world.clear_bonus_url()
+                time.sleep(1)
 
             # is there any building in progress on planet now?
             build_in_progress = False
@@ -102,7 +109,8 @@ def auto_builder_thread():
                     bitem = bitem_
                     break
             if build_in_progress:
-                logger.info('{0} has still build in progress {1}'.format(planet.name, bitem.name))
+                logger.info('{0} has still build in progress {1} lv {2}'.format(
+                        planet.name, bitem.name, bitem.level))
                 continue
 
             # no builds in progress, we can continue
