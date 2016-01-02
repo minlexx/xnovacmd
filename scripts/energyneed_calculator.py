@@ -12,7 +12,7 @@ def energy_need_for_gid(gid: int, level: int) -> int:
         e = (10 * level) * (1.1 ** level)
         return round(e)
     if gid == 3:
-        e = (20 * level) * (1.1 ** level)
+        e = (30 * level) * (1.1 ** level)
         return round(e)
     return -1
 
