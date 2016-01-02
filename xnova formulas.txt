@@ -20,17 +20,44 @@
 Дейтерия на термоядерной электростанции: 
 = 10 * уровень*1,1^уровень 
 
-deit energy consumption:
-lv  1: 33
-lv  2: 83
-lv  3: 137
-lv  4: 202
-lv  5: 277
-lv  6: 366
-lv  7: 470
-lv  8: 591
-lv  9: 732
-lv 10: 894
+$ProdGrid = array(
+		1   => array(
+				'metal'     => 'return   (30 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);',
+				'crystal'   => 'return   "0";',
+				'deuterium' => 'return   "0";',
+				'energy'    => 'return - (10 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'
+		),
+		2   => array(
+				'metal'     => 'return   "0";',
+				'crystal'   => 'return   (20 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);',
+				'deuterium' => 'return   "0";',
+				'energy'    => 'return - (10 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'
+		),
+		3   => array(
+				'metal'     => 'return   "0";',
+				'crystal'   => 'return   "0";',
+				'deuterium' => 'return  ((10 * $BuildLevel * pow((1.1), $BuildLevel)) * (-0.002 * $BuildTemp + 1.28)) * (0.1 * $BuildLevelFactor);',
+				'energy'    => 'return - (30 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'
+		),
+		4   => array(
+				'metal'     => 'return   "0";',
+				'crystal'   => 'return   "0";',
+				'deuterium' => 'return   "0";',
+				'energy'    => 'return   (20 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);'
+		),
+		12  => array(
+				'metal'     => 'return   "0";',
+				'crystal'   => 'return   "0";',
+				'deuterium' => 'return - (10 * $BuildLevel * pow((1.1), $BuildLevel)) * (0.1 * $BuildLevelFactor);',
+				'energy'    => 'return   (40 * $BuildLevel * pow(1.05 + $energy_tech * 0.01, $BuildLevel)) * (0.1 * $BuildLevelFactor) ;'
+		),
+		212 => array(
+				'metal'     => 'return   "0";',
+				'crystal'   => 'return   "0";',
+				'deuterium' => 'return   "0";',
+				'energy'    => 'return  (($BuildTemp / 4) + 20) * $BuildLevel * (0.1 * $BuildLevelFactor);'
+		)
+	);
 
 
 Вместимость хранилищ 
