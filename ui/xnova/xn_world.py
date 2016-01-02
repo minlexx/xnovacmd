@@ -834,7 +834,7 @@ class XNovaWorld(QThread):
         Then calls self.on_page_downloaded() to automatically parse requested page.
         If force_download is True, max_cache_lifetime is ignored.
         (This method's return value is ignored for now)
-        :param page_name: 'name' of page to use as key when stored to cache
+        :param page_name: 'name' of page to use as key when stored to cache, if None - cache disabled
         :param page_url: URL to download in HTTP GET request
         :param max_cache_lifetime:
         :param force_download:
@@ -855,15 +855,16 @@ class XNovaWorld(QThread):
             # set referer, if set
             if referer is not None:
                 self._page_downloader.set_referer(referer)
-            # try to download, it not in cache
+            # try to download
             page_content = self._page_downloader.download_url_path(page_url)
             # signal that we have finished network request
             if not self._world_is_loading:
                 self.net_request_finished.emit()
-            # save in cache
+            # save in cache, only if content anf page_name is present
             if (page_content is not None) and (page_name is not None):
                 self._page_cache.set_page(page_name, page_content)
-            else:  # download error happened
+            # check for download error
+            if page_content is None:  # download error happened
                 self._inc_network_errors()
         # parse page content independently if it was read from cache or by network from server
         if (page_content is not None) and (page_name is not None):
