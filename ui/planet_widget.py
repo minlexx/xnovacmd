@@ -803,10 +803,20 @@ class PlanetWidget(QFrame):
         if not bitem.is_building_item:
             logger.warn('Cannot dismantle item that is not building: {0}'.format(bitem))
             return
+        downgrade_price = '{0} {3},  {1} {4},  {2} {5}'.format(
+                self.tr('Metal'), self.tr('Crystal'), self.tr('Deit'),
+                int(bitem.cost_met//2),
+                int(bitem.cost_cry // 2),
+                int(bitem.cost_deit // 2))
         btn = QMessageBox.question(self,
                 self.tr('Downgrade building'),
                 self.tr('Are you sure you want to downgrade this building?') + '\n' +
-                        '{0} {1} {2}'.format(bitem.name, self.tr('lv.'), bitem.level),
+                        '{0} {1} {2}\n{3}: {4}'.format(
+                        bitem.name,
+                        self.tr('lv.'),
+                        bitem.level,
+                        self.tr('Cost'),
+                        downgrade_price),
                 QMessageBox.Yes | QMessageBox.No)
         if btn == QMessageBox.Yes:
             self.world.signal(XNovaWorld.SIGNAL_BUILD_DISMANTLE,
