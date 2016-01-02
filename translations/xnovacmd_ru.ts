@@ -965,34 +965,54 @@ Res: {0}</source>
 <context>
     <name>PlanetWidget</name>
     <message>
-        <location filename="planet_widget.py" line="680"/>
+        <location filename="planet_widget.py" line="682"/>
         <source>Buildings</source>
         <translation>Постройки</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="689"/>
+        <location filename="planet_widget.py" line="691"/>
         <source>Shipyard</source>
         <translation>Верфь</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="697"/>
+        <location filename="planet_widget.py" line="699"/>
         <source>Research</source>
         <translation>Исследования</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="806"/>
+        <location filename="planet_widget.py" line="813"/>
         <source>Downgrade building</source>
         <translation>Снос здания</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="806"/>
+        <location filename="planet_widget.py" line="813"/>
         <source>Are you sure you want to downgrade this building?</source>
         <translation>Вы уверены, что хотите снести это здание?</translation>
     </message>
     <message>
-        <location filename="planet_widget.py" line="806"/>
+        <location filename="planet_widget.py" line="813"/>
         <source>lv.</source>
         <translation>ур.</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="808"/>
+        <source>Metal</source>
+        <translation>Металл</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="808"/>
+        <source>Crystal</source>
+        <translation>Кристалл</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="808"/>
+        <source>Deit</source>
+        <translation>Дейтерий</translation>
+    </message>
+    <message>
+        <location filename="planet_widget.py" line="813"/>
+        <source>Cost</source>
+        <translation>Стоимость</translation>
     </message>
 </context>
 <context>
@@ -1279,7 +1299,7 @@ Res: {0}</source>
 <context>
     <name>XNovaWorld</name>
     <message>
-        <location filename="xn_world.py" line="1064"/>
+        <location filename="xn_world.py" line="1109"/>
         <source>Planet</source>
         <translation>Планета</translation>
     </message>
