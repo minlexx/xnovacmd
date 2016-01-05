@@ -1,6 +1,7 @@
 import argparse
 import re
 
+from ui.xnova.xn_page_cache import XNovaPageCache
 from ui.xnova.xn_page_dnl import XNovaPageDownload
 from ui.xnova import xn_logger
 
@@ -22,6 +23,7 @@ def parse_args():
 
 def main():
     args = parse_args()
+    page_cache = XNovaPageCache()
     page_dnl = XNovaPageDownload()
     # 
     # 1. download main root page
@@ -47,6 +49,9 @@ def main():
     if match is None:
         raise NetError('Login error! Name or password is invalid!')
     logger.info('Login OK!')
+    #
+    # 4. init page cache, load all cached pages
+    page_cache.load_from_disk_cache()
 
 
 if __name__ == '__main__':
