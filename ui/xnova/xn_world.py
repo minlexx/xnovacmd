@@ -4,10 +4,9 @@ import re
 
 from PyQt5.QtCore import pyqtSignal, QThread, QMutex
 
-from .xn_data import XNAccountInfo
 from .xn_page_cache import XNovaPageCache
 from .xn_page_dnl import XNovaPageDownload
-from .xn_data import XNCoords, XNFlight, XNPlanet, XNPlanetBuildingItem
+from .xn_data import XNAccountInfo, XNCoords, XNFlight, XNPlanet, XNPlanetBuildingItem
 from .xn_techtree import XNTechTree_instance
 from .xn_parser_overview import OverviewParser
 from .xn_parser_userinfo import UserInfoParser
