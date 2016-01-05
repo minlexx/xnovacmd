@@ -12,12 +12,12 @@ from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
+from ui.xnova.xn_parser_techtree import TechtreeParser
 # from ui.xnova.xn_parser_galaxy import GalaxyParser
 # from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
 # from ui.xnova.xn_parser_planet_energy import PlanetEnergyResParser
 # from ui.xnova.xn_parser_shipyard import ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
 # from ui.xnova.xn_parser_research import ResearchAvailParser
-# from ui.xnova.xn_parser_techtree import TechtreeParser
 from ui.xnova import xn_logger
 
 logger = xn_logger.get(__name__, debug=True)
