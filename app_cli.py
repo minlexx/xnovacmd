@@ -1,5 +1,4 @@
 import argparse
-import configparser
 import re
 
 from ui.xnova.xn_page_dnl import XNovaPageDownload
@@ -14,7 +13,7 @@ class NetError(Exception):
         self.desc = desc if desc is not None else ''
 
 
-def parse_args() -> argparse.ArgumentParser:
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('login', help='your login')
     parser.add_argument('password', help='your password')
@@ -23,7 +22,6 @@ def parse_args() -> argparse.ArgumentParser:
 
 def main():
     args = parse_args()
-    #logger.debug('login={}, password={}'.format(args.login, args.password))
     page_dnl = XNovaPageDownload()
     # 
     # 1. download main root page
@@ -40,13 +38,11 @@ def main():
     if page_dnl.sess is not None:
         if page_dnl.sess.headers is not None:
             page_dnl.sess.headers.update(headers)
-    # logger.debug('Going to post login form to {}'.format(url))
-    # logger.debug('Postdata: {}'.format(postdata))
     content = page_dnl.post(url, postdata, referer=referer)
     if content is None:
         raise NetError('Network download page error: ' + page_dnl.error_str)
-    # logger.debug('login form response = {0}'.format(content))
-    # parse login response
+    #
+    # 3. parse login response
     match = re.search('^<script', content)
     if match is None:
         raise NetError('Login error! Name or password is invalid!')
