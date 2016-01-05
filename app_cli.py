@@ -228,16 +228,10 @@ class World:
         :param referer: if set, use this as value for HTTP Referer header
         :return: response content, or None on error
         """
-        # signal that we are starting network request
-        if not self._world_is_loading:
-            self.net_request_started.emit()
         page_content = self._page_dnl.post(page_url, post_data=post_data, referer=referer)
-        # signal that we have finished network request
-        if not self._world_is_loading:
-            self.net_request_finished.emit()
         # handle errors
         if page_content is None:
-            self._inc_network_errors()
+            raise NetError(self._page_dnl.error_str)
         return page_content
     
     def world_refresh(self):
