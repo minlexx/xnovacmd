@@ -2,11 +2,14 @@
 import unittest
 
 from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
-from ui.xnova.xn_parser_shipyard import parse_js_array_decl
-from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
-    PlanetBuildingsProgressParser
+
 from ui.xnova.xn_parser_techtree import TechtreeParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
+from ui.xnova.xn_parser_fleet import FleetsMaxParser
+
+from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
+    PlanetBuildingsProgressParser
+from ui.xnova.xn_parser_shipyard import parse_js_array_decl
 
 
 def read_test_page(page_name: str) -> str:
@@ -105,3 +108,14 @@ class TestParser(unittest.TestCase):
         self.assertEqual(uip.main_planet_name, 'Arnon')
         self.assertEqual(uip.main_planet_coords.coords_str(), '[1:7:9]')
         self.assertEqual(uip.alliance_name, 'Fury')
+
+    def test_parse_fleetsmax(self):
+        parser = FleetsMaxParser()
+        content = read_test_page('fleet.html')
+        self.assertIsNotNone(content)
+        parser.parse_page_content(content)
+        self.assertEqual(parser.fleets_cur, 6)
+        self.assertEqual(parser.fleets_max, 14)
+        self.assertEqual(parser.expeditions_cur, 0)
+        self.assertEqual(parser.expeditions_max, 2)
+

@@ -1,0 +1,787 @@
+	<!DOCTYPE HTML>
+	<html>
+	<head>
+									<title>Флот :: Звездная Империя</title>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<link rel="image_src" href="http://uni4.xnova.su/images/logo.jpg" />
+		<link rel="apple-touch-icon" href="http://uni4.xnova.su/images/apple-touch-icon.png"/>
+		<link href="/cache/UNI4/scripts/min_1451261343.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/cache/UNI4/scripts/min_1451261343.js"></script>
+		<!--
+		<link rel="stylesheet" type="text/css" href="/template/main/bootstrap.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/skins/default/formate.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/style.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/media.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/scripts/smoothness/jquery-ui-1.10.2.custom.css">
+
+		<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/template/main/script.js?v=3cf"></script>
+		-->
+					<meta name="viewport" content="width=810">
+				<!--
+		<script type="text/javascript" src="/scripts/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/scripts/game.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/universe.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/flotten.js?v=3cf"></script>
+		<script language="JavaScript" src="/scripts/smiles.js?v=3cf"></script>
+		<script src="/scripts/ed.js?v=3cf" type="text/javascript"></script>
+		-->
+			</head>
+	<body class="window">
+	<script type="text/javascript">
+		XNova.path = '/';
+		var timestamp = 1452078380;
+		var timezone = 4;
+		var ajax_nav = 1;
+		var addToUrl = '';
+
+					XNova.fleetSpeed 	= 2;
+			XNova.gameSpeed 	= 2;
+			XNova.resSpeed 		= 3;
+			</script>
+			<a href="#" class="menu-toggle visible-xs">
+    <span>
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="third"></span>
+    </span>
+</a>
+<div class="menu-sidebar visible-xs">
+	<ul class="nav">
+					<li><a data-link="overview"  href="?set=overview" >Обзор</a></li>
+					<li><a data-link="imperium"  href="?set=imperium" >Империя</a></li>
+					<li><a data-link="galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+					<li><a data-link="fleet"  href="?set=fleet" class="check">Флот</a></li>
+					<li><a data-link="buildings"  href="?set=buildings" >Постройки</a></li>
+					<li><a data-link="buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+					<li><a data-link="buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+					<li><a data-link="buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+					<li><a data-link="buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+					<li><a data-link="resources"  href="?set=resources" >Сырьё</a></li>
+					<li><a data-link="marchand"  href="?set=marchand" >Рынок</a></li>
+					<li><a data-link="officier"  href="?set=officier" >Офицеры</a></li>
+					<li><a data-link="alliance"  href="?set=alliance" >Альянс</a></li>
+					<li><a data-link="buddy"  href="?set=buddy" >Друзья</a></li>
+					<li><a data-link="notes"  href="?set=notes" >Заметки</a></li>
+					<li><a data-link="records"  href="?set=records" >Рекорды</a></li>
+					<li><a data-link="hall"  href="?set=hall" >Зал славы</a></li>
+					<li><a data-link="log"  href="?set=log" >Логи</a></li>
+					<li><a data-link="calculate"  href="?set=calculate" >Расчеты</a></li>
+			</ul>
+</div>
+<div class="contentBox set_fleet">
+	<div id="box">
+		<div class="game_menu">
+			<div class="visible-xs text-center bar">
+									<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+								<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+				<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b>0</b></a>
+									<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b>0</b></a>
+							</div>
+			<div class="bar hhh hidden-xs">
+				<div class="message_list">
+											<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+										<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+					<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b id="new_messages">0</b></a>
+											<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b id="ally_messages">0</b></a>
+									</div>
+				<table align="center" class="top_menu">
+					<tr>
+																			<td class="m1"><a href="http://xnova.su/" target="_blank" class="tooltip sprite ico_space" data-tooltip-content="Вселенные"></a></td>
+												<td class="m1"><a href="?set=stat" class="tooltip sprite ico_stats" data-tooltip-content="Статистика"></a></td>
+						<td class="m1"><a href="?set=techtree" class="tooltip sprite ico_tech" data-tooltip-content="Технологии"></a>
+						<td class="m1"><a href="?set=sim" class="tooltip sprite ico_sim" data-tooltip-content="Симулятор"></a>
+						<td class="m1"><a href="?set=search" class="tooltip sprite ico_search" data-tooltip-content="Поиск"></a></td>
+													<td class="m1"><a href="?set=support" class="tooltip sprite ico_support" data-tooltip-content="Техподдержка"></a></td>
+																			<td class="m1"><a href="http://forum.xnova.su/" target="_blank" class="tooltip sprite ico_forum" data-tooltip-content="Форум"></a></td>
+												<td class="m1"><a href="?set=options" class="tooltip sprite ico_settings" data-tooltip-content="Настройки"></a></td>
+													<td class="m1"><a href="?set=logout&popup" class="tooltip sprite ico_exit" data-tooltip-content="Выход"></a></td>
+																	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="icon-panel visible-xs">
+			<a href="?set=stat" class="sprite ico_stats"></a>
+			<a href="?set=techtree" class="sprite ico_tech"></a>
+			<a href="?set=sim" class="sprite ico_sim"></a>
+			<a href="?set=search" class="sprite ico_search"></a>
+			<a href="?set=support" class="sprite ico_support"></a>
+			<a href="http://forum.xnova.su/" target="_blank" class="sprite ico_forum"></a>
+			<a href="?set=options" class="sprite ico_settings"></a>
+			<a href="?set=logout&popup" class="sprite ico_exit"></a>
+		</div>
+		<div class="game_content">
+			<ul class="menu hidden-xs">
+									<li><a id="link_overview"  href="?set=overview" >Обзор</a></li>
+									<li><a id="link_imperium"  href="?set=imperium" >Империя</a></li>
+									<li><a id="link_galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+									<li><a id="link_fleet"  href="?set=fleet" class="check">Флот</a></li>
+									<li><a id="link_buildings"  href="?set=buildings" >Постройки</a></li>
+									<li><a id="link_buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+									<li><a id="link_buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+									<li><a id="link_buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+									<li><a id="link_buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+									<li><a id="link_resources"  href="?set=resources" >Сырьё</a></li>
+									<li><a id="link_marchand"  href="?set=marchand" >Рынок</a></li>
+									<li><a id="link_officier"  href="?set=officier" >Офицеры</a></li>
+									<li><a id="link_alliance"  href="?set=alliance" >Альянс</a></li>
+									<li><a id="link_buddy"  href="?set=buddy" >Друзья</a></li>
+									<li><a id="link_notes"  href="?set=notes" >Заметки</a></li>
+									<li><a id="link_records"  href="?set=records" >Рекорды</a></li>
+									<li><a id="link_hall"  href="?set=hall" >Зал славы</a></li>
+									<li><a id="link_log"  href="?set=log" >Логи</a></li>
+									<li><a id="link_calculate"  href="?set=calculate" >Расчеты</a></li>
+							</ul>
+								<a href="#" class="planet-toggle visible-xs"><span>
+			<span class="first"></span>
+			<span class="second"></span>
+			<span class="third"></span>
+		</span>
+	</a>
+		<div class="planet-sidebar planetList">
+			<div class="list ">
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(60668)" title="Osmon">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet07.jpg" height="40" width="40" alt="Osmon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a></span>
+						<div class="hidden-sm">
+							Osmon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(54450)" title="Arnon">
+							<img src="/skins/default/planeten/small/s_normaltempplanet08.jpg" height="40" width="40" alt="Arnon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a></span>
+						<div class="hidden-sm">
+							Arnon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(69255)" title="SG Tama">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a></span>
+						<div class="hidden-sm">
+							SG Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 current">
+						<a href="javascript:" onclick="changePlanet(57064)" title="Tama">
+							<img src="/skins/default/planeten/small/s_wasserplanet08.jpg" height="40" width="40" alt="Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a></span>
+						<div class="hidden-sm">
+							Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(58119)" title="Jita">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet18.jpg" height="40" width="40" alt="Jita">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a></span>
+						<div class="hidden-sm">
+							Jita							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(61569)" title="Amarr">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet09.jpg" height="40" width="40" alt="Amarr">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a></span>
+						<div class="hidden-sm">
+							Amarr							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(65077)" title="SG Fury">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Fury">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a></span>
+						<div class="hidden-sm">
+							SG Fury							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57862)" title="J152711">
+							<img src="/skins/default/planeten/small/s_normaltempplanet10.jpg" height="40" width="40" alt="J152711">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a></span>
+						<div class="hidden-sm">
+							J152711							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56598)" title="Dodixie">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet16.jpg" height="40" width="40" alt="Dodixie">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a></span>
+						<div class="hidden-sm">
+							Dodixie							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(84514)" title="Колония">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Колония">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a></span>
+						<div class="hidden-sm">
+							Колония							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(75971)" title="SG Rens">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a></span>
+						<div class="hidden-sm">
+							SG Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56814)" title="Rens">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet08.jpg" height="40" width="40" alt="Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a></span>
+						<div class="hidden-sm">
+							Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(67343)" title="Geminate">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet01.jpg" height="40" width="40" alt="Geminate">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a></span>
+						<div class="hidden-sm">
+							Geminate							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+								<div class="clearfix"></div>
+			</div>
+		</div>
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+				$('.planetList .list').on('mouseup', 'a', function()
+				{
+					$('.planetList .planet').removeClass('current');
+					$(this).parents('.planet').addClass('current');
+				});
+			});
+		</script>
+							<div class="content">
+								<div id="gamediv" class="container-fluid">	
+			<script type="text/javascript">
+	var ress = new Array(52423, 597910, 40803);
+	var max = new Array(11062500,6937500,6937500);
+	var production = new Array(14.3925, 7.2386111111111, 2.6086111111111);
+	timeouts['res_count'] = window.setInterval(XNova.updateResources, 1000);
+	var serverTime = 1452078380000 - Djs + (timezone + 6) * 1800000;
+</script>
+<form action="" name="ress" id="ress" style="display:none">
+	<input type="hidden" id="metall" value="0">
+	<input type="hidden" id="crystall" value="0">
+	<input type="hidden" id="deuterium" value="0">
+	<input type="hidden" id="bmetall" value="0">
+	<input type="hidden" id="bcrystall" value="0">
+	<input type="hidden" id="bdeuterium" value="0">
+</form>
+<div class="row topnav">
+			<div class="col-md-2 hidden-xs col-sm-12">
+			<div class="separator visible-sm"></div>
+			<select style="width:100%;" onChange="load(this.options[this.selectedIndex].value);">
+<option value="?set=fleet&amp;cp=60668&amp;re=0">Osmon&nbsp;[1:7:6]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=54450&amp;re=0">Arnon&nbsp;[1:7:9]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=fleet&amp;cp=69255&amp;re=0">SG Tama&nbsp;[1:34:10]&nbsp;&nbsp;</option>
+<option selected="selected" value="?set=fleet&amp;cp=57064&amp;re=0">Tama&nbsp;[1:34:11]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=58119&amp;re=0">Jita&nbsp;[1:96:6]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=61569&amp;re=0">Amarr&nbsp;[1:198:5]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=fleet&amp;cp=65077&amp;re=0">SG Fury&nbsp;[1:233:2]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=57862&amp;re=0">J152711&nbsp;[2:50:7]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=56598&amp;re=0">Dodixie&nbsp;[2:159:4]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=fleet&amp;cp=84514&amp;re=0">Колония&nbsp;[2:270:6]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=fleet&amp;cp=75971&amp;re=0">SG Rens&nbsp;[3:130:4]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=56814&amp;re=0">Rens&nbsp;[3:130:5]&nbsp;&nbsp;</option>
+<option value="?set=fleet&amp;cp=67343&amp;re=0">Geminate&nbsp;[4:100:5]&nbsp;&nbsp;</option></select>
+			<div class="separator visible-sm"></div>
+		</div>
+		<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник металла', '?set=infos&gid=1&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>51.813</td></tr><tr><td>День:</td><td align=right>1.243.512</td></tr></table>'><span class="sprite skin_metall"></span><br></span>
+				<font color="#FFFF00">Металл</font><br>
+				<div title="Количество ресурса на планете"><div id="met">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">11.062.500</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник кристалла', '?set=infos&gid=2&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>26.059</td></tr><tr><td>День:</td><td align=right>625.416</td></tr></table>'><span class="sprite skin_kristall"></span><br></span>
+				<font color="#FFFF00">Кристалл</font><br>
+				<div title="Количество ресурса на планете"><div id="cry">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">6.937.500</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Синтезатор дейтерия', '?set=infos&gid=3&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>9.391</td></tr><tr><td>День:</td><td align=right>225.384</td></tr></table>'><span class="sprite skin_deuterium"></span><br></span>
+				<font color="#FFFF00">Дейтерий</font><br>
+				<div title="Количество ресурса на планете"><div id="deu">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">6.937.500</font></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Солнечная батарея', '?set=infos&gid=4&ajax&popup', 600)" title="Солнечная батарея" class="hidden-xs"><span class="sprite skin_energie"></span><br></span>
+				<font color="#FFFF00">Энергия</font><br>
+				<div title="Энергетический баланс"><span class="positive">32</span></div>
+				<span title="Выработка энергии" class="hidden-xs"><font color="#00ff00">13.911</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span class="tooltip hidden-xs" data-tooltip-content='<center>Вместимость:<br>7500 / 7500</center>'>
+											<span class="sprite skin_batt100"></span>
+										<br>
+				</span>
+				<font color="#FFFF00">Заряд</font><br>
+				100%<br>
+			</div>
+			<div class="col-xs-4 text-center">
+				<a href="?set=infokredits" class="tooltip hidden-xs" data-tooltip-content='
+				<table width=550>
+				<tr>
+									<td align="center" width="14%">
+						Геолог						<div class="separator"></div>
+						<span class="officier of601_ikon"></span>
+					</td>
+									<td align="center" width="14%">
+						Адмирал						<div class="separator"></div>
+						<span class="officier of602"></span>
+					</td>
+									<td align="center" width="14%">
+						Инженер						<div class="separator"></div>
+						<span class="officier of603"></span>
+					</td>
+									<td align="center" width="14%">
+						Технократ						<div class="separator"></div>
+						<span class="officier of604"></span>
+					</td>
+									<td align="center" width="14%">
+						Архитектор						<div class="separator"></div>
+						<span class="officier of605"></span>
+					</td>
+									<td align="center" width="14%">
+						Метафизик						<div class="separator"></div>
+						<span class="officier of606"></span>
+					</td>
+									<td align="center" width="14%">
+						Наёмник						<div class="separator"></div>
+						<span class="officier of607"></span>
+					</td>
+								</tr>
+				<tr>
+									<td align="center">
+											Нанят до <font color=lime>12.01.2016 09:08</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+								</tr></table>'><span class="sprite skin_kredits"></span><br></a>
+				<font color="#FFFF00">Кредиты</font><br>
+				63<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#met").html(XNova.format(52423));
+	$("#cry").html(XNova.format(597910));
+	$("#deu").html(XNova.format(40803));
+	$(document).ready(XNova.updateResources());
+</script>	
+	
+
+
+
+
+<div class="row"><div class="table-responsive">
+	<table class='table'>
+		<tr>
+			<td colspan='9' class='c'>
+				<table border="0" width="100%">
+					<tr>
+						<td align="left">
+							Флоты 6 из 14						</td>
+						<td align="right">
+							0/2 Экспедиции						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<th width='20'>№</th>
+			<th>Миссия</th>
+			<th>Кол</th>
+			<th>Дислокация</th>
+			<th width='80'>Прибытие</th>
+			<th>Цель</th>
+			<th width='80'>Возврат</th>
+			<th>Через</th>
+			<th width='110'>Приказы</th>
+		</tr>
+					<tr>
+				<th>1</th>
+				<th>
+					<a>Транспорт</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Малый транспорт: 10<br>'>10</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=3&system=130">[3:130:5]</a></th>
+				<th>06.01.16<br>16:32:13</th>
+				<th><a href="?set=galaxy&r=3&galaxy=2&system=270">[2:270:6]</a></th>
+				<th>06.01.16<br>17:44:06</th>
+				<th><font color="lime">1 ч. 37 мин. 47 с. </font></th>
+				<th>
+											<form action="?set=fleet&page=back" method="post">
+							<input name="fleetid" value="1612989" type="hidden">
+							<input value=" Возврат домой " type="submit" name="send">
+						</form>
+															</th>
+			</tr>
+					<tr>
+				<th>2</th>
+				<th>
+					<a>Оставить</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Малый транспорт: 3000<br>Большой транспорт: 150<br>Переработчик: 50<br>'>3.200</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=3&system=130">[3:130:5]</a></th>
+				<th>06.01.16<br>08:08:03</th>
+				<th><a href="?set=galaxy&r=3&galaxy=4&system=100">[4:100:5]</a></th>
+				<th>06.01.16<br>16:07:09</th>
+				<th><font color="lime">50 с. </font></th>
+				<th>
+											&nbsp;-&nbsp;
+									</th>
+			</tr>
+					<tr>
+				<th>3</th>
+				<th>
+					<a>Оставить</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Линейный крейсер: 6<br>Корсар: 18<br>'>24</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=4&system=100">[4:100:5]</a></th>
+				<th>06.01.16<br>16:33:12</th>
+				<th><a href="?set=galaxy&r=3&galaxy=3&system=130">[3:130:4]</a></th>
+				<th>06.01.16<br>17:45:05</th>
+				<th><font color="lime">1 ч. 38 мин. 46 с. </font></th>
+				<th>
+											<form action="?set=fleet&page=back" method="post">
+							<input name="fleetid" value="1612993" type="hidden">
+							<input value=" Возврат домой " type="submit" name="send">
+						</form>
+															</th>
+			</tr>
+					<tr>
+				<th>4</th>
+				<th>
+					<a>Транспорт</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Малый транспорт: 10<br>'>10</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=3&system=130">[3:130:5]</a></th>
+				<th>06.01.16<br>17:01:22</th>
+				<th><a href="?set=galaxy&r=3&galaxy=1&system=233">[1:233:2]</a></th>
+				<th>06.01.16<br>18:43:00</th>
+				<th><font color="lime">2 ч. 36 мин. 41 с. </font></th>
+				<th>
+											<form action="?set=fleet&page=back" method="post">
+							<input name="fleetid" value="1612988" type="hidden">
+							<input value=" Возврат домой " type="submit" name="send">
+						</form>
+															</th>
+			</tr>
+					<tr>
+				<th>5</th>
+				<th>
+					<a>Создать базу</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Малый транспорт: 200<br>Большой транспорт: 120<br>Крейсер: 405<br>Шпионский зонд: 145<br>Линейный крейсер: 398<br>Передвижная база: 1<br>Корсар: 2474<br>'>3.743</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=1&system=34">[1:34:10]</a></th>
+				<th>06.01.16<br>16:23:42</th>
+				<th><a href="?set=galaxy&r=3&galaxy=1&system=70">[1:70:6]</a></th>
+				<th>06.01.16<br>17:19:24</th>
+				<th><font color="lime">1 ч. 13 мин. 5 с. </font></th>
+				<th>
+											<form action="?set=fleet&page=back" method="post">
+							<input name="fleetid" value="1613001" type="hidden">
+							<input value=" Возврат домой " type="submit" name="send">
+						</form>
+															</th>
+			</tr>
+					<tr>
+				<th>6</th>
+				<th>
+					<a>Оставить</a>
+											<br><a title="Полёт к цели">(A)</a>
+									</th>
+				<th>
+					<a class="tooltip" data-tooltip-content='Переработчик: 100<br>'>100</a>
+				</th>
+				<th><a href="?set=galaxy&r=3&galaxy=1&system=7">[1:7:9]</a></th>
+				<th>06.01.16<br>16:07:48</th>
+				<th><a href="?set=galaxy&r=3&galaxy=1&system=34">[1:34:11]</a></th>
+				<th>06.01.16<br>17:41:58</th>
+				<th><font color="lime">1 ч. 35 мин. 39 с. </font></th>
+				<th>
+											<form action="?set=fleet&page=back" method="post">
+							<input name="fleetid" value="1612889" type="hidden">
+							<input value=" Возврат домой " type="submit" name="send">
+						</form>
+															</th>
+			</tr>
+							</table>
+	</div>
+	<br>
+	<form action="?set=fleet&page=fleet_1" method="post" class="table-responsive">
+		<table class="table fleet_ships">
+			<tr>
+				<td colspan="4" class="c">
+					Выбрать корабли:
+				</td>
+			</tr>
+			<tr>
+				<th class="col-sm-5 col-xs-4">Тип корабля</th>
+				<th class="col-sm-2 col-xs-2">Кол-во</th>
+				<th class="col-sm-2 col-xs-2">-</th>
+				<th class="col-sm-3 col-xs-4">-</th>
+			</tr>
+							<tr>
+					<th><a title="Малый транспорт">Малый транспорт</a></th>
+					<th>50</th>
+											<th><a href="javascript:noShip('ship202'); calc_capacity();">min</a>/<a href="javascript:maxShip('ship202'); calc_capacity();">max</a></th>
+						<th>
+							<a href="javascript:chShipCount('202', '-1'); calc_capacity();" title="Уменьшить на 1 ед." style="color:#FFD0D0">- </a>
+							<input type="text" name="ship202" style="width:65%" value="0" onfocus="if(this.value == '0') this.value='';" onblur="if(this.value == '') this.value='0';" title="Малый транспорт: 50" onChange="calc_capacity()" onKeyUp="calc_capacity()" />
+							<a href="javascript:chShipCount('202', '1'); calc_capacity();" title="Увеличить на 1 ед." style="color:#D0FFD0"> +</a>
+
+							<input type="hidden" name="maxship202" value="50" />
+							<input type="hidden" name="consumption202" value="10" />
+							<input type="hidden" name="speed202" value="33000" />
+							<input type="hidden" name="capacity202" value="7500" />
+						</th>
+									</tr>
+							<tr>
+					<th><a title="Лёгкий истребитель">Лёгкий истребитель</a></th>
+					<th>822</th>
+											<th><a href="javascript:noShip('ship204'); calc_capacity();">min</a>/<a href="javascript:maxShip('ship204'); calc_capacity();">max</a></th>
+						<th>
+							<a href="javascript:chShipCount('204', '-1'); calc_capacity();" title="Уменьшить на 1 ед." style="color:#FFD0D0">- </a>
+							<input type="text" name="ship204" style="width:65%" value="0" onfocus="if(this.value == '0') this.value='';" onblur="if(this.value == '') this.value='0';" title="Лёгкий истребитель: 822" onChange="calc_capacity()" onKeyUp="calc_capacity()" />
+							<a href="javascript:chShipCount('204', '1'); calc_capacity();" title="Увеличить на 1 ед." style="color:#D0FFD0"> +</a>
+
+							<input type="hidden" name="maxship204" value="822" />
+							<input type="hidden" name="consumption204" value="20" />
+							<input type="hidden" name="speed204" value="31625" />
+							<input type="hidden" name="capacity204" value="50" />
+						</th>
+									</tr>
+							<tr>
+					<th><a title="Переработчик">Переработчик</a></th>
+					<th>5</th>
+											<th><a href="javascript:noShip('ship209'); calc_capacity();">min</a>/<a href="javascript:maxShip('ship209'); calc_capacity();">max</a></th>
+						<th>
+							<a href="javascript:chShipCount('209', '-1'); calc_capacity();" title="Уменьшить на 1 ед." style="color:#FFD0D0">- </a>
+							<input type="text" name="ship209" style="width:65%" value="0" onfocus="if(this.value == '0') this.value='';" onblur="if(this.value == '') this.value='0';" title="Переработчик: 5" onChange="calc_capacity()" onKeyUp="calc_capacity()" />
+							<a href="javascript:chShipCount('209', '1'); calc_capacity();" title="Увеличить на 1 ед." style="color:#D0FFD0"> +</a>
+
+							<input type="hidden" name="maxship209" value="5" />
+							<input type="hidden" name="consumption209" value="300" />
+							<input type="hidden" name="speed209" value="5060" />
+							<input type="hidden" name="capacity209" value="28000" />
+						</th>
+									</tr>
+							<tr>
+					<th><a title="Шпионский зонд">Шпионский зонд</a></th>
+					<th>50</th>
+											<th><a href="javascript:noShip('ship210'); calc_capacity();">min</a>/<a href="javascript:maxShip('ship210'); calc_capacity();">max</a></th>
+						<th>
+							<a href="javascript:chShipCount('210', '-1'); calc_capacity();" title="Уменьшить на 1 ед." style="color:#FFD0D0">- </a>
+							<input type="text" name="ship210" style="width:65%" value="0" onfocus="if(this.value == '0') this.value='';" onblur="if(this.value == '') this.value='0';" title="Шпионский зонд: 50" onChange="calc_capacity()" onKeyUp="calc_capacity()" />
+							<a href="javascript:chShipCount('210', '1'); calc_capacity();" title="Увеличить на 1 ед." style="color:#D0FFD0"> +</a>
+
+							<input type="hidden" name="maxship210" value="50" />
+							<input type="hidden" name="consumption210" value="1" />
+							<input type="hidden" name="speed210" value="253000000" />
+							<input type="hidden" name="capacity210" value="5" />
+						</th>
+									</tr>
+							<tr>
+					<th><a title="Солнечный спутник">Солнечный спутник</a></th>
+					<th>50</th>
+											<th></th><th></th>
+									</tr>
+						
+							<tr>
+					<th colspan="2">
+						<a href="javascript:noShips(); calc_capacity();" >Обнулить</a>
+					</th>
+					<th colspan="2"><a href="javascript:maxShips(); calc_capacity();" >Все корабли</a></th>
+				</tr>
+				<tr>
+					<th colspan="2" class="hidden-xs">-</th>
+					<th colspan="1" class="visible-xs">-</th>
+					<th colspan="1" class="hidden-xs">Вместимость</th>
+					<th colspan="2" class="visible-xs">Вместимость</th>
+					<th colspan="1"><div id="allcapacity">-</div></th>
+				</tr>
+				<tr>
+					<th colspan="2" class="hidden-xs">-</th>
+					<th colspan="1" class="visible-xs">-</th>
+					<th colspan="1" class="hidden-xs">Скорость</th>
+					<th colspan="2" class="visible-xs">Скорость</th>
+					<th colspan="1"><div id="allspeed">-</div></th>
+				</tr>
+								<tr>
+					<th colspan="4"><input type="submit" value=" Далее " /></th>
+				</tr>
+									</table>
+		<input type="hidden" name="galaxy" value="1" />
+		<input type="hidden" name="system" value="34" />
+		<input type="hidden" name="planet" value="11" />
+		<input type="hidden" name="planet_type" value="1" />
+		<input type="hidden" name="mission" value="0" />
+		<input type="hidden" name="maxepedition" value="2" />
+		<input type="hidden" name="curepedition" value="0" />
+		<input type="hidden" name="target_mission" value="0" />
+		<input type="hidden" name="crc" value="fedc543f8faf93755b3bccd1e94dd66f" />
+	</form>
+</div>
+
+			</div>
+
+		<div id="loadingOverlay">загрузка...<br><img src="/images/loading.gif" alt=""></div>
+		<div id="preloadOverlay"><img src="/images/loading.gif" alt=""></div>
+
+				</div>
+		<div class="clearfix"></div>
+		</div>
+		</div>
+		</div></div>
+
+		<div id="siteFooter" class="hidden-xs">
+			<div class="container-fluid">
+				<div class="pull-left text-left">
+					<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+											<a class="hidden-sm" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+									</div>
+				<div class="pull-right text-right">
+										<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+					<a href="?set=banned">Тёмные</a>|
+											<a href="wide.php" data-link="1">Большой монитор</a>|
+						<a href="http://vk.com/xnova_game" target="_blank">ВК</a>|
+						<a href="?set=contact">Контакты</a>|
+										<a href="?set=content&article=help">Новичкам</a>|
+					<a href="?set=content&article=agb">Правила</a>|
+					<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+				</div>
+				<br class="clearfloat"/></div>
+		</div>
+		<div class="row hidden-sm hidden-md hidden-lg footer-mobile">
+			<div class="col-xs-12 text-center">
+				<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+				<a href="?set=banned">Тёмные</a>|
+				<a href="?set=contact">Контакты</a>|
+				<a href="?set=content&article=help">Новичкам</a>|
+				<a href="?set=content&article=agb">Правила</a>
+			</div>
+			<div class="col-xs-8 text-center">
+				<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+									<a class="media_1" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+							</div>
+			<div class="col-xs-4 text-center">
+				<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+			</div>
+		</div>
+	
+	
+		
+	<div id="windowDialog"></div>
+	<div id="tooltip" class="tip"></div>
+
+	
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	var yaParams = {userId: 71995};
+	</script>
+
+	<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter25961143 = new Ya.Metrika({id:25961143,params:window.yaParams||{ }});
+			} catch(e) { }
+		});
+
+	    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<!-- /Yandex.Metrika counter -->
+	</body></html>
+
+
+	<script type="text/javascript">setMenuItem("fleet");</script>
+
+	<script type="text/javascript">UpdateGameInfo('0', '0'); timestamp = 1452078380;</script>
