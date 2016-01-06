@@ -238,22 +238,18 @@ FileName=$[Project-Path]img_gen.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node7]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]setup.py
+FileName=$[Project-Path]run_tests.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]test.py
+FileName=$[Project-Path]setup.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]test_parser.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node10]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]test_requesocks.py
-
 [Project\ChildNodes\Node0\ChildNodes]
-Count=11
+Count=10
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode
@@ -284,11 +280,11 @@ MessagesFormat=$[FileName] $[LineNumber]
 
 [Project\ChildNodes\Node1\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationNode
-Name=test_parser
+Name=run_tests
 
 [Project\ChildNodes\Node1\ChildNodes\Node1\RunConfig]
-ScriptName=C:\dev\xnovacmd\test_parser.py
-Description=Test parser
+ScriptName=C:\dev\xnovacmd\run_tests.py
+Description=Run auto tests
 EngineType=peRemote
 ReinitializeBeforeRun=TRUE
 WorkingDir=$[ActiveScript-Dir]
