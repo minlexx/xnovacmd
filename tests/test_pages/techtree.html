@@ -1,0 +1,925 @@
+	<!DOCTYPE HTML>
+	<html>
+	<head>
+									<title>Технология :: Звездная Империя</title>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<link rel="image_src" href="http://uni4.xnova.su/images/logo.jpg" />
+		<link rel="apple-touch-icon" href="http://uni4.xnova.su/images/apple-touch-icon.png"/>
+		<link href="/cache/UNI4/scripts/min_1451261343.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/cache/UNI4/scripts/min_1451261343.js"></script>
+		<!--
+		<link rel="stylesheet" type="text/css" href="/template/main/bootstrap.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/skins/default/formate.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/style.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/media.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/scripts/smoothness/jquery-ui-1.10.2.custom.css">
+
+		<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/template/main/script.js?v=3cf"></script>
+		-->
+					<meta name="viewport" content="width=810">
+				<!--
+		<script type="text/javascript" src="/scripts/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/scripts/game.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/universe.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/flotten.js?v=3cf"></script>
+		<script language="JavaScript" src="/scripts/smiles.js?v=3cf"></script>
+		<script src="/scripts/ed.js?v=3cf" type="text/javascript"></script>
+		-->
+			</head>
+	<body class="window">
+	<script type="text/javascript">
+		XNova.path = '/';
+		var timestamp = 1452059279;
+		var timezone = 4;
+		var ajax_nav = 1;
+		var addToUrl = '';
+
+					XNova.fleetSpeed 	= 2;
+			XNova.gameSpeed 	= 2;
+			XNova.resSpeed 		= 3;
+			</script>
+			<a href="#" class="menu-toggle visible-xs">
+    <span>
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="third"></span>
+    </span>
+</a>
+<div class="menu-sidebar visible-xs">
+	<ul class="nav">
+					<li><a data-link="overview"  href="?set=overview" >Обзор</a></li>
+					<li><a data-link="imperium"  href="?set=imperium" >Империя</a></li>
+					<li><a data-link="galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+					<li><a data-link="fleet"  href="?set=fleet" >Флот</a></li>
+					<li><a data-link="buildings"  href="?set=buildings" >Постройки</a></li>
+					<li><a data-link="buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+					<li><a data-link="buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+					<li><a data-link="buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+					<li><a data-link="buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+					<li><a data-link="resources"  href="?set=resources" >Сырьё</a></li>
+					<li><a data-link="marchand"  href="?set=marchand" >Рынок</a></li>
+					<li><a data-link="officier"  href="?set=officier" >Офицеры</a></li>
+					<li><a data-link="alliance"  href="?set=alliance" >Альянс</a></li>
+					<li><a data-link="buddy"  href="?set=buddy" >Друзья</a></li>
+					<li><a data-link="notes"  href="?set=notes" >Заметки</a></li>
+					<li><a data-link="records"  href="?set=records" >Рекорды</a></li>
+					<li><a data-link="hall"  href="?set=hall" >Зал славы</a></li>
+					<li><a data-link="log"  href="?set=log" >Логи</a></li>
+					<li><a data-link="calculate"  href="?set=calculate" >Расчеты</a></li>
+			</ul>
+</div>
+<div class="contentBox set_techtree">
+	<div id="box">
+		<div class="game_menu">
+			<div class="visible-xs text-center bar">
+									<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+								<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+				<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b>2</b></a>
+									<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b>0</b></a>
+							</div>
+			<div class="bar hhh hidden-xs">
+				<div class="message_list">
+											<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+										<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+					<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b id="new_messages">2</b></a>
+											<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b id="ally_messages">0</b></a>
+									</div>
+				<table align="center" class="top_menu">
+					<tr>
+																			<td class="m1"><a href="http://xnova.su/" target="_blank" class="tooltip sprite ico_space" data-tooltip-content="Вселенные"></a></td>
+												<td class="m1"><a href="?set=stat" class="tooltip sprite ico_stats" data-tooltip-content="Статистика"></a></td>
+						<td class="m1"><a href="?set=techtree" class="tooltip sprite ico_tech" data-tooltip-content="Технологии"></a>
+						<td class="m1"><a href="?set=sim" class="tooltip sprite ico_sim" data-tooltip-content="Симулятор"></a>
+						<td class="m1"><a href="?set=search" class="tooltip sprite ico_search" data-tooltip-content="Поиск"></a></td>
+													<td class="m1"><a href="?set=support" class="tooltip sprite ico_support" data-tooltip-content="Техподдержка"></a></td>
+																			<td class="m1"><a href="http://forum.xnova.su/" target="_blank" class="tooltip sprite ico_forum" data-tooltip-content="Форум"></a></td>
+												<td class="m1"><a href="?set=options" class="tooltip sprite ico_settings" data-tooltip-content="Настройки"></a></td>
+													<td class="m1"><a href="?set=logout&popup" class="tooltip sprite ico_exit" data-tooltip-content="Выход"></a></td>
+																	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="icon-panel visible-xs">
+			<a href="?set=stat" class="sprite ico_stats"></a>
+			<a href="?set=techtree" class="sprite ico_tech"></a>
+			<a href="?set=sim" class="sprite ico_sim"></a>
+			<a href="?set=search" class="sprite ico_search"></a>
+			<a href="?set=support" class="sprite ico_support"></a>
+			<a href="http://forum.xnova.su/" target="_blank" class="sprite ico_forum"></a>
+			<a href="?set=options" class="sprite ico_settings"></a>
+			<a href="?set=logout&popup" class="sprite ico_exit"></a>
+		</div>
+		<div class="game_content">
+			<ul class="menu hidden-xs">
+									<li><a id="link_overview"  href="?set=overview" >Обзор</a></li>
+									<li><a id="link_imperium"  href="?set=imperium" >Империя</a></li>
+									<li><a id="link_galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+									<li><a id="link_fleet"  href="?set=fleet" >Флот</a></li>
+									<li><a id="link_buildings"  href="?set=buildings" >Постройки</a></li>
+									<li><a id="link_buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+									<li><a id="link_buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+									<li><a id="link_buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+									<li><a id="link_buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+									<li><a id="link_resources"  href="?set=resources" >Сырьё</a></li>
+									<li><a id="link_marchand"  href="?set=marchand" >Рынок</a></li>
+									<li><a id="link_officier"  href="?set=officier" >Офицеры</a></li>
+									<li><a id="link_alliance"  href="?set=alliance" >Альянс</a></li>
+									<li><a id="link_buddy"  href="?set=buddy" >Друзья</a></li>
+									<li><a id="link_notes"  href="?set=notes" >Заметки</a></li>
+									<li><a id="link_records"  href="?set=records" >Рекорды</a></li>
+									<li><a id="link_hall"  href="?set=hall" >Зал славы</a></li>
+									<li><a id="link_log"  href="?set=log" >Логи</a></li>
+									<li><a id="link_calculate"  href="?set=calculate" >Расчеты</a></li>
+							</ul>
+								<a href="#" class="planet-toggle visible-xs"><span>
+			<span class="first"></span>
+			<span class="second"></span>
+			<span class="third"></span>
+		</span>
+	</a>
+		<div class="planet-sidebar planetList">
+			<div class="list ">
+									<div class="planet type_1 current">
+						<a href="javascript:" onclick="changePlanet(60668)" title="Osmon">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet07.jpg" height="40" width="40" alt="Osmon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a></span>
+						<div class="hidden-sm">
+							Osmon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(54450)" title="Arnon">
+							<img src="/skins/default/planeten/small/s_normaltempplanet08.jpg" height="40" width="40" alt="Arnon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a></span>
+						<div class="hidden-sm">
+							Arnon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(69255)" title="SG Tama">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a></span>
+						<div class="hidden-sm">
+							SG Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57064)" title="Tama">
+							<img src="/skins/default/planeten/small/s_wasserplanet08.jpg" height="40" width="40" alt="Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a></span>
+						<div class="hidden-sm">
+							Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(81466)" title="Военная база">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Военная база">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=69">[1:69:1]</a></span>
+						<div class="hidden-sm">
+							Военная база							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=69">[1:69:1]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(58119)" title="Jita">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet18.jpg" height="40" width="40" alt="Jita">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a></span>
+						<div class="hidden-sm">
+							Jita							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(61569)" title="Amarr">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet09.jpg" height="40" width="40" alt="Amarr">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a></span>
+						<div class="hidden-sm">
+							Amarr							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(65077)" title="SG Fury">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Fury">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a></span>
+						<div class="hidden-sm">
+							SG Fury							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57862)" title="J152711">
+							<img src="/skins/default/planeten/small/s_normaltempplanet10.jpg" height="40" width="40" alt="J152711">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a></span>
+						<div class="hidden-sm">
+							J152711							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56598)" title="Dodixie">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet16.jpg" height="40" width="40" alt="Dodixie">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a></span>
+						<div class="hidden-sm">
+							Dodixie							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(84514)" title="Колония">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Колония">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a></span>
+						<div class="hidden-sm">
+							Колония							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(75971)" title="SG Rens">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a></span>
+						<div class="hidden-sm">
+							SG Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56814)" title="Rens">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet08.jpg" height="40" width="40" alt="Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a></span>
+						<div class="hidden-sm">
+							Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(67343)" title="Geminate">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet01.jpg" height="40" width="40" alt="Geminate">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a></span>
+						<div class="hidden-sm">
+							Geminate							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+								<div class="clearfix"></div>
+			</div>
+		</div>
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+				$('.planetList .list').on('mouseup', 'a', function()
+				{
+					$('.planetList .planet').removeClass('current');
+					$(this).parents('.planet').addClass('current');
+				});
+			});
+		</script>
+							<div class="content">
+								<div id="gamediv" class="container-fluid">	
+	
+	
+
+
+
+
+<div class="row"><div id="tabs" class="ui-tabs ui-widget ui-widget-content techtree">
+	<div class="head">
+		<ul class="ui-tabs-nav ui-widget-header">
+												<li><a href="#tabs-0">Постройки</a></li>
+																																																																																																																		<li><a href="#tabs-15">Особые постройки</a></li>
+																																												<li><a href="#tabs-20">Исследования</a></li>
+																																																																																																																																														<li><a href="#tabs-39">Флот</a></li>
+																																																																																																																																																					<li><a href="#tabs-59">Оборона</a></li>
+																																																																															</ul>
+	</div>
+	<div id="tabs-0" class="ui-tabs-panel ui-widget-content container-fluid">
+									<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=1">Рудник металла</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=2">Рудник кристалла</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=3">Синтезатор дейтерия</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=4">Солнечная батарея</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=12">Термоядерный реактор</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=12">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Синтезатор дейтерия (уровень 5)</span><br><span class="positive">Энергетическая технология (уровень 3)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=14">Фабрика роботов</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=15">Фабрика нанитов</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=15">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Фабрика роботов (уровень 10)</span><br><span class="positive">Компьютерная технология (уровень 10)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=21">Верфь</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=21">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Фабрика роботов (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=22">Склад металла</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=23">Склад кристалла</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=24">Емкость дейтерия</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=31">Лаборатория</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=33">Терраформер</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=33">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Фабрика нанитов (уровень 1)</span><br><span class="positive">Энергетическая технология (уровень 12)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=34">Склад альянса</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												</div><div id="tabs-15" class="ui-tabs-panel ui-widget-content container-fluid" style="display: none">
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=41">Лунная база</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=42">Сенсорная фаланга</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=42">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лунная база (уровень 1 + <b>1</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=43">Межгалактические врата</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=43">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лунная база (уровень 1 + <b>1</b>)</span><br><span class="positive">Гиперпространственная технология (уровень 7)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=44">Ракетная шахта</a>
+
+											</div><div class="col-sm-7 col-xs-6">
+											</div>
+				</div>
+												</div><div id="tabs-20" class="ui-tabs-panel ui-widget-content container-fluid" style="display: none">
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=106">Шпионаж</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=106">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 3 + <b>3</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=108">Компьютерная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=108">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 1 + <b>1</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=109">Оружейная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=109">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 4 + <b>4</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=110">Щитовая технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=110">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 3)</span><br><span class="negative">Лаборатория (уровень 6 + <b>6</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=111">Броня космических кораблей</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=111">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 2 + <b>2</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=113">Энергетическая технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=113">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 1 + <b>1</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=114">Гиперпространственная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=114">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 5)</span><br><span class="positive">Щитовая технология (уровень 5)</span><br><span class="negative">Лаборатория (уровень 7 + <b>7</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=115">Ракетный двигатель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=115">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 1)</span><br><span class="negative">Лаборатория (уровень 1 + <b>1</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=117">Импульсный двигатель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=117">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 1)</span><br><span class="negative">Лаборатория (уровень 2 + <b>2</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=118">Гиперпространственный двигатель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=118">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Гиперпространственная технология (уровень 3)</span><br><span class="negative">Лаборатория (уровень 7 + <b>7</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=120">Лазерная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=120">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 1 + <b>1</b>)</span><br><span class="positive">Энергетическая технология (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=121">Ионная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=121">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 4 + <b>4</b>)</span><br><span class="positive">Лазерная технология (уровень 5)</span><br><span class="positive">Энергетическая технология (уровень 4)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=122">Плазменная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=122">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 5 + <b>5</b>)</span><br><span class="positive">Энергетическая технология (уровень 8)</span><br><span class="positive">Лазерная технология (уровень 10)</span><br><span class="positive">Ионная технология (уровень 5)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=123">М.И.С.</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=123">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 10 + <b>10</b>)</span><br><span class="positive">Компьютерная технология (уровень 8)</span><br><span class="positive">Гиперпространственная технология (уровень 8)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=124">Экспедиционная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=124">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 3 + <b>3</b>)</span><br><span class="positive">Компьютерная технология (уровень 4)</span><br><span class="positive">Импульсный двигатель (уровень 3)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=150">Технология колонизации</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=150">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 3 + <b>3</b>)</span><br><span class="positive">Энергетическая технология (уровень 5)</span><br><span class="positive">Броня космических кораблей (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=161">Военная база</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=161">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 11 + <b>11</b>)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=199">Гравитационная технология</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=199">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Лаборатория (уровень 12 + <b>12</b>)</span><br>					</div>
+				</div>
+												</div><div id="tabs-39" class="ui-tabs-panel ui-widget-content container-fluid" style="display: none">
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=202">Малый транспорт</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=202">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 2)</span><br><span class="positive">Ракетный двигатель (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=203">Большой транспорт</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=203">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 4)</span><br><span class="positive">Ракетный двигатель (уровень 6)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=204">Лёгкий истребитель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=204">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 1)</span><br><span class="positive">Ракетный двигатель (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=205">Тяжёлый истребитель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=205">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 3)</span><br><span class="positive">Броня космических кораблей (уровень 2)</span><br><span class="positive">Импульсный двигатель (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=206">Крейсер</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=206">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 5)</span><br><span class="positive">Импульсный двигатель (уровень 4)</span><br><span class="positive">Ионная технология (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=207">Линкор</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=207">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 7)</span><br><span class="positive">Гиперпространственный двигатель (уровень 4)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=208">Колонизатор</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=208">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 4)</span><br><span class="positive">Импульсный двигатель (уровень 3)</span><br><span class="positive">Технология колонизации (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=209">Переработчик</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=209">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 4)</span><br><span class="positive">Ракетный двигатель (уровень 6)</span><br><span class="positive">Щитовая технология (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=210">Шпионский зонд</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=210">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 3)</span><br><span class="positive">Ракетный двигатель (уровень 3)</span><br><span class="positive">Шпионаж (уровень 2)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=211">Бомбардировщик</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=211">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Импульсный двигатель (уровень 6)</span><br><span class="positive">Верфь (уровень 8)</span><br><span class="positive">Плазменная технология (уровень 5)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=212">Солнечный спутник</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=212">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=213">Уничтожитель</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=213">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 9)</span><br><span class="positive">Гиперпространственный двигатель (уровень 6)</span><br><span class="positive">Гиперпространственная технология (уровень 5)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=214">Звезда смерти</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=214">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Верфь (уровень 12 + <b>2</b>)</span><br><span class="positive">Гравитационная технология (уровень 1)</span><br><span class="positive">Гиперпространственный двигатель (уровень 7)</span><br><span class="positive">Гиперпространственная технология (уровень 6)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=215">Линейный крейсер</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=215">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 8)</span><br><span class="positive">Гиперпространственная технология (уровень 5)</span><br><span class="positive">Лазерная технология (уровень 12)</span><br><span class="positive">Гиперпространственный двигатель (уровень 5)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=216">Передвижная база</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=216">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 8)</span><br><span class="positive">Военная база (уровень 1)</span><br><span class="positive">Гиперпространственный двигатель (уровень 6)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=220">Корвет</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=220">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 5)</span><br><span class="positive">Импульсный двигатель (уровень 4)</span><br><span class="positive">Оружейная технология (уровень 4)</span><br><span class="positive">Энергетическая технология (уровень 4)</span><br>Фракция (<span class="negative">Конфедерация)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=221">Перехватчик</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=221">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 4)</span><br><span class="positive">Импульсный двигатель (уровень 3)</span><br><span class="positive">Броня космических кораблей (уровень 5)</span><br>Фракция (<span class="negative">Бионики)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=222">Дредноут</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=222">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 8)</span><br><span class="positive">Гиперпространственная технология (уровень 4)</span><br><span class="positive">Гиперпространственный двигатель (уровень 5)</span><br>Фракция (<span class="negative">Сайлоны)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=223">Корсар</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=223">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 5)</span><br><span class="positive">Броня космических кораблей (уровень 5)</span><br><span class="positive">Импульсный двигатель (уровень 3)</span><br>Фракция (<span class="positive">Древние)</span><br>					</div>
+				</div>
+												</div><div id="tabs-59" class="ui-tabs-panel ui-widget-content container-fluid" style="display: none">
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=401">Ракетная установка</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=401">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=402">Легкий лазер</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=402">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 1)</span><br><span class="positive">Верфь (уровень 2)</span><br><span class="positive">Лазерная технология (уровень 3)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=403">Тяжёлый лазер</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=403">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Энергетическая технология (уровень 3)</span><br><span class="positive">Верфь (уровень 4)</span><br><span class="positive">Лазерная технология (уровень 6)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=404">Пушка Гаусса</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=404">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 6)</span><br><span class="positive">Энергетическая технология (уровень 6)</span><br><span class="positive">Оружейная технология (уровень 3)</span><br><span class="positive">Щитовая технология (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=405">Ионное орудие</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=405">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 4)</span><br><span class="positive">Ионная технология (уровень 4)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=406">Плазменное орудие</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=406">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Верфь (уровень 8)</span><br><span class="positive">Плазменная технология (уровень 7)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=407">Малый щитовой купол</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=407">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Щитовая технология (уровень 2)</span><br><span class="positive">Верфь (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=408">Большой щитовой купол</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=408">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Щитовая технология (уровень 6)</span><br><span class="positive">Верфь (уровень 6)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=502">Ракета-перехватчик</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=502">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="positive">Ракетная шахта (уровень 2)</span><br><span class="positive">Верфь (уровень 1)</span><br>					</div>
+				</div>
+												<div class="row">
+					<div class="col-sm-5 col-xs-6 title">
+						<a href="?set=infos&gid=503">Межпланетная ракета</a>
+
+													<div class="pull-right hidden-xs"><a href="?set=techtree&id=503">[i]</a></div>
+											</div><div class="col-sm-7 col-xs-6">
+						<span class="negative">Ракетная шахта (уровень 4 + <b>2</b>)</span><br><span class="positive">Верфь (уровень 1)</span><br><span class="positive">Импульсный двигатель (уровень 1)</span><br>					</div>
+				</div>
+						</div>
+</div>
+
+<script type="text/javascript">
+$(function()
+{
+  	$( "#tabs" ).tabs();
+	$("#tabs .row:even").addClass("odd");
+});
+</script></div>
+
+			</div>
+
+		<div id="loadingOverlay">загрузка...<br><img src="/images/loading.gif" alt=""></div>
+		<div id="preloadOverlay"><img src="/images/loading.gif" alt=""></div>
+
+				</div>
+		<div class="clearfix"></div>
+		</div>
+		</div>
+		</div></div>
+
+		<div id="siteFooter" class="hidden-xs">
+			<div class="container-fluid">
+				<div class="pull-left text-left">
+					<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+											<a class="hidden-sm" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+									</div>
+				<div class="pull-right text-right">
+										<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+					<a href="?set=banned">Тёмные</a>|
+											<a href="wide.php" data-link="1">Большой монитор</a>|
+						<a href="http://vk.com/xnova_game" target="_blank">ВК</a>|
+						<a href="?set=contact">Контакты</a>|
+										<a href="?set=content&article=help">Новичкам</a>|
+					<a href="?set=content&article=agb">Правила</a>|
+					<a onclick="" title="Игроков в сети" style="color:green">32</a>/<a onclick="" title="Всего игроков" style="color:yellow">119873</a>
+				</div>
+				<br class="clearfloat"/></div>
+		</div>
+		<div class="row hidden-sm hidden-md hidden-lg footer-mobile">
+			<div class="col-xs-12 text-center">
+				<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+				<a href="?set=banned">Тёмные</a>|
+				<a href="?set=contact">Контакты</a>|
+				<a href="?set=content&article=help">Новичкам</a>|
+				<a href="?set=content&article=agb">Правила</a>
+			</div>
+			<div class="col-xs-8 text-center">
+				<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+									<a class="media_1" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+							</div>
+			<div class="col-xs-4 text-center">
+				<a onclick="" title="Игроков в сети" style="color:green">32</a>/<a onclick="" title="Всего игроков" style="color:yellow">119873</a>
+			</div>
+		</div>
+	
+	
+		
+	<div id="windowDialog"></div>
+	<div id="tooltip" class="tip"></div>
+
+	
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	var yaParams = {userId: 71995};
+	</script>
+
+	<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter25961143 = new Ya.Metrika({id:25961143,params:window.yaParams||{ }});
+			} catch(e) { }
+		});
+
+	    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<!-- /Yandex.Metrika counter -->
+	</body></html>
+
+
+	<script type="text/javascript">setMenuItem("techtree");</script>
+
+	<script type="text/javascript">UpdateGameInfo('2', '0'); timestamp = 1452059279;</script>

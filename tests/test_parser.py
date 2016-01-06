@@ -5,6 +5,7 @@ from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
 from ui.xnova.xn_parser_shipyard import parse_js_array_decl
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
     PlanetBuildingsProgressParser
+from ui.xnova.xn_parser_techtree import TechtreeParser
 
 
 def read_test_page(page_name: str) -> str:
@@ -17,7 +18,7 @@ def read_test_page(page_name: str) -> str:
 
 
 class TestParser(unittest.TestCase):
-    def test_time_left(self):
+    def test_parse_time_left(self):
         # with days
         t = parse_time_left_str('1:3:25:50')
         self.assertEqual(t, (27, 25, 50))
@@ -37,7 +38,7 @@ class TestParser(unittest.TestCase):
         t = parse_time_left_str('12')
         self.assertEqual(t, (0, 0, 12))
 
-    def test_build_total_time(self):
+    def test_parse_build_total_time(self):
         # with days
         secs = parse_build_total_time_sec('2 д. 3 ч. 51 мин. 30 с.')
         self.assertEqual(secs, 2*24*3600 + 3*3600 + 51*60 + 30)
@@ -72,3 +73,13 @@ class TestParser(unittest.TestCase):
         parser.parse_page_content(content)
         self.assertEqual(len(parser.builds_in_progress), 1)
         self.assertTrue(parser.builds_in_progress[0].is_downgrade)
+
+    def test_parse_techtree(self):
+        ttp = TechtreeParser()
+        content = read_test_page('techtree.html')
+        ttp.parse_page_content(content)
+        self.assertEqual(len(ttp.techtree), 65)
+        self.assertEqual(ttp.techtree[0], (1, 'Рудник металла', 'building'))
+        self.assertEqual(ttp.techtree[12], (33, 'Терраформер', 'building'))
+        self.assertEqual(ttp.techtree[len(ttp.techtree)-1], \
+            (503, 'Межпланетная ракета', 'defense'))
