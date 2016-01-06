@@ -1,0 +1,987 @@
+	<!DOCTYPE HTML>
+	<html>
+	<head>
+									<title>Постройки :: Звездная Империя</title>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<link rel="image_src" href="http://uni4.xnova.su/images/logo.jpg" />
+		<link rel="apple-touch-icon" href="http://uni4.xnova.su/images/apple-touch-icon.png"/>
+		<link href="/cache/UNI4/scripts/min_1451261343.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/cache/UNI4/scripts/min_1451261343.js"></script>
+		<!--
+		<link rel="stylesheet" type="text/css" href="/template/main/bootstrap.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/skins/default/formate.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/style.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/media.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/scripts/smoothness/jquery-ui-1.10.2.custom.css">
+
+		<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/template/main/script.js?v=3cf"></script>
+		-->
+					<meta name="viewport" content="width=810">
+				<!--
+		<script type="text/javascript" src="/scripts/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/scripts/game.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/universe.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/flotten.js?v=3cf"></script>
+		<script language="JavaScript" src="/scripts/smiles.js?v=3cf"></script>
+		<script src="/scripts/ed.js?v=3cf" type="text/javascript"></script>
+		-->
+			</head>
+	<body class="window">
+	<script type="text/javascript">
+		XNova.path = '/';
+		var timestamp = 1452063071;
+		var timezone = 4;
+		var ajax_nav = 1;
+		var addToUrl = '';
+
+					XNova.fleetSpeed 	= 2;
+			XNova.gameSpeed 	= 2;
+			XNova.resSpeed 		= 3;
+			</script>
+			<a href="#" class="menu-toggle visible-xs">
+    <span>
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="third"></span>
+    </span>
+</a>
+<div class="menu-sidebar visible-xs">
+	<ul class="nav">
+					<li><a data-link="overview"  href="?set=overview" >Обзор</a></li>
+					<li><a data-link="imperium"  href="?set=imperium" >Империя</a></li>
+					<li><a data-link="galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+					<li><a data-link="fleet"  href="?set=fleet" >Флот</a></li>
+					<li><a data-link="buildings"  href="?set=buildings" class="check">Постройки</a></li>
+					<li><a data-link="buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+					<li><a data-link="buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+					<li><a data-link="buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+					<li><a data-link="buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+					<li><a data-link="resources"  href="?set=resources" >Сырьё</a></li>
+					<li><a data-link="marchand"  href="?set=marchand" >Рынок</a></li>
+					<li><a data-link="officier"  href="?set=officier" >Офицеры</a></li>
+					<li><a data-link="alliance"  href="?set=alliance" >Альянс</a></li>
+					<li><a data-link="buddy"  href="?set=buddy" >Друзья</a></li>
+					<li><a data-link="notes"  href="?set=notes" >Заметки</a></li>
+					<li><a data-link="records"  href="?set=records" >Рекорды</a></li>
+					<li><a data-link="hall"  href="?set=hall" >Зал славы</a></li>
+					<li><a data-link="log"  href="?set=log" >Логи</a></li>
+					<li><a data-link="calculate"  href="?set=calculate" >Расчеты</a></li>
+			</ul>
+</div>
+<div class="contentBox set_buildings">
+	<div id="box">
+		<div class="game_menu">
+			<div class="visible-xs text-center bar">
+									<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+								<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+				<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b>0</b></a>
+									<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b>0</b></a>
+							</div>
+			<div class="bar hhh hidden-xs">
+				<div class="message_list">
+											<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+										<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+					<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b id="new_messages">0</b></a>
+											<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b id="ally_messages">0</b></a>
+									</div>
+				<table align="center" class="top_menu">
+					<tr>
+																			<td class="m1"><a href="http://xnova.su/" target="_blank" class="tooltip sprite ico_space" data-tooltip-content="Вселенные"></a></td>
+												<td class="m1"><a href="?set=stat" class="tooltip sprite ico_stats" data-tooltip-content="Статистика"></a></td>
+						<td class="m1"><a href="?set=techtree" class="tooltip sprite ico_tech" data-tooltip-content="Технологии"></a>
+						<td class="m1"><a href="?set=sim" class="tooltip sprite ico_sim" data-tooltip-content="Симулятор"></a>
+						<td class="m1"><a href="?set=search" class="tooltip sprite ico_search" data-tooltip-content="Поиск"></a></td>
+													<td class="m1"><a href="?set=support" class="tooltip sprite ico_support" data-tooltip-content="Техподдержка"></a></td>
+																			<td class="m1"><a href="http://forum.xnova.su/" target="_blank" class="tooltip sprite ico_forum" data-tooltip-content="Форум"></a></td>
+												<td class="m1"><a href="?set=options" class="tooltip sprite ico_settings" data-tooltip-content="Настройки"></a></td>
+													<td class="m1"><a href="?set=logout&popup" class="tooltip sprite ico_exit" data-tooltip-content="Выход"></a></td>
+																	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="icon-panel visible-xs">
+			<a href="?set=stat" class="sprite ico_stats"></a>
+			<a href="?set=techtree" class="sprite ico_tech"></a>
+			<a href="?set=sim" class="sprite ico_sim"></a>
+			<a href="?set=search" class="sprite ico_search"></a>
+			<a href="?set=support" class="sprite ico_support"></a>
+			<a href="http://forum.xnova.su/" target="_blank" class="sprite ico_forum"></a>
+			<a href="?set=options" class="sprite ico_settings"></a>
+			<a href="?set=logout&popup" class="sprite ico_exit"></a>
+		</div>
+		<div class="game_content">
+			<ul class="menu hidden-xs">
+									<li><a id="link_overview"  href="?set=overview" >Обзор</a></li>
+									<li><a id="link_imperium"  href="?set=imperium" >Империя</a></li>
+									<li><a id="link_galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+									<li><a id="link_fleet"  href="?set=fleet" >Флот</a></li>
+									<li><a id="link_buildings"  href="?set=buildings" class="check">Постройки</a></li>
+									<li><a id="link_buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+									<li><a id="link_buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+									<li><a id="link_buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+									<li><a id="link_buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+									<li><a id="link_resources"  href="?set=resources" >Сырьё</a></li>
+									<li><a id="link_marchand"  href="?set=marchand" >Рынок</a></li>
+									<li><a id="link_officier"  href="?set=officier" >Офицеры</a></li>
+									<li><a id="link_alliance"  href="?set=alliance" >Альянс</a></li>
+									<li><a id="link_buddy"  href="?set=buddy" >Друзья</a></li>
+									<li><a id="link_notes"  href="?set=notes" >Заметки</a></li>
+									<li><a id="link_records"  href="?set=records" >Рекорды</a></li>
+									<li><a id="link_hall"  href="?set=hall" >Зал славы</a></li>
+									<li><a id="link_log"  href="?set=log" >Логи</a></li>
+									<li><a id="link_calculate"  href="?set=calculate" >Расчеты</a></li>
+							</ul>
+								<a href="#" class="planet-toggle visible-xs"><span>
+			<span class="first"></span>
+			<span class="second"></span>
+			<span class="third"></span>
+		</span>
+	</a>
+		<div class="planet-sidebar planetList">
+			<div class="list ">
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(60668)" title="Osmon">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet07.jpg" height="40" width="40" alt="Osmon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a></span>
+						<div class="hidden-sm">
+							Osmon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 current">
+						<a href="javascript:" onclick="changePlanet(54450)" title="Arnon">
+							<img src="/skins/default/planeten/small/s_normaltempplanet08.jpg" height="40" width="40" alt="Arnon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a></span>
+						<div class="hidden-sm">
+							Arnon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(69255)" title="SG Tama">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a></span>
+						<div class="hidden-sm">
+							SG Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57064)" title="Tama">
+							<img src="/skins/default/planeten/small/s_wasserplanet08.jpg" height="40" width="40" alt="Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a></span>
+						<div class="hidden-sm">
+							Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(81466)" title="Военная база">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Военная база">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=69">[1:69:1]</a></span>
+						<div class="hidden-sm">
+							Военная база							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=69">[1:69:1]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(58119)" title="Jita">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet18.jpg" height="40" width="40" alt="Jita">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a></span>
+						<div class="hidden-sm">
+							Jita							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(61569)" title="Amarr">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet09.jpg" height="40" width="40" alt="Amarr">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a></span>
+						<div class="hidden-sm">
+							Amarr							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(65077)" title="SG Fury">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Fury">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a></span>
+						<div class="hidden-sm">
+							SG Fury							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57862)" title="J152711">
+							<img src="/skins/default/planeten/small/s_normaltempplanet10.jpg" height="40" width="40" alt="J152711">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a></span>
+						<div class="hidden-sm">
+							J152711							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56598)" title="Dodixie">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet16.jpg" height="40" width="40" alt="Dodixie">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a></span>
+						<div class="hidden-sm">
+							Dodixie							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(84514)" title="Колония">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Колония">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a></span>
+						<div class="hidden-sm">
+							Колония							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(75971)" title="SG Rens">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a></span>
+						<div class="hidden-sm">
+							SG Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56814)" title="Rens">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet08.jpg" height="40" width="40" alt="Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a></span>
+						<div class="hidden-sm">
+							Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(67343)" title="Geminate">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet01.jpg" height="40" width="40" alt="Geminate">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a></span>
+						<div class="hidden-sm">
+							Geminate							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+								<div class="clearfix"></div>
+			</div>
+		</div>
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+				$('.planetList .list').on('mouseup', 'a', function()
+				{
+					$('.planetList .planet').removeClass('current');
+					$(this).parents('.planet').addClass('current');
+				});
+			});
+		</script>
+							<div class="content">
+								<div id="gamediv" class="container-fluid">	
+			<script type="text/javascript">
+	var ress = new Array(317328, 272536, 634500);
+	var max = new Array(1750000,1125000,687500);
+	var production = new Array(12.635, 7.2386111111111, 2.3019444444444);
+	timeouts['res_count'] = window.setInterval(XNova.updateResources, 1000);
+	var serverTime = 1452063071000 - Djs + (timezone + 6) * 1800000;
+</script>
+<form action="" name="ress" id="ress" style="display:none">
+	<input type="hidden" id="metall" value="0">
+	<input type="hidden" id="crystall" value="0">
+	<input type="hidden" id="deuterium" value="0">
+	<input type="hidden" id="bmetall" value="0">
+	<input type="hidden" id="bcrystall" value="0">
+	<input type="hidden" id="bdeuterium" value="0">
+</form>
+<div class="row topnav">
+			<div class="col-md-2 hidden-xs col-sm-12">
+			<div class="separator visible-sm"></div>
+			<select style="width:100%;" onChange="load(this.options[this.selectedIndex].value);">
+<option value="?set=buildings&amp;cp=60668&amp;re=0">Osmon&nbsp;[1:7:6]&nbsp;&nbsp;</option>
+<option selected="selected" value="?set=buildings&amp;cp=54450&amp;re=0">Arnon&nbsp;[1:7:9]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=buildings&amp;cp=69255&amp;re=0">SG Tama&nbsp;[1:34:10]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=57064&amp;re=0">Tama&nbsp;[1:34:11]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=buildings&amp;cp=81466&amp;re=0">Военная база&nbsp;[1:69:1]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=58119&amp;re=0">Jita&nbsp;[1:96:6]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=61569&amp;re=0">Amarr&nbsp;[1:198:5]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=buildings&amp;cp=65077&amp;re=0">SG Fury&nbsp;[1:233:2]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=57862&amp;re=0">J152711&nbsp;[2:50:7]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=56598&amp;re=0">Dodixie&nbsp;[2:159:4]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=buildings&amp;cp=84514&amp;re=0">Колония&nbsp;[2:270:6]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=buildings&amp;cp=75971&amp;re=0">SG Rens&nbsp;[3:130:4]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=56814&amp;re=0">Rens&nbsp;[3:130:5]&nbsp;&nbsp;</option>
+<option value="?set=buildings&amp;cp=67343&amp;re=0">Geminate&nbsp;[4:100:5]&nbsp;&nbsp;</option></select>
+			<div class="separator visible-sm"></div>
+		</div>
+		<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник металла', '?set=infos&gid=1&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>45.486</td></tr><tr><td>День:</td><td align=right>1.091.664</td></tr></table>'><span class="sprite skin_metall"></span><br></span>
+				<font color="#FFFF00">Металл</font><br>
+				<div title="Количество ресурса на планете"><div id="met">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">1.750.000</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник кристалла', '?set=infos&gid=2&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>26.059</td></tr><tr><td>День:</td><td align=right>625.416</td></tr></table>'><span class="sprite skin_kristall"></span><br></span>
+				<font color="#FFFF00">Кристалл</font><br>
+				<div title="Количество ресурса на планете"><div id="cry">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">1.125.000</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Синтезатор дейтерия', '?set=infos&gid=3&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>8.287</td></tr><tr><td>День:</td><td align=right>198.888</td></tr></table>'><span class="sprite skin_deuterium"></span><br></span>
+				<font color="#FFFF00">Дейтерий</font><br>
+				<div title="Количество ресурса на планете"><div id="deu">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">687.500</font></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Солнечная батарея', '?set=infos&gid=4&ajax&popup', 600)" title="Солнечная батарея" class="hidden-xs"><span class="sprite skin_energie"></span><br></span>
+				<font color="#FFFF00">Энергия</font><br>
+				<div title="Энергетический баланс"><span class="positive">19</span></div>
+				<span title="Выработка энергии" class="hidden-xs"><font color="#00ff00">12.529</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span class="tooltip hidden-xs" data-tooltip-content='<center>Вместимость:<br>7250 / 7250</center>'>
+											<span class="sprite skin_batt100"></span>
+										<br>
+				</span>
+				<font color="#FFFF00">Заряд</font><br>
+				100%<br>
+			</div>
+			<div class="col-xs-4 text-center">
+				<a href="?set=infokredits" class="tooltip hidden-xs" data-tooltip-content='
+				<table width=550>
+				<tr>
+									<td align="center" width="14%">
+						Геолог						<div class="separator"></div>
+						<span class="officier of601_ikon"></span>
+					</td>
+									<td align="center" width="14%">
+						Адмирал						<div class="separator"></div>
+						<span class="officier of602"></span>
+					</td>
+									<td align="center" width="14%">
+						Инженер						<div class="separator"></div>
+						<span class="officier of603"></span>
+					</td>
+									<td align="center" width="14%">
+						Технократ						<div class="separator"></div>
+						<span class="officier of604"></span>
+					</td>
+									<td align="center" width="14%">
+						Архитектор						<div class="separator"></div>
+						<span class="officier of605"></span>
+					</td>
+									<td align="center" width="14%">
+						Метафизик						<div class="separator"></div>
+						<span class="officier of606"></span>
+					</td>
+									<td align="center" width="14%">
+						Наёмник						<div class="separator"></div>
+						<span class="officier of607"></span>
+					</td>
+								</tr>
+				<tr>
+									<td align="center">
+											Нанят до <font color=lime>12.01.2016 09:08</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+								</tr></table>'><span class="sprite skin_kredits"></span><br></a>
+				<font color="#FFFF00">Кредиты</font><br>
+				63<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#met").html(XNova.format(317328));
+	$("#cry").html(XNova.format(272536));
+	$("#deu").html(XNova.format(634500));
+	$(document).ready(XNova.updateResources());
+</script>	
+	
+
+
+
+
+<div class="row"><div class="block">
+	<div class="title">
+		Занято полей
+		<font color="#00FF00">148</font> из <font color="#FF0000">163</font>
+		<div class="pull-right col-xs-12 col-sm-6 nopadding">Осталось <span class="positive">15</span> свободных полей</div>
+		<div class="clearfix"></div>
+	</div>
+			<table class="table" id="building">
+			<tr>
+				<td class="c" width="50%">
+					1: Емкость дейтерия 4. Снос здания				</td>
+				<td class="k">
+											<div id="blc" class="z"></div>
+						<script type="text/javascript">BuildTimeout(1011, 1, 54450, 0);</script>
+						<div class="positive">06.01 12:08:02</div>
+									</td>
+			</tr>
+		</table>
+		<div class="content">
+		<div id="tabs" class="ui-tabs ui-widget ui-widget-content">
+			<div class="head hidden-xs">
+				<ul class="ui-tabs-nav ui-widget-header">
+					<li id="tab_area"><a href="#tabs-0">Планета</a></li>
+					<li id="tab_list"><a href="#tabs-1">Постройки</a></li>
+				</ul>
+			</div>
+			<div id="tabs-0" class="ui-tabs-panel ui-widget-content">
+				<div class="buildings area planet">
+											<div data-id="1" class="object i_1  tooltip" data-tooltip-content='<center>Основной поставщик сырья для строительства несущих структур построек и кораблей.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/1.png" alt="Рудник металла">
+							<div class="name">Рудник металла <span>28</span></div>
+						</div>
+											<div data-id="2" class="object i_2  tooltip" data-tooltip-content='<center>Основной поставщик сырья для электронных строительных элементов и сплавов.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/2.png" alt="Рудник кристалла">
+							<div class="name">Рудник кристалла <span>26</span></div>
+						</div>
+											<div data-id="3" class="object i_3  tooltip" data-tooltip-content='<center>Извлекает из воды на планете незначительную долю дейтерия.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/3.png" alt="Синтезатор дейтерия">
+							<div class="name">Синтезатор дейтерия <span>22</span></div>
+						</div>
+											<div data-id="4" class="object i_4  tooltip" data-tooltip-content='<center>Производит энергию из солнечных лучей. Энергия требуется для работы большинства построек.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/4.png" alt="Солнечная батарея">
+							<div class="name">Солнечная батарея <span>29</span></div>
+						</div>
+											<div data-id="12" class="object i_12 empty tooltip" data-tooltip-content='<center>Добывает энергию из процесса образования атома гелия двумя атомами тяжёлого водорода.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/12.png" alt="Термоядерный реактор">
+							<div class="name">Термоядерный реактор <span>0</span></div>
+						</div>
+											<div data-id="14" class="object i_14  tooltip" data-tooltip-content='<center>Предоставляет простую рабочую силу, которую можно применять при строительстве планетарной инфраструктуры. Каждый уровень развития фабрики повышает скорость строительства зданий.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/14.png" alt="Фабрика роботов">
+							<div class="name">Фабрика роботов <span>10</span></div>
+						</div>
+											<div data-id="15" class="object i_15  tooltip" data-tooltip-content='<center>Фабрика нанитов производит специальных эволюционированных роботов - нанитов. Наниты - это роботы, которые путём объединения в состоянии выполнять экстраординарные задания.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/15.png" alt="Фабрика нанитов">
+							<div class="name">Фабрика нанитов <span>2</span></div>
+						</div>
+											<div data-id="21" class="object i_21  tooltip" data-tooltip-content='<center>В строительной верфи производятся все виды кораблей и оборонительных сооружений.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/21.png" alt="Верфь">
+							<div class="name">Верфь <span>10</span></div>
+						</div>
+											<div data-id="22" class="object i_22  tooltip" data-tooltip-content='<center>Хранилище для необработанных руд металлов до их дальнейшей переработки.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/22.png" alt="Склад металла">
+							<div class="name">Склад металла <span>7</span></div>
+						</div>
+											<div data-id="23" class="object i_23  tooltip" data-tooltip-content='<center>Хранилище для необработанного кристалла до его дальнейшей переработки.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/23.png" alt="Склад кристалла">
+							<div class="name">Склад кристалла <span>6</span></div>
+						</div>
+											<div data-id="24" class="object i_24  tooltip" data-tooltip-content='<center>Огромные ёмкости для сберегания добытого дейтерия.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/24.png" alt="Емкость дейтерия">
+							<div class="name">Емкость дейтерия <span>5</span></div>
+						</div>
+											<div data-id="31" class="object i_31 empty tooltip" data-tooltip-content='<center>Необходима для исследования новых технологий.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/31.png" alt="Лаборатория">
+							<div class="name">Лаборатория <span>0</span></div>
+						</div>
+											<div data-id="33" class="object i_33 empty tooltip" data-tooltip-content='<center>Терраформер может преобразовывать огромные территории делая их пригодными для застройки.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/33.png" alt="Терраформер">
+							<div class="name">Терраформер <span>0</span></div>
+						</div>
+											<div data-id="34" class="object i_34 empty tooltip" data-tooltip-content='<center>Склад альянса предоставляет возможность обеспечения топливом дружественных флотов, которые помогают при обороне и находятся на орбите.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/34.png" alt="Склад альянса">
+							<div class="name">Склад альянса <span>0</span></div>
+						</div>
+											<div data-id="44" class="object i_44  tooltip" data-tooltip-content='<center>Служит для хранения ракет.</center>' data-tooltip-width="150">
+							<img src="/images/buildings/44.png" alt="Ракетная шахта">
+							<div class="name">Ракетная шахта <span>3</span></div>
+						</div>
+									</div>
+			</div>
+			<div id="tabs-1" class="ui-tabs-panel ui-widget-content" style="display: none">
+				<div class="row" id="building">
+										<div class="col-md-6" id="object_1">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Рудник металла', '?set=infos&gid=1&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/1.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Основной поставщик сырья для строительства несущих структур построек и кораблей.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 4.796.033">5.113.361</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resNo tooltip" data-tooltip-content="необходимо: 1.005.804">1.278.340</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=1>Рудник металла</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">28</span><br>
+																	Время: 1 д. 5 ч. 3 мин. 11 с. <br>
+									<br>Металл: <span class=positive>+6327</span><br>Энергия:  <span class=negative>-563</span>									<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_2">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Рудник кристалла', '?set=infos&gid=2&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/2.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Основной поставщик сырья для электронных строительных элементов и сплавов.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 9.418.228">9.735.556</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resNo tooltip" data-tooltip-content="необходимо: 4.595.242">4.867.778</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=2>Рудник кристалла</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">26</span><br>
+																	Время: 2 д. 18 ч. 22 мин. 43 с. <br>
+									<br>Кристалл:  <span class=positive>+3704</span><br>Энергия:  <span class=negative>-441</span>									<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_3">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Синтезатор дейтерия', '?set=infos&gid=3&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/3.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Извлекает из воды на планете незначительную долю дейтерия.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 1.366.083">1.683.411</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resNo tooltip" data-tooltip-content="необходимо: 288.601">561.137</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=3>Синтезатор дейтерия</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">22</span><br>
+																	Время: 10 ч. 12 мин. 8 с. <br>
+									<br>Дейтерий:  <span class=positive>+1243</span><br>Энергия:  <span class=negative>-806</span>									<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_4">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Солнечная батарея', '?set=infos&gid=4&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/4.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Производит энергию из солнечных лучей. Энергия требуется для работы большинства построек.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 9.270.224">9.587.552</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resNo tooltip" data-tooltip-content="необходимо: 3.562.485">3.835.021</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=4>Солнечная батарея</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">29</span><br>
+																	Время: 2 д. 13 ч. 42 с. <br>
+									<br>Энергия:  <span class=positive>+1492</span>									<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_12">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Термоядерный реактор', '?set=infos&gid=12&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/12.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Добывает энергию из процесса образования атома гелия двумя атомами тяжёлого водорода.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">900</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">360</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">180</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=12>Термоядерный реактор</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="negative">0</span><br>
+																	Время: 20 с. <br>
+									<br>Дейтерий:  <span class=negative>-42</span><br>Энергия:  <span class=positive>+48</span>									<div class="startBuild"><span class="resNo">Построить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_14">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Фабрика роботов', '?set=infos&gid=14&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/14.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Предоставляет простую рабочую силу, которую можно применять при строительстве планетарной инфраструктуры. Каждый уровень развития фабрики повышает скорость строительства зданий.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 92.272">409.600</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">122.880</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">204.800</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=14>Фабрика роботов</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">10</span><br>
+																	Время: 2 ч. 25 мин. 13 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_15">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Фабрика нанитов', '?set=infos&gid=15&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/15.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Фабрика нанитов производит специальных эволюционированных роботов - нанитов. Наниты - это роботы, которые путём объединения в состоянии выполнять экстраординарные задания.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 3.682.672">4.000.000</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resNo tooltip" data-tooltip-content="необходимо: 1.727.464">2.000.000</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">400.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=15>Фабрика нанитов</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">2</span><br>
+																	Время: 1 д. 3 ч. 16 мин. 21 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_21">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Верфь', '?set=infos&gid=21&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/21.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>В строительной верфи производятся все виды кораблей и оборонительных сооружений.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resNo tooltip" data-tooltip-content="необходимо: 92.272">409.600</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">204.800</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">102.400</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=21>Верфь</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">10</span><br>
+																	Время: 2 ч. 47 мин. 33 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_22">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Склад металла', '?set=infos&gid=22&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/22.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Хранилище для необработанных руд металлов до их дальнейшей переработки.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">256.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=22>Склад металла</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">7</span><br>
+																	Время: 1 ч. 9 мин. 49 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_23">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Склад кристалла', '?set=infos&gid=23&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/23.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Хранилище для необработанного кристалла до его дальнейшей переработки.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">128.000</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">64.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=23>Склад кристалла</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">6</span><br>
+																	Время: 52 мин. 21 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_24">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Емкость дейтерия', '?set=infos&gid=24&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/24.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Огромные ёмкости для сберегания добытого дейтерия.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">64.000</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">64.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=24>Емкость дейтерия</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">5</span><br>
+																	Время: 34 мин. 54 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_31">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Лаборатория', '?set=infos&gid=31&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/31.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Необходима для исследования новых технологий.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">200</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">400</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">200</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=31>Лаборатория</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="negative">0</span><br>
+																	Время: 9 с. <br>
+																		<div class="startBuild"><span class="resNo">Построить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_33">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Терраформер', '?set=infos&gid=33&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/33.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Терраформер может преобразовывать огромные территории делая их пригодными для застройки.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">50.000</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">100.000</span> </div><div><img src='skins/default/images/s_energie.png' align="absmiddle" class="tooltip" data-tooltip-content='Энергия'><span class="resYes">1.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=33>Терраформер</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="negative">0</span><br>
+																	Время: 13 мин. 38 с. <br>
+																		<div class="startBuild"><span class="resNo">Построить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_34">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Склад альянса', '?set=infos&gid=34&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/34.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Склад альянса предоставляет возможность обеспечения топливом дружественных флотов, которые помогают при обороне и находятся на орбите.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">20.000</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">40.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=34>Склад альянса</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="negative">0</span><br>
+																	Время: 16 мин. 21 с. <br>
+																		<div class="startBuild"><span class="resNo">Построить</span></div>
+															</div>
+						</div>
+					</div>
+										<div class="col-md-6" id="object_44">
+						<div class="viewport buildings ">
+							
+							<div class="img">
+								<a href="javascript:;" onclick="showWindow('Ракетная шахта', '?set=infos&gid=44&ajax&popup', 600)">
+									<img src="/skins/default/gebaeude/44.gif" align="top" alt="" class="tooltip img-responsive" data-tooltip-content='<center>Служит для хранения ракет.</center>' data-tooltip-width="150">
+								</a>
+
+								<div class="overContent">
+									<div><img src='skins/default/images/s_metall.png' align="absmiddle" class="tooltip" data-tooltip-content='Металл'><span class="resYes">160.000</span> </div><div><img src='skins/default/images/s_kristall.png' align="absmiddle" class="tooltip" data-tooltip-content='Кристалл'><span class="resYes">160.000</span> </div><div><img src='skins/default/images/s_deuterium.png' align="absmiddle" class="tooltip" data-tooltip-content='Дейтерий'><span class="resYes">8.000</span> </div>								</div>
+							</div>
+							<div class="title">
+								<a href=?set=infos&gid=44>Ракетная шахта</a>
+							</div>
+							<div class="actions">
+								Уровень: <span class="positive">3</span><br>
+																	Время: 1 ч. 27 мин. 16 с. <br>
+																		<div class="startBuild"><span class="resNo">Улучшить</span></div>
+															</div>
+						</div>
+					</div>
+									</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		var tab = 0;
+	
+		if (html5_storage())
+		{
+			tab = parseInt(localStorage.getItem("buildingAreaTab"));
+			
+			if (isNaN(tab))
+				tab = 0;
+		}
+		
+		if (!$('#tab_area').is(':visible'))
+			tab = 1;
+		
+		$( "#tabs" ).tabs({active: tab, activate: function( event, ui ) 
+		{
+			var t = $(ui.newPanel).attr('id').split('-');
+			
+			localStorage.setItem("buildingAreaTab", parseInt(t[1]));
+		}});
+
+		$('#building').on('click', '#blc', function(e)
+		{
+			$(this).remove();
+		});
+
+		$('.buildings.area .object').on('click', function(e)
+		{
+			var id = $(this).data('id');
+
+			$('#windowDialog')
+					.dialog("option", "title", 'Информация о постройке')
+					.dialog("option", "height", 167)
+					.html($('#object_'+id).html())
+					.dialog("option", "position", {my: "center", at: "center", of: window})
+					.dialog("open");
+		});
+	});
+</script></div>
+
+			</div>
+
+		<div id="loadingOverlay">загрузка...<br><img src="/images/loading.gif" alt=""></div>
+		<div id="preloadOverlay"><img src="/images/loading.gif" alt=""></div>
+
+				</div>
+		<div class="clearfix"></div>
+		</div>
+		</div>
+		</div></div>
+
+		<div id="siteFooter" class="hidden-xs">
+			<div class="container-fluid">
+				<div class="pull-left text-left">
+					<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+											<a class="hidden-sm" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+									</div>
+				<div class="pull-right text-right">
+										<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+					<a href="?set=banned">Тёмные</a>|
+											<a href="wide.php" data-link="1">Большой монитор</a>|
+						<a href="http://vk.com/xnova_game" target="_blank">ВК</a>|
+						<a href="?set=contact">Контакты</a>|
+										<a href="?set=content&article=help">Новичкам</a>|
+					<a href="?set=content&article=agb">Правила</a>|
+					<a onclick="" title="Игроков в сети" style="color:green">40</a>/<a onclick="" title="Всего игроков" style="color:yellow">119874</a>
+				</div>
+				<br class="clearfloat"/></div>
+		</div>
+		<div class="row hidden-sm hidden-md hidden-lg footer-mobile">
+			<div class="col-xs-12 text-center">
+				<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+				<a href="?set=banned">Тёмные</a>|
+				<a href="?set=contact">Контакты</a>|
+				<a href="?set=content&article=help">Новичкам</a>|
+				<a href="?set=content&article=agb">Правила</a>
+			</div>
+			<div class="col-xs-8 text-center">
+				<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+									<a class="media_1" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+							</div>
+			<div class="col-xs-4 text-center">
+				<a onclick="" title="Игроков в сети" style="color:green">40</a>/<a onclick="" title="Всего игроков" style="color:yellow">119874</a>
+			</div>
+		</div>
+	
+	
+		
+	<div id="windowDialog"></div>
+	<div id="tooltip" class="tip"></div>
+
+	
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	var yaParams = {userId: 71995};
+	</script>
+
+	<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter25961143 = new Ya.Metrika({id:25961143,params:window.yaParams||{ }});
+			} catch(e) { }
+		});
+
+	    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<!-- /Yandex.Metrika counter -->
+	</body></html>
+
+
+	<script type="text/javascript">setMenuItem("buildings");</script>
+
+	<script type="text/javascript">UpdateGameInfo('0', '0'); timestamp = 1452063071;</script>

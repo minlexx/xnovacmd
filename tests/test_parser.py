@@ -3,9 +3,20 @@ import unittest
 
 from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
 from ui.xnova.xn_parser_shipyard import parse_js_array_decl
+from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
+    PlanetBuildingsProgressParser
 
 
-class TestParserTimes(unittest.TestCase):
+def read_test_page(page_name: str) -> str:
+    pages_dir = 'tests/test_pages/'
+    fn = pages_dir + page_name
+    ret = None
+    with open(fn, mode='r', encoding='utf-8') as f:
+        ret = f.read()
+    return ret
+
+
+class TestParser(unittest.TestCase):
     def test_time_left(self):
         # with days
         t = parse_time_left_str('1:3:25:50')
@@ -53,3 +64,6 @@ class TestParserTimes(unittest.TestCase):
                          ['Корсар', 'Звезда смерти'])
         # test skip empty parts
         self.assertEqual(parse_js_array_decl("c = new Array(11,123,4567,'');"), [11, 123, 4567])
+
+    def test_parse_building_downgrade(self):
+        pass
