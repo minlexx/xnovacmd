@@ -56,7 +56,10 @@ class World:
         self._cur_planet_id = 0
         self._cur_planet_name = ''
         self._cur_planet_coords = XNCoords()
-    
+
+    def get_planets() -> list:
+        return self._planets
+
     def do_login(self) -> bool:
         # 1. download main root page
         content = self._page_dnl.download_url_path('')
@@ -87,14 +90,14 @@ class World:
         self._page_cache.load_from_disk_cache()
         self.init_parsers()
         return True
-    
+
     def init_parsers(self):
         self._parsers['overview'] = [OverviewParser(), CurPlanetParser()]
         self._parsers['imperium'] = [ImperiumParser()]
         self._parsers['techtree'] = [TechtreeParser()]
         self._parsers['fleet'] = [FleetsMaxParser()]
         self._parsers['self_user_info'] = [UserInfoParser()]
-    
+
     def run_parser(self, page_name: str, page_content: str):
         logger.debug('Running parsers for: {}'.format(page_name))
         if page_name in self._parsers:
@@ -138,8 +141,8 @@ class World:
                     logger.error('Unexpected attribute error while running parsers ' \
                         'for page: {0}: {1}'.format(page_name, str(ae)))
         else:
-            logger.error('Cannot find parser for page: [{}]'.format(page_name))
-    
+            logger.warn('Cannot find parser for page: [{}]'.format(page_name))
+
     def _page_name_to_url_path(self, page_name: str):
         urls_dict = dict()
         urls_dict['overview'] = '?set=overview'
@@ -159,7 +162,7 @@ class World:
         else:
             logger.warn('unknown page name requested: {0}'.format(page_name))
         return sub_url
-    
+
     def _get_page(self, page_name, max_cache_lifetime=None, force_download=False):
         """
         Gets page from cache or from server only by page name.
@@ -233,7 +236,7 @@ class World:
         if page_content is None:
             raise NetError(self._page_dnl.error_str)
         return page_content
-    
+
     def world_refresh(self):
         pages_list = ['techtree', 'overview', 'imperium', 'fleet']
         pages_maxtime = [3600, 60, 60, 60]  # pages' expiration time in cache
@@ -245,10 +248,21 @@ class World:
 
 
 def main():
+    global world
     args = parse_args()
     world = World(args.login, args.password)
     world.do_login()
     world.world_refresh()
+
+    for planet in world.get_planets():
+        logger.info('Planet {} {} id #{}'.format(
+            planet.name, planet.coords.coords_str(), planet.planet_id))
+
+    content = world._get_page_url('buildings_54450', '?set=buildings&cp=54450',
+        None, True)
+
+
+world = None
 
 
 if __name__ == '__main__':
