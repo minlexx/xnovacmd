@@ -1,0 +1,486 @@
+	<!DOCTYPE HTML>
+	<html>
+	<head>
+									<title>Империя :: Звездная Империя</title>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<link rel="image_src" href="http://uni4.xnova.su/images/logo.jpg" />
+		<link rel="apple-touch-icon" href="http://uni4.xnova.su/images/apple-touch-icon.png"/>
+		<link href="/cache/UNI4/scripts/min_1451261343.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/cache/UNI4/scripts/min_1451261343.js"></script>
+		<!--
+		<link rel="stylesheet" type="text/css" href="/template/main/bootstrap.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/skins/default/formate.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/style.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/media.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/scripts/smoothness/jquery-ui-1.10.2.custom.css">
+
+		<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/template/main/script.js?v=3cf"></script>
+		-->
+					<meta name="viewport" content="width=810">
+				<!--
+		<script type="text/javascript" src="/scripts/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/scripts/game.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/universe.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/flotten.js?v=3cf"></script>
+		<script language="JavaScript" src="/scripts/smiles.js?v=3cf"></script>
+		<script src="/scripts/ed.js?v=3cf" type="text/javascript"></script>
+		-->
+			</head>
+	<body class="window">
+	<script type="text/javascript">
+		XNova.path = '/';
+		var timestamp = 1452078379;
+		var timezone = 4;
+		var ajax_nav = 1;
+		var addToUrl = '';
+
+					XNova.fleetSpeed 	= 2;
+			XNova.gameSpeed 	= 2;
+			XNova.resSpeed 		= 3;
+			</script>
+			<a href="#" class="menu-toggle visible-xs">
+    <span>
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="third"></span>
+    </span>
+</a>
+<div class="menu-sidebar visible-xs">
+	<ul class="nav">
+					<li><a data-link="overview"  href="?set=overview" >Обзор</a></li>
+					<li><a data-link="imperium"  href="?set=imperium" class="check">Империя</a></li>
+					<li><a data-link="galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+					<li><a data-link="fleet"  href="?set=fleet" >Флот</a></li>
+					<li><a data-link="buildings"  href="?set=buildings" >Постройки</a></li>
+					<li><a data-link="buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+					<li><a data-link="buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+					<li><a data-link="buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+					<li><a data-link="buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+					<li><a data-link="resources"  href="?set=resources" >Сырьё</a></li>
+					<li><a data-link="marchand"  href="?set=marchand" >Рынок</a></li>
+					<li><a data-link="officier"  href="?set=officier" >Офицеры</a></li>
+					<li><a data-link="alliance"  href="?set=alliance" >Альянс</a></li>
+					<li><a data-link="buddy"  href="?set=buddy" >Друзья</a></li>
+					<li><a data-link="notes"  href="?set=notes" >Заметки</a></li>
+					<li><a data-link="records"  href="?set=records" >Рекорды</a></li>
+					<li><a data-link="hall"  href="?set=hall" >Зал славы</a></li>
+					<li><a data-link="log"  href="?set=log" >Логи</a></li>
+					<li><a data-link="calculate"  href="?set=calculate" >Расчеты</a></li>
+			</ul>
+</div>
+<div class="contentBox set_imperium">
+	<div id="box">
+		<div class="game_menu">
+			<div class="visible-xs text-center bar">
+									<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+								<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+				<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b>0</b></a>
+									<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b>0</b></a>
+							</div>
+			<div class="bar hhh hidden-xs">
+				<div class="message_list">
+											<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+										<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+					<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b id="new_messages">0</b></a>
+											<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b id="ally_messages">0</b></a>
+									</div>
+				<table align="center" class="top_menu">
+					<tr>
+																			<td class="m1"><a href="http://xnova.su/" target="_blank" class="tooltip sprite ico_space" data-tooltip-content="Вселенные"></a></td>
+												<td class="m1"><a href="?set=stat" class="tooltip sprite ico_stats" data-tooltip-content="Статистика"></a></td>
+						<td class="m1"><a href="?set=techtree" class="tooltip sprite ico_tech" data-tooltip-content="Технологии"></a>
+						<td class="m1"><a href="?set=sim" class="tooltip sprite ico_sim" data-tooltip-content="Симулятор"></a>
+						<td class="m1"><a href="?set=search" class="tooltip sprite ico_search" data-tooltip-content="Поиск"></a></td>
+													<td class="m1"><a href="?set=support" class="tooltip sprite ico_support" data-tooltip-content="Техподдержка"></a></td>
+																			<td class="m1"><a href="http://forum.xnova.su/" target="_blank" class="tooltip sprite ico_forum" data-tooltip-content="Форум"></a></td>
+												<td class="m1"><a href="?set=options" class="tooltip sprite ico_settings" data-tooltip-content="Настройки"></a></td>
+													<td class="m1"><a href="?set=logout&popup" class="tooltip sprite ico_exit" data-tooltip-content="Выход"></a></td>
+																	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="icon-panel visible-xs">
+			<a href="?set=stat" class="sprite ico_stats"></a>
+			<a href="?set=techtree" class="sprite ico_tech"></a>
+			<a href="?set=sim" class="sprite ico_sim"></a>
+			<a href="?set=search" class="sprite ico_search"></a>
+			<a href="?set=support" class="sprite ico_support"></a>
+			<a href="http://forum.xnova.su/" target="_blank" class="sprite ico_forum"></a>
+			<a href="?set=options" class="sprite ico_settings"></a>
+			<a href="?set=logout&popup" class="sprite ico_exit"></a>
+		</div>
+		<div class="game_content">
+			<ul class="menu hidden-xs">
+									<li><a id="link_overview"  href="?set=overview" >Обзор</a></li>
+									<li><a id="link_imperium"  href="?set=imperium" class="check">Империя</a></li>
+									<li><a id="link_galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+									<li><a id="link_fleet"  href="?set=fleet" >Флот</a></li>
+									<li><a id="link_buildings"  href="?set=buildings" >Постройки</a></li>
+									<li><a id="link_buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+									<li><a id="link_buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+									<li><a id="link_buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+									<li><a id="link_buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+									<li><a id="link_resources"  href="?set=resources" >Сырьё</a></li>
+									<li><a id="link_marchand"  href="?set=marchand" >Рынок</a></li>
+									<li><a id="link_officier"  href="?set=officier" >Офицеры</a></li>
+									<li><a id="link_alliance"  href="?set=alliance" >Альянс</a></li>
+									<li><a id="link_buddy"  href="?set=buddy" >Друзья</a></li>
+									<li><a id="link_notes"  href="?set=notes" >Заметки</a></li>
+									<li><a id="link_records"  href="?set=records" >Рекорды</a></li>
+									<li><a id="link_hall"  href="?set=hall" >Зал славы</a></li>
+									<li><a id="link_log"  href="?set=log" >Логи</a></li>
+									<li><a id="link_calculate"  href="?set=calculate" >Расчеты</a></li>
+							</ul>
+								<a href="#" class="planet-toggle visible-xs"><span>
+			<span class="first"></span>
+			<span class="second"></span>
+			<span class="third"></span>
+		</span>
+	</a>
+		<div class="planet-sidebar planetList">
+			<div class="list ">
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(60668)" title="Osmon">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet07.jpg" height="40" width="40" alt="Osmon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a></span>
+						<div class="hidden-sm">
+							Osmon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(54450)" title="Arnon">
+							<img src="/skins/default/planeten/small/s_normaltempplanet08.jpg" height="40" width="40" alt="Arnon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a></span>
+						<div class="hidden-sm">
+							Arnon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(69255)" title="SG Tama">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a></span>
+						<div class="hidden-sm">
+							SG Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 current">
+						<a href="javascript:" onclick="changePlanet(57064)" title="Tama">
+							<img src="/skins/default/planeten/small/s_wasserplanet08.jpg" height="40" width="40" alt="Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a></span>
+						<div class="hidden-sm">
+							Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(58119)" title="Jita">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet18.jpg" height="40" width="40" alt="Jita">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a></span>
+						<div class="hidden-sm">
+							Jita							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(61569)" title="Amarr">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet09.jpg" height="40" width="40" alt="Amarr">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a></span>
+						<div class="hidden-sm">
+							Amarr							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(65077)" title="SG Fury">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Fury">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a></span>
+						<div class="hidden-sm">
+							SG Fury							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57862)" title="J152711">
+							<img src="/skins/default/planeten/small/s_normaltempplanet10.jpg" height="40" width="40" alt="J152711">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a></span>
+						<div class="hidden-sm">
+							J152711							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56598)" title="Dodixie">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet16.jpg" height="40" width="40" alt="Dodixie">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a></span>
+						<div class="hidden-sm">
+							Dodixie							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(84514)" title="Колония">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Колония">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a></span>
+						<div class="hidden-sm">
+							Колония							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(75971)" title="SG Rens">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a></span>
+						<div class="hidden-sm">
+							SG Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56814)" title="Rens">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet08.jpg" height="40" width="40" alt="Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a></span>
+						<div class="hidden-sm">
+							Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(67343)" title="Geminate">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet01.jpg" height="40" width="40" alt="Geminate">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a></span>
+						<div class="hidden-sm">
+							Geminate							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+								<div class="clearfix"></div>
+			</div>
+		</div>
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+				$('.planetList .list').on('mouseup', 'a', function()
+				{
+					$('.planetList .planet').removeClass('current');
+					$(this).parents('.planet').addClass('current');
+				});
+			});
+		</script>
+							<div class="content">
+								<div id="gamediv" class="container-fluid">	
+	
+	
+
+
+
+
+<div class="row">	<script type="application/javascript">
+		$(document).ready(function()
+		{
+			$('body.window .content').css('width', 1425);
+			$('#box, .game_content > .content').css('display', 'table');
+		});
+	</script>
+<div class="table-responsive">
+	<table class="table">
+		<tr valign="left">
+			<td class="c" colspan="16">Обзор империи</td>
+		</tr>
+		<tr>
+			<th colspan="2">&nbsp;</th>
+			<th width=75><a href="?set=overview&cp=60668&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet07.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=54450&amp;re=0"><img src="skins/default/planeten/small/s_normaltempplanet08.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=69255&amp;re=0"><img src="skins/default/planeten/small/s_baseplanet01.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=57064&amp;re=0"><img src="skins/default/planeten/small/s_wasserplanet08.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=58119&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet18.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=61569&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet09.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=65077&amp;re=0"><img src="skins/default/planeten/small/s_baseplanet01.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=57862&amp;re=0"><img src="skins/default/planeten/small/s_normaltempplanet10.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=56598&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet16.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=84514&amp;re=0"><img src="skins/default/planeten/small/s_baseplanet01.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=75971&amp;re=0"><img src="skins/default/planeten/small/s_baseplanet01.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=56814&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet08.jpg" border="0" height="75" width="75"></a></th><th width=75><a href="?set=overview&cp=67343&amp;re=0"><img src="skins/default/planeten/small/s_dschjungelplanet01.jpg" border="0" height="75" width="75"></a></th>			<th width=100>Сумма
+			</th>
+		</tr>
+		<tr>
+			<th colspan="2">Название</th>
+			<th>Osmon</th><th>Arnon</th><th>SG Tama</th><th>Tama</th><th>Jita</th><th>Amarr</th><th>SG Fury</th><th>J152711</th><th>Dodixie</th><th>Колония</th><th>SG Rens</th><th>Rens</th><th>Geminate</th>			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			<th colspan="2">Координаты</th>
+			<th>[<a href="?set=galaxy&r=3&galaxy=1&system=7">1:7:6</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=7">1:7:9</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=34">1:34:10</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=34">1:34:11</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=96">1:96:6</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=198">1:198:5</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=1&system=233">1:233:2</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=2&system=50">2:50:7</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=2&system=159">2:159:4</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=2&system=270">2:270:6</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=3&system=130">3:130:4</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=3&system=130">3:130:5</a>]</th><th>[<a href="?set=galaxy&r=3&galaxy=4&system=100">4:100:5</a>]</th>			<th>&nbsp;</th>
+		</tr>
+		<tr>
+			<th colspan="2">Поля</th>
+			<th>144/238</th><th>148/163</th><th>10/10</th><th>183/209</th><th>164/222</th><th>146/219</th><th>10/10</th><th>148/188</th><th>148/165</th><th>10/10</th><th>10/10</th><th>186/214</th><th>146/196</th>			<th>1453 / 1854</th>
+		</tr>
+
+		<tr>
+			<td class="c" colspan="16" align="left">Ресурсы</td>
+		</tr>
+		<tr>
+			<th rowspan="5">на планете</th>
+			<th>Металл</th>
+			<th>51.656</th><th>48.576</th><th>0</th><th>52.409</th><th>99.669</th><th>99.545</th><th>3.247</th><th>74.388</th><th>96.902</th><th>0</th><th>0</th><th>79.423</th><th>44.940</th>			<th>650.756</th>
+		</tr>
+		<tr>
+			<th>Кристалл</th>
+			<th>69.485</th><th>40.003</th><th>0</th><th>597.904</th><th>27.001</th><th>26.921</th><th>1.627</th><th>26.416</th><th>26.298</th><th>0</th><th>0</th><th>218.700</th><th>43.844</th>			<th>1.078.200</th>
+		</tr>
+		<tr>
+			<th>Дейтерий</th>
+			<th>8.249</th><th>10.495</th><th>17.967</th><th>40.800</th><th>27.142</th><th>34.249</th><th>35.918</th><th>28.881</th><th>32.809</th><th>0</th><th>55.898</th><th>225.891</th><th>28.113</th>			<th>546.412</th>
+		</tr>
+		<tr>
+			<th>Энергия</th>
+			<th>1</th><th>19</th><th>0</th><th>32</th><th>11</th><th>1</th><th>0</th><th>25</th><th>19</th><th>0</th><th>0</th><th>149</th><th>29</th>			<th>286</th>
+		</tr>
+		<tr>
+			<th>Заряд</th>
+			<th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">0</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">0</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">0</font>%</th><th><font color="#00ff00">0</font>%</th><th><font color="#00ff00">100</font>%</th><th><font color="#00ff00">100</font>%</th>			<th>&nbsp;</th>
+		</tr>
+
+
+		<tr>
+			<th rowspan="3">в час</th>
+			<th>Металл</th>
+			<th>45.426</th><th>45.426</th><th>0</th><th>51.753</th><th>45.426</th><th>45.426</th><th>0</th><th>45.426</th><th>45.426</th><th>0</th><th>0</th><th>51.753</th><th>45.426</th>			<th>421.488</th>
+		</tr>
+		<tr>
+			<th>Кристалл</th>
+			<th>26.029</th><th>26.029</th><th>0</th><th>26.029</th><th>26.029</th><th>26.029</th><th>0</th><th>26.029</th><th>26.029</th><th>0</th><th>0</th><th>29.733</th><th>26.029</th>			<th>237.965</th>
+		</tr>
+		<tr>
+			<th>Дейтерий</th>
+			<th>7.776</th><th>8.287</th><th>0</th><th>9.391</th><th>7.749</th><th>7.790</th><th>0</th><th>7.561</th><th>7.642</th><th>0</th><th>0</th><th>10.212</th><th>7.508</th>			<th>73.916</th>
+		</tr>
+
+
+		<tr>
+			<th rowspan="6">Производство</th>
+			<th>Металл</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th>			<th rowspan="6">&nbsp;</th>
+		</tr>
+		<tr>
+			<th>Кристаллы</th>
+			<th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th></th></tr>
+		<tr>
+			<th>Дейтерий</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th></tr>
+		<tr>
+			<th>Солн. ст.</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th></tr>
+		<tr>
+			<th>Терм. ст.</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th></tr>
+		<tr>
+			<th>Спутники</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th><th><font color="#00FF00">100</font>%</th></tr>
+		<tr>
+			<th colspan="15">Кредиты</th>
+			<th><font color=#FFFF00>63</font></th>
+		</tr>
+		<tr>
+			<td class="c" colspan="16" align="left">Постройки</td>
+		</tr>
+		<tr><th colspan="2">Рудник металла</th><th>28</th><th>28</th><th>-</th><th>29</th><th>28</th><th>28</th><th>-</th><th>28</th><th>28</th><th>-</th><th>-</th><th>29</th><th>28</th><th>29 (29)</th></tr><tr><th colspan="2">Рудник кристалла</th><th>26</th><th>26</th><th>-</th><th>26</th><th>26</th><th>26</th><th>-</th><th>26</th><th>26</th><th>-</th><th>-</th><th>27</th><th>26</th><th>26 (27)</th></tr><tr><th colspan="2">Синтезатор дейтерия</th><th>22</th><th>22</th><th>-</th><th>23</th><th>22</th><th>22</th><th>-</th><th>22</th><th>22</th><th>-</th><th>-</th><th>24</th><th>22</th><th>23 (24)</th></tr><tr><th colspan="2">Солнечная батарея</th><th>29</th><th>29</th><th>-</th><th>30</th><th>29</th><th>29</th><th>-</th><th>29</th><th>29</th><th>-</th><th>-</th><th>30</th><th>29</th><th>30 (30)</th></tr><tr><th colspan="2">Термоядерный реактор</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>0 (0)</th></tr><tr><th colspan="2">Фабрика роботов</th><th>10</th><th>10</th><th>9</th><th>11</th><th>10</th><th>10</th><th>9</th><th>10</th><th>10</th><th>9</th><th>9</th><th>10</th><th>10</th><th>11 (11)</th></tr><tr><th colspan="2">Фабрика нанитов</th><th>2</th><th>2</th><th>-</th><th>4</th><th>2</th><th>2</th><th>-</th><th>2</th><th>2</th><th>-</th><th>-</th><th>4</th><th>2</th><th>4 (4)</th></tr><tr><th colspan="2">Верфь</th><th>10</th><th>10</th><th>-</th><th>12</th><th>11</th><th>10</th><th>-</th><th>10</th><th>10</th><th>-</th><th>-</th><th>12</th><th>10</th><th>12 (12)</th></tr><tr><th colspan="2">Склад металла</th><th>7</th><th>7</th><th>-</th><th>11</th><th>9</th><th>7</th><th>-</th><th>8</th><th>8</th><th>-</th><th>-</th><th>11</th><th>7</th><th>11 (11)</th></tr><tr><th colspan="2">Склад кристалла</th><th>5</th><th>6</th><th>-</th><th>10</th><th>7</th><th>6</th><th>-</th><th>7</th><th>7</th><th>-</th><th>-</th><th>11</th><th>6</th><th>10 (11)</th></tr><tr><th colspan="2">Емкость дейтерия</th><th>3</th><th>5</th><th>-</th><th>10</th><th>6</th><th>4</th><th>-</th><th>4</th><th>4</th><th>-</th><th>-</th><th>10</th><th>4</th><th>10 (10)</th></tr><tr><th colspan="2">Лаборатория</th><th>-</th><th>-</th><th>-</th><th>12</th><th>12</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>12</th><th>-</th><th>12 (12)</th></tr><tr><th colspan="2">Терраформер</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>0 (0)</th></tr><tr><th colspan="2">Склад альянса</th><th>-</th><th>-</th><th>-</th><th>1</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>1 (1)</th></tr><tr><th colspan="2">Ракетная шахта</th><th>2</th><th>3</th><th>-</th><th>4</th><th>2</th><th>2</th><th>-</th><th>2</th><th>2</th><th>-</th><th>-</th><th>6</th><th>2</th><th>4 (6)</th></tr><tr><th colspan="2">Лунная база</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>0 (0)</th></tr><tr><th colspan="2">Сенсорная фаланга</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>0 (0)</th></tr><tr><th colspan="2">Межгалактические врата</th><th>-</th><th>-</th><th>1</th><th>-</th><th>-</th><th>-</th><th>1</th><th>-</th><th>-</th><th>1</th><th>1</th><th>-</th><th>-</th><th>0 (1)</th></tr>		<tr>
+			<td class="c" colspan="16" align="left">Корабли</td>
+		</tr>
+		<tr><th colspan="2">Малый транспорт</th><th>10</th><th>-<th>0 <font color=yellow>-200</font></th><th>50</th><th>-<th>10</th><th>0 <font color=yellow>+10</font></th><th>-<th>-<th>0 <font color=yellow>+10</font></th><th>-<th>1182 <font color=yellow>-3020</font></th><th>0 <font color=yellow>+3000</font></th><th>1252 <font color=#00FF00>+3020</font></th></tr><tr><th colspan="2">Большой транспорт</th><th>-<th>-<th>0 <font color=yellow>-120</font></th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0 <font color=yellow>-150</font></th><th>0 <font color=yellow>+150</font></th><th>0 <font color=#00FF00>+150</font></th></tr><tr><th colspan="2">Лёгкий истребитель</th><th>-<th>-<th>-<th>822</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>1064</th><th>-<th>1886</th></tr><tr><th colspan="2">Тяжёлый истребитель</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Крейсер</th><th>2</th><th>-<th>0 <font color=yellow>-405</font></th><th>-<th>8</th><th>8</th><th>-<th>8</th><th>8</th><th>-<th>-<th>-<th>7 <font color=#00FF00>+7</font></th><th>41 <font color=#00FF00>+7</font></th></tr><tr><th colspan="2">Линкор</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Колонизатор</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Переработчик</th><th>1</th><th>2 <font color=yellow>-100</font></th><th>-<th>5 <font color=yellow>+100</font></th><th>1</th><th>1</th><th>-<th>1</th><th>1</th><th>-<th>-<th>35 <font color=yellow>-50</font></th><th>1 <font color=yellow>+50</font></th><th>48 <font color=#00FF00>+150</font></th></tr><tr><th colspan="2">Шпионский зонд</th><th>-<th>20</th><th>0 <font color=yellow>-145</font></th><th>50</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>36</th><th>-<th>106</th></tr><tr><th colspan="2">Бомбардировщик</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Солнечный спутник</th><th>47</th><th>57</th><th>-<th>50</th><th>46</th><th>47</th><th>-<th>44</th><th>45</th><th>-<th>-<th>83</th><th>43</th><th>462</th></tr><tr><th colspan="2">Уничтожитель</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Звезда смерти</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Линейный крейсер</th><th>2</th><th>-<th>0 <font color=yellow>-398</font></th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0 <font color=yellow>+6</font></th><th>-<th>0 <font color=yellow>-6</font></th><th>2 <font color=#00FF00>+6</font></th></tr><tr><th colspan="2">Передвижная база</th><th>-<th>-<th>1 <font color=yellow>-1</font></th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>1</th></tr><tr><th colspan="2">Корвет</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Перехватчик</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Дредноут</th><th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>-<th>0</th></tr><tr><th colspan="2">Корсар</th><th>9</th><th>18</th><th>0 <font color=yellow>-2474</font></th><th>-<th>16</th><th>11</th><th>-<th>16</th><th>16</th><th>-<th>0 <font color=yellow>+18</font></th><th>-<th>0 <font color=#00FF00>+1</font> <font color=yellow>-18</font></th><th>86 <font color=#00FF00>+19</font></th></tr>		<tr>
+			<td class="c" colspan="16" align="left">Оборона</td>
+		</tr>
+		<tr><th colspan="2">Ракетная установка</th><th>300</th><th>300</th><th>-</th><th>2000</th><th>300</th><th>300</th><th>-</th><th>300</th><th>300</th><th>-</th><th>-</th><th>2000</th><th>300</th><th>6100</th></tr><tr><th colspan="2">Легкий лазер</th><th>300</th><th>300</th><th>-</th><th>2000</th><th>300</th><th>300</th><th>-</th><th>300</th><th>300</th><th>-</th><th>-</th><th>2000</th><th>300</th><th>6100</th></tr><tr><th colspan="2">Тяжёлый лазер</th><th>150</th><th>150</th><th>-</th><th>1000</th><th>150</th><th>150</th><th>-</th><th>150</th><th>150</th><th>-</th><th>-</th><th>1000</th><th>150</th><th>3050</th></tr><tr><th colspan="2">Пушка Гаусса</th><th>50</th><th>50</th><th>-</th><th>375</th><th>50</th><th>50</th><th>-</th><th>50</th><th>50</th><th>-</th><th>-</th><th>210</th><th>50</th><th>935</th></tr><tr><th colspan="2">Ионное орудие</th><th>20</th><th>20</th><th>-</th><th>20</th><th>20</th><th>20</th><th>-</th><th>20</th><th>40</th><th>-</th><th>-</th><th>50</th><th>20</th><th>230</th></tr><tr><th colspan="2">Плазменное орудие</th><th>10</th><th>10</th><th>-</th><th>30</th><th>10</th><th>10</th><th>-</th><th>10</th><th>10</th><th>-</th><th>-</th><th>30</th><th>10</th><th>130</th></tr><tr><th colspan="2">Малый щитовой купол</th><th>1</th><th>1</th><th>-</th><th>1</th><th>1</th><th>1</th><th>-</th><th>1</th><th>1</th><th>-</th><th>-</th><th>1</th><th>1</th><th>9</th></tr><tr><th colspan="2">Большой щитовой купол</th><th>1</th><th>1</th><th>-</th><th>1</th><th>1</th><th>1</th><th>-</th><th>1</th><th>1</th><th>-</th><th>-</th><th>1</th><th>1</th><th>9</th></tr><tr><th colspan="2">Ракета-перехватчик</th><th>20</th><th>20</th><th>-</th><th>20</th><th>20</th><th>20</th><th>-</th><th>20</th><th>20</th><th>-</th><th>-</th><th>59</th><th>20</th><th>219</th></tr><tr><th colspan="2">Межпланетная ракета</th><th>-</th><th>-</th><th>-</th><th>7</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>-</th><th>7</th></tr>		<tr>
+			<td class="c" colspan="16" align="left">Исследования</td>
+		</tr>
+		<tr><th colspan="15">Шпионаж</th><th><font color=#FFFF00>13</font></th></tr><tr><th colspan="15">Компьютерная технология</th><th><font color=#FFFF00>13</font></th></tr><tr><th colspan="15">Оружейная технология</th><th><font color=#FFFF00>14</font></th></tr><tr><th colspan="15">Щитовая технология</th><th><font color=#FFFF00>14</font></th></tr><tr><th colspan="15">Броня космических кораблей</th><th><font color=#FFFF00>14</font></th></tr><tr><th colspan="15">Энергетическая технология</th><th><font color=#FFFF00>12</font></th></tr><tr><th colspan="15">Гиперпространственная технология</th><th><font color=#FFFF00>8</font></th></tr><tr><th colspan="15">Ракетный двигатель</th><th><font color=#FFFF00>13</font></th></tr><tr><th colspan="15">Импульсный двигатель</th><th><font color=#FFFF00>10</font></th></tr><tr><th colspan="15">Гиперпространственный двигатель</th><th><font color=#FFFF00>8</font></th></tr><tr><th colspan="15">Лазерная технология</th><th><font color=#FFFF00>15</font></th></tr><tr><th colspan="15">Ионная технология</th><th><font color=#FFFF00>11</font></th></tr><tr><th colspan="15">Плазменная технология</th><th><font color=#FFFF00>10</font></th></tr><tr><th colspan="15">М.И.С.</th><th><font color=#FFFF00>2</font></th></tr><tr><th colspan="15">Экспедиционная технология</th><th><font color=#FFFF00>4</font></th></tr><tr><th colspan="15">Технология колонизации</th><th><font color=#FFFF00>8</font></th></tr><tr><th colspan="15">Военная база</th><th><font color=#FFFF00>6</font></th></tr><tr><th colspan="15">Гравитационная технология</th><th><font color=#FFFF00>1</font></th></tr>	</table>
+</div></div>
+
+			</div>
+
+		<div id="loadingOverlay">загрузка...<br><img src="/images/loading.gif" alt=""></div>
+		<div id="preloadOverlay"><img src="/images/loading.gif" alt=""></div>
+
+				</div>
+		<div class="clearfix"></div>
+		</div>
+		</div>
+		</div></div>
+
+		<div id="siteFooter" class="hidden-xs">
+			<div class="container-fluid">
+				<div class="pull-left text-left">
+					<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+											<a class="hidden-sm" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+									</div>
+				<div class="pull-right text-right">
+										<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+					<a href="?set=banned">Тёмные</a>|
+											<a href="wide.php" data-link="1">Большой монитор</a>|
+						<a href="http://vk.com/xnova_game" target="_blank">ВК</a>|
+						<a href="?set=contact">Контакты</a>|
+										<a href="?set=content&article=help">Новичкам</a>|
+					<a href="?set=content&article=agb">Правила</a>|
+					<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+				</div>
+				<br class="clearfloat"/></div>
+		</div>
+		<div class="row hidden-sm hidden-md hidden-lg footer-mobile">
+			<div class="col-xs-12 text-center">
+				<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+				<a href="?set=banned">Тёмные</a>|
+				<a href="?set=contact">Контакты</a>|
+				<a href="?set=content&article=help">Новичкам</a>|
+				<a href="?set=content&article=agb">Правила</a>
+			</div>
+			<div class="col-xs-8 text-center">
+				<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+									<a class="media_1" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+							</div>
+			<div class="col-xs-4 text-center">
+				<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+			</div>
+		</div>
+	
+	
+		
+	<div id="windowDialog"></div>
+	<div id="tooltip" class="tip"></div>
+
+	
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	var yaParams = {userId: 71995};
+	</script>
+
+	<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter25961143 = new Ya.Metrika({id:25961143,params:window.yaParams||{ }});
+			} catch(e) { }
+		});
+
+	    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<!-- /Yandex.Metrika counter -->
+	</body></html>
+
+
+	<script type="text/javascript">setMenuItem("imperium");</script>
+
+	<script type="text/javascript">UpdateGameInfo('0', '0'); timestamp = 1452078379;</script>

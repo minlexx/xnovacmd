@@ -1,0 +1,856 @@
+	<!DOCTYPE HTML>
+	<html>
+	<head>
+									<title>Обзор :: Звездная Империя</title>
+							<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<link rel="image_src" href="http://uni4.xnova.su/images/logo.jpg" />
+		<link rel="apple-touch-icon" href="http://uni4.xnova.su/images/apple-touch-icon.png"/>
+		<link href="/cache/UNI4/scripts/min_1451261343.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/cache/UNI4/scripts/min_1451261343.js"></script>
+		<!--
+		<link rel="stylesheet" type="text/css" href="/template/main/bootstrap.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/skins/default/formate.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/style.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/template/main/media.css?v=3cf">
+		<link rel="stylesheet" type="text/css" href="/scripts/smoothness/jquery-ui-1.10.2.custom.css">
+
+		<script type="text/javascript" src="//yastatic.net/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="//yastatic.net/jquery-ui/1.11.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/template/main/script.js?v=3cf"></script>
+		-->
+					<meta name="viewport" content="width=810">
+				<!--
+		<script type="text/javascript" src="/scripts/jquery.form.min.js"></script>
+		<script type="text/javascript" src="/scripts/game.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/universe.js?v=3cf"></script>
+		<script type="text/javascript" src="/scripts/flotten.js?v=3cf"></script>
+		<script language="JavaScript" src="/scripts/smiles.js?v=3cf"></script>
+		<script src="/scripts/ed.js?v=3cf" type="text/javascript"></script>
+		-->
+			</head>
+	<body class="window">
+	<script type="text/javascript">
+		XNova.path = '/';
+		var timestamp = 1452078376;
+		var timezone = 4;
+		var ajax_nav = 1;
+		var addToUrl = '';
+
+					XNova.fleetSpeed 	= 2;
+			XNova.gameSpeed 	= 2;
+			XNova.resSpeed 		= 3;
+			</script>
+			<a href="#" class="menu-toggle visible-xs">
+    <span>
+        <span class="first"></span>
+        <span class="second"></span>
+        <span class="third"></span>
+    </span>
+</a>
+<div class="menu-sidebar visible-xs">
+	<ul class="nav">
+					<li><a data-link="overview"  href="?set=overview" class="check">Обзор</a></li>
+					<li><a data-link="imperium"  href="?set=imperium" >Империя</a></li>
+					<li><a data-link="galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+					<li><a data-link="fleet"  href="?set=fleet" >Флот</a></li>
+					<li><a data-link="buildings"  href="?set=buildings" >Постройки</a></li>
+					<li><a data-link="buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+					<li><a data-link="buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+					<li><a data-link="buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+					<li><a data-link="buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+					<li><a data-link="resources"  href="?set=resources" >Сырьё</a></li>
+					<li><a data-link="marchand"  href="?set=marchand" >Рынок</a></li>
+					<li><a data-link="officier"  href="?set=officier" >Офицеры</a></li>
+					<li><a data-link="alliance"  href="?set=alliance" >Альянс</a></li>
+					<li><a data-link="buddy"  href="?set=buddy" >Друзья</a></li>
+					<li><a data-link="notes"  href="?set=notes" >Заметки</a></li>
+					<li><a data-link="records"  href="?set=records" >Рекорды</a></li>
+					<li><a data-link="hall"  href="?set=hall" >Зал славы</a></li>
+					<li><a data-link="log"  href="?set=log" >Логи</a></li>
+					<li><a data-link="calculate"  href="?set=calculate" >Расчеты</a></li>
+			</ul>
+</div>
+<div class="contentBox set_overview">
+	<div id="box">
+		<div class="game_menu">
+			<div class="visible-xs text-center bar">
+									<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+								<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+				<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b>0</b></a>
+									<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b>0</b></a>
+							</div>
+			<div class="bar hhh hidden-xs">
+				<div class="message_list">
+											<a class="m1 tooltip" href="?set=tutorial" data-tooltip-content="Квесты"><span class="sprite ico_tutorial"></span></a>
+										<a class="m1 tooltip" href="?set=chat" data-tooltip-content="Чат"><span class="sprite ico_chat"></span></a>
+					<a class="m1 tooltip" href="?set=messages" data-tooltip-content="Сообщения"><span class="sprite ico_mail"></span> <b id="new_messages">0</b></a>
+											<a class="m1 tooltip" href="?set=alliance&mode=circular" data-tooltip-content="Альянс"><span class="sprite ico_alliance"></span> <b id="ally_messages">0</b></a>
+									</div>
+				<table align="center" class="top_menu">
+					<tr>
+																			<td class="m1"><a href="http://xnova.su/" target="_blank" class="tooltip sprite ico_space" data-tooltip-content="Вселенные"></a></td>
+												<td class="m1"><a href="?set=stat" class="tooltip sprite ico_stats" data-tooltip-content="Статистика"></a></td>
+						<td class="m1"><a href="?set=techtree" class="tooltip sprite ico_tech" data-tooltip-content="Технологии"></a>
+						<td class="m1"><a href="?set=sim" class="tooltip sprite ico_sim" data-tooltip-content="Симулятор"></a>
+						<td class="m1"><a href="?set=search" class="tooltip sprite ico_search" data-tooltip-content="Поиск"></a></td>
+													<td class="m1"><a href="?set=support" class="tooltip sprite ico_support" data-tooltip-content="Техподдержка"></a></td>
+																			<td class="m1"><a href="http://forum.xnova.su/" target="_blank" class="tooltip sprite ico_forum" data-tooltip-content="Форум"></a></td>
+												<td class="m1"><a href="?set=options" class="tooltip sprite ico_settings" data-tooltip-content="Настройки"></a></td>
+													<td class="m1"><a href="?set=logout&popup" class="tooltip sprite ico_exit" data-tooltip-content="Выход"></a></td>
+																	</tr>
+				</table>
+			</div>
+		</div>
+		<div class="icon-panel visible-xs">
+			<a href="?set=stat" class="sprite ico_stats"></a>
+			<a href="?set=techtree" class="sprite ico_tech"></a>
+			<a href="?set=sim" class="sprite ico_sim"></a>
+			<a href="?set=search" class="sprite ico_search"></a>
+			<a href="?set=support" class="sprite ico_support"></a>
+			<a href="http://forum.xnova.su/" target="_blank" class="sprite ico_forum"></a>
+			<a href="?set=options" class="sprite ico_settings"></a>
+			<a href="?set=logout&popup" class="sprite ico_exit"></a>
+		</div>
+		<div class="game_content">
+			<ul class="menu hidden-xs">
+									<li><a id="link_overview"  href="?set=overview" class="check">Обзор</a></li>
+									<li><a id="link_imperium"  href="?set=imperium" >Империя</a></li>
+									<li><a id="link_galaxy"  href="?set=galaxy&r=0" >Космос</a></li>
+									<li><a id="link_fleet"  href="?set=fleet" >Флот</a></li>
+									<li><a id="link_buildings"  href="?set=buildings" >Постройки</a></li>
+									<li><a id="link_buildingsresearch"  href="?set=buildings&mode=research" >Наука</a></li>
+									<li><a id="link_buildingsresearch_fleet"  href="?set=buildings&mode=research_fleet" >Фабрика</a></li>
+									<li><a id="link_buildingsfleet"  href="?set=buildings&mode=fleet" >Верфь</a></li>
+									<li><a id="link_buildingsdefense"  href="?set=buildings&mode=defense" >Оборона</a></li>
+									<li><a id="link_resources"  href="?set=resources" >Сырьё</a></li>
+									<li><a id="link_marchand"  href="?set=marchand" >Рынок</a></li>
+									<li><a id="link_officier"  href="?set=officier" >Офицеры</a></li>
+									<li><a id="link_alliance"  href="?set=alliance" >Альянс</a></li>
+									<li><a id="link_buddy"  href="?set=buddy" >Друзья</a></li>
+									<li><a id="link_notes"  href="?set=notes" >Заметки</a></li>
+									<li><a id="link_records"  href="?set=records" >Рекорды</a></li>
+									<li><a id="link_hall"  href="?set=hall" >Зал славы</a></li>
+									<li><a id="link_log"  href="?set=log" >Логи</a></li>
+									<li><a id="link_calculate"  href="?set=calculate" >Расчеты</a></li>
+							</ul>
+								<a href="#" class="planet-toggle visible-xs"><span>
+			<span class="first"></span>
+			<span class="second"></span>
+			<span class="third"></span>
+		</span>
+	</a>
+		<div class="planet-sidebar planetList">
+			<div class="list ">
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(60668)" title="Osmon">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet07.jpg" height="40" width="40" alt="Osmon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a></span>
+						<div class="hidden-sm">
+							Osmon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(54450)" title="Arnon">
+							<img src="/skins/default/planeten/small/s_normaltempplanet08.jpg" height="40" width="40" alt="Arnon">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a></span>
+						<div class="hidden-sm">
+							Arnon							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7">[1:7:9]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(69255)" title="SG Tama">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a></span>
+						<div class="hidden-sm">
+							SG Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:10]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 current">
+						<a href="javascript:" onclick="changePlanet(57064)" title="Tama">
+							<img src="/skins/default/planeten/small/s_wasserplanet08.jpg" height="40" width="40" alt="Tama">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a></span>
+						<div class="hidden-sm">
+							Tama							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34">[1:34:11]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(58119)" title="Jita">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet18.jpg" height="40" width="40" alt="Jita">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a></span>
+						<div class="hidden-sm">
+							Jita							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=96">[1:96:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(61569)" title="Amarr">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet09.jpg" height="40" width="40" alt="Amarr">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a></span>
+						<div class="hidden-sm">
+							Amarr							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=198">[1:198:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(65077)" title="SG Fury">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Fury">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a></span>
+						<div class="hidden-sm">
+							SG Fury							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233">[1:233:2]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(57862)" title="J152711">
+							<img src="/skins/default/planeten/small/s_normaltempplanet10.jpg" height="40" width="40" alt="J152711">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a></span>
+						<div class="hidden-sm">
+							J152711							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=50">[2:50:7]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56598)" title="Dodixie">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet16.jpg" height="40" width="40" alt="Dodixie">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a></span>
+						<div class="hidden-sm">
+							Dodixie							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=159">[2:159:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(84514)" title="Колония">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="Колония">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a></span>
+						<div class="hidden-sm">
+							Колония							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270">[2:270:6]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_5 ">
+						<a href="javascript:" onclick="changePlanet(75971)" title="SG Rens">
+							<img src="/skins/default/planeten/small/s_baseplanet01.jpg" height="40" width="40" alt="SG Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a></span>
+						<div class="hidden-sm">
+							SG Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:4]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(56814)" title="Rens">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet08.jpg" height="40" width="40" alt="Rens">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a></span>
+						<div class="hidden-sm">
+							Rens							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130">[3:130:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+									<div class="planet type_1 ">
+						<a href="javascript:" onclick="changePlanet(67343)" title="Geminate">
+							<img src="/skins/default/planeten/small/s_dschjungelplanet01.jpg" height="40" width="40" alt="Geminate">
+						</a>
+						<span class="visible-sm-inline-block"><a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a></span>
+						<div class="hidden-sm">
+							Geminate							<br>
+							<a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100">[4:100:5]</a>						</div>
+						<div class="clear"></div>
+					</div>
+								<div class="clearfix"></div>
+			</div>
+		</div>
+			<script type="text/javascript">
+			$(document).ready(function()
+			{
+				$('.planetList .list').on('mouseup', 'a', function()
+				{
+					$('.planetList .planet').removeClass('current');
+					$(this).parents('.planet').addClass('current');
+				});
+			});
+		</script>
+							<div class="content">
+								<div id="gamediv" class="container-fluid">	
+			<script type="text/javascript">
+	var ress = new Array(52366, 597882, 40792);
+	var max = new Array(11062500,6937500,6937500);
+	var production = new Array(14.3925, 7.2386111111111, 2.6086111111111);
+	timeouts['res_count'] = window.setInterval(XNova.updateResources, 1000);
+	var serverTime = 1452078376000 - Djs + (timezone + 6) * 1800000;
+</script>
+<form action="" name="ress" id="ress" style="display:none">
+	<input type="hidden" id="metall" value="0">
+	<input type="hidden" id="crystall" value="0">
+	<input type="hidden" id="deuterium" value="0">
+	<input type="hidden" id="bmetall" value="0">
+	<input type="hidden" id="bcrystall" value="0">
+	<input type="hidden" id="bdeuterium" value="0">
+</form>
+<div class="row topnav">
+			<div class="col-md-2 hidden-xs col-sm-12">
+			<div class="separator visible-sm"></div>
+			<select style="width:100%;" onChange="load(this.options[this.selectedIndex].value);">
+<option value="?set=overview&amp;cp=60668&amp;re=0">Osmon&nbsp;[1:7:6]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=54450&amp;re=0">Arnon&nbsp;[1:7:9]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=overview&amp;cp=69255&amp;re=0">SG Tama&nbsp;[1:34:10]&nbsp;&nbsp;</option>
+<option selected="selected" value="?set=overview&amp;cp=57064&amp;re=0">Tama&nbsp;[1:34:11]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=58119&amp;re=0">Jita&nbsp;[1:96:6]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=61569&amp;re=0">Amarr&nbsp;[1:198:5]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=overview&amp;cp=65077&amp;re=0">SG Fury&nbsp;[1:233:2]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=57862&amp;re=0">J152711&nbsp;[2:50:7]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=56598&amp;re=0">Dodixie&nbsp;[2:159:4]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=overview&amp;cp=84514&amp;re=0">Колония&nbsp;[2:270:6]&nbsp;&nbsp;</option>
+<option style="color:yellow;" value="?set=overview&amp;cp=75971&amp;re=0">SG Rens&nbsp;[3:130:4]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=56814&amp;re=0">Rens&nbsp;[3:130:5]&nbsp;&nbsp;</option>
+<option value="?set=overview&amp;cp=67343&amp;re=0">Geminate&nbsp;[4:100:5]&nbsp;&nbsp;</option></select>
+			<div class="separator visible-sm"></div>
+		</div>
+		<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник металла', '?set=infos&gid=1&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>51.813</td></tr><tr><td>День:</td><td align=right>1.243.512</td></tr></table>'><span class="sprite skin_metall"></span><br></span>
+				<font color="#FFFF00">Металл</font><br>
+				<div title="Количество ресурса на планете"><div id="met">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">11.062.500</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Рудник кристалла', '?set=infos&gid=2&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>26.059</td></tr><tr><td>День:</td><td align=right>625.416</td></tr></table>'><span class="sprite skin_kristall"></span><br></span>
+				<font color="#FFFF00">Кристалл</font><br>
+				<div title="Количество ресурса на планете"><div id="cry">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">6.937.500</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Синтезатор дейтерия', '?set=infos&gid=3&ajax&popup', 600)" class="tooltip hidden-xs" data-tooltip-content='<table width=150><tr><td width=30%>КПД:</td><td align=right>100%</td></tr><tr><td>В час:</td><td align=right>9.391</td></tr><tr><td>День:</td><td align=right>225.384</td></tr></table>'><span class="sprite skin_deuterium"></span><br></span>
+				<font color="#FFFF00">Дейтерий</font><br>
+				<div title="Количество ресурса на планете"><div id="deu">-</div></div>
+				<span title="Максимальная вместимость хранилищ" class="hidden-xs"><font color="#00ff00">6.937.500</font></span>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-5 col-sm-6">
+		<div class="row">
+			<div class="col-xs-4 text-center">
+				<span onclick="showWindow('Солнечная батарея', '?set=infos&gid=4&ajax&popup', 600)" title="Солнечная батарея" class="hidden-xs"><span class="sprite skin_energie"></span><br></span>
+				<font color="#FFFF00">Энергия</font><br>
+				<div title="Энергетический баланс"><span class="positive">32</span></div>
+				<span title="Выработка энергии" class="hidden-xs"><font color="#00ff00">13.911</font></span>
+			</div>
+			<div class="col-xs-4 text-center">
+				<span class="tooltip hidden-xs" data-tooltip-content='<center>Вместимость:<br>7500 / 7500</center>'>
+											<span class="sprite skin_batt100"></span>
+										<br>
+				</span>
+				<font color="#FFFF00">Заряд</font><br>
+				100%<br>
+			</div>
+			<div class="col-xs-4 text-center">
+				<a href="?set=infokredits" class="tooltip hidden-xs" data-tooltip-content='
+				<table width=550>
+				<tr>
+									<td align="center" width="14%">
+						Геолог						<div class="separator"></div>
+						<span class="officier of601_ikon"></span>
+					</td>
+									<td align="center" width="14%">
+						Адмирал						<div class="separator"></div>
+						<span class="officier of602"></span>
+					</td>
+									<td align="center" width="14%">
+						Инженер						<div class="separator"></div>
+						<span class="officier of603"></span>
+					</td>
+									<td align="center" width="14%">
+						Технократ						<div class="separator"></div>
+						<span class="officier of604"></span>
+					</td>
+									<td align="center" width="14%">
+						Архитектор						<div class="separator"></div>
+						<span class="officier of605"></span>
+					</td>
+									<td align="center" width="14%">
+						Метафизик						<div class="separator"></div>
+						<span class="officier of606"></span>
+					</td>
+									<td align="center" width="14%">
+						Наёмник						<div class="separator"></div>
+						<span class="officier of607"></span>
+					</td>
+								</tr>
+				<tr>
+									<td align="center">
+											Нанят до <font color=lime>12.01.2016 09:08</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+									<td align="center">
+											<font color=lime>Не нанят</font>
+										</td>
+								</tr></table>'><span class="sprite skin_kredits"></span><br></a>
+				<font color="#FFFF00">Кредиты</font><br>
+				63<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#met").html(XNova.format(52366));
+	$("#cry").html(XNova.format(597882));
+	$("#deu").html(XNova.format(40792));
+	$(document).ready(XNova.updateResources());
+</script>	
+	
+
+
+
+
+<div class="row">
+<div class="block">
+	<div class="title">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
+				Планета "Tama"
+				<a href="?set=galaxy&r=0&galaxy=1&system=34">[1:34:11]</a>
+				<a href="?set=overview&mode=renameplanet" title="Редактирование планеты">(изменить)</a>
+			</div>
+			<div class="separator visible-xs"></div>
+			<div class="col-xs-12 col-sm-6">
+				<div id="clock" class="pull-right">06-01-2016 16:06:16</div>
+				<script type="text/javascript">UpdateClock();</script>
+				<div class="clearfix visible-xs"></div>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+					<table class="table">
+									<tr class="return">
+					<th width="80">
+						<div id="bxxfe8" class="z">53</div>
+						<font color="lime">16:07:09</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="return owndeploy">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>3.000<font></td></tr><tr><td width=75% align=left><font color=white>Большой транспорт:<font></td><td width=25% align=right><font color=white>150<font></td></tr><tr><td width=75% align=left><font color=white>Переработчик:<font></td><td width=25% align=right><font color=white>50<font></td></tr></table>' class="owndeploy">флот</a> отправленный с планеты Geminate <a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100" owndeploy >[4:100:5]</a> возвращается на планету Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owndeploy >[3:130:5]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>1.000.000<font></td></tr></table>' class="tooltip owndeploy">Оставить</a></span>
+					</th>
+					<script>FlotenTime('bxxfe8', 53);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxfs13" class="z">1:32</div>
+						<font color="lime">16:07:48</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight owndeploy">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Переработчик:<font></td><td width=25% align=right><font color=white>100<font></td></tr></table>' class="owndeploy">флот</a> отправленный с планеты Arnon <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=7" owndeploy >[1:7:9]</a> направляется к планете Tama <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" owndeploy >[1:34:11]</a>. Задание: Оставить</span>
+					</th>
+					<script>FlotenTime('bxxfs13', 92);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxfs5" class="z">17:26</div>
+						<font color="lime">16:23:42</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight ownmissile">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>200<font></td></tr><tr><td width=75% align=left><font color=white>Большой транспорт:<font></td><td width=25% align=right><font color=white>120<font></td></tr><tr><td width=75% align=left><font color=white>Крейсер:<font></td><td width=25% align=right><font color=white>405<font></td></tr><tr><td width=75% align=left><font color=white>Шпионский зонд:<font></td><td width=25% align=right><font color=white>145<font></td></tr><tr><td width=75% align=left><font color=white>Линейный крейсер:<font></td><td width=25% align=right><font color=white>398<font></td></tr><tr><td width=75% align=left><font color=white>Передвижная база:<font></td><td width=25% align=right><font color=white>1<font></td></tr><tr><td width=75% align=left><font color=white>Корсар:<font></td><td width=25% align=right><font color=white>2.474<font></td></tr></table>' class="ownmissile">флот</a> отправленный  с военной базы SG Tama <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" ownmissile >[1:34:10]</a> направляется к  координаты <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=70" ownmissile >[1:70:6]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>430.000<font></td></tr></table>' class="tooltip ownmissile">Создать базу</a></span>
+					</th>
+					<script>FlotenTime('bxxfs5', 1046);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxofs11" class="z">24:32</div>
+						<font color="lime">16:30:48</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight attack">Чужой <a href='?set=sim&r=204,1650!10;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Лёгкий истребитель:<font></td><td width=25% align=right><font color=white>1.650<font></td></tr></table>' class="attack">флот</a> игрока ScumWir <a href="?set=messages&amp;mode=write&amp;id=69186" title="Отправить сообщение"><span class='sprite skin_m'></span></a> отправленный с луны Луна <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233" attack >[1:233:9]</a> направляется к планете Tama <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" attack >[1:34:11]</a>. Задание: Атаковать</span>
+					</th>
+					<script>FlotenTime('bxxofs11', 1472);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxfs7" class="z">25:57</div>
+						<font color="lime">16:32:13</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight owntransport">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>10<font></td></tr></table>' class="owntransport">флот</a> отправленный с планеты Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owntransport >[3:130:5]</a> направляется к  военной базе Колония <a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270" owntransport >[2:270:6]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>38.122<font></td></tr></table>' class="tooltip owntransport">Транспорт</a></span>
+					</th>
+					<script>FlotenTime('bxxfs7', 1557);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxfs9" class="z">26:56</div>
+						<font color="lime">16:33:12</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight owndeploy">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Линейный крейсер:<font></td><td width=25% align=right><font color=white>6<font></td></tr><tr><td width=75% align=left><font color=white>Корсар:<font></td><td width=25% align=right><font color=white>18<font></td></tr></table>' class="owndeploy">флот</a> отправленный с планеты Geminate <a href="?set=galaxy&amp;r=3&amp;galaxy=4&amp;system=100" owndeploy >[4:100:5]</a> направляется к  военной базе SG Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owndeploy >[3:130:4]</a>. Задание: Оставить</span>
+					</th>
+					<script>FlotenTime('bxxfs9', 1616);</script>					</tr>
+									<tr class="flight">
+					<th width="80">
+						<div id="bxxfs12" class="z">55:6</div>
+						<font color="lime">17:01:22</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="flight owntransport">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>10<font></td></tr></table>' class="owntransport">флот</a> отправленный с планеты Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owntransport >[3:130:5]</a> направляется к  военной базе SG Fury <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233" owntransport >[1:233:2]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>50.000<font></td></tr></table>' class="tooltip owntransport">Транспорт</a></span>
+					</th>
+					<script>FlotenTime('bxxfs12', 3306);</script>					</tr>
+									<tr class="return">
+					<th width="80">
+						<div id="bxxfe5" class="z">1:13:8</div>
+						<font color="lime">17:19:24</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="return ownmissile">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>200<font></td></tr><tr><td width=75% align=left><font color=white>Большой транспорт:<font></td><td width=25% align=right><font color=white>120<font></td></tr><tr><td width=75% align=left><font color=white>Крейсер:<font></td><td width=25% align=right><font color=white>405<font></td></tr><tr><td width=75% align=left><font color=white>Шпионский зонд:<font></td><td width=25% align=right><font color=white>145<font></td></tr><tr><td width=75% align=left><font color=white>Линейный крейсер:<font></td><td width=25% align=right><font color=white>398<font></td></tr><tr><td width=75% align=left><font color=white>Передвижная база:<font></td><td width=25% align=right><font color=white>1<font></td></tr><tr><td width=75% align=left><font color=white>Корсар:<font></td><td width=25% align=right><font color=white>2.474<font></td></tr></table>' class="ownmissile">флот</a> отправленный  с координат <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=70" ownmissile >[1:70:6]</a>SG Tama <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=34" ownmissile >[1:34:10]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>430.000<font></td></tr></table>' class="tooltip ownmissile">Создать базу</a></span>
+					</th>
+					<script>FlotenTime('bxxfe5', 4388);</script>					</tr>
+									<tr class="return">
+					<th width="80">
+						<div id="bxxfe7" class="z">1:37:50</div>
+						<font color="lime">17:44:06</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="return owntransport">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>10<font></td></tr></table>' class="owntransport">флот</a> отправленный  с военной базы Колония <a href="?set=galaxy&amp;r=3&amp;galaxy=2&amp;system=270" owntransport >[2:270:6]</a> возвращается на планету Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owntransport >[3:130:5]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>38.122<font></td></tr></table>' class="tooltip owntransport">Транспорт</a></span>
+					</th>
+					<script>FlotenTime('bxxfe7', 5870);</script>					</tr>
+									<tr class="return">
+					<th width="80">
+						<div id="bxxfe12" class="z">2:36:44</div>
+						<font color="lime">18:43:00</font>
+					</th>
+					<th class="text-left" colspan="3">
+						<span class="return owntransport">Ваш <a href='javascript:;' class="tooltip" data-tooltip-content='<table width=200><tr><td width=75% align=left><font color=white>Малый транспорт:<font></td><td width=25% align=right><font color=white>10<font></td></tr></table>' class="owntransport">флот</a> отправленный  с военной базы SG Fury <a href="?set=galaxy&amp;r=3&amp;galaxy=1&amp;system=233" owntransport >[1:233:2]</a> возвращается на планету Rens <a href="?set=galaxy&amp;r=3&amp;galaxy=3&amp;system=130" owntransport >[3:130:5]</a>. Задание: <a href='javascript:;' data-tooltip-content='<table width=200><tr><td width=50% align=left><font color=white>Металл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Кристалл<font></td><td width=50% align=right><font color=white>0<font></td></tr><tr><td width=50% align=left><font color=white>Дейтерий<font></td><td width=50% align=right><font color=white>50.000<font></td></tr></table>' class="tooltip owntransport">Транспорт</a></span>
+					</th>
+					<script>FlotenTime('bxxfe12', 9404);</script>					</tr>
+							</table>
+			<div class="separator"></div>
+								<div class="row overview">
+			<div class="col-sm-4">
+				<div class="row">
+					<div class="col-sm-10 col-xs-5">
+						<div class="planet-image">
+							<a href="?set=overview&mode=renameplanet">
+								<img src="/skins/default/planeten/wasserplanet08.jpg" alt="">
+							</a>
+													</div>
+
+						<div class="separator"></div>
+
+						<div style="border: 1px solid rgb(153, 153, 255); width: 100%; margin: 0 auto;">
+							<div id="CaseBarre" style="background-color: #C00000; width: 87%;  margin: 0 auto; text-align:center;">
+								<font color="#000000"><b>87%</b></font></div>
+						</div>
+
+						<br><center><a href="javascript:" onclick="snow()">Добавить снега</a></center>
+
+											</div>
+					<div class="col-sm-2 col-xs-7">
+						<div class="row">
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Геолог<br>Нанят до <font color=lime>12.01.2016 09:08</font>"><span class="officier of601_ikon"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Адмирал<br><font color=lime>Не нанят</font>"><span class="officier of602"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Инженер<br><font color=lime>Не нанят</font>"><span class="officier of603"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Технократ<br><font color=lime>Не нанят</font>"><span class="officier of604"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Архитектор<br><font color=lime>Не нанят</font>"><span class="officier of605"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Метафизик<br><font color=lime>Не нанят</font>"><span class="officier of606"></span></a>
+									</div>
+
+							
+									<div class="col-xs-3 col-sm-12">
+										<a href="?set=officier" class="tooltip" data-tooltip-content="Наёмник<br><font color=lime>Не нанят</font>"><span class="officier of607"></span></a>
+									</div>
+
+													</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="separator hidden-sm hidden-md hidden-lg"></div>
+				<table class="table">
+					<tr>
+						<td class="c" colspan="2">Диаметр</td>
+					</tr>
+					<tr>
+						<th colspan="2">14.456 км</th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">Занятость</td>
+					</tr>
+					<tr>
+						<th colspan="2"><a title="Занятость полей">183</a> / <a title="Максимальное количество полей">209</a> поля</th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">Температура</td>
+					</tr>
+					<tr>
+						<th colspan="2">от. -8&deg;C до 32&deg;C</th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">
+							Обломки
+													</td>
+					</tr>
+					<tr>
+						<th colspan="2" class="doubleth">
+							<img src="/skins/default/images/s_metall.png" alt="" align="absmiddle" class="tooltip" data-tooltip-content="Металл">
+							0							/
+							<img src="/skins/default/images/s_kristall.png" alt="" align="absmiddle" class="tooltip" data-tooltip-content="Кристалл">
+							0						</th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">Бои</td>
+					</tr>
+					<tr>
+						<th colspan="2">
+							<img src="/images/wins.gif" alt="" align="absmiddle" class="tooltip" data-tooltip-content="Победы">
+							1399							&nbsp;&nbsp;
+							<img src="/images/losses.gif" alt="" align="absmiddle" class="tooltip" data-tooltip-content="Поражения">
+							29						</th>
+					</tr>
+					<tr>
+						<th colspan="2">Фракция: <a href="?set=race">Древние</a></th>
+					</tr>
+					<tr>
+						<th colspan="2"><a href="?set=refers">http://uni4.xnova.su/?71995</a> [0]</th>
+					</tr>
+				</table>
+			</div>
+			<div class="col-sm-4">
+				<div class="separator hidden-sm hidden-md hidden-lg"></div>
+				<table class="table">
+					<tr>
+						<td class="c col-sm-5 col-xs-6">Игрок:</td>
+						<td class="c col-sm-7 col-xs-6" style="word-break: break-all;"><a href="?set=players&id=71995" class="window popup-user">minlexx</a></td>
+					</tr>
+					<tr>
+						<th>Постройки:</th>
+						<th><span class="positive">1.398.843</span></th>
+					</tr>
+					<tr>
+						<th>Флот:</th>
+						<th><span class="positive">110.307</span></th>
+					</tr>
+					<tr>
+						<th>Оборона:</th>
+						<th><span class="positive">105.220</span></th>
+					</tr>
+					<tr>
+						<th>Наука:</th>
+						<th><span class="positive">400.604</span></th>
+					</tr>
+					<tr>
+						<th>Всего:</th>
+						<th><span class="positive">2.014.973</span></th>
+					</tr>
+					<tr>
+						<th>Место:</th>
+						<th><a href="?set=stat&range=52">52</a> <span title="Изменение места в рейтинге">(<font color="lightblue">0</font>)</span></th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">Промышленный уровень</td>
+					</tr>
+					<tr>
+						<th colspan="2">33 из 100</th>
+					</tr>
+					<tr>
+						<th colspan="2">18.043 / 35.937 exp</th>
+					</tr>
+					<tr>
+						<td class="c" colspan="2">Военный уровень</td>
+					</tr>
+					<tr>
+						<th colspan="2">25 из 100</th>
+					</tr>
+					<tr>
+						<th colspan="2">575 / 625 exp</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+			</div>
+</div>
+
+
+	<div class="separator"></div>
+
+	<div id="tabs" class="ui-tabs ui-widget ui-widget-content" style="max-width: 100%">
+		<div class="head">
+			<ul class="ui-tabs-nav ui-widget-header">
+				<li><a href="#tabs-0">Чат</a></li>
+				<li><a href="#tabs-1">Форум</a></li>
+			</ul>
+		</div>
+		<div id="tabs-0" class="ui-tabs-panel ui-widget-content">
+			<table class="table" style="max-width: 100%">
+				<tr>
+					<th class="left">
+						<div style="max-height: 150px;overflow-y: auto;overflow-x: hidden;">
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">16:01</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">qwerty</span> написал</span>: плять, я хочу выучить текст..  :crazy:  :happy:</div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">16:00</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">qwerty</span> написал</span>: [url]https://www.youtube.com/w atch?v=1RrLvgpJEgM[/url] с 1мин34сек  :good2:  :pirat:  :pirat:  :pirat:  :lol:  :lol:  :lol:  :lol:  :lol:  :lol:</div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">15:54</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">МиФоОБЛОМ</span> написал</span>: бомба...........ааааааа......к ораул, людички ратуйте......хе хе хе.....</div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">15:15</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">GoodBoy</span> написал</span>: Сижу в компе, слышу чето про водородную бомбу. Думаю, ну все пи*да вона :gun1:</div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">15:05</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">qwerty</span> написал</span>: гыы..  :aplause: КНДР водородную бомбу фейкнула :happy:</div></div>
+							<div class="clear"></div>
+												</div>
+					</th>
+				</tr>
+			</table>
+		</div>
+		<div id="tabs-1" class="ui-tabs-panel ui-widget-content" style="display: none">
+			<table class="table">
+				<tr>
+					<th class="left">
+						<div style="max-height: 150px;overflow-y: auto;overflow-x: hidden;">
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">14:11</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">veliks</span> написал "<span class="to">Комиксы  FFFFFFFUUUUUUU про Уфу =)</span>"</span>: Прикол в чем то <a href="http://forum.xnova.su/viewtopic.php?f=19&t=3102&p=140802#p140802" target="_blank">читать полностью</a></div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">23:50</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">Onsi1</span> написал "<span class="to">обмен аккаунтами</span>"</span>: согласно правилам п. 1.3 игроки Onsi и _spok_ обменяются аккаунтами. <a href="http://forum.xnova.su/viewtopic.php?f=133&t=3473&p=140801#p140801" target="_blank">читать полностью</a></div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">23:42</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">_spok_</span> написал "<span class="to">обмен аккаунтами</span>"</span>: согласно правилам п. 1.3 игроки _spok_ и Onsi обменяются аккаунтами. <a href="http://forum.xnova.su/viewtopic.php?f=133&t=3473&p=140800#p140800" target="_blank">читать полностью</a></div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">19:06</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">aleshka</span> написал "<span class="to">Флуд</span>"</span>: Прикольно было играть в первый раз когда была 2 уни,тогда было все в новинку,вторая игра уже не то... <a href="http://forum.xnova.su/viewtopic.php?f=18&t=2086&p=140799#p140799" target="_blank">читать полностью</a></div></div>
+							<div class="clear"></div>
+													<div class="activity"><div class="date1" style="display: inline-block;padding-right:5px;">13:35</div><div style="display: inline;white-space:pre-wrap"><span class="title"><span class="to">nvlad</span> написал "<span class="to">Предложения и правки по игре.</span>"</span>: Предложения:1. Почему-бы не сделать показатель новых сообщений в скобочках, когда не обновляешь игру, то есть аяксам просматривать это ?2. Когда отправляешь шпионские зонды, почему не добавить сообщение о отправке этих зондов и сделать увеличение... <a href="http://forum.xnova.su/viewtopic.php?f=127&t=3472&p=140798#p140798" target="_blank">читать полностью</a></div></div>
+							<div class="clear"></div>
+												</div>
+					</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$("#tabs").tabs();
+	</script>
+</div>
+
+			</div>
+
+		<div id="loadingOverlay">загрузка...<br><img src="/images/loading.gif" alt=""></div>
+		<div id="preloadOverlay"><img src="/images/loading.gif" alt=""></div>
+
+				</div>
+		<div class="clearfix"></div>
+		</div>
+		</div>
+		</div></div>
+
+		<div id="siteFooter" class="hidden-xs">
+			<div class="container-fluid">
+				<div class="pull-left text-left">
+					<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+											<a class="hidden-sm" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+									</div>
+				<div class="pull-right text-right">
+										<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+					<a href="?set=banned">Тёмные</a>|
+											<a href="wide.php" data-link="1">Большой монитор</a>|
+						<a href="http://vk.com/xnova_game" target="_blank">ВК</a>|
+						<a href="?set=contact">Контакты</a>|
+										<a href="?set=content&article=help">Новичкам</a>|
+					<a href="?set=content&article=agb">Правила</a>|
+					<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+				</div>
+				<br class="clearfloat"/></div>
+		</div>
+		<div class="row hidden-sm hidden-md hidden-lg footer-mobile">
+			<div class="col-xs-12 text-center">
+				<a href="http://forum.xnova.su/" target="_blank">Форум</a>|
+				<a href="?set=banned">Тёмные</a>|
+				<a href="?set=contact">Контакты</a>|
+				<a href="?set=content&article=help">Новичкам</a>|
+				<a href="?set=content&article=agb">Правила</a>
+			</div>
+			<div class="col-xs-8 text-center">
+				<a href="?set=news" title="Последние изменения">2.6 REV27</a>
+									<a class="media_1" target="_blank" href="http://xnova.su/">© 2008 - 2016 Xcms</a>
+							</div>
+			<div class="col-xs-4 text-center">
+				<a onclick="" title="Игроков в сети" style="color:green">51</a>/<a onclick="" title="Всего игроков" style="color:yellow">119890</a>
+			</div>
+		</div>
+	
+	
+		
+	<div id="windowDialog"></div>
+	<div id="tooltip" class="tip"></div>
+
+	
+	
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+	var yaParams = {userId: 71995};
+	</script>
+
+	<script type="text/javascript">
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter25961143 = new Ya.Metrika({id:25961143,params:window.yaParams||{ }});
+			} catch(e) { }
+		});
+
+	    var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); };
+	    s.type = "text/javascript";
+	    s.async = true;
+	    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+	    if (w.opera == "[object Opera]") {
+	        d.addEventListener("DOMContentLoaded", f, false);
+	    } else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<!-- /Yandex.Metrika counter -->
+	</body></html>
+
+
+	<script type="text/javascript">setMenuItem("overview");</script>
+
+	<script type="text/javascript">UpdateGameInfo('0', '0'); timestamp = 1452078376;</script>
