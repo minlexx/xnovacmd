@@ -6,6 +6,7 @@ from ui.xnova.xn_parser_shipyard import parse_js_array_decl
 from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
     PlanetBuildingsProgressParser
 from ui.xnova.xn_parser_techtree import TechtreeParser
+from ui.xnova.xn_parser_userinfo import UserInfoParser
 
 
 def read_test_page(page_name: str) -> str:
@@ -77,9 +78,30 @@ class TestParser(unittest.TestCase):
     def test_parse_techtree(self):
         ttp = TechtreeParser()
         content = read_test_page('techtree.html')
+        self.assertIsNotNone(content)
         ttp.parse_page_content(content)
         self.assertEqual(len(ttp.techtree), 65)
         self.assertEqual(ttp.techtree[0], (1, 'Рудник металла', 'building'))
         self.assertEqual(ttp.techtree[12], (33, 'Терраформер', 'building'))
         self.assertEqual(ttp.techtree[len(ttp.techtree)-1], \
             (503, 'Межпланетная ракета', 'defense'))
+
+    def test_parse_self_user_info(self):
+        content = read_test_page('self_user_info.html')
+        self.assertIsNotNone(content)
+        uip = UserInfoParser()
+        uip.parse_page_content(content)
+        #
+        self.assertEqual(uip.buildings, 1398715)
+        self.assertEqual(uip.buildings_rank, 48)
+        self.assertEqual(uip.fleet, 101486)
+        self.assertEqual(uip.fleet_rank, 43)
+        self.assertEqual(uip.defense, 105220)
+        self.assertEqual(uip.defense_rank, 65)
+        self.assertEqual(uip.science, 400604)
+        self.assertEqual(uip.science_rank, 47)
+        self.assertEqual(uip.total, 2006024)
+        self.assertEqual(uip.rank, 52)
+        self.assertEqual(uip.main_planet_name, 'Arnon')
+        self.assertEqual(uip.main_planet_coords.coords_str(), '[1:7:9]')
+        self.assertEqual(uip.alliance_name, 'Fury')
