@@ -145,7 +145,7 @@ def parse_build_total_time_sec(s: str) -> int:
 # by remembering tags path
 class XNParserBase(html.parser.HTMLParser):
     def __init__(self):
-        super(XNParserBase, self).__init__(strict=False, convert_charrefs=True)
+        super(XNParserBase, self).__init__(convert_charrefs=True)
         self._last_tag = ''
         self._last_attrs = list()
 
