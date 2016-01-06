@@ -4,6 +4,8 @@ import unittest
 from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
 
 from ui.xnova.xn_parser_techtree import TechtreeParser
+from ui.xnova.xn_parser_overview import OverviewParser
+from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
 
@@ -118,4 +120,35 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parser.fleets_max, 14)
         self.assertEqual(parser.expeditions_cur, 0)
         self.assertEqual(parser.expeditions_max, 2)
+
+    def test_parse_imperium(self):
+        content = read_test_page('imperium.html')
+        self.assertIsNotNone(content)
+        parser = ImperiumParser()
+        parser.parse_page_content(content)
+        planets = parser.planets
+        #
+        self.assertEqual(len(planets), 13)
+        self.assertEqual(planets[0].name, 'Osmon')
+        self.assertEqual(planets[0].coords.coords_str(), '[1:7:6]')
+        self.assertEqual(planets[0].is_base, False)
+        self.assertEqual(planets[0].is_moon, False)
+        self.assertEqual(planets[2].is_base, True)
+        self.assertEqual(planets[12].name, 'Geminate')
+        #
+        self.assertEqual(planets[2].planet_id, 69255)
+        self.assertEqual(planets[1].pic_url,
+            'skins/default/planeten/small/s_normaltempplanet08.jpg')
+        self.assertEqual(planets[3].fields_busy, 183)
+        self.assertEqual(planets[3].fields_total, 209)
+        # check resources
+        self.assertEqual(planets[4].res_current.met, 99669)
+        self.assertEqual(planets[4].res_current.cry, 27001)
+        self.assertEqual(planets[4].res_current.deit, 27142)
+        # rph
+        self.assertEqual(planets[5].res_per_hour.met, 45426)
+        self.assertEqual(planets[5].res_per_hour.cry, 26029)
+        self.assertEqual(planets[5].res_per_hour.deit, 7790)
+        # energy left
+        self.assertEqual(planets[7].energy.energy_left, 25)
 

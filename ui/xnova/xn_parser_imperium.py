@@ -574,7 +574,7 @@ class ImperiumParser(XNParserBase):
             self.in_picdef = False
             return
         if tag == 'html':
-            logger.info('Loaded info about {0} planet(s)'.format(len(self.planets)))
+            logger.debug('Loaded info about {0} planet(s)'.format(len(self.planets)))
             # for pl in self.planets:
             #    logger.debug('Planet {0} buildings: {1}'.format(str(pl), str(pl.buildings)))
             #    logger.debug('Planet {0} ships:     {1}'.format(str(pl), str(pl.ships)))
