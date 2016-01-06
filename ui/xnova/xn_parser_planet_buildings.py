@@ -206,7 +206,7 @@ class PlanetBuildingsProgressParser(XNParserBase):
         bitem.set_end_time(dt_end)  # also calculates seconds_left, if possible
         self.builds_in_progress.append(bitem)
         # logging
-        logger.info(' ...add build item: {0}'.format(str(bitem)))
+        logger.debug(' ...add build item: {0}'.format(str(bitem)))
 
     def handle_starttag(self, tag: str, attrs: list):
         super(PlanetBuildingsProgressParser, self).handle_starttag(tag, attrs)
