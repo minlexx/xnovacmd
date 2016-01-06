@@ -57,7 +57,7 @@ class World:
         self._cur_planet_name = ''
         self._cur_planet_coords = XNCoords()
 
-    def get_planets() -> list:
+    def get_planets(self) -> list:
         return self._planets
 
     def do_login(self) -> bool:
@@ -263,7 +263,7 @@ def main():
         None, True)
 
     # cancel_link = '?set=buildings&listid=1&cmd=cancel&planet=54450'
-    # <td class="c" width="50%">1: Р•РјРєРѕСЃС‚СЊ РґРµР№С‚РµСЂРёСЏ 4. РЎРЅРѕСЃ Р·РґР°РЅРёСЏ</td>
+    # <td class="c" width="50%">1: Емкость дейтерия 4. Снос здания</td>
 
 
 world = None
