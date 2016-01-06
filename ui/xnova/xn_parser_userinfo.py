@@ -75,7 +75,7 @@ class UserInfoParser(XNParserBase):
                     s = safe_int(match.group(3))
                     p = safe_int(match.group(4))
                     self.main_planet_coords.set_gsp(g, s, p)
-                    logger.info('Got main planet: {0} {1}'.format(self.main_planet_name, self.main_planet_coords))
+                    logger.debug('Got main planet: {0} {1}'.format(self.main_planet_name, self.main_planet_coords))
                 self.counter = 0
                 self.in_main_planet = False
             return
