@@ -180,19 +180,27 @@ class PlanetBuildingsProgressParser(XNParserBase):
         self._position = 0
         self._building = ''
         self._level = 0
+        self._is_downgrade = False
 
     def clear(self):
         self.builds_in_progress = []
+        self._position = 0
+        self._building = ''
+        self._level = 0
+        self._is_downgrade = False
 
     def add_build_info(self,
                        position: int,
-                       building: str, level: int,
+                       building: str,
+                       level: int,
+                       is_downgrade: bool,
                        dt_end: datetime.datetime = None,
                        remove_link: str = None):
         bitem = XNPlanetBuildingItem()
         bitem.name = building
         bitem.gid = XNTechTree_instance().find_gid_by_name(building)
         bitem.level = level
+        bitem.is_downgrade = is_downgrade
         bitem.position = position
         bitem.remove_link = remove_link
         bitem.set_end_time(dt_end)  # also calculates seconds_left, if possible
@@ -212,6 +220,8 @@ class PlanetBuildingsProgressParser(XNParserBase):
         super(PlanetBuildingsProgressParser, self).handle_data2(data, tag, attrs)
         # tag_classes = get_tag_classes(attrs)
         # <td class="c" width="50%"> 1: Рудник металла 26 </td>
+        # downgrade building:
+        # <td class="c" width="50%">1: Емкость дейтерия 4. Снос здания</td>
         if self.in_curbuild_table:
             if tag == 'td':
                 # logger.debug('[{0}]'.format(data))
@@ -219,11 +229,15 @@ class PlanetBuildingsProgressParser(XNParserBase):
                 self._building = ''
                 self._level = 0
                 # first, before ':' token is position
-                # next comes sapce, followed by all other chars
+                # next comes space, followed by all other chars
                 m = re.search(r'(\d)+:\s+(.+)', data)
                 if m is not None:
                     self._position = int(m.group(1))
                     building = m.group(2)
+                    if building.endswith('. Снос здания'):
+                        logger.debug('Detected downgrade! [{}]'.format(building))
+                        building = building[:-13]
+                        self._is_downgrade = True
                     bs = building.split(' ')  # bs = ['Рудник', 'металла', '26']
                     # the last item in 'bs' is building level
                     self._level = safe_int(bs.pop())
@@ -246,7 +260,12 @@ class PlanetBuildingsProgressParser(XNParserBase):
                             # construct remove link
                             remove_link = '?set=buildings&listid={0}&cmd=cancel&planet={1}'.format(var_pk, planet_id)
                             # logger.debug('dt_now={0}, td={1}, dt_end={2}'.format(dt_now, td, dt_end))
-                            self.add_build_info(self._position, self._building, self._level, dt_end, remove_link)
+                            self.add_build_info(self._position,
+                                    self._building,
+                                    self._level,
+                                    self._is_downgrade,
+                                    dt_end,
+                                    remove_link)
             if tag == 'a':
                 # remove from queue (Architector only)
                 # <a href="?set=buildings&listid=2&cmd=remove&planet=54450">Удалить</a>
