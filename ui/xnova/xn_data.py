@@ -482,6 +482,7 @@ class XNPlanetBuildingItem:
         self.is_shipyard_item = False
         self.is_research_item = False
         self.is_researchfleet_item = False
+        self.is_downgrade = False
 
     def __str__(self):
         end_str = 'None'
@@ -503,6 +504,8 @@ class XNPlanetBuildingItem:
             lv_str = '{0} pcs.'.format(self.quantity)
         else:
             lv_str = 'lv.{0}'.format(self.level)
+        if self.is_downgrade:
+            lv_str += '->{0} (downgrade)'.format(self.level-1)
         price_str = ''
         if (self.cost_met > 0) or (self.cost_cry > 0) or (self.cost_deit > 0) or (self.cost_energy > 0):
             price_str = ' (Price:'
