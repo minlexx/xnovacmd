@@ -1,3 +1,3 @@
-from .test_parser import TestParserTimes
+from .test_parser import TestParser
 
-__all__ = ['TestParserTimes']
+__all__ = ['TestParser']

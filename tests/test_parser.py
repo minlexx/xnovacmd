@@ -66,4 +66,9 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parse_js_array_decl("c = new Array(11,123,4567,'');"), [11, 123, 4567])
 
     def test_parse_building_downgrade(self):
-        pass
+        content = read_test_page('building_downgrade.html')
+        self.assertIsNotNone(content)
+        parser = PlanetBuildingsProgressParser()
+        parser.parse_page_content(content)
+        self.assertEqual(len(parser.builds_in_progress), 1)
+        self.assertTrue(parser.builds_in_progress[0].is_downgrade)
