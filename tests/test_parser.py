@@ -9,8 +9,8 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
 
-from ui.xnova.xn_parser_planet_buildings import PlanetBuildingsAvailParser, \
-    PlanetBuildingsProgressParser
+from ui.xnova.xn_parser_planet_buildings import \
+    PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
 from ui.xnova.xn_parser_shipyard import parse_js_array_decl
 
 
@@ -152,3 +152,33 @@ class TestParser(unittest.TestCase):
         # energy left
         self.assertEqual(planets[7].energy.energy_left, 25)
 
+    def test_parse_overview_1(self):
+        content = read_test_page('overview.html')
+        self.assertIsNotNone(content)
+        parser = OverviewParser()
+        parser.parse_page_content(content)
+        #
+        self.assertEqual(str(parser.server_time), '2016-01-06 16:06:16')
+        self.assertEqual(parser.new_messages_count, 0)
+        self.assertEqual(parser.online_players, 51)
+        self.assertFalse(parser.in_RO)
+        self.assertEqual(parser.account.login, 'minlexx')
+        self.assertEqual(parser.account.ref_link, \
+            'http://uni4.xnova.su/?71995')
+        self.assertEqual(parser.account.id, 71995)
+        #
+        self.assertEqual(parser.account.scores.buildings, 1398843)
+        self.assertEqual(parser.account.scores.fleet, 110307)
+        self.assertEqual(parser.account.scores.defense, 105220)
+        self.assertEqual(parser.account.scores.science, 400604)
+        self.assertEqual(parser.account.scores.total, 2014973)
+        self.assertEqual(parser.account.scores.rank, 52)
+        self.assertEqual(parser.account.scores.rank_delta, 0)
+        self.assertEqual(parser.account.scores.industry_level, 33)
+        self.assertEqual(parser.account.scores.industry_exp, (18043, 35937))
+        self.assertEqual(parser.account.scores.military_level, 25)
+        self.assertEqual(parser.account.scores.military_exp, (575, 625))
+        self.assertEqual(parser.account.scores.credits, 63)
+        self.assertEqual(parser.account.scores.fraction, 'Древние')
+        self.assertEqual(parser.account.scores.wins, 1399)
+        self.assertEqual(parser.account.scores.losses, 29)
