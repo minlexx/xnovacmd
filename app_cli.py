@@ -87,7 +87,8 @@ class World:
         logger.info('Login OK!')
         #
         # 4. post-login init procedure
-        self._page_cache.load_from_disk_cache()
+        self._page_cache.save_load_encoding = 'UTF-8'  # force encoding
+        self._page_cache.load_from_disk_cache(clean=True)
         self.init_parsers()
         return True
 
@@ -260,6 +261,9 @@ def main():
 
     content = world._get_page_url('buildings_54450', '?set=buildings&cp=54450',
         None, True)
+
+    # cancel_link = '?set=buildings&listid=1&cmd=cancel&planet=54450'
+    # <td class="c" width="50%">1: Р•РјРєРѕСЃС‚СЊ РґРµР№С‚РµСЂРёСЏ 4. РЎРЅРѕСЃ Р·РґР°РЅРёСЏ</td>
 
 
 world = None
