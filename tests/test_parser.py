@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from ui.xnova.xn_parser import parse_time_left_str, parse_build_total_time_sec
+from ui.xnova.xn_parser import parse_time_left_str, \
+    parse_build_total_time_sec
 
 from ui.xnova.xn_parser_techtree import TechtreeParser
 from ui.xnova.xn_parser_overview import OverviewParser
@@ -65,12 +66,15 @@ class TestParser(unittest.TestCase):
         s = 'c = new Array('
         self.assertIsNone(parse_js_array_decl('c = new Array('))
         # simple ints array
-        self.assertEqual(parse_js_array_decl('c = new Array(11,123,4567);'), [11, 123, 4567])
+        self.assertEqual(parse_js_array_decl('c = new Array(11,123,4567);'), \
+                         [11, 123, 4567])
         # simple strings array
-        self.assertEqual(parse_js_array_decl("b = new Array('Корсар','Звезда смерти');"),
-                         ['Корсар', 'Звезда смерти'])
+        self.assertEqual(parse_js_array_decl(
+                    "b = new Array('Корсар','Звезда смерти');"),
+                    ['Корсар', 'Звезда смерти'])
         # test skip empty parts
-        self.assertEqual(parse_js_array_decl("c = new Array(11,123,4567,'');"), [11, 123, 4567])
+        self.assertEqual(parse_js_array_decl("c = new Array(11,123,4567,'');"), \
+                         [11, 123, 4567])
 
     def test_parse_building_downgrade(self):
         content = read_test_page('building_downgrade.html')
@@ -182,3 +186,13 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parser.account.scores.fraction, 'Древние')
         self.assertEqual(parser.account.scores.wins, 1399)
         self.assertEqual(parser.account.scores.losses, 29)
+
+    def test_parse_overview_flights(self):
+        content = read_test_page('overview.html')
+        self.assertIsNotNone(content)
+        parser = OverviewParser()
+        parser.parse_page_content(content)
+        #
+        flights = parser.flights
+        for fl in flights:
+            print(str(fl))
