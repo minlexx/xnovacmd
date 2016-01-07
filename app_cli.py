@@ -238,6 +238,15 @@ class World:
             raise NetError(self._page_dnl.error_str)
         return page_content
 
+    def download_galaxy_page(self, galaxy_no, sys_no, force_download=False):
+        # 'http://uni4.xnova.su/?set=galaxy&r=3&galaxy=3&system=130'
+        page_url = '?set=galaxy&r=3&galaxy={0}&system={1}'.format(
+                galaxy_no, sys_no)
+        page_name = 'galaxy_{0}_{1}'.format(galaxy_no, sys_no)
+        # if force_download is True, cache_lifetime is ignored
+        return self._get_page_url(page_name, page_url,
+                force_download=force_download)
+
     def world_refresh(self):
         pages_list = ['techtree', 'overview', 'imperium', 'fleet']
         pages_maxtime = [3600, 60, 60, 60]  # pages' expiration time in cache
@@ -262,8 +271,7 @@ def main():
     content = world._get_page_url('buildings_54450', '?set=buildings&cp=54450',
         None, True)
 
-    # cancel_link = '?set=buildings&listid=1&cmd=cancel&planet=54450'
-    # <td class="c" width="50%">1: Емкость дейтерия 4. Снос здания</td>
+    content = world.download_galaxy_page(5, 63)
 
 
 world = None
