@@ -5,7 +5,7 @@ from .xn_data import XNCoords
 from .xn_parser import XNParserBase, safe_int, get_attribute, get_tag_classes
 from . import xn_logger
 
-logger = xn_logger.get(__name__, debug=True)
+logger = xn_logger.get(__name__, debug=False)
 
 
 class CurPlanetParser(XNParserBase):
@@ -86,5 +86,5 @@ class CurPlanetParser(XNParserBase):
     def handle_endtag(self, tag: str):
         super(CurPlanetParser, self).handle_endtag(tag)
         if tag == 'html':
-            logger.info('Found cur planet: #{0} {1} {2}'.format(
+            logger.debug('Found cur planet: #{0} {1} {2}'.format(
                 self.cur_planet_id, self.cur_planet_name, str(self.cur_planet_coords)))
