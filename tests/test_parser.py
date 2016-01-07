@@ -13,6 +13,7 @@ from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
+from ui.xnova.xn_parser_planet_energy import PlanetEnergyResParser
 
 from ui.xnova.xn_parser_planet_buildings import \
     PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
@@ -274,3 +275,21 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parser.cur_planet_name, 'Tama')
         self.assertEqual(parser.cur_planet_coords.coords_str(), \
             '[1:34:11]')
+
+    def test_parse_planet_energy_and_resources(self):
+        content = read_test_page('overview.html')
+        self.assertIsNotNone(content)
+        parser = PlanetEnergyResParser()
+        parser.parse_page_content(content)
+        #
+        self.assertEqual(parser.energy_left, 32)
+        self.assertEqual(parser.energy_total, 13911)
+        self.assertEqual(parser.res_current.met, 52366)
+        self.assertEqual(parser.res_current.cry, 597882)
+        self.assertEqual(parser.res_current.deit, 40792)
+        self.assertEqual(parser.res_per_hour.met, 51813)
+        self.assertEqual(parser.res_per_hour.cry, 26058)
+        self.assertEqual(parser.res_per_hour.deit, 9390)
+        self.assertEqual(parser.res_max_silos.met, 11062500)
+        self.assertEqual(parser.res_max_silos.cry, 6937500)
+        self.assertEqual(parser.res_max_silos.deit, 6937500)
