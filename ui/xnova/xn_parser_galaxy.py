@@ -32,6 +32,9 @@ class GalaxyParser(XNParserBase):
         super(GalaxyParser, self).handle_endtag(tag)
         if self._in_galaxy and tag == 'script':
             self._in_galaxy = False
+            # automatically parse js script
+            if self.script_body != '':
+                self.unscramble_galaxy_script()
 
     def handle_data2(self, data: str, tag: str, attrs: list):
         if self._in_galaxy and (tag == 'script'):
