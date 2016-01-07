@@ -271,7 +271,7 @@ def main():
     content = world._get_page_url('buildings_54450', '?set=buildings&cp=54450',
         None, True)
 
-    content = world.download_galaxy_page(5, 63)
+    content = world.download_galaxy_page(5, 62)
 
 
 world = None
