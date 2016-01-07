@@ -4,6 +4,9 @@ import unittest
 from ui.xnova.xn_parser import parse_time_left_str, \
     parse_build_total_time_sec
 
+from ui.xnova.xn_data import XNCoords, XNFlight, \
+    XNPlanetBuildingItem, XNPlanet
+
 from ui.xnova.xn_parser_techtree import TechtreeParser
 from ui.xnova.xn_parser_overview import OverviewParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
@@ -194,5 +197,68 @@ class TestParser(unittest.TestCase):
         parser.parse_page_content(content)
         #
         flights = parser.flights
-        for fl in flights:
-            print(str(fl))
+        #
+        self.assertEqual(len(flights), 10)
+        #
+        # check first flight very very tightly
+        self.assertEqual(flights[0].mission, 'owndeploy')
+        self.assertEqual(flights[0].direction, 'return')
+        self.assertEqual(flights[0].src.target_name, 'Geminate')
+        self.assertEqual(flights[0].src.target_type, XNCoords.TYPE_PLANET)
+        self.assertEqual(flights[0].src.galaxy, 4)
+        self.assertEqual(flights[0].src.system, 100)
+        self.assertEqual(flights[0].src.position, 5)
+        self.assertEqual(flights[0].dst.target_name, 'Rens')
+        self.assertEqual(flights[0].dst.target_type, XNCoords.TYPE_PLANET)
+        self.assertEqual(flights[0].dst.galaxy, 3)
+        self.assertEqual(flights[0].dst.system, 130)
+        self.assertEqual(flights[0].dst.position, 5)
+        self.assertTrue(flights[0].is_our_fleet)
+        self.assertEqual(flights[0].seconds_left, 53)
+        self.assertEqual(flights[0].enemy_name, '')
+        # check resources
+        self.assertEqual(flights[0].res.met, 0)
+        self.assertEqual(flights[0].res.cry, 0)
+        self.assertEqual(flights[0].res.deit, 1000000)
+        # check ships
+        self.assertEqual(flights[0].ships.mt, 3000)
+        self.assertEqual(flights[0].ships.bt, 150)
+        self.assertEqual(flights[0].ships.li, 0)
+        self.assertEqual(flights[0].ships.ti, 0)
+        self.assertEqual(flights[0].ships.rab, 50)
+        #
+        # flight 2 direction
+        self.assertEqual(flights[1].direction, 'flight')
+        #
+        # flight 3 mission
+        self.assertEqual(flights[2].mission, 'ownbase')
+        # flight 3 src type
+        self.assertEqual(flights[2].src.target_type, XNCoords.TYPE_WARBASE)
+        self.assertEqual(flights[2].src.target_name, 'SG Tama')
+        self.assertEqual(flights[2].ships.f_corsair, 2474)
+        #
+        # flight 5 mission
+        self.assertEqual(flights[4].mission, 'owntransport')
+        #
+        # flight 4 enemy attack
+        self.assertEqual(flights[3].mission, 'attack')
+        self.assertEqual(flights[3].direction, 'flight')
+        self.assertEqual(flights[3].seconds_left, 1472)
+        self.assertEqual(flights[3].is_our_fleet, False)
+        self.assertEqual(flights[3].enemy_name, 'ScumWir')
+        self.assertEqual(flights[3].src.target_name, 'Луна')
+        self.assertEqual(flights[3].src.target_type, XNCoords.TYPE_MOON)
+        self.assertEqual(flights[3].src.galaxy, 1)
+        self.assertEqual(flights[3].src.system, 233)
+        self.assertEqual(flights[3].src.position, 9)
+        self.assertEqual(flights[3].dst.target_name, 'Tama')
+        self.assertEqual(flights[3].dst.target_type, XNCoords.TYPE_PLANET)
+        self.assertEqual(flights[3].dst.galaxy, 1)
+        self.assertEqual(flights[3].dst.system, 34)
+        self.assertEqual(flights[3].dst.position, 11)
+        self.assertEqual(flights[3].res.met, 0)
+        self.assertEqual(flights[3].res.cry, 0)
+        self.assertEqual(flights[3].res.deit, 0)
+        self.assertEqual(flights[3].ships.mt, 0)
+        self.assertEqual(flights[3].ships.li, 1650)
+        self.assertEqual(flights[3].is_hostile(), True)
