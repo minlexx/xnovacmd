@@ -12,6 +12,7 @@ from ui.xnova.xn_parser_overview import OverviewParser
 from ui.xnova.xn_parser_imperium import ImperiumParser
 from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
+from ui.xnova.xn_parser_curplanet import CurPlanetParser
 
 from ui.xnova.xn_parser_planet_buildings import \
     PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
@@ -262,3 +263,14 @@ class TestParser(unittest.TestCase):
         self.assertEqual(flights[3].ships.mt, 0)
         self.assertEqual(flights[3].ships.li, 1650)
         self.assertEqual(flights[3].is_hostile(), True)
+
+    def test_parse_current_planet(self):
+        content = read_test_page('overview.html')
+        self.assertIsNotNone(content)
+        parser = CurPlanetParser()
+        parser.parse_page_content(content)
+        #
+        self.assertEqual(parser.cur_planet_id, 57064)
+        self.assertEqual(parser.cur_planet_name, 'Tama')
+        self.assertEqual(parser.cur_planet_coords.coords_str(), \
+            '[1:34:11]')
