@@ -268,10 +268,13 @@ def main():
         logger.info('Planet {} {} id #{}'.format(
             planet.name, planet.coords.coords_str(), planet.planet_id))
 
-    content = world._get_page_url('buildings_54450', '?set=buildings&cp=54450',
-        None, True)
+    content = world._get_page_url('buildings_54450', \
+        '?set=buildings&cp=54450', None, True)
 
-    content = world.download_galaxy_page(5, 62)
+    #content = world.download_galaxy_page(5, 62, force_download=True)
+
+    content = world._get_page_url('researchfleet_57064', \
+        '?set=buildings&mode=research_fleet&cp=57064', None, True)
 
 
 world = None
