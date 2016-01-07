@@ -14,10 +14,13 @@ from ui.xnova.xn_parser_userinfo import UserInfoParser
 from ui.xnova.xn_parser_fleet import FleetsMaxParser
 from ui.xnova.xn_parser_curplanet import CurPlanetParser
 from ui.xnova.xn_parser_planet_energy import PlanetEnergyResParser
+from ui.xnova.xn_parser_galaxy import GalaxyParser
 
 from ui.xnova.xn_parser_planet_buildings import \
     PlanetBuildingsAvailParser, PlanetBuildingsProgressParser
-from ui.xnova.xn_parser_shipyard import parse_js_array_decl
+from ui.xnova.xn_parser_shipyard import parse_js_array_decl, \
+    ShipyardShipsAvailParser, ShipyardBuildsInProgressParser
+from ui.xnova.xn_parser_research import ResearchAvailParser
 
 
 def read_test_page(page_name: str) -> str:
@@ -293,3 +296,68 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parser.res_max_silos.met, 11062500)
         self.assertEqual(parser.res_max_silos.cry, 6937500)
         self.assertEqual(parser.res_max_silos.deit, 6937500)
+
+    def test_parse_galaxy(self):
+        content = read_test_page('galaxy_5_62.html')
+        self.assertIsNotNone(content)
+        parser = GalaxyParser()
+        parser.parse_page_content(content)
+        #
+        galaxy_rows = parser.galaxy_rows
+        #
+        self.assertIsNone(galaxy_rows[0])
+        self.assertIsNone(galaxy_rows[1])
+        self.assertIsNone(galaxy_rows[2])
+        # check 3rd planet every field
+        self.assertIsNotNone(galaxy_rows[3])
+        self.assertIsInstance(galaxy_rows[3], dict)
+        self.assertEqual(galaxy_rows[3]['ally_planet'], 0)
+        self.assertIsNone(galaxy_rows[3]['luna_temp'])
+        self.assertEqual(galaxy_rows[3]['metal'], 0)
+        self.assertEqual(galaxy_rows[3]['id_planet'], 82160)
+        self.assertIsNone(galaxy_rows[3]['ally_web'])
+        self.assertIsNone(galaxy_rows[3]['type'])
+        self.assertEqual(galaxy_rows[3]['avatar'], 7)
+        self.assertEqual(galaxy_rows[3]['image'], 'trockenplanet18')
+        self.assertEqual(galaxy_rows[3]['onlinetime'], 0)
+        self.assertEqual(galaxy_rows[3]['username'], 'ElvenShadow')
+        self.assertEqual(galaxy_rows[3]['parent_planet'], 0)
+        self.assertEqual(galaxy_rows[3]['ally_id'], 0)
+        self.assertEqual(galaxy_rows[3]['name'], 'Андромеда')
+        self.assertIsNone(galaxy_rows[3]['luna_diameter'])
+        self.assertEqual(galaxy_rows[3]['crystal'], 0)
+        self.assertIsNone(galaxy_rows[3]['ally_members'])
+        self.assertEqual(galaxy_rows[3]['sex'], 1)
+        self.assertEqual(galaxy_rows[3]['planet_type'], 1)
+        self.assertEqual(galaxy_rows[3]['user_id'], 114604)
+        self.assertEqual(galaxy_rows[3]['race'], 2)
+        self.assertIsNone(galaxy_rows[3]['ally_name'])
+        self.assertEqual(galaxy_rows[3]['destruyed'], 0)
+        self.assertEqual(galaxy_rows[3]['total_points'], 3509)
+        self.assertIsNone(galaxy_rows[3]['luna_id'])
+        self.assertEqual(galaxy_rows[3]['last_active'], 55)
+        self.assertEqual(galaxy_rows[3]['planet'], 3)
+        self.assertEqual(galaxy_rows[3]['user_image'], '114604_1451805300.jpg')
+        self.assertEqual(galaxy_rows[3]['authlevel'], 0)
+        self.assertIsNone(galaxy_rows[3]['luna_destruyed'])
+        self.assertIsNone(galaxy_rows[3]['ally_tag'])
+        self.assertEqual(galaxy_rows[3]['banaday'], 0)
+        self.assertEqual(galaxy_rows[3]['total_rank'], 179)
+        self.assertIsNone(galaxy_rows[3]['luna_name'])
+        self.assertEqual(galaxy_rows[3]['urlaubs_modus_time'], 0)
+        # 5th planet is (i) player
+        self.assertEqual(galaxy_rows[5]['onlinetime'], 1)
+        # 6th planet is (U) player, has ally
+        self.assertEqual(galaxy_rows[6]['urlaubs_modus_time'], 1)
+        self.assertEqual(galaxy_rows[6]['ally_web'], '')
+        self.assertEqual(galaxy_rows[6]['ally_id'], 6)
+        self.assertEqual(galaxy_rows[6]['ally_members'], 7)
+        self.assertEqual(galaxy_rows[6]['ally_name'], \
+            'Великолепный МИФ или мифитерия Ж')
+        self.assertEqual(galaxy_rows[6]['ally_tag'], 'МиФ')
+        # 8th planet has moon
+        self.assertEqual(galaxy_rows[8]['luna_diameter'], 8660)
+        self.assertEqual(galaxy_rows[8]['luna_id'], 55144)
+        self.assertEqual(galaxy_rows[8]['luna_destruyed'], 0)
+        self.assertEqual(galaxy_rows[8]['luna_name'], 'Мамба')
+        self.assertEqual(galaxy_rows[8]['luna_temp'], 47)
