@@ -296,7 +296,7 @@ class OverviewParser(XNParserBase):
             self._in_server_time = False
             return
         if tag == 'html':
-            logger.info('Loaded total {0} flights.'.format(len(self.flights)))
+            logger.debug('Loaded total {0} flights.'.format(len(self.flights)))
         if tag == 'script':
             if self._in_flight and self._in_floten_time:
                 self.add_flight()
@@ -382,10 +382,10 @@ class OverviewParser(XNParserBase):
                     logger.warn('OverviewParser failed to parse player rank delta: {0}'.format(str(ve)))
                 self._data_prev = ''
                 self._in_player_data = False
-                logger.info('Account Rank: {0}, delta: {1}'.format(
+                logger.debug('Account Rank: {0}, delta: {1}'.format(
                     self.account.scores.rank, self.account.scores.rank_delta))
-                # logger.info(str(self.account.scores))
-                # logger.info(str(self.account))
+                # logger.debug(str(self.account.scores))
+                # logger.debug(str(self.account))
                 return
             # none of above matches
             self._data_prev = data
@@ -552,14 +552,14 @@ class OverviewParser(XNParserBase):
                 minute = safe_int(match.group(5))
                 second = safe_int(match.group(6))
                 self.server_time = datetime.datetime(year, month, day, hour, minute, second)
-                logger.info('Got server time: {0}'.format(self.server_time))
+                logger.debug('Got server time: {0}'.format(self.server_time))
         if tag == 'b':
             # <b id="new_messages">0</b>
             b_id = get_attribute(attrs, 'id')
             if b_id is not None:
                 if b_id == 'new_messages':
                     self.new_messages_count = safe_int(data)
-                    logger.info('new messages: {0}'.format(self.new_messages_count))
+                    logger.debug('new messages: {0}'.format(self.new_messages_count))
         if tag == 'a':
             # find current online players count
             # <a onclick="" title="Игроков в сети" style="color:green">35</a>
@@ -568,11 +568,11 @@ class OverviewParser(XNParserBase):
             a_href = get_attribute(attrs, 'href')
             if (a_title == 'Игроков в сети') and (a_style == 'color:green'):
                 self.online_players = safe_int(data)
-                logger.info('Online players = {0}'.format(self.online_players))
+                logger.debug('Online players = {0}'.format(self.online_players))
             if (a_href is not None) and (a_href == '?set=overview&mode=bonus'):
                 if data == 'ПОЛУЧИТЬ БОНУС':
                     self.bonus_url = '?set=overview&mode=bonus'
-                    logger.info('!!! Bonus available !!! {0}'.format(self.bonus_url))
+                    logger.debug('!!! Bonus available !!! {0}'.format(self.bonus_url))
         if tag == 'script':
             # parse fleet remaining time more precisely
             # <script>FlotenTime('bxxfs2', 89118);</script>
