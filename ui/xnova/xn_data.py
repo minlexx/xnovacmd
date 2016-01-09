@@ -630,6 +630,7 @@ class XNPlanet:
                 bi.dt_end = ba.dt_end
                 bi.seconds_left = ba.seconds_left
                 bi.remove_link = ba.remove_link
+                bi.is_downgrade = ba.is_downgrade
                 return True
         return False
 
