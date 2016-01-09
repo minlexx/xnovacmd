@@ -522,6 +522,7 @@ class XNova_MainWindow(QWidget):
     def on_world_timer(self):
         if self.world:
             self.world.world_tick()
+        self.update_planets_panel()
         if self.flights_widget:
             self.flights_widget.update_flights()
         if self.overview_widget:
@@ -593,6 +594,15 @@ class XNova_MainWindow(QWidget):
     def on_building_complete(self, planet: XNPlanet, bitem: XNPlanetBuildingItem):
         logger.debug('main: build complete: on planet {0}: {1}'.format(
             planet.name, str(bitem)))
+        # update also planet tab, if any
+        if isinstance(planet, XNPlanet):
+            tab_idx = self.find_tab_for_planet(planet.planet_id)
+            if tab_idx != -1:
+                tab_widget = self._tabwidget.tabWidget(tab_idx)
+                if isinstance(tab_widget, PlanetWidget):
+                    logger.debug('Updating planet tab #{}'.format(tab_idx))
+                    tab_widget.setPlanet(planet)
+        # construct message to show in tray
         if bitem.is_shipyard_item:
             binfo_str = '{0} x {1}'.format(bitem.quantity, bitem.name)
         else:
