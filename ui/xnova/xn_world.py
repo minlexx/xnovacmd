@@ -752,8 +752,8 @@ class XNovaWorld(QThread):
             if self._cur_planet_id != planet_id:
                 logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
-                            self._cur_planet_id, planet_id)
-            self._download_planet_overview(planet_id)
+                            self._cur_planet_id, planet_id))
+                self._download_planet_overview(planet_id)
             self._request_build_item(planet_id, bitem, quantity)
             self.unlock()
 
@@ -767,8 +767,8 @@ class XNovaWorld(QThread):
             if self._cur_planet_id != planet_id:
                 logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
-                            self._cur_planet_id, planet_id)
-            self._download_planet_overview(planet_id)
+                            self._cur_planet_id, planet_id))
+                self._download_planet_overview(planet_id)
             self._request_build_cancel(planet_id, bitem)
             self.unlock()
 
@@ -782,8 +782,8 @@ class XNovaWorld(QThread):
             if self._cur_planet_id != planet_id:
                 logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
-                            self._cur_planet_id, planet_id)
-            self._download_planet_overview(planet_id)
+                            self._cur_planet_id, planet_id))
+                self._download_planet_overview(planet_id)
             self._request_build_dismantle(planet_id, bitem)
             self.unlock()
 
