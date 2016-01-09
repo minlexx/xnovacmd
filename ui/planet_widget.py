@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QWidget, QFrame, QMenu, QAction, \
     QMessageBox, QGridLayout, QScrollArea, QLayout
 from PyQt5.QtGui import QIcon, QCursor, QPixmap, QFont
 
-from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem, XNResourceBundle
+from ui.xnova.xn_data import XNPlanet, XNCoords, XNPlanetBuildingItem, \
+    XNResourceBundle
 from ui.xnova.xn_world import XNovaWorld_instance, XNovaWorld
 from ui.xnova import xn_logger
 
@@ -172,7 +173,8 @@ class Planet_BasicInfoPanel(QFrame):
         self._planet = planet
         self._planet_pic_url = planet.pic_url
         # deal with planet pic
-        file_name = './cache/img/{0}'.format(self._planet_pic_url.replace('/', '_'))
+        file_name = './cache/img/{0}'.format(
+                    self._planet_pic_url.replace('/', '_'))
         self._pixmap = QPixmap(file_name)
         self._lbl_img.setPixmap(self._pixmap)
         # setup widget max height based on picture size and layout's margins
@@ -185,12 +187,16 @@ class Planet_BasicInfoPanel(QFrame):
         self.setMaximumHeight(max_height)
         # planet name, corods, fields
         self._lbl_name.setText(planet.name)
-        self._lbl_coords.setText('<a href="{0}">{0}</a>'.format(planet.coords.coords_str()))
-        fields_left_str = '{0}: {1}'.format(self.tr('left'), planet.fields_total - planet.fields_busy)
-        self._lbl_fields.setText(self.tr('Fields:') +
-                                 ' {0} / {1} ({2})'.format(planet.fields_busy,
-                                                           planet.fields_total,
-                                                           fields_left_str))
+        self._lbl_coords.setText('<a href="{0}">{0}</a>'.format(
+                planet.coords.coords_str()))
+        fields_left_str = '{0}: {1}'.format(
+                self.tr('left'),
+                planet.fields_total - planet.fields_busy)
+        self._lbl_fields.setText(
+                self.tr('Fields:') +
+                ' {0} / {1} ({2})'.format(planet.fields_busy,
+                                          planet.fields_total,
+                                          fields_left_str))
         # resources
         self.update_resources()
 
@@ -217,9 +223,12 @@ class Planet_BasicInfoPanel(QFrame):
         self._lbl_cur_deit.setText('<font color="{0}">{1}</font>'.format(
                 color, number_format(int(self._planet.res_current.deit))))
         # update res max
-        self._lbl_max_met.setText(number_format(int(self._planet.res_max_silos.met)))
-        self._lbl_max_cry.setText(number_format(int(self._planet.res_max_silos.cry)))
-        self._lbl_max_deit.setText(number_format(int(self._planet.res_max_silos.deit)))
+        self._lbl_max_met.setText(number_format(
+                int(self._planet.res_max_silos.met)))
+        self._lbl_max_cry.setText(number_format(
+                int(self._planet.res_max_silos.cry)))
+        self._lbl_max_deit.setText(number_format(
+                int(self._planet.res_max_silos.deit)))
         # energy
         self._lbl_energy_stats.setText('{0} / {1}    ({2}%)'.format(
                 self._planet.energy.energy_left,
@@ -254,8 +263,10 @@ class Planet_BasicInfoPanel(QFrame):
 
 class Planet_BuildItemWidget(QFrame):
 
-    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)  # bitem, optional quantity for shipyard
-    requestDowngradeItem = pyqtSignal(XNPlanetBuildingItem)   # downgrade a building
+    # bitem, optional quantity for shipyard
+    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)
+    # downgrade a building
+    requestDowngradeItem = pyqtSignal(XNPlanetBuildingItem)
 
     def __init__(self, parent: QWidget):
         super(Planet_BuildItemWidget, self).__init__(parent)
@@ -363,7 +374,10 @@ class Planet_BuildItemWidget(QFrame):
         self._layout.addWidget(self._lbl_pix, 0, Qt.AlignTop | Qt.AlignHCenter)
         self._layout.addLayout(self._layout_v)
 
-    def set_building_item(self, bitem: XNPlanetBuildingItem, res_cur: XNResourceBundle, energy_cur: int):
+    def set_building_item(self,
+                          bitem: XNPlanetBuildingItem,
+                          res_cur: XNResourceBundle,
+                          energy_cur: int):
         self._bitem = bitem
         # load pixmap
         pix_fn = 'ui/i/building_{0}.gif'.format(bitem.gid)
@@ -396,10 +410,12 @@ class Planet_BuildItemWidget(QFrame):
             setstr = number_format(bitem.cost_met)
             color = color_enough
             if res_cur.met < bitem.cost_met:
-                setstr += ' (-{0})'.format(number_format(int(bitem.cost_met - res_cur.met)))
+                setstr += ' (-{0})'.format(number_format(
+                        int(bitem.cost_met - res_cur.met)))
                 color = color_notenough
                 enough_met = False
-            self._lbl_price_met.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_met.setText('<font color="{0}">{1}</font>'.format(
+                    color, setstr))
             self._lbl_price_met_ico.show()
             self._lbl_price_met.show()
         else:
@@ -410,10 +426,12 @@ class Planet_BuildItemWidget(QFrame):
             setstr = number_format(bitem.cost_cry)
             color = color_enough
             if res_cur.cry < bitem.cost_cry:
-                setstr += ' (-{0})'.format(number_format(int(bitem.cost_cry - res_cur.cry)))
+                setstr += ' (-{0})'.format(number_format(
+                        int(bitem.cost_cry - res_cur.cry)))
                 color = color_notenough
                 enough_cry = False
-            self._lbl_price_cry.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_cry.setText('<font color="{0}">{1}</font>'.format(
+                    color, setstr))
             self._lbl_price_cry_ico.show()
             self._lbl_price_cry.show()
         else:
@@ -424,10 +442,12 @@ class Planet_BuildItemWidget(QFrame):
             setstr = number_format(bitem.cost_deit)
             color = color_enough
             if res_cur.deit < bitem.cost_deit:
-                setstr += ' (-{0})'.format(number_format(int(bitem.cost_deit - res_cur.deit)))
+                setstr += ' (-{0})'.format(number_format(
+                        int(bitem.cost_deit - res_cur.deit)))
                 color = color_notenough
                 enough_deit = False
-            self._lbl_price_deit.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_deit.setText('<font color="{0}">{1}</font>'.format(
+                    color, setstr))
             self._lbl_price_deit_ico.show()
             self._lbl_price_deit.show()
         else:
@@ -438,10 +458,12 @@ class Planet_BuildItemWidget(QFrame):
             setstr = number_format(bitem.cost_energy)
             color = color_enough
             if energy_cur < bitem.cost_energy:
-                setstr += ' (-{0})'.format(number_format(int(bitem.cost_energy - energy_cur)))
+                setstr += ' (-{0})'.format(number_format(
+                        int(bitem.cost_energy - energy_cur)))
                 color = color_notenough
                 enough_energy = False
-            self._lbl_price_energy.setText('<font color="{0}">{1}</font>'.format(color, setstr))
+            self._lbl_price_energy.setText(
+                '<font color="{0}">{1}</font>'.format(color, setstr))
             self._lbl_price_energy_ico.show()
             self._lbl_price_energy.show()
         else:
@@ -449,7 +471,8 @@ class Planet_BuildItemWidget(QFrame):
             self._lbl_price_energy.hide()
         #
         # enable or disable buttons
-        if enough_met and enough_cry and enough_deit and enough_energy and (self._bitem.seconds_total > 0):
+        if enough_met and enough_cry and enough_deit and \
+                enough_energy and (self._bitem.seconds_total > 0):
             self._btn_upgrade.setEnabled(True)
         else:
             self._btn_upgrade.setEnabled(False)
@@ -479,11 +502,11 @@ class Planet_BuildItemWidget(QFrame):
             if self._bitem.cost_energy > 0:
                 counts[3] = int(energy_cur // self._bitem.cost_energy)
             maxb = 0
-            for cnt in counts:  # find first count which is > 0
+            for cnt in counts:  # find first count, which is > 0
                 if cnt > 0:
                     maxb = cnt
                     break
-            for cnt in counts:  # find minimum count among counts, which is > 0
+            for cnt in counts:  # find minimum count, which is > 0
                 if cnt > 0:
                     if cnt < maxb:
                         maxb = cnt
@@ -520,8 +543,8 @@ class Planet_BuildItemWidget(QFrame):
                 pass
             if qint < 1:  # invalid format
                 QMessageBox.warning(self,
-                                    self.tr('Invalid format!'),
-                                    self.tr('Please input positive integer value!'))
+                        self.tr('Invalid format!'),
+                        self.tr('Please input positive integer value!'))
                 return
             # clear lineedit text
             self._lineedit_quantity.setText('')
@@ -539,8 +562,10 @@ class Planet_BuildItemsPanel(QFrame):
     TYPE_SHIPYARD = 'shipyard'
     TYPE_RESEARCHES = 'researches'
 
-    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)  # bitem, optional quantity (for shipyard)
-    requestDowngradeItem = pyqtSignal(XNPlanetBuildingItem)   # downgrade a building
+    # bitem, optional quantity (for shipyard)
+    requestBuildItem = pyqtSignal(XNPlanetBuildingItem, int)
+    # downgrade a building
+    requestDowngradeItem = pyqtSignal(XNPlanetBuildingItem)
 
     def __init__(self, parent: QWidget):
         super(Planet_BuildItemsPanel, self).__init__(parent)
@@ -574,8 +599,10 @@ class Planet_BuildItemsPanel(QFrame):
         # cannot set type twice
         if self._type != '':
             raise ValueError('Planet_BuildItemsPanel: Cannot set type twice!')
-        if typ not in [self.TYPE_BUILDINGS, self.TYPE_SHIPYARD, self.TYPE_RESEARCHES]:
-            raise ValueError('Planet_BuildItemsPanel: invalid type: [{0}]!'.format(typ))
+        if typ not in [self.TYPE_BUILDINGS, self.TYPE_SHIPYARD, \
+                self.TYPE_RESEARCHES]:
+            raise ValueError('Planet_BuildItemsPanel: '
+                    'invalid type: [{0}]!'.format(typ))
         self._type = typ
 
     def set_planet(self, planet: XNPlanet):
@@ -584,27 +611,32 @@ class Planet_BuildItemsPanel(QFrame):
         if self._type == self.TYPE_BUILDINGS:
             for bitem in self._planet.buildings_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.set_building_item(bitem, self._planet.res_current,
+                        self._planet.energy.energy_total)
                 biw.show()
         elif self._type == self.TYPE_SHIPYARD:
             for bitem in self._planet.shipyard_tems:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.set_building_item(bitem, self._planet.res_current,
+                        self._planet.energy.energy_total)
                 biw.show()
             # also defense items
             for bitem in self._planet.defense_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.set_building_item(bitem, self._planet.res_current,
+                        self._planet.energy.energy_total)
                 biw.show()
         elif self._type == self.TYPE_RESEARCHES:
             for bitem in self._planet.research_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.set_building_item(bitem, self._planet.res_current,
+                        self._planet.energy.energy_total)
                 biw.show()
             # also research_fleet items
             for bitem in self._planet.researchfleet_items:
                 biw = self.biw_for_gid(bitem.gid)
-                biw.set_building_item(bitem, self._planet.res_current, self._planet.energy.energy_total)
+                biw.set_building_item(bitem, self._planet.res_current,
+                        self._planet.energy.energy_total)
                 biw.show()
 
     def biw_for_gid(self, gid: int) -> Planet_BuildItemWidget:
@@ -619,7 +651,8 @@ class Planet_BuildItemsPanel(QFrame):
             biw.requestBuildItem.connect(self.on_request_build_item)
             biw.requestDowngradeItem.connect(self.on_request_downgrade_item)
             self._biws[gid] = biw
-            self._layout.addWidget(biw, self._layout_lastrow, self._layout_lastcol)
+            self._layout.addWidget(biw, self._layout_lastrow,
+                    self._layout_lastcol)
             self._layout_lastcol += 1
             if self._layout_lastcol > (self.MAX_COLS -1):
                 self._layout_lastcol = 0
@@ -629,7 +662,8 @@ class Planet_BuildItemsPanel(QFrame):
         return biw
 
     @pyqtSlot(XNPlanetBuildingItem, int)
-    def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
+    def on_request_build_item(self, bitem: XNPlanetBuildingItem,
+            quantity: int):
         self.requestBuildItem.emit(bitem, quantity)
 
     @pyqtSlot(XNPlanetBuildingItem)
@@ -660,7 +694,8 @@ class PlanetWidget(QFrame):
         # basic info panel
         self._bipanel = Planet_BasicInfoPanel(self)
         self._bipanel.requestOpenGalaxy.connect(self.on_request_open_galaxy)
-        self._bipanel.requestRefreshPlanet.connect(self.on_request_refresh_planet)
+        self._bipanel.requestRefreshPlanet.connect(
+                self.on_request_refresh_planet)
         self._bipanel.requestRenamePlanet.connect(self.on_request_rename_planet)
         # build progress widgets
         self._bpw_buildings = BuildProgressWidget(self)
@@ -719,11 +754,14 @@ class PlanetWidget(QFrame):
         self._cf_research.expanded.connect(self.on_frame_research_expanded)
         self._cf_research.collapsed.connect(self.on_frame_research_collapsed)
         #
-        self._bpw_buildings.requestCancelBuild.connect(self.on_request_cancel_build)
-        self._bpw_research.requestCancelBuild.connect(self.on_request_cancel_build)
+        self._bpw_buildings.requestCancelBuild.connect(
+                self.on_request_cancel_build)
+        self._bpw_research.requestCancelBuild.connect(
+                self.on_request_cancel_build)
         #
         self._bip_buildings.requestBuildItem.connect(self.on_request_build_item)
-        self._bip_buildings.requestDowngradeItem.connect(self.on_request_downgrade_item)
+        self._bip_buildings.requestDowngradeItem.connect(
+                self.on_request_downgrade_item)
         self._bip_shipyard.requestBuildItem.connect(self.on_request_build_item)
         self._bip_research.requestBuildItem.connect(self.on_request_build_item)
         #
@@ -740,8 +778,10 @@ class PlanetWidget(QFrame):
         self._bipanel.setup_from_planet(self._planet)
         # setup build progress widgets
         self._bpw_buildings.update_from_planet(planet, typ='')
-        self._bpw_shipyard.update_from_planet(planet, typ=BuildProgressWidget.BPW_TYPE_SHIPYARD)
-        self._bpw_research.update_from_planet(planet, typ=BuildProgressWidget.BPW_TYPE_RESEARCH)
+        self._bpw_shipyard.update_from_planet(planet,
+                typ=BuildProgressWidget.BPW_TYPE_SHIPYARD)
+        self._bpw_research.update_from_planet(planet,
+                typ=BuildProgressWidget.BPW_TYPE_RESEARCH)
         # setup build items panels (in collapsible frames)
         self._bip_buildings.set_planet(planet)
         self._bip_shipyard.set_planet(planet)
@@ -762,8 +802,10 @@ class PlanetWidget(QFrame):
         self._bipanel.update_resources()
         # update build progress widgets - tick builds
         self._bpw_buildings.update_from_planet(self._planet)
-        self._bpw_shipyard.update_from_planet(self._planet, BuildProgressWidget.BPW_TYPE_SHIPYARD)
-        self._bpw_research.update_from_planet(self._planet, BuildProgressWidget.BPW_TYPE_RESEARCH)
+        self._bpw_shipyard.update_from_planet(self._planet,
+                BuildProgressWidget.BPW_TYPE_SHIPYARD)
+        self._bpw_research.update_from_planet(self._planet,
+                BuildProgressWidget.BPW_TYPE_RESEARCH)
 
     @pyqtSlot(XNCoords)
     def on_request_open_galaxy(self, coords: XNCoords):
@@ -771,11 +813,13 @@ class PlanetWidget(QFrame):
 
     @pyqtSlot()
     def on_request_refresh_planet(self):
-        self.world.signal(self.world.SIGNAL_RELOAD_PLANET, planet_id=self._planet.planet_id)
+        self.world.signal(self.world.SIGNAL_RELOAD_PLANET,
+                planet_id=self._planet.planet_id)
 
     @pyqtSlot(int, str)
     def on_request_rename_planet(self, planet_id: int, planet_name: str):
-        self.world.signal(self.world.SIGNAL_RENAME_PLANET, planet_id=planet_id, new_name=planet_name)
+        self.world.signal(self.world.SIGNAL_RENAME_PLANET,
+                planet_id=planet_id, new_name=planet_name)
 
     @pyqtSlot(XNPlanetBuildingItem)
     def on_request_cancel_build(self, bitem: XNPlanetBuildingItem):
@@ -788,7 +832,8 @@ class PlanetWidget(QFrame):
                           bitem=bitem)
 
     @pyqtSlot(XNPlanetBuildingItem, int)
-    def on_request_build_item(self, bitem: XNPlanetBuildingItem, quantity: int):
+    def on_request_build_item(self, bitem: XNPlanetBuildingItem,
+                              quantity: int):
         if bitem is None:
             return
         self.world.signal(XNovaWorld.SIGNAL_BUILD_ITEM,
@@ -801,7 +846,8 @@ class PlanetWidget(QFrame):
         if bitem is None:
             return
         if not bitem.is_building_item:
-            logger.warn('Cannot dismantle item that is not building: {0}'.format(bitem))
+            logger.warn('Cannot dismantle item that is '
+                    'not building: {0}'.format(bitem))
             return
         downgrade_price = '{0} {3},  {1} {4},  {2} {5}'.format(
                 self.tr('Metal'), self.tr('Crystal'), self.tr('Deit'),
@@ -810,8 +856,8 @@ class PlanetWidget(QFrame):
                 int(bitem.cost_deit // 2))
         btn = QMessageBox.question(self,
                 self.tr('Downgrade building'),
-                self.tr('Are you sure you want to downgrade this building?') + '\n' +
-                        '{0} {1} {2}\n{3}: {4}'.format(
+                self.tr('Are you sure you want to downgrade this building?')
+                        + '\n' + '{0} {1} {2}\n{3}: {4}'.format(
                         bitem.name,
                         self.tr('lv.'),
                         bitem.level,
