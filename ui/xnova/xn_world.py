@@ -747,6 +747,13 @@ class XNovaWorld(QThread):
             planet_id = int(self._signal_kwargs['planet_id'])
             quantity = int(self._signal_kwargs['quantity'])
             self.lock()
+            # check that current planet is the same as requested to build on
+            # (it should be the same)
+            if self._cur_planet_id != planet_id:
+                logger.debug("Current planet ({}) is not {}, force '
+                    'change current planet'.format(
+                            self._cur_planet_id, planet_id)
+            self._download_planet_overview(planet_id)
             self._request_build_item(planet_id, bitem, quantity)
             self.unlock()
 
@@ -755,6 +762,13 @@ class XNovaWorld(QThread):
             bitem = self._signal_kwargs['bitem']
             planet_id = int(self._signal_kwargs['planet_id'])
             self.lock()
+            # check that current planet is the same as requested to build on
+            # (it should be the same)
+            if self._cur_planet_id != planet_id:
+                logger.debug("Current planet ({}) is not {}, force '
+                    'change current planet'.format(
+                            self._cur_planet_id, planet_id)
+            self._download_planet_overview(planet_id)
             self._request_build_cancel(planet_id, bitem)
             self.unlock()
 
@@ -763,6 +777,13 @@ class XNovaWorld(QThread):
             bitem = self._signal_kwargs['bitem']
             planet_id = int(self._signal_kwargs['planet_id'])
             self.lock()
+            # check that current planet is the same as requested to build on
+            # (it should be the same)
+            if self._cur_planet_id != planet_id:
+                logger.debug("Current planet ({}) is not {}, force '
+                    'change current planet'.format(
+                            self._cur_planet_id, planet_id)
+            self._download_planet_overview(planet_id)
             self._request_build_dismantle(planet_id, bitem)
             self.unlock()
 
