@@ -120,7 +120,7 @@ class BuildProgressWidget(QFrame):
                                     bi.level, bi.level+1)
                         else:
                             bn = '[{}] {} {}->{}'.format(
-                                    set.tr('Dismantle:'), bi.name,
+                                    self.tr('Dismantle'), bi.name,
                                     bi.level, bi.level-1)
                         self._lbl_buildName.setText(bn)
                         self._set_percent_complete(bi)
