@@ -687,6 +687,9 @@ class XNovaWorld(QThread):
             # go go go
             logger.debug('renaming planet #{0} to [{1}]'.format(planet_id, new_name))
             self.lock()
+            # first need to ensure that this planet is current
+            self._download_planet_overview(planet_id, force_download=True)
+            # then trigger a rename operation
             self._request_rename_planet(planet_id, new_name)
             # force imperium update to read new planet name
             self._get_page('imperium', 1, force_download=True)
