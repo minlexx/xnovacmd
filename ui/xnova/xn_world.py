@@ -738,9 +738,7 @@ class XNovaWorld(QThread):
                 gp = GalaxyParser()
                 gp.clear()
                 gp.parse_page_content(page_content)
-                if gp.script_body != '':
-                    gp.unscramble_galaxy_script()
-                    logger.debug(gp.galaxy_rows)
+                logger.debug(gp.galaxy_rows)
 
     def on_signal_build_item(self):
         if ('bitem' in self._signal_kwargs) and ('planet_id' in self._signal_kwargs) \
