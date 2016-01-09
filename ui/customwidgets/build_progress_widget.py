@@ -70,7 +70,8 @@ class BuildProgressWidget(QFrame):
             ret += self._bitem.name
             if self._bitem.is_shipyard_item:
                 ret += ' (shipyard)'
-            if self._bitem.is_research_item or self._bitem.is_researchfleet_item:
+            if self._bitem.is_research_item or \
+                        self._bitem.is_researchfleet_item:
                 ret += ' (research)'
         return ret
 
@@ -95,7 +96,8 @@ class BuildProgressWidget(QFrame):
         secs_left -= hours_left * 3600
         mins_left = secs_left // 60
         secs_left -= mins_left * 60
-        bl_str = '({0:02}:{1:02}:{2:02})'.format(hours_left, mins_left, secs_left)
+        bl_str = '({0:02}:{1:02}:{2:02})'.format(
+                hours_left, mins_left, secs_left)
         self._lbl_buildTime.setText(bl_str)
 
     def update_from_planet(self, planet: XNPlanet, typ: str = ''):
@@ -104,14 +106,23 @@ class BuildProgressWidget(QFrame):
         # config UI
         self._lbl_planetName.setText(planet.name)
         self._lbl_planetCoords.setText(' [{0}:{1}:{2}] '.format(
-            planet.coords.galaxy, planet.coords.system, planet.coords.position))
+                planet.coords.galaxy,
+                planet.coords.system,
+                planet.coords.position))
         if typ == '':
             # set from normal building
             if len(planet.buildings_items) > 0:
                 for bi in planet.buildings_items:
                     if bi.is_in_progress():
                         self._bitem = bi
-                        self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                        if not bi.is_downgrade:
+                            bn = '{} {}->{}'.format(bi.name,
+                                    bi.level, bi.level+1)
+                        else:
+                            bn = '[{}] {} {}->{}'.format(
+                                    set.tr('Dismantle:'), bi.name,
+                                    bi.level, bi.level-1)
+                        self._lbl_buildName.setText(bn)
                         self._set_percent_complete(bi)
                         self._set_buildtime(bi)
                         self.show()
@@ -124,7 +135,8 @@ class BuildProgressWidget(QFrame):
             # set from shipyard item
             for bi in planet.shipyard_progress_items:
                 self._bitem = bi
-                self._lbl_buildName.setText('{0} x {1} '.format(bi.quantity, bi.name))
+                self._lbl_buildName.setText('{0} x {1} '.format(
+                        bi.quantity, bi.name))
                 self._set_percent_complete(bi)
                 self._set_buildtime(bi)
                 self.show()
@@ -135,7 +147,8 @@ class BuildProgressWidget(QFrame):
             for bi in planet.research_items:
                 if bi.is_in_progress():
                     self._bitem = bi
-                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                    self._lbl_buildName.setText('{0} {1} '.format(
+                            bi.name, bi.level+1))
                     self._set_percent_complete(bi)
                     self._set_buildtime(bi)
                     self.show()
@@ -144,20 +157,24 @@ class BuildProgressWidget(QFrame):
             for bi in planet.researchfleet_items:
                 if bi.is_in_progress():
                     self._bitem = bi
-                    self._lbl_buildName.setText('{0} {1} '.format(bi.name, bi.level+1))
+                    self._lbl_buildName.setText('{0} {1} '.format(
+                            bi.name, bi.level+1))
                     self._set_percent_complete(bi)
                     self._set_buildtime(bi)
                     self.show()
                     return
-            # if we are here, no researches in progress were found (return is in previuos line)
+            # if we are here, no researches in progress were found
+            # (return is in previuos line)
             self.hide()
         else:
-            logger.error('update_from_planet(): unknown type: {0}'.format(typ))
+            logger.error('update_from_planet(): unknown type: {0}'.format(
+                    typ))
 
     @pyqtSlot()
     def on_btn_cancel(self):
         if self._bitem is not None:
-            if (self._bitem.remove_link is not None) and (self._bitem.remove_link != ''):
-                logger.debug('cancel clicked, remove_link = [{0}]'.format(self._bitem.remove_link))
+            if (self._bitem.remove_link is not None) and \
+                        (self._bitem.remove_link != ''):
                 self.requestCancelBuild.emit(self._bitem)
-                self.requestCancelBuildWithPlanet.emit(self._bitem, self._planet.planet_id)
+                self.requestCancelBuildWithPlanet.emit(
+                        self._bitem, self._planet.planet_id)
