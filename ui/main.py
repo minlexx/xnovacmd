@@ -3,7 +3,8 @@ import pathlib
 import pickle
 
 from PyQt5.QtCore import pyqtSlot, Qt, QTimer, QVariant, QEvent
-from PyQt5.QtGui import QIcon, QCloseEvent, QCursor, QShowEvent, QWindowStateChangeEvent
+from PyQt5.QtGui import QIcon, QCloseEvent, QCursor, QShowEvent, \
+    QWindowStateChangeEvent
 from PyQt5.QtWidgets import QWidget, QFrame, QMessageBox, QSystemTrayIcon, \
     QScrollArea, QMenu, QAction, QLabel, QVBoxLayout, QHBoxLayout
 
@@ -514,6 +515,7 @@ class XNova_MainWindow(QWidget):
             if tab_idx != -1:
                 tab_widget = self._tabwidget.tabWidget(tab_idx)
                 if isinstance(tab_widget, PlanetWidget):
+                    logger.debug('Updating planet tab #{}'.format(tab_idx))
                     tab_widget.setPlanet(planet)
 
     @pyqtSlot()
@@ -709,7 +711,7 @@ class XNova_MainWindow(QWidget):
         # planet building item
         bitem = XNPlanetBuildingItem()
         bitem.gid = 1
-        bitem.name = 'Рудник металла'
+        bitem.name = 'Р СѓРґРЅРёРє РјРµС‚Р°Р»Р»Р°'
         bitem.level = 29
         bitem.remove_link = ''
         bitem.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem.gid)
@@ -720,7 +722,7 @@ class XNova_MainWindow(QWidget):
         # second bitem
         bitem2 = XNPlanetBuildingItem()
         bitem2.gid = 2
-        bitem2.name = 'Рудник кристалла'
+        bitem2.name = 'Р СѓРґРЅРёРє РєСЂРёСЃС‚Р°Р»Р»Р°'
         bitem2.level = 26
         bitem2.remove_link = ''
         bitem2.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem2.gid)
