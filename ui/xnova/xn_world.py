@@ -177,7 +177,8 @@ class XNovaWorld(QThread):
         if kwargs is not None:
             self._signal_kwargs = kwargs
         self.unlock()
-        self.exit(signal_code)  # QEventLoop.exit(code) makes thread's event loop to exit with code
+        self.exit(signal_code)  # QEventLoop.exit(code) makes thread's
+        # event loop to exit with code
 
     ###################################
     # Getters
@@ -232,10 +233,15 @@ class XNovaWorld(QThread):
         self.unlock()
         return dt_server
 
-    def get_planets(self) -> list:
+    def get_planets(self, timeout_ms=None) -> list:
+        """
+        Gets list of planets (XNPlanet)
+        :param timeout_ms: milliseconds to wait the lock, default infinite
+        :return list of [XPlanet()]
+        """
         ret = []
         # try to lock with 0ms wait, if fails, return empty list
-        if self.lock(0):
+        if self.lock(timeout_ms):
             ret = self._planets
             self.unlock()
         return ret
@@ -397,17 +403,22 @@ class XNovaWorld(QThread):
                         self.build_complete.emit(planet, bitem)
         # end _world_tick_planets()
 
-    # can trigger signal to refresh overview page every
-    # 'self._overview_update_interval' seconds
     def _maybe_refresh_overview(self):
+        """
+        Can trigger signal to refresh overview page every
+        'self._overview_update_interval' seconds.
+        Called from self._world_tick(), which holds the lock already
+        """
         if 'overview' in self._page_dnl_times:
             dt_last = self._page_dnl_times['overview']
             dt_now = datetime.datetime.today()
             dt_diff = dt_now - dt_last
             secs_ago = int(dt_diff.total_seconds())
             if secs_ago >= self._overview_update_interval:
-                logger.debug('_maybe_refresh_overview() trigger update: {0} secs ago.'.format(secs_ago))
+                logger.debug('_maybe_refresh_overview() trigger update: '
+                        '{0} secs ago.'.format(secs_ago))
                 self.signal(self.SIGNAL_RELOAD_PAGE, page_name='overview')
+
 
     ################################################################################
 
@@ -997,12 +1008,15 @@ class XNovaWorld(QThread):
             referer = ''
             if bitem.is_building_item:
                 page_name = 'buildings_{0}'.format(planet_id)
-                referer = '?set=buildings'
+                referer = 'http://{0}/?set=buildings'.format(
+                        self._page_downloader.xnova_url)
             elif bitem.is_research_item:
                 page_name = 'research_{0}'.format(planet_id)
-                referer = '?set=buildings&mode=research'
+                referer = 'http://{0}/?set=buildings&mode=research'.format(
+                        self._page_downloader.xnova_url)
             elif bitem.is_researchfleet_item:
-                referer = '?set=buildings&mode=research_fleet'
+                referer = 'http://{0}/?set=buildings&mode=research_fleet'.format(
+                        self._page_downloader.xnova_url)
                 page_name = 'researchfleet_{0}'.format(planet_id)
             # send request
             self._get_page_url(page_name, bitem.build_link,
@@ -1021,7 +1035,8 @@ class XNovaWorld(QThread):
             post_data = dict()
             param_name = 'fmenge[{0}]'.format(bitem.gid)
             post_data[param_name] = quantity
-            referer = 'http://{0}/?set=buildings&mode=fleet'.format(self._page_downloader.xnova_url)
+            referer = 'http://{0}/?set=buildings&mode=fleet'.format(
+                    self._page_downloader.xnova_url)
             self._post_page_url(post_url, post_data, referer)
             # automatically download planet shipyard after this
             self._download_planet_shipyard(planet_id, force_download=True)
