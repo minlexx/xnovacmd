@@ -750,7 +750,7 @@ class XNovaWorld(QThread):
             # check that current planet is the same as requested to build on
             # (it should be the same)
             if self._cur_planet_id != planet_id:
-                logger.debug("Current planet ({}) is not {}, force '
+                logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
                             self._cur_planet_id, planet_id)
             self._download_planet_overview(planet_id)
@@ -765,7 +765,7 @@ class XNovaWorld(QThread):
             # check that current planet is the same as requested to build on
             # (it should be the same)
             if self._cur_planet_id != planet_id:
-                logger.debug("Current planet ({}) is not {}, force '
+                logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
                             self._cur_planet_id, planet_id)
             self._download_planet_overview(planet_id)
@@ -780,7 +780,7 @@ class XNovaWorld(QThread):
             # check that current planet is the same as requested to build on
             # (it should be the same)
             if self._cur_planet_id != planet_id:
-                logger.debug("Current planet ({}) is not {}, force '
+                logger.debug('Current planet ({}) is not {}, force '
                     'change current planet'.format(
                             self._cur_planet_id, planet_id)
             self._download_planet_overview(planet_id)
