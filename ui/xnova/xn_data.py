@@ -534,6 +534,14 @@ class XNPlanetBuildingItem:
         td = self.dt_end - dt_now
         self.seconds_left = int(td.total_seconds())
 
+    def calc_end_time(self):
+        if self.seconds_left == -1:
+            self.dt_end = None
+            return
+        dt_now = datetime.datetime.now()
+        td = datetime.timedelta(seconds=self.seconds_left)
+        self.dt_end = dt_now + td
+
     def is_in_progress(self):
         if (self.seconds_left > 0) and (self.dt_end is not None):
             return True
