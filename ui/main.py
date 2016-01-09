@@ -721,7 +721,7 @@ class XNova_MainWindow(QWidget):
         # planet building item
         bitem = XNPlanetBuildingItem()
         bitem.gid = 1
-        bitem.name = 'Р СѓРґРЅРёРє РјРµС‚Р°Р»Р»Р°'
+        bitem.name = 'Рудник металла'
         bitem.level = 29
         bitem.remove_link = ''
         bitem.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem.gid)
@@ -732,7 +732,7 @@ class XNova_MainWindow(QWidget):
         # second bitem
         bitem2 = XNPlanetBuildingItem()
         bitem2.gid = 2
-        bitem2.name = 'Р СѓРґРЅРёРє РєСЂРёСЃС‚Р°Р»Р»Р°'
+        bitem2.name = 'Рудник кристалла'
         bitem2.level = 26
         bitem2.remove_link = ''
         bitem2.build_link = '?set=buildings&cmd=insert&building={0}'.format(bitem2.gid)
@@ -740,6 +740,9 @@ class XNova_MainWindow(QWidget):
         bitem2.cost_met = 9735556
         bitem2.cost_cry = 4667778
         bitem2.is_building_item = True
+        bitem2.is_downgrade = True
+        bitem2.seconds_left = bitem2.seconds_total // 2
+        bitem2.calc_end_time()
         # add bitems
         pl1.buildings_items = [bitem, bitem2]
         # add
