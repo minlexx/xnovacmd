@@ -73,7 +73,7 @@ def auto_builder_thread():
                         'build solar station!'.format(planet.name, free_energy))
             return ss_bitem
         logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
-            planet.name, met_level, cry_level, deit_level, free_energy))
+            planet.name, met_level, cry_level, deit_level, ss_level, free_energy))
         if ss_level < met_level:
             return ss_bitem
         # calc energy needs
