@@ -138,6 +138,7 @@ class XNova_MainWindow(QWidget):
             self.tray_icon = None
         if self.world_timer.isActive():
             self.world_timer.stop()
+        self.world.script_command = 'stop'  # also stop possible running scripts
         if self.world.isRunning():
             self.world.quit()
             logger.debug('waiting for world thread to stop (5 sec)...')
