@@ -72,6 +72,18 @@ def auto_builder_thread():
             logger.info('Planet [{0}] has too low energy ({1}), must '
                         'build solar station!'.format(planet.name, free_energy))
             return ss_bitem
+        # second, check robotics factory, if it is below level 10
+        factory_bitem = planet.find_bitem_by_gid(int(BGid.FACTORY))
+        if factory_bitem is not None:
+            if factory_bitem.level < 10:
+                # check resources, this will build factory before any
+                # any other building only if enough resources NOW, do not wait
+                if (planet.res_current.met >= factory_bitem.cost_met) and \
+                        (planet.res_current.cry >= factory_bitem.cost_cry) and \
+                        (planet.res_current.deit >= factory_bitem.cost_deit):
+                    logger.info('Planet [{0}] Factory level < 10 and have res for it,'
+                                ' build Factory!'.format(planet.name))
+                    return factory_bitem
         logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
             planet.name, met_level, cry_level, deit_level, ss_level, free_energy))
         if ss_level < met_level:
