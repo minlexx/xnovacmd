@@ -643,5 +643,17 @@ class XNPlanet:
                 return True
         return False
 
-    def lab_level(self):
-        return self.buildings.lab
+    def find_bitem_by_gid(self, gid: int) -> XNPlanetBuildingItem:
+        for bitem in self.buildings_items:
+            if bitem.gid == gid:
+                return bitem
+        for bitem in self.shipyard_tems:
+            if bitem.gid == gid:
+                return bitem
+        for bitem in self.research_items:
+            if bitem.gid == gid:
+                return bitem
+        for bitem in self.researchfleet_items:
+            if bitem.gid == gid:
+                return bitem
+        return None
