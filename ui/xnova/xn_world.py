@@ -751,9 +751,9 @@ class XNovaWorld(QThread):
             # (it should be the same)
             if self._cur_planet_id != planet_id:
                 logger.debug('Current planet ({}) is not {}, force '
-                    'change current planet'.format(
-                            self._cur_planet_id, planet_id))
-                self._download_planet_overview(planet_id)
+                             'change current planet'.format(
+                              self._cur_planet_id, planet_id))
+                self._download_planet_overview(planet_id, force_download=True)
             self._request_build_item(planet_id, bitem, quantity)
             self.unlock()
 
