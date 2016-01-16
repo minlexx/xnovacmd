@@ -3,12 +3,12 @@ from threading import Thread
 
 def auto_builder_thread():
     import time
-    from enum import Enum
+    from enum import IntEnum
     from ui.xnova.xn_data import XNPlanet, XNPlanetBuildingItem
     from ui.xnova.xn_world import XNovaWorld_instance, XNovaWorld
     from ui.xnova import xn_logger
 
-    class BGid(Enum):
+    class BGid(IntEnum):
         METAL_FACTORY = 1
         CRYSTAL_FACTORY = 2
         DEIT_FACTORY = 3
@@ -19,6 +19,13 @@ def auto_builder_thread():
         CRYSTAL_SILO = 23
         DEIT_SILO = 24
         LAB = 31
+
+    logger = xn_logger.get('auto_builder', debug=True)
+
+    world = XNovaWorld_instance()
+    world.script_command = 'running'
+
+    WORK_INTERVAL = 60  # seconds
 
     def check_bonus(world: XNovaWorld):
         bonus_url = world.get_bonus_url()
@@ -38,7 +45,53 @@ def auto_builder_thread():
             return round(e)
         return -1
 
-    def check_planet_buildings(world: XNovaWorld, planet: XNPlanet)
+    def calc_planet_next_building(planet: XNPlanet) -> XNPlanetBuildingItem:
+        if planet.is_moon or planet.is_base:
+            return None
+        met_level = 0
+        cry_level = 0
+        deit_level = 0
+        ss_level = 0
+        #
+        met_bitem = planet.find_bitem_by_gid(int(BGid.METAL_FACTORY))
+        if met_bitem is not None:
+            met_level = met_bitem.level
+        cry_bitem = planet.find_bitem_by_gid(int(BGid.CRYSTAL_FACTORY))
+        if cry_bitem is not None:
+            cry_level = cry_bitem.level
+        deit_bitem = planet.find_bitem_by_gid(int(BGid.DEIT_FACTORY))
+        if deit_bitem is not None:
+            deit_level = deit_bitem.level
+        ss_bitem = planet.find_bitem_by_gid(int(BGid.SOLAR_STATION))
+        if ss_bitem is not None:
+            ss_level = ss_bitem.level
+        free_energy = planet.energy.energy_left
+        #
+        # first, check energy
+        if free_energy <= 1:
+            logger.info('Planet [{0}] has too low energy ({1}), must '
+                        'build solar station!'.format(planet.name, free_energy))
+            return ss_bitem
+        logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
+            planet.name, met_level, cry_level, deit_level, free_energy))
+        if ss_level < met_level:
+            return ss_bitem
+        # calc energy needs
+        met_eneed = energy_need_for_gid(int(BGid.METAL_FACTORY), met_level+1)
+        cry_eneed = energy_need_for_gid(int(BGid.CRYSTAL_FACTORY), cry_level+1)
+        deit_eneed = energy_need_for_gid(int(BGid.DEIT_FACTORY), deit_level+1)
+        # try to fit in energy some buildings
+        if (met_level < ss_level) and (met_eneed <= free_energy):
+            return met_bitem
+        if (cry_level < ss_level-1) and (cry_eneed <= free_energy):
+            return cry_bitem
+        if (deit_level < ss_level-5) and (deit_eneed <= free_energy):
+            return deit_bitem
+        logger.warn('calc_planet_next_building(): for some reason cannot decide what to build, '
+                    'will build solar station by default')
+        return ss_bitem
+
+    def check_planet_buildings(world: XNovaWorld, planet: XNPlanet):
         # is there any building in progress on planet now?
         build_in_progress = False
         bitem = XNPlanetBuildingItem()
@@ -52,32 +105,10 @@ def auto_builder_thread():
                     planet.name, bitem.name, bitem.level+1))
             return
         # no builds in progress, we can continue
-        # find the first building in a queue that is not present on the planet
-        gid = 0
-        level = 0
-        bitem = XNPlanetBuildingItem()
-        for queue_item in buildings_queue:
-            gid = queue_item[0]
-            level = queue_item[1]
-            is_present = True
-            for bitem_ in planet.buildings_items:
-                if bitem_.gid == gid:  # the same building type, check level
-                    if bitem_.level < level:  # AHA! level too low?
-                        is_present = False
-                        bitem = bitem_
-                        break
-            if not is_present:
-                break
-            gid = 0
-            level = 0
-            bitem = XNPlanetBuildingItem()
 
-        # maybe we are at the end of queue?
-        if (gid == 0) or (level == 0) or (bitem.build_link is None):
-            logger.info('Seems we have built all the queue!')
-            break
+        bitem = calc_planet_next_building(planet)
 
-        logger.info('Next building in a queue: {0} lv {1}'.format(bitem.name, level))
+        logger.info('Next building will be: {0} lv {1}'.format(bitem.name, bitem.level+1))
         logger.info('Its build_Link is: [{0}]'.format(bitem.build_link))
         logger.info('Its price: {0}m {1}c {2}d'.format(bitem.cost_met, bitem.cost_cry, bitem.cost_deit))
         logger.info('We have: {0}m {1}c {2}d'.format(int(planet.res_current.met),
@@ -96,12 +127,6 @@ def auto_builder_thread():
         else:
             logger.warn('We DO NOT have enough resources to build it =( Wait...')
 
-    logger = xn_logger.get('auto_builder', debug=True)
-
-    world = XNovaWorld_instance()
-    world.script_command = 'running'
-
-    WORK_INTERVAL = 60  # seconds
     last_work_time = time.time() - WORK_INTERVAL
 
     logger.info('Started.')
@@ -121,6 +146,9 @@ def auto_builder_thread():
                 continue
             for planet in planets:
                 check_planet_buildings(world, planet)
+                time.sleep(1)
+                if world.script_command == 'stop':
+                    break
         # if we didn't sleep long enough for a work_interval
     # while True
 
