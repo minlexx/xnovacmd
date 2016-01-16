@@ -25,7 +25,7 @@ def auto_builder_thread():
     world = XNovaWorld_instance()
     world.script_command = 'running'
 
-    WORK_INTERVAL = 60  # seconds
+    WORK_INTERVAL = 145  # seconds
 
     def check_bonus(world: XNovaWorld):
         bonus_url = world.get_bonus_url()
@@ -77,18 +77,23 @@ def auto_builder_thread():
         if ss_level < met_level:
             return ss_bitem
         # calc energy needs
-        met_eneed = energy_need_for_gid(int(BGid.METAL_FACTORY), met_level+1)
-        cry_eneed = energy_need_for_gid(int(BGid.CRYSTAL_FACTORY), cry_level+1)
-        deit_eneed = energy_need_for_gid(int(BGid.DEIT_FACTORY), deit_level+1)
+        met_eneed = energy_need_for_gid(int(BGid.METAL_FACTORY), met_level+1) \
+            - energy_need_for_gid(int(BGid.METAL_FACTORY), met_level)
+        cry_eneed = energy_need_for_gid(int(BGid.CRYSTAL_FACTORY), cry_level+1) \
+            - energy_need_for_gid(int(BGid.CRYSTAL_FACTORY), cry_level)
+        deit_eneed = energy_need_for_gid(int(BGid.DEIT_FACTORY), deit_level+1) \
+            - energy_need_for_gid(int(BGid.DEIT_FACTORY), deit_level)
+        logger.info('Planet [{0}] needed en: {1}/{2}/{3}'.format(
+                planet.name, met_eneed, cry_eneed, deit_eneed))
         # try to fit in energy some buildings
         if (met_level < ss_level) and (met_eneed <= free_energy):
             return met_bitem
-        if (cry_level < ss_level-1) and (cry_eneed <= free_energy):
+        if (cry_level < (ss_level-1)) and (cry_eneed <= free_energy):
             return cry_bitem
-        if (deit_level < ss_level-5) and (deit_eneed <= free_energy):
+        if (deit_level < (ss_level-3)) and (deit_eneed <= free_energy):
             return deit_bitem
-        logger.warn('calc_planet_next_building(): for some reason cannot decide what to build, '
-                    'will build solar station by default')
+        logger.warn('Planet [{0}] for some reason cannot decide what to build, '
+                    'will build solar station by default'.format(planet.name))
         return ss_bitem
 
     def check_planet_buildings(world: XNovaWorld, planet: XNPlanet):
@@ -101,24 +106,27 @@ def auto_builder_thread():
                 bitem = bitem_
                 break
         if build_in_progress:
-            logger.info('{0} has still build in progress {1} lv {2}'.format(
+            logger.info('Planet [{0}] has still build in progress {1} lv {2}'.format(
                     planet.name, bitem.name, bitem.level+1))
             return
         # no builds in progress, we can continue
 
         bitem = calc_planet_next_building(planet)
 
-        logger.info('Next building will be: {0} lv {1}'.format(bitem.name, bitem.level+1))
-        logger.info('Its build_Link is: [{0}]'.format(bitem.build_link))
-        logger.info('Its price: {0}m {1}c {2}d'.format(bitem.cost_met, bitem.cost_cry, bitem.cost_deit))
-        logger.info('We have: {0}m {1}c {2}d'.format(int(planet.res_current.met),
-                                                     int(planet.res_current.cry),
-                                                     int(planet.res_current.deit)))
+        logger.info('Planet [{0}] Next building will be: {1} lv {2}'.format(
+                planet.name, bitem.name, bitem.level+1))
+        # logger.info('Its build_Link is: [{0}]'.format(bitem.build_link))
+        logger.info('Planet [{0}] Its price: {1}m {2}c {3}d'.format(
+                planet.name, bitem.cost_met, bitem.cost_cry, bitem.cost_deit))
+        logger.info('Planet [{0}] We have: {1}m {2}c {3}d'.format(
+                planet.name, int(planet.res_current.met), int(planet.res_current.cry),
+                int(planet.res_current.deit)))
         # do we have enough resources to build it?
         if (planet.res_current.met >= bitem.cost_met) and \
                 (planet.res_current.cry >= bitem.cost_cry) and \
                 (planet.res_current.deit >= bitem.cost_deit):
-            logger.info('We have enough resources to build it, trigger!')
+            logger.info('Planet [{0}] We have enough resources to build it, trigger!'.format(
+                    planet.name))
             world.signal(world.SIGNAL_BUILD_ITEM,
                          planet_id=planet.planet_id,
                          bitem=bitem,
