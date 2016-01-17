@@ -19,6 +19,7 @@ def auto_builder_thread():
         CRYSTAL_SILO = 23
         DEIT_SILO = 24
         LAB = 31
+        ROCKET_SILO = 44
 
     logger = xn_logger.get('auto_builder', debug=True)
 
@@ -73,8 +74,10 @@ def auto_builder_thread():
                         'build solar station!'.format(planet.name, free_energy))
             return ss_bitem
         # second, check robotics factory, if it is below level 10
+        factory_level = 0
         factory_bitem = planet.find_bitem_by_gid(int(BGid.FACTORY))
         if factory_bitem is not None:
+            factory_level = factory_bitem.level
             if factory_bitem.level < 10:
                 # check resources, this will build factory before any
                 # any other building only if enough resources NOW, do not wait
@@ -84,6 +87,18 @@ def auto_builder_thread():
                     logger.info('Planet [{0}] Factory level < 10 and have res for it,'
                                 ' build Factory!'.format(planet.name))
                     return factory_bitem
+        # maybe build shipyard? :)
+        shipyard_bitem = planet.find_bitem_by_gid(int(BGid.SHIPYARD))
+        if shipyard_bitem is not None:
+            if shipyard_bitem.level < factory_level:
+                if (planet.res_current.met >= shipyard_bitem.cost_met) and \
+                        (planet.res_current.cry >= shipyard_bitem.cost_cry) and \
+                        (planet.res_current.deit >= shipyard_bitem.cost_deit):
+                    logger.info('Planet [{0}] Shipyard level < {1} and have res for it,'
+                                ' build Factory!'.format(planet.name, factory_level))
+                    return shipyard_bitem
+        #
+        # other resources buildings
         logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
             planet.name, met_level, cry_level, deit_level, ss_level, free_energy))
         if ss_level < met_level:
