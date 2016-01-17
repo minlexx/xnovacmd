@@ -115,9 +115,9 @@ def auto_builder_thread():
         # try to fit in energy some buildings
         if (met_level < ss_level) and (met_eneed <= free_energy):
             return met_bitem
-        if (cry_level < (ss_level-1)) and (cry_eneed <= free_energy):
+        if (cry_level < (ss_level-2)) and (cry_eneed <= free_energy):
             return cry_bitem
-        if (deit_level < (ss_level-3)) and (deit_eneed <= free_energy):
+        if (deit_level < (ss_level-4)) and (deit_eneed <= free_energy):
             return deit_bitem
         logger.warn('Planet [{0}] for some reason cannot decide what to build, '
                     'will build solar station by default'.format(planet.name))
