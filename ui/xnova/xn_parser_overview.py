@@ -62,6 +62,8 @@ def _parse_flight_ships(s) -> XNShipsBundle:
                 elif self._p == 'Численность:':
                     logger.warn('_parse_flight_ships(): we do now know the exact enemy'
                                 ' ship types and count! Not enough technology level?')
+                    # emulate known count of spies
+                    self.ships.spy = value
                 else:
                     # ValueError: Unknown ship type: "Межпланетная ракета:"
                     raise ValueError('Unknown ship type: "{0}"'.format(self._p))
