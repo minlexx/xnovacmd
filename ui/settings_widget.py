@@ -52,7 +52,7 @@ class Settings_Net(QWidget):
         self._l_surl.addWidget(self._le_surl)
         self._layout.addLayout(self._l_surl)
         # emulate browser combo box
-        self._l_eb = QHBoxLayout(self)
+        self._l_eb = QHBoxLayout()
         self._lbl_eb = QLabel(self.tr('Emulate browser:'), self)
         self._lbl_eb.setMinimumWidth(min_width)
         self._cb_eb = QComboBox(self)
