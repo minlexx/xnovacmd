@@ -103,6 +103,7 @@ def auto_builder_thread():
             planet.name, met_level, cry_level, deit_level, ss_level, free_energy))
         if ss_level < met_level:
             return ss_bitem
+        #
         # calc energy needs
         met_eneed = energy_need_for_gid(int(BGid.METAL_FACTORY), met_level+1) \
             - energy_need_for_gid(int(BGid.METAL_FACTORY), met_level)
@@ -119,6 +120,22 @@ def auto_builder_thread():
             return cry_bitem
         if (deit_level < (ss_level-4)) and (deit_eneed <= free_energy):
             return deit_bitem
+        #
+        # check resources storage capacity
+        if planet.res_current.met / planet.res_max_silos.met >= 0.7:
+            silo_bitem = planet.find_bitem_by_gid(int(BGid.METAL_SILO))
+            logger.info('Planet [{0}] needs metal silo!'.format(planet.name))
+            return silo_bitem
+        if planet.res_current.cry / planet.res_max_silos.cry >= 0.7:
+            silo_bitem = planet.find_bitem_by_gid(int(BGid.CRYSTAL_SILO))
+            logger.info('Planet [{0}] needs crystal silo!'.format(planet.name))
+            return silo_bitem
+        if planet.res_current.deit / planet.res_max_silos.deit >= 0.7:
+            silo_bitem = planet.find_bitem_by_gid(int(BGid.DEIT_SILO))
+            logger.info('Planet [{0}] needs deit silo!'.format(planet.name))
+            return silo_bitem
+        #
+        # default - build solar station
         logger.warn('Planet [{0}] for some reason cannot decide what to build, '
                     'will build solar station by default'.format(planet.name))
         return ss_bitem
@@ -142,7 +159,6 @@ def auto_builder_thread():
 
         logger.info('Planet [{0}] Next building will be: {1} lv {2}'.format(
                 planet.name, bitem.name, bitem.level+1))
-        # logger.info('Its build_Link is: [{0}]'.format(bitem.build_link))
         logger.info('Planet [{0}] Its price: {1}m {2}c {3}d'.format(
                 planet.name, bitem.cost_met, bitem.cost_cry, bitem.cost_deit))
         logger.info('Planet [{0}] We have: {1}m {2}c {3}d'.format(
@@ -158,9 +174,10 @@ def auto_builder_thread():
                          planet_id=planet.planet_id,
                          bitem=bitem,
                          quantity=0)
-            logger.info('Signal to build this item has been sent to world thread, wait...')
+            logger.info('Planet [{0}] Signal to build this item has been sent to world thread, wait...'.format(
+                planet.name))
         else:
-            logger.warn('We DO NOT have enough resources to build it =( Wait...')
+            logger.warn('Planet [{0}] We DO NOT have enough resources to build it =( Wait...'.format(planet.name))
 
     last_work_time = time.time() - WORK_INTERVAL
 
