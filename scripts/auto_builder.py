@@ -14,6 +14,7 @@ def auto_builder_thread():
         DEIT_FACTORY = 3
         SOLAR_STATION = 4
         FACTORY = 14
+        NANITES = 15
         SHIPYARD = 21
         METAL_SILO = 22
         CRYSTAL_SILO = 23
@@ -97,6 +98,14 @@ def auto_builder_thread():
                     logger.info('Planet [{0}] Shipyard level < {1} and have res for it,'
                                 ' build Factory!'.format(planet.name, factory_level))
                     return shipyard_bitem
+        # maybe build nanites factory? :)
+        nanites_bitem = planet.find_bitem_by_gid(int(BGid.NANITES))
+        if nanites_bitem is not None:
+            if (planet.res_current.met >= nanites_bitem.cost_met) and \
+                    (planet.res_current.cry >= nanites_bitem.cost_cry) and \
+                    (planet.res_current.deit >= nanites_bitem.cost_deit):
+                logger.info('Planet [{0}] can build NANITES!'.format(planet.name))
+                return nanites_bitem
         #
         # other resources buildings
         logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
