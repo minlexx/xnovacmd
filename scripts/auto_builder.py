@@ -99,13 +99,24 @@ def auto_builder_thread():
                                 ' build Factory!'.format(planet.name, factory_level))
                     return shipyard_bitem
         # maybe build nanites factory? :)
-        nanites_bitem = planet.find_bitem_by_gid(int(BGid.NANITES))
-        if nanites_bitem is not None:
-            if (planet.res_current.met >= nanites_bitem.cost_met) and \
-                    (planet.res_current.cry >= nanites_bitem.cost_cry) and \
-                    (planet.res_current.deit >= nanites_bitem.cost_deit):
-                logger.info('Planet [{0}] can build NANITES!'.format(planet.name))
-                return nanites_bitem
+        if factory_level >= 10:
+            nanites_bitem = planet.find_bitem_by_gid(int(BGid.NANITES))
+            if nanites_bitem is not None:
+                if (planet.res_current.met >= nanites_bitem.cost_met) and \
+                        (planet.res_current.cry >= nanites_bitem.cost_cry) and \
+                        (planet.res_current.deit >= nanites_bitem.cost_deit):
+                    logger.info('Planet [{0}] can build NANITES!'.format(planet.name))
+                    return nanites_bitem
+        # maybe build rocket silo?
+        rs_bitem = planet.find_bitem_by_gid(int(BGid.ROCKET_SILO))
+        if rs_bitem is not None:
+            if rs_bitem.level < 2:
+                if (planet.res_current.met >= rs_bitem.cost_met) and \
+                        (planet.res_current.cry >= rs_bitem.cost_cry) and \
+                        (planet.res_current.deit >= rs_bitem.cost_deit):
+                    logger.info('Planet [{0}] can build rocket silo lv {1}'.format(
+                        planet.name, rs_bitem.level+1))
+                    return rs_bitem
         #
         # other resources buildings
         logger.info('Planet [{0}] m/c/d/e levels: {1}/{2}/{3}/{4} free_en: {5}'.format(
