@@ -197,7 +197,8 @@ def auto_builder_thread():
             logger.info('Planet [{0}] Signal to build this item has been sent to world thread, wait...'.format(
                 planet.name))
         else:
-            logger.warn('Planet [{0}] We DO NOT have enough resources to build it =( Wait...'.format(planet.name))
+            logger.warn('Planet [{0}] We DO NOT have enough resources to build [{1} lv {2}]...'.format(
+                    planet.name, bitem.name, bitem.level+1))
 
     last_work_time = time.time() - WORK_INTERVAL
 
