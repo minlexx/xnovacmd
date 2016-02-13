@@ -28,6 +28,7 @@ def auto_builder_thread():
     world.script_command = 'running'
 
     WORK_INTERVAL = 145  # seconds
+    IMPERIUM_REFRESH_INTERVAL = 300  # seconds
 
     def check_bonus(world: XNovaWorld):
         bonus_url = world.get_bonus_url()
@@ -202,6 +203,7 @@ def auto_builder_thread():
                     planet.name, bitem.name, bitem.level+1))
 
     last_work_time = time.time() - WORK_INTERVAL
+    last_imperium_refresh_time = time.time()
 
     logger.info('Started.')
 
@@ -224,6 +226,12 @@ def auto_builder_thread():
                 if world.script_command == 'stop':
                     break
         # if we didn't sleep long enough for a work_interval
+
+        # refresh imperium from time to time
+        if cur_time - last_imperium_refresh_time >= IMPERIUM_REFRESH_INTERVAL:
+            logger.info('Time to refresh imperium...')
+            last_imperium_refresh_time = cur_time
+            world.signal(world.SIGNAL_RELOAD_PAGE, page_name='imperium')
     # while True
 
     del world.script_command
