@@ -194,8 +194,9 @@ def auto_builder_thread():
                          planet_id=planet.planet_id,
                          bitem=bitem,
                          quantity=0)
-            logger.info('Planet [{0}] Signal to build this item has been sent to world thread, wait...'.format(
+            logger.info('Planet [{0}] Signal to build this item has been sent to world thread, wait 10s...'.format(
                 planet.name))
+            time.sleep(10)  # actually wait
         else:
             logger.warn('Planet [{0}] We DO NOT have enough resources to build [{1} lv {2}]...'.format(
                     planet.name, bitem.name, bitem.level+1))
