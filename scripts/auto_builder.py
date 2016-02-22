@@ -177,6 +177,11 @@ def auto_builder_thread():
         # no builds in progress, we can continue
 
         bitem = calc_planet_next_building(planet)
+        if bitem is None:
+            logger.error('Planet [{0}]: for some reason could not calculate '
+                         'next building, some internal error? Try to relogin and '
+                         'refresh all world.'.format(planet.name))
+            return
 
         logger.info('Planet [{0}] Next building will be: {1} lv {2}'.format(
                 planet.name, bitem.name, bitem.level+1))
