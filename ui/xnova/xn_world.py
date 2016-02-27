@@ -98,7 +98,7 @@ class XNovaWorld(QThread):
         # internal need
         self._net_errors_count = 0
         self._net_errors_list = []
-        self._NET_ERRORS_MAX = 10
+        self._NET_ERRORS_MAX = 100
         self._mutex = QMutex(QMutex.Recursive)
         self._signal_kwargs = dict()
         # thread identifiers, collected here mainly for debugging purposes
