@@ -143,18 +143,21 @@ def auto_builder_thread():
             return deit_bitem
         #
         # check resources storage capacity
-        if planet.res_current.met / planet.res_max_silos.met >= 0.7:
-            silo_bitem = planet.find_bitem_by_gid(int(BGid.METAL_SILO))
-            logger.info('Planet [{0}] needs metal silo!'.format(planet.name))
-            return silo_bitem
-        if planet.res_current.cry / planet.res_max_silos.cry >= 0.7:
-            silo_bitem = planet.find_bitem_by_gid(int(BGid.CRYSTAL_SILO))
-            logger.info('Planet [{0}] needs crystal silo!'.format(planet.name))
-            return silo_bitem
-        if planet.res_current.deit / planet.res_max_silos.deit >= 0.7:
-            silo_bitem = planet.find_bitem_by_gid(int(BGid.DEIT_SILO))
-            logger.info('Planet [{0}] needs deit silo!'.format(planet.name))
-            return silo_bitem
+        if planet.res_max_silos.met > 0:
+            if planet.res_current.met / planet.res_max_silos.met >= 0.7:
+                silo_bitem = planet.find_bitem_by_gid(int(BGid.METAL_SILO))
+                logger.info('Planet [{0}] needs metal silo!'.format(planet.name))
+                return silo_bitem
+        if planet.res_max_silos.cry > 0:
+            if planet.res_current.cry / planet.res_max_silos.cry >= 0.7:
+                silo_bitem = planet.find_bitem_by_gid(int(BGid.CRYSTAL_SILO))
+                logger.info('Planet [{0}] needs crystal silo!'.format(planet.name))
+                return silo_bitem
+        if planet.res_max_silos.deit > 0:
+            if planet.res_current.deit / planet.res_max_silos.deit >= 0.7:
+                silo_bitem = planet.find_bitem_by_gid(int(BGid.DEIT_SILO))
+                logger.info('Planet [{0}] needs deit silo!'.format(planet.name))
+                return silo_bitem
         #
         # default - build solar station
         logger.warn('Planet [{0}] for some reason cannot decide what to build, '
