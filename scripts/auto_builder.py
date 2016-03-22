@@ -6,6 +6,7 @@ def auto_builder_thread():
     from enum import IntEnum
     from ui.xnova.xn_data import XNPlanet, XNPlanetBuildingItem
     from ui.xnova.xn_world import XNovaWorld_instance, XNovaWorld
+    from ui.xnova.xn_techtree import XNTechTree_instance
     from ui.xnova import xn_logger
 
     class BGid(IntEnum):
@@ -46,7 +47,13 @@ def auto_builder_thread():
         if gid == 3:
             e = (30 * level) * (1.1 ** level)
             return round(e)
-        return -1
+        # error! incorrect gid supplied?
+        tt = XNTechTree_instance()
+        item = tt.find_item_by_gid(gid)
+        s = 'Don\'t know how to calculate energy need for gid={0} "{1}" ({2})'.format(
+            gid, item.name, item.category)
+        logger.error(s)
+        raise RuntimeError(s)
 
     def calc_planet_next_building(planet: XNPlanet) -> XNPlanetBuildingItem:
         if planet.is_moon or planet.is_base:
