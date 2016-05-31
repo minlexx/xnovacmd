@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import sys
 import time
 import sqlite3
@@ -17,7 +17,7 @@ try:
 except ImportError:
     print('PyExecJS is not installed? try "pip install PyExecJS" or something')
     print('   before that you need pip, apt-get install python3-pip')
-    print('   then pip-3.2 install pyexecjs')
+    print('   then pip-3 install pyexecjs')
     sys.exit(1)
 
 from ui.xnova import xn_logger
@@ -40,7 +40,7 @@ status_filename = 'galaxy_auto_parser.json'
 
 ###############################################
 # internal state vars, do not touch
-logger = xn_logger.get('main', debug=True)
+logger = xn_logger.get('GAP', debug=True)
 g_page_cache = XNovaPageCache()
 g_page_dnl = XNovaPageDownload()
 g_parser = GalaxyParser()
@@ -245,6 +245,27 @@ def db_set_galaxy_row(r: GalaxyRow):
     cur.close()
 
 
+def xnova_authorize(xn_login, xn_password):
+    postdata = {
+        'emails': xn_login,
+        'password': xn_password,
+        'rememberme': 'on'
+    }
+    r = requests.post('http://uni4.xnova.su/?set=login&xd',
+                      data=postdata,
+                      allow_redirects=False)
+    # print(r.content)  # empty
+    # print(r.text)     # also empty
+    cookies_dict = {}
+    for single_cookie in r.cookies.iteritems():
+        cookies_dict[single_cookie[0]] = single_cookie[1]
+    # print(cookies_dict)
+    if ('x_id' not in cookies_dict) and ('x_secret' not in cookies_dict) \
+        and ('x_uni' not in cookies_dict):
+        return None
+    return cookies_dict
+
+
 def go_galaxy_system(gal, sys_):
     # try lo get page from cache
     global g_got_from_cache
@@ -290,7 +311,7 @@ def go_galaxy_system(gal, sys_):
         return True
 
 
-def output_progress(ts_start, num, total):
+def output_progress(ts_start, num, total, gal, sys_):
     ts_now = time.time()
     secs_passed = int(ts_now - ts_start)
     speed = 0
@@ -306,9 +327,9 @@ def output_progress(ts_start, num, total):
     cached_str = ''
     global g_got_from_cache
     if g_got_from_cache:
-        cached_str = '[CACHED]'
-    logger.info('[{0}/{1}] {7} ({2:0.1f}%) done, {3}s passed, ~{4:02}h {5:02}m {6:02}s left.'.format(
-        num, total, percent, secs_passed, hrs_left, mins_left, secs_left, cached_str))
+        cached_str = ' [CACHED]'
+    logger.info('[{0}/{1}]{2} [{3}:{4}] ({5:0.1f}%) done, {6}s passed, ~{7:02}h {8:02}m {9:02}s left.'.format(
+        num, total, cached_str, gal, sys_, percent, secs_passed, hrs_left, mins_left, secs_left))
     try:
         status = dict()
         status['done'] = num
@@ -332,7 +353,7 @@ def go():
         for sys_ in range(int(system_range[0]), int(system_range[1]) + 1):
             go_galaxy_system(gal, sys_)
             num_requests += 1
-            output_progress(ts_start, num_requests, total_requests)
+            output_progress(ts_start, num_requests, total_requests, gal, sys_)
             if not g_got_from_cache:
                 time.sleep(delay_between_requests_secs)
 
@@ -372,20 +393,22 @@ def main():
                     help='Name of sqlite3 db file to store galaxy data. Default is "galaxy.db"')
     ap.add_argument('--status-filename', nargs='?', default='galaxy_auto_parser.json',
                     help='File name where scan progress will be written in JSON format. Default \
-is "galaxy_auto_parser.json". JSON output format example is: {"done": 1, "total": 10}.')
+is "galaxy_auto_parser.json". JSON output example is: {"done": 1, "total": 10}.')
     ap.add_argument('--cookies-filename', nargs='?', default='./cache/cookies.json',
-                    help='Name of JSON file with cookies used to access site. Default is "./cache/cookies.json"'
-                    'JSON file format:'
-                    '{ '
-                    '    "PHPSESSID": "o1c4iuctlt2s7721cuohuhkla7", '
-                    '    "x_id": "1", '
-                    '    "x_secret": "553a5b8f1f30a1c3708711ba57cab68a", '
-                    '    "x_uni": "uni4"'
-                    '}')
+                    help='Name of JSON file with cookies used to access site. \
+Default is "./cache/cookies.json". Ignored if --login and --password are given and auth was OK')
     ap.add_argument('--list-js-runtimes', action='store_true',
                     help='List available detected JavaScript runtimes and exit.')
+    # NEW: explicitly set login/password via command-line arguments
+    ap.add_argument('--login', nargs='?', default='your@email.com',
+                    help='Login to use to authorize in XNova game')
+    ap.add_argument('--password', nargs='?', default='your_secret_password',
+                    help='Password to use to authorize in XNova game')
+
     ns = ap.parse_args()
+
     global g_db, status_filename, galaxy_range, system_range, max_cache_secs, delay_between_requests_secs
+
     # apply parsed arguments
     g_db = sqlite3.connect(ns.db_filename)
     delay_between_requests_secs = ns.delay
@@ -399,14 +422,29 @@ is "galaxy_auto_parser.json". JSON output format example is: {"done": 1, "total"
     cookies_filename = ns.cookies_filename
     if ns.list_js_runtimes:
         list_js_runtimes()
+
+    have_login = False
+    if (ns.login != 'your@email.com') and (ns.password != 'your_secret_password'):
+        cookies_dict = xnova_authorize(ns.login, ns.password)
+        if cookies_dict is None:
+            logger.error('Failed to authorize in XNova!\n')
+            sys.exit(1)
+        have_login = True
+        logger.info('Login to XNova OK!')
+        # now we got those cookies, set it to
+        g_page_dnl.set_cookies_from_dict(cookies_dict,
+                                         do_save=True,
+                                         json_filename=cookies_filename)
+
     # init globals
     g_page_cache.load_from_disk_cache(clean=True)
     g_page_dnl.set_useragent(user_agent)
-    if not g_page_dnl.load_cookies_from_file(cookies_filename):
-        logger.error('Page downloader failed to load cookies JSON!')
-        logger.error('Please make sure that file "{0}" exists and contains cookies!'.format(cookies_filename))
-        logger.error('(You can provide cookies with --cookies-filename option.)')
-        sys.exit(1)
+    if not have_login:
+        if not g_page_dnl.load_cookies_from_file(cookies_filename):
+            logger.error('Page downloader failed to load cookies JSON!')
+            logger.error('Please make sure that file "{0}" exists and contains cookies!'.format(cookies_filename))
+            logger.error('(You can provide cookies with --cookies-filename option.)')
+            sys.exit(1)
     logger.info('Helpers init complete')
     check_database_tables()
     go()
